@@ -3951,5 +3951,143 @@ input[type="submit"],
   display: block;
 }
 
+/* ==========================================================================
+   MEEEKU BALANCED 4-COLUMN LUXURY FOOTER
+   ========================================================================== */
+.meeeku-footer-wrapper {
+  background: linear-gradient(180deg, #FFFDF7 0%, #FFF0F5 100%) !important;
+  border-top: 2px solid #F8BBD0 !important;
+  padding: 4.5rem 0 2.5rem !important;
+  width: 100% !important;
+}
+
+.meeeku-footer-grid {
+  display: grid !important;
+  grid-template-columns: 1.2fr 1fr 1fr 1.3fr !important;
+  gap: 3.5rem !important;
+  align-items: flex-start !important;
+  width: 100% !important;
+  max-width: 1200px !important;
+  margin: 0 auto 3.5rem !important;
+}
+
+@media screen and (max-width: 989px) {
+  .meeeku-footer-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 2.5rem !important;
+  }
+}
+
+@media screen and (max-width: 549px) {
+  .meeeku-footer-grid {
+    grid-template-columns: 1fr !important;
+    text-align: center !important;
+  }
+}
+
+.meeeku-footer-col {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.meeeku-footer-logo {
+  max-height: 45px !important;
+  width: auto !important;
+  margin-bottom: 1.2rem !important;
+}
+
+.meeeku-footer-tagline {
+  font-size: 1.35rem !important;
+  color: #555 !important;
+  line-height: 1.5 !important;
+  margin-bottom: 1.2rem !important;
+}
+
+.meeeku-footer-heading {
+  color: #3D2355 !important;
+  font-size: 1.7rem !important;
+  font-weight: 700 !important;
+  margin-bottom: 1.2rem !important;
+  margin-top: 0 !important;
+}
+
+.meeeku-footer-links {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.8rem !important;
+}
+
+.meeeku-footer-links li a {
+  color: #3D2355 !important;
+  font-size: 1.4rem !important;
+  text-decoration: none !important;
+  transition: color 0.2s ease !important;
+}
+
+.meeeku-footer-links li a:hover {
+  color: #FF6097 !important;
+}
+
+.meeeku-footer-subtext {
+  font-size: 1.35rem !important;
+  color: #555 !important;
+  line-height: 1.4 !important;
+  margin-bottom: 1.2rem !important;
+}
+
+.meeeku-footer-input-group {
+  display: flex !important;
+  gap: 0.5rem !important;
+  background: #FFFFFF !important;
+  border: 2px solid #F8BBD0 !important;
+  border-radius: 30px !important;
+  padding: 0.3rem 0.3rem 0.3rem 1.2rem !important;
+  box-shadow: 0 4px 12px rgba(107, 63, 160, 0.05) !important;
+}
+
+.meeeku-footer-input {
+  border: none !important;
+  outline: none !important;
+  background: transparent !important;
+  font-size: 1.4rem !important;
+  color: #3D2355 !important;
+  flex-grow: 1 !important;
+  width: 100% !important;
+}
+
+.meeeku-footer-btn {
+  border-radius: 30px !important;
+  padding: 0.8rem 1.6rem !important;
+  font-size: 1.4rem !important;
+  white-space: nowrap !important;
+}
+
+.meeeku-footer-bottom {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  border-top: 1px solid #F8BBD0 !important;
+  padding-top: 2rem !important;
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+  font-size: 1.3rem !important;
+  color: #666 !important;
+  flex-wrap: wrap !important;
+  gap: 1rem !important;
+}
+
+.meeeku-footer-legal a {
+  color: #666 !important;
+  text-decoration: none !important;
+}
+
+.meeeku-footer-legal a:hover {
+  color: #3D2355 !important;
+}
+
+
 
 
