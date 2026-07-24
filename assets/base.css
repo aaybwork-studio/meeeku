@@ -4147,8 +4147,31 @@ input[type="submit"],
 }
 
 /* ==========================================================================
-   MASTER BUTTON STYLING, ACTIVE STATES & HOVER ANIMATIONS
+   SMOOTH CUBIC-BEZIER CURVE ANIMATIONS & ZERO EXTERNAL GLOWS
    ========================================================================== */
+
+/* Hide Plain Page Titles on Contact Page */
+.template-page-contact .main-page-title,
+.template-page-contact .page-title,
+h1.main-page-title {
+  display: none !important;
+}
+
+/* Master Button Rules: NO External Box-Shadow Glows! Internal Transitions Only */
+.button,
+button,
+.meeeku-size-option,
+.meeeku-pill-filter,
+.meeeku-btn-primary,
+.meeeku-btn-secondary,
+.meeeku-card-hover-quick-add {
+  box-shadow: none !important;
+  transition: background-color 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+              color 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+              border-color 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+              transform 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+              opacity 0.35s cubic-bezier(0.25, 1, 0.5, 1) !important;
+}
 
 /* Size / Age Pill Options */
 .meeeku-size-option {
@@ -4160,20 +4183,16 @@ input[type="submit"],
   font-size: 1.4rem !important;
   font-weight: 700 !important;
   cursor: pointer !important;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
-  box-shadow: 0 4px 12px rgba(107, 63, 160, 0.04) !important;
 }
 .meeeku-size-option:hover {
   background: #FFF0F5 !important;
   border-color: #6B3FA0 !important;
-  transform: translateY(-2px) !important;
-  box-shadow: 0 8px 18px rgba(107, 63, 160, 0.12) !important;
+  color: #6B3FA0 !important;
 }
 .meeeku-size-option.active {
   background: #6B3FA0 !important;
   border-color: #6B3FA0 !important;
   color: #FFFFFF !important;
-  box-shadow: 0 8px 20px rgba(107, 63, 160, 0.25) !important;
 }
 
 /* Category Filter Pills */
@@ -4186,8 +4205,6 @@ input[type="submit"],
   font-size: 1.4rem !important;
   font-weight: 700 !important;
   cursor: pointer !important;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
-  box-shadow: 0 4px 12px rgba(107, 63, 160, 0.04) !important;
   text-decoration: none !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -4196,20 +4213,17 @@ input[type="submit"],
   background: #FFF0F5 !important;
   border-color: #6B3FA0 !important;
   color: #6B3FA0 !important;
-  transform: translateY(-2px) !important;
-  box-shadow: 0 8px 18px rgba(107, 63, 160, 0.12) !important;
 }
 .meeeku-pill-filter.active {
   background: #6B3FA0 !important;
   border-color: #6B3FA0 !important;
   color: #FFFFFF !important;
-  box-shadow: 0 8px 20px rgba(107, 63, 160, 0.25) !important;
 }
 
 /* Primary Add to Cart Pill Button */
 .button--primary,
 .meeeku-btn-primary {
-  background: linear-gradient(135deg, #FF6097 0%, #E91E63 100%) !important;
+  background: #FF6097 !important;
   color: #FFFFFF !important;
   border: none !important;
   border-radius: 30px !important;
@@ -4217,13 +4231,10 @@ input[type="submit"],
   font-size: 1.5rem !important;
   font-weight: 700 !important;
   cursor: pointer !important;
-  box-shadow: 0 8px 24px rgba(255, 96, 151, 0.28) !important;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 .button--primary:hover,
 .meeeku-btn-primary:hover {
-  transform: translateY(-3px) scale(1.02) !important;
-  box-shadow: 0 12px 30px rgba(255, 96, 151, 0.42) !important;
+  background: #E91E63 !important;
 }
 
 /* Buy It Now Pill Button */
@@ -4237,14 +4248,58 @@ input[type="submit"],
   font-size: 1.5rem !important;
   font-weight: 700 !important;
   cursor: pointer !important;
-  box-shadow: 0 8px 24px rgba(61, 35, 85, 0.2) !important;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 .button--secondary:hover,
 .meeeku-btn-secondary:hover {
   background: #512B72 !important;
-  transform: translateY(-2px) !important;
-  box-shadow: 0 10px 28px rgba(61, 35, 85, 0.35) !important;
+}
+
+/* Smooth Expandable Accordion Animation (Image 3 Fix) */
+.meeeku-accordion-header {
+  width: 100% !important;
+  background: #FFFDF7 !important;
+  border: 2px solid #F8BBD0 !important;
+  border-radius: 24px !important;
+  padding: 1.4rem 2rem !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  font-size: 1.6rem !important;
+  font-weight: 700 !important;
+  color: #3D2355 !important;
+  cursor: pointer !important;
+  transition: border-color 0.3s ease, background-color 0.3s ease !important;
+}
+.meeeku-accordion-header:hover {
+  border-color: #6B3FA0 !important;
+  background: #FFF0F5 !important;
+}
+.meeeku-accordion-icon {
+  font-size: 1.2rem !important;
+  color: #FF6097 !important;
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1) !important;
+}
+.meeeku-accordion-item.active .meeeku-accordion-icon {
+  transform: rotate(180deg) !important;
+}
+
+.meeeku-accordion-content {
+  max-height: 0 !important;
+  opacity: 0 !important;
+  overflow: hidden !important;
+  transition: max-height 0.45s cubic-bezier(0.25, 1, 0.5, 1),
+              opacity 0.35s ease,
+              padding 0.35s ease !important;
+  background: #FFFFFF !important;
+  border-radius: 0 0 20px 20px !important;
+  padding: 0 1.8rem !important;
+}
+.meeeku-accordion-item.active .meeeku-accordion-content {
+  max-height: 400px !important;
+  opacity: 1 !important;
+  padding: 1.5rem 1.8rem !important;
+  border: 2px solid #F8BBD0 !important;
+  border-top: none !important;
 }
 
 
