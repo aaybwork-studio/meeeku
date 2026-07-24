@@ -74,6 +74,15 @@
           </span>
         </button>
       </div>
+      <div class="meeeku-shipping-bar" style="background: #FFF0F5; padding: 1rem 1.5rem; border-radius: 16px; border: 1px solid #F8BBD0; margin: 0.5rem 1.5rem 1rem; text-align: center; font-size: 1.3rem; color: #3D2355; font-weight: 600;">
+        {% assign free_shipping_threshold = 199900 %}
+        {% if cart.total_price >= free_shipping_threshold %}
+          <span>🎉 <strong>Congratulations!</strong> You unlocked <strong>FREE Express Shipping</strong>!</span>
+        {% else %}
+          {% assign amount_left = free_shipping_threshold | minus: cart.total_price %}
+          <span>🚚 Add <strong>{{ amount_left | money }}</strong> more to get <strong>FREE Express Shipping</strong>!</span>
+        {% endif %}
+      </div>
       <cart-drawer-items
         view-event-payload="{{ cart | standard_event_data: 'view', context: 'dialog' | escape }}"
         view-event-trigger="manual"

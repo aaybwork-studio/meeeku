@@ -1,0 +1,94 @@
+{% comment %}
+  Meeeku Customer Reviews & Instagram Carousel Section
+{% endcomment %}
+
+<div class="page-width meeeku-reviews-section">
+  <div class="text-center" style="margin-bottom: 3rem;">
+    <span class="meeeku-badge meeeku-badge--ethnic">Loved by 500+ Moms</span>
+    <h2 class="h1" style="color: #3D2355; margin-top: 1rem;">Meeeku Little Stars ✨</h2>
+    <p style="color: #6B3FA0; font-size: 1.6rem;">Real smiles from real little princesses wearing Meeeku Ethnic & Nightsuits.</p>
+  </div>
+
+  <div class="meeeku-reviews-grid">
+    <!-- Review 1 -->
+    <div class="meeeku-review-card">
+      <div class="meeeku-review-stars">⭐⭐⭐⭐⭐</div>
+      <p class="meeeku-review-text">"The Lehenga fabric is so soft! My 3-year-old daughter wore it all day during Diwali without complaining about any itchiness!"</p>
+      <div class="meeeku-review-author">
+        <strong>Priya M.</strong> — <span>Verified Mom (Delhi)</span>
+      </div>
+    </div>
+
+    <!-- Review 2 -->
+    <div class="meeeku-review-card">
+      <div class="meeeku-review-stars">⭐⭐⭐⭐⭐</div>
+      <p class="meeeku-review-text">"The organic cotton nightsuit is insanely soft. Washed it 5 times already and the colors are still super bright. Highly recommend!"</p>
+      <div class="meeeku-review-author">
+        <strong>Ananya R.</strong> — <span>Verified Mom (Bangalore)</span>
+      </div>
+    </div>
+
+    <!-- Review 3 -->
+    <div class="meeeku-review-card">
+      <div class="meeeku-review-stars">⭐⭐⭐⭐⭐</div>
+      <p class="meeeku-review-text">"Super fast shipping and adorable packaging! The size guide was spot-on for my 4Y girl. Can't wait for the boys collection!"</p>
+      <div class="meeeku-review-author">
+        <strong>Sneha K.</strong> — <span>Verified Mom (Mumbai)</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.meeeku-reviews-section {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+.meeeku-reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2.5rem;
+}
+.meeeku-review-card {
+  background: #FFFDF7;
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 0 8px 24px rgba(107, 63, 160, 0.08);
+  border: 2px solid #F8BBD0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.meeeku-review-stars {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+.meeeku-review-text {
+  font-size: 1.5rem;
+  color: #444;
+  line-height: 1.6;
+  font-style: italic;
+  margin-bottom: 1.5rem;
+}
+.meeeku-review-author strong {
+  color: #3D2355;
+}
+.meeeku-review-author span {
+  color: #888;
+  font-size: 1.3rem;
+}
+</style>
+
+{% schema %}
+{
+  "name": "Meeeku Reviews",
+  "tag": "section",
+  "class": "section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Meeeku Reviews"
+    }
+  ]
+}
+{% endschema %}

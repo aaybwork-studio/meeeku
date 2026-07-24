@@ -35,6 +35,10 @@
         "padding_bottom": 36
       }
     },
+    "meeeku_reviews": {
+      "type": "meeeku-reviews",
+      "settings": {}
+    },
     "meeeku_boys": {
       "type": "meeeku-boys-coming-soon",
       "settings": {}
@@ -43,6 +47,7 @@
   "order": [
     "meeeku_hero",
     "featured_collection",
+    "meeeku_reviews",
     "meeeku_boys"
   ]
 }

@@ -492,6 +492,7 @@
                     product_form_id: product_form_id
                   %}
                 {%- when 'buy_buttons' -%}
+                  {% render 'meeeku-trust-badges' %}
                   {% render 'meeeku-size-guide' %}
                   {%- render 'buy-buttons',
                     block: block,
@@ -500,6 +501,7 @@
                     section_id: section.id,
                     show_pickup_availability: true
                   -%}
+                  {% render 'meeeku-wash-care' %}
                 {%- when 'rating' -%}
                   {%- if product.metafields.reviews.rating.value != blank -%}
                     <div class="rating-wrapper">
