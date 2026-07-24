@@ -3991,9 +3991,67 @@ input[type="submit"],
 }
 
 .meeeku-footer-logo {
-  max-height: 45px !important;
-  width: auto !important;
+  width: 140px !important;
+  height: auto !important;
+  max-width: 100% !important;
+  object-fit: contain !important;
   margin-bottom: 1.2rem !important;
+}
+
+/* Clean Catalog Product Cards & Hover-Only Quick Add Button */
+.meeeku-card-media-wrapper {
+  position: relative !important;
+  overflow: hidden !important;
+  border-radius: 22px !important;
+  border: 2px solid #F8BBD0 !important;
+  background: #FFFDF7 !important;
+  box-shadow: 0 8px 24px rgba(107, 63, 160, 0.06) !important;
+}
+
+.meeeku-card-img {
+  width: 100% !important;
+  height: 380px !important;
+  object-fit: cover !important;
+  object-position: top center !important;
+  transition: transform 0.4s ease !important;
+  display: block !important;
+}
+
+.card-wrapper:hover .meeeku-card-img {
+  transform: scale(1.04) !important;
+}
+
+.meeeku-card-hover-quick-add {
+  position: absolute !important;
+  bottom: 1.2rem !important;
+  left: 50% !important;
+  transform: translateX(-50%) translateY(20px) !important;
+  opacity: 0 !important;
+  transition: opacity 0.3s ease, transform 0.3s ease !important;
+  z-index: 5 !important;
+  width: 85% !important;
+  border-radius: 30px !important;
+  background: rgba(255, 253, 247, 0.94) !important;
+  backdrop-filter: blur(8px) !important;
+  color: #3D2355 !important;
+  font-weight: 700 !important;
+  font-size: 1.35rem !important;
+  padding: 0.9rem 1.2rem !important;
+  border: 2px solid #F8BBD0 !important;
+  box-shadow: 0 8px 20px rgba(107, 63, 160, 0.15) !important;
+  cursor: pointer !important;
+  text-align: center !important;
+}
+
+.card-wrapper:hover .meeeku-card-hover-quick-add {
+  opacity: 1 !important;
+  transform: translateX(-50%) translateY(0) !important;
+}
+
+.meeeku-card-hover-quick-add:hover {
+  background: #6B3FA0 !important;
+  color: #FFFFFF !important;
+  border-color: #6B3FA0 !important;
 }
 
 .meeeku-footer-tagline {
