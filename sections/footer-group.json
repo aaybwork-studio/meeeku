@@ -5,29 +5,29 @@
     "footer": {
       "type": "footer",
       "blocks": {
-        "brand_info": {
-          "type": "brand_information",
-          "settings": {}
-        },
-        "menu_quick": {
+        "menu_shop": {
           "type": "link_list",
           "settings": {
-            "heading": "Explore Meeeku",
+            "heading": "Shop Collections",
             "menu": "main-menu"
           }
         },
-        "text_customer": {
+        "text_support": {
           "type": "text",
           "settings": {
-            "heading": "Little Dreamers (2-5Y)",
-            "subtext": "<p>Crafting super-soft Indian Ethnic wear & cozy cotton nightsuits for your little ones. 💖<br><strong>Boys collection launching soon!</strong></p>"
+            "heading": "Customer Care",
+            "subtext": "<p><strong>Email:</strong> hello@meeeku.com<br><strong>WhatsApp:</strong> +91 98765 43210<br><strong>Hours:</strong> Mon - Sat (10am - 7pm IST)</p>"
           }
+        },
+        "brand_info": {
+          "type": "brand_information",
+          "settings": {}
         }
       },
       "block_order": [
-        "brand_info",
-        "menu_quick",
-        "text_customer"
+        "menu_shop",
+        "text_support",
+        "brand_info"
       ],
       "settings": {
         "color_scheme": "scheme-4",

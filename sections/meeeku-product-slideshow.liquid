@@ -1,5 +1,5 @@
 {% comment %}
-  Meeeku Full-Width Scenery Hero Carousel with Left/Right/Left Text Positioning
+  Meeeku Full-Width Scenery Hero Carousel with Direct <img> Tags & Left/Right/Left Overlay Cards
 {% endcomment %}
 
 <div class="meeeku-slideshow-wrapper">
@@ -7,7 +7,7 @@
     
     <!-- Slide 1: Indian Ethnic (Text on LEFT) -->
     <div class="meeeku-slide active" data-index="0">
-      <div class="meeeku-slide__bg" style="background-image: url('{{ 'hero_scenery_ethnic.jpg' | asset_url }}');"></div>
+      <img src="{{ 'hero_scenery_ethnic.jpg' | asset_url }}" alt="Girls Indian Ethnic Wear 2-5Y" class="meeeku-slide-img-full" width="1600" height="900" loading="eager">
       <div class="meeeku-slide__overlay"></div>
       <div class="page-width meeeku-slide__content-wrapper">
         <div class="meeeku-slide__card meeeku-slide__card--left">
@@ -21,7 +21,7 @@
 
     <!-- Slide 2: Nightsuits (Text on RIGHT) -->
     <div class="meeeku-slide" data-index="1">
-      <div class="meeeku-slide__bg" style="background-image: url('{{ 'hero_scenery_nightsuits.jpg' | asset_url }}');"></div>
+      <img src="{{ 'hero_scenery_nightsuits.jpg' | asset_url }}" alt="Girls Organic Cotton Nightsuits 2-5Y" class="meeeku-slide-img-full" width="1600" height="900" loading="lazy">
       <div class="meeeku-slide__overlay"></div>
       <div class="page-width meeeku-slide__content-wrapper">
         <div class="meeeku-slide__card meeeku-slide__card--right">
@@ -35,7 +35,7 @@
 
     <!-- Slide 3: Boys Teaser (Text on LEFT) -->
     <div class="meeeku-slide" data-index="2">
-      <div class="meeeku-slide__bg" style="background-image: url('{{ 'hero_scenery_boys.jpg' | asset_url }}');"></div>
+      <img src="{{ 'hero_scenery_boys.jpg' | asset_url }}" alt="Boys Collection Teaser 2-5Y" class="meeeku-slide-img-full" width="1600" height="900" loading="lazy">
       <div class="meeeku-slide__overlay"></div>
       <div class="page-width meeeku-slide__content-wrapper">
         <div class="meeeku-slide__card meeeku-slide__card--left">
@@ -66,9 +66,9 @@
   position: relative;
   z-index: 1;
   width: 100%;
-  height: 520px;
+  height: 540px;
   overflow: hidden;
-  background-color: #FFFDF7;
+  background-color: #3D2355;
 }
 .meeeku-slideshow-container {
   position: relative;
@@ -91,14 +91,15 @@
   opacity: 1;
   visibility: visible;
 }
-.meeeku-slide__bg {
+.meeeku-slide-img-full {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-size: cover;
-  background-position: center center;
+  object-fit: cover;
+  object-position: center center;
+  z-index: 1;
 }
 .meeeku-slide__overlay {
   position: absolute;
@@ -106,11 +107,12 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(61, 35, 85, 0.25);
+  background: rgba(61, 35, 85, 0.28);
+  z-index: 2;
 }
 .meeeku-slide__content-wrapper {
   position: relative;
-  z-index: 2;
+  z-index: 3;
   display: flex;
   align-items: center;
   height: 100%;
@@ -122,7 +124,7 @@
   border-radius: 28px;
   padding: 2.5rem 3rem;
   max-width: 440px;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
   border: 2px solid #F8BBD0;
 }
 .meeeku-slide__card--left {
@@ -158,12 +160,12 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  z-index: 3;
-  background: rgba(255, 253, 247, 0.85);
+  z-index: 5;
+  background: rgba(255, 253, 247, 0.88);
   border: 1px solid #F8BBD0;
   color: #3D2355;
-  width: 44px;
-  height: 44px;
+  width: 46px;
+  height: 46px;
   border-radius: 50% !important;
   font-size: 2rem;
   cursor: pointer;
@@ -172,7 +174,7 @@
   justify-content: center;
   transition: background 0.3s ease, transform 0.3s ease;
   backdrop-filter: blur(4px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.15);
 }
 .meeeku-slideshow__nav:hover {
   background: #FFFDF7;
@@ -189,7 +191,7 @@
   bottom: 1.5rem;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 3;
+  z-index: 5;
   display: flex;
   gap: 0.8rem;
 }
@@ -209,11 +211,11 @@
 
 @media screen and (max-width: 749px) {
   .meeeku-slideshow-wrapper {
-    height: 450px;
+    height: 460px;
   }
   .meeeku-slide__card {
     padding: 2rem;
-    max-width: 90%;
+    max-width: 92%;
     margin: 0 auto !important;
   }
   .meeeku-slide__headline {
