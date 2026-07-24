@@ -1,44 +1,44 @@
 {% comment %}
-  Meeeku Full-Width Scenery Hero Carousel
+  Meeeku Full-Width Scenery Hero Carousel with Left/Right/Left Text Positioning
 {% endcomment %}
 
 <div class="meeeku-slideshow-wrapper">
   <div class="meeeku-slideshow-container" id="MeeekuSlideshow-{{ section.id }}">
     
-    <!-- Slide 1: Indian Ethnic -->
+    <!-- Slide 1: Indian Ethnic (Text on LEFT) -->
     <div class="meeeku-slide active" data-index="0">
       <div class="meeeku-slide__bg" style="background-image: url('{{ 'hero_scenery_ethnic.jpg' | asset_url }}');"></div>
       <div class="meeeku-slide__overlay"></div>
       <div class="page-width meeeku-slide__content-wrapper">
-        <div class="meeeku-slide__card">
+        <div class="meeeku-slide__card meeeku-slide__card--left">
           <span class="meeeku-badge meeeku-badge--ethnic">Girls Ethnic (2-5Y)</span>
           <h2 class="meeeku-slide__headline">Royal Silk & Cotton Lehengas</h2>
           <p class="meeeku-slide__tagline">Handcrafted with 100% soft cotton lining for zero-itch festive play.</p>
-          <a href="/collections/indian-ethnic" class="button button--primary meeeku-btn-pill">Shop Ethnic Wear 👑</a>
+          <a href="/collections/all" class="button button--primary meeeku-btn-pill">Shop Ethnic Wear 👑</a>
         </div>
       </div>
     </div>
 
-    <!-- Slide 2: Nightsuits -->
+    <!-- Slide 2: Nightsuits (Text on RIGHT) -->
     <div class="meeeku-slide" data-index="1">
       <div class="meeeku-slide__bg" style="background-image: url('{{ 'hero_scenery_nightsuits.jpg' | asset_url }}');"></div>
       <div class="meeeku-slide__overlay"></div>
       <div class="page-width meeeku-slide__content-wrapper">
-        <div class="meeeku-slide__card">
+        <div class="meeeku-slide__card meeeku-slide__card--right">
           <span class="meeeku-badge meeeku-badge--nightsuits">100% Organic Cotton</span>
           <h2 class="meeeku-slide__headline">Cloud-Soft Nightsuits</h2>
           <p class="meeeku-slide__tagline">Ultra-breathable sleepwear Pyjama sets featuring whimsical hand-drawn prints.</p>
-          <a href="/collections/nightsuits" class="button button--secondary meeeku-btn-pill">Shop Nightsuits 🌙</a>
+          <a href="/collections/all" class="button button--secondary meeeku-btn-pill">Shop Nightsuits 🌙</a>
         </div>
       </div>
     </div>
 
-    <!-- Slide 3: Boys Teaser -->
+    <!-- Slide 3: Boys Teaser (Text on LEFT) -->
     <div class="meeeku-slide" data-index="2">
       <div class="meeeku-slide__bg" style="background-image: url('{{ 'hero_scenery_boys.jpg' | asset_url }}');"></div>
       <div class="meeeku-slide__overlay"></div>
       <div class="page-width meeeku-slide__content-wrapper">
-        <div class="meeeku-slide__card">
+        <div class="meeeku-slide__card meeeku-slide__card--left">
           <span class="meeeku-badge meeeku-badge--coming-soon">Boys Line Coming Soon</span>
           <h2 class="meeeku-slide__headline">Little Princes Collection</h2>
           <p class="meeeku-slide__tagline">Handsome Kurtas & cozy loungewear for boys (2-5Y). Join early access!</p>
@@ -64,6 +64,7 @@
 <style>
 .meeeku-slideshow-wrapper {
   position: relative;
+  z-index: 1;
   width: 100%;
   height: 520px;
   overflow: hidden;
@@ -105,23 +106,34 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, rgba(61, 35, 85, 0.65) 0%, rgba(61, 35, 85, 0.2) 60%, rgba(0, 0, 0, 0) 100%);
+  background: rgba(61, 35, 85, 0.25);
 }
 .meeeku-slide__content-wrapper {
   position: relative;
-  z-index: 3;
+  z-index: 2;
   display: flex;
   align-items: center;
   height: 100%;
+  width: 100%;
 }
 .meeeku-slide__card {
-  background: rgba(255, 253, 247, 0.92);
+  background: rgba(255, 253, 247, 0.94);
   backdrop-filter: blur(8px);
   border-radius: 28px;
   padding: 2.5rem 3rem;
-  max-width: 460px;
+  max-width: 440px;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
   border: 2px solid #F8BBD0;
+}
+.meeeku-slide__card--left {
+  margin-right: auto;
+  margin-left: 0;
+  text-align: left;
+}
+.meeeku-slide__card--right {
+  margin-left: auto;
+  margin-right: 0;
+  text-align: left;
 }
 .meeeku-slide__headline {
   color: #3D2355 !important;
@@ -146,7 +158,7 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  z-index: 5;
+  z-index: 3;
   background: rgba(255, 253, 247, 0.85);
   border: 1px solid #F8BBD0;
   color: #3D2355;
@@ -177,7 +189,7 @@
   bottom: 1.5rem;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 5;
+  z-index: 3;
   display: flex;
   gap: 0.8rem;
 }
@@ -202,7 +214,7 @@
   .meeeku-slide__card {
     padding: 2rem;
     max-width: 90%;
-    margin: 0 auto;
+    margin: 0 auto !important;
   }
   .meeeku-slide__headline {
     font-size: 2.2rem;

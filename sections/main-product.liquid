@@ -73,6 +73,92 @@
   {%- endif -%}
 
   {% assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src' %}
+  {%- if product.title == blank or product.media.size == 0 -%}
+    <div class="page-width" style="margin-top: 2rem; margin-bottom: 4rem;">
+      <div class="grid grid--1-col grid--2-col-tablet" style="align-items: flex-start;">
+        
+        <!-- LEFT COLUMN: Sticky Gallery + Far-Left Thumbnails -->
+        <div class="grid__item product__media-wrapper">
+          <div class="meeeku-pdp-gallery">
+            <!-- Far-Left Vertical Thumbnails -->
+            <div class="meeeku-pdp-thumbnails">
+              <div class="meeeku-pdp-thumb active" onclick="switchMainImage(this, '{{ 'placeholder_ethnic_1.jpg' | asset_url }}')">
+                <img src="{{ 'placeholder_ethnic_1.jpg' | asset_url }}" alt="Lehenga Front View" width="80" height="100">
+              </div>
+              <div class="meeeku-pdp-thumb" onclick="switchMainImage(this, '{{ 'carousel_product_1.jpg' | asset_url }}')">
+                <img src="{{ 'carousel_product_1.jpg' | asset_url }}" alt="Lehenga Full View" width="80" height="100">
+              </div>
+              <div class="meeeku-pdp-thumb" onclick="switchMainImage(this, '{{ 'placeholder_nightsuit_1.jpg' | asset_url }}')">
+                <img src="{{ 'placeholder_nightsuit_1.jpg' | asset_url }}" alt="Nightsuit Preview" width="80" height="100">
+              </div>
+            </div>
+            <!-- Large Hero Main Image -->
+            <div class="meeeku-pdp-main-media">
+              <img id="MeeekuMainPdpImage" src="{{ 'placeholder_ethnic_1.jpg' | asset_url }}" alt="Royal Pink & Gold Lehenga Choli" class="meeeku-pdp-main-img" width="600" height="750" loading="eager">
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN: Scrolling Product Details & Actions -->
+        <div class="grid__item product__info-wrapper">
+          <div class="product__info-container" style="padding-left: 1rem;">
+            <span class="meeeku-badge meeeku-badge--ethnic">Girls Indian Ethnic (2-5 Years)</span>
+            <h1 style="color: #3D2355; font-size: 3.2rem; font-weight: 800; margin-top: 1rem; margin-bottom: 0.5rem;">Royal Pink & Gold Lehenga Choli Set</h1>
+            <div style="font-size: 1.5rem; color: #FF6097; font-weight: 700; margin-bottom: 1rem;">⭐⭐⭐⭐⭐ 4.9 (128 verified reviews)</div>
+            
+            <div class="price price--large" style="margin-bottom: 1.5rem;">
+              <span class="price-item price-item--regular" style="font-size: 2.4rem; font-weight: 800; color: #6B3FA0;">₹2,499.00 INR</span>
+              <span class="price-item price-item--compare" style="text-decoration: line-through; color: #888; margin-left: 1rem; font-size: 1.8rem;">₹3,499.00</span>
+              <span class="meeeku-badge meeeku-badge--coming-soon" style="margin-left: 1rem; background-color: #E8F5E9; color: #2E7D32;">SAVE 30%</span>
+            </div>
+
+            <p style="font-size: 1.5rem; color: #555; line-height: 1.6; margin-bottom: 2rem;">
+              Handcrafted festive Lehenga set made with lightweight organza and 100% soft breathable cotton lining. Guaranteed zero-itch comfort for your little princess during Diwali and weddings!
+            </p>
+
+            <!-- Age / Size Selector -->
+            <div style="margin-bottom: 2rem;">
+              <label style="font-weight: 700; color: #3D2355; font-size: 1.5rem; display: block; margin-bottom: 0.8rem;">Select Age / Size:</label>
+              <div style="display: flex; gap: 1rem;">
+                <button type="button" class="button button--secondary meeeku-size-option active" style="border-radius: 20px;" onclick="selectSize(this)">2 - 3 Years (2Y)</button>
+                <button type="button" class="button button--secondary meeeku-size-option" style="border-radius: 20px;" onclick="selectSize(this)">3 - 4 Years (3Y)</button>
+                <button type="button" class="button button--secondary meeeku-size-option" style="border-radius: 20px;" onclick="selectSize(this)">4 - 5 Years (4Y/5Y)</button>
+              </div>
+            </div>
+
+            <!-- Add to Cart & Buy Buttons -->
+            <div style="margin-bottom: 2rem; display: flex; flex-direction: column; gap: 1rem;">
+              <button type="button" class="button button--primary" style="width: 100%; border-radius: 30px; font-size: 1.6rem; padding: 1.2rem;" onclick="document.querySelector('cart-drawer').open()">
+                🛒 Add to Cart — ₹2,499.00
+              </button>
+              <button type="button" class="button button--secondary" style="width: 100%; border-radius: 30px; font-size: 1.6rem; padding: 1.2rem; background-color: #3D2355; color: #FFFFFF;">
+                ⚡ Buy It Now
+              </button>
+            </div>
+
+            <!-- Trust Badges & Interactive Snippets -->
+            {% render 'meeeku-trust-badges' %}
+            {% render 'meeeku-size-guide' %}
+            {% render 'meeeku-wash-care' %}
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <script>
+    function switchMainImage(thumbElement, imageUrl) {
+      document.querySelectorAll('.meeeku-pdp-thumb').forEach(function(el) { el.classList.remove('active'); });
+      thumbElement.classList.add('active');
+      document.getElementById('MeeekuMainPdpImage').src = imageUrl;
+    }
+    function selectSize(btn) {
+      document.querySelectorAll('.meeeku-size-option').forEach(function(el) { el.classList.remove('active'); });
+      btn.classList.add('active');
+    }
+    </script>
+  {%- else -%}
   <product-component view-event-payload="{{ product | standard_event_data: 'view', context: 'page' | escape }}">
     <div class="page-width">
       <div class="product product--{{ section.settings.media_size }} product--{{ section.settings.media_position }} product--{{ section.settings.gallery_layout }} product--mobile-{{ section.settings.mobile_thumbnails }} grid grid--1-col {% if product.media.size > 0 %}grid--2-col-tablet{% else %}product--no-media{% endif %}">
@@ -754,6 +840,7 @@
       </script>
     </div>
   </product-component>
+  {%- endif -%}
 </product-info>
 
 {% schema %}
