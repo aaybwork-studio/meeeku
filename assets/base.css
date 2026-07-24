@@ -3662,6 +3662,32 @@ details-disclosure > details {
   padding-right: 1.5rem !important;
 }
 
+/* Center Footer Blocks & Eliminate Awkward Left Space */
+.footer__blocks-wrapper {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  text-align: center !important;
+  gap: 3rem !important;
+}
+.footer-block {
+  text-align: center !important;
+  flex: 1 1 250px !important;
+  max-width: 320px !important;
+  margin: 0 auto !important;
+}
+.footer-block__details-content,
+.footer-block__heading,
+.footer__newsletter {
+  text-align: center !important;
+}
+.footer-block__details-content .list-menu__item--link {
+  justify-content: center !important;
+}
+.footer__content-bottom {
+  text-align: center !important;
+}
+
 .header__heading-logo {
   max-height: 55px;
   width: auto;
