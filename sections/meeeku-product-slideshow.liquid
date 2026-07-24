@@ -1,57 +1,48 @@
 {% comment %}
-  Meeeku White Background Interactive Hero Product Carousel
+  Meeeku Full-Width Scenery Hero Carousel
 {% endcomment %}
 
 <div class="meeeku-slideshow-wrapper">
   <div class="meeeku-slideshow-container" id="MeeekuSlideshow-{{ section.id }}">
     
-    <!-- Slide 1: Indian Ethnic Lehenga -->
+    <!-- Slide 1: Indian Ethnic -->
     <div class="meeeku-slide active" data-index="0">
-      <div class="page-width meeeku-slide__inner">
-        <div class="meeeku-slide__content">
-          <span class="meeeku-badge meeeku-badge--ethnic">Girls Collection (2-5Y)</span>
-          <h2 class="meeeku-slide__title">Royal Silk & Cotton Lehengas</h2>
-          <p class="meeeku-slide__sub">Handcrafted Indian Ethnic wear lined with 100% soft cotton for zero-itch festive fun.</p>
-          <div class="meeeku-slide__actions">
-            <a href="/collections/indian-ethnic" class="button button--primary">Shop Ethnic Collection 👑</a>
-          </div>
-        </div>
-        <div class="meeeku-slide__media">
-          <img src="{{ 'carousel_product_1.jpg' | asset_url }}" alt="Girls Indian Ethnic Lehenga 2-5Y" class="meeeku-slide-img" width="800" height="450" loading="eager">
+      <div class="meeeku-slide__bg" style="background-image: url('{{ 'hero_scenery_ethnic.jpg' | asset_url }}');"></div>
+      <div class="meeeku-slide__overlay"></div>
+      <div class="page-width meeeku-slide__content-wrapper">
+        <div class="meeeku-slide__card">
+          <span class="meeeku-badge meeeku-badge--ethnic">Girls Ethnic (2-5Y)</span>
+          <h2 class="meeeku-slide__headline">Royal Silk & Cotton Lehengas</h2>
+          <p class="meeeku-slide__tagline">Handcrafted with 100% soft cotton lining for zero-itch festive play.</p>
+          <a href="/collections/indian-ethnic" class="button button--primary meeeku-btn-pill">Shop Ethnic Wear 👑</a>
         </div>
       </div>
     </div>
 
-    <!-- Slide 2: Organic Cotton Nightsuits -->
+    <!-- Slide 2: Nightsuits -->
     <div class="meeeku-slide" data-index="1">
-      <div class="page-width meeeku-slide__inner">
-        <div class="meeeku-slide__content">
+      <div class="meeeku-slide__bg" style="background-image: url('{{ 'hero_scenery_nightsuits.jpg' | asset_url }}');"></div>
+      <div class="meeeku-slide__overlay"></div>
+      <div class="page-width meeeku-slide__content-wrapper">
+        <div class="meeeku-slide__card">
           <span class="meeeku-badge meeeku-badge--nightsuits">100% Organic Cotton</span>
-          <h2 class="meeeku-slide__title">Cloud-Soft Printed Nightsuits</h2>
-          <p class="meeeku-slide__sub">Ultra-breathable sleepwear Pyjama sets featuring whimsical hand-illustrated prints.</p>
-          <div class="meeeku-slide__actions">
-            <a href="/collections/nightsuits" class="button button--secondary">Shop Cozy Nightsuits 🌙</a>
-          </div>
-        </div>
-        <div class="meeeku-slide__media">
-          <img src="{{ 'carousel_product_2.jpg' | asset_url }}" alt="Girls Organic Cotton Nightsuits 2-5Y" class="meeeku-slide-img" width="800" height="450" loading="lazy">
+          <h2 class="meeeku-slide__headline">Cloud-Soft Nightsuits</h2>
+          <p class="meeeku-slide__tagline">Ultra-breathable sleepwear Pyjama sets featuring whimsical hand-drawn prints.</p>
+          <a href="/collections/nightsuits" class="button button--secondary meeeku-btn-pill">Shop Nightsuits 🌙</a>
         </div>
       </div>
     </div>
 
     <!-- Slide 3: Boys Teaser -->
     <div class="meeeku-slide" data-index="2">
-      <div class="page-width meeeku-slide__inner">
-        <div class="meeeku-slide__content">
-          <span class="meeeku-badge meeeku-badge--coming-soon">Launching Soon!</span>
-          <h2 class="meeeku-slide__title">Little Princes Boys Line</h2>
-          <p class="meeeku-slide__sub">Handsome Kurtas & cozy loungewear for boys (2-5Y). Join our VIP early access list!</p>
-          <div class="meeeku-slide__actions">
-            <a href="#meeeku-boys-waitlist" class="button button--primary" style="background-color: #1976D2;">Join Boys Waitlist 🚀</a>
-          </div>
-        </div>
-        <div class="meeeku-slide__media">
-          <img src="{{ 'carousel_product_3.jpg' | asset_url }}" alt="Boys Kurta Pyjama Collection 2-5Y" class="meeeku-slide-img" width="800" height="450" loading="lazy">
+      <div class="meeeku-slide__bg" style="background-image: url('{{ 'hero_scenery_boys.jpg' | asset_url }}');"></div>
+      <div class="meeeku-slide__overlay"></div>
+      <div class="page-width meeeku-slide__content-wrapper">
+        <div class="meeeku-slide__card">
+          <span class="meeeku-badge meeeku-badge--coming-soon">Boys Line Coming Soon</span>
+          <h2 class="meeeku-slide__headline">Little Princes Collection</h2>
+          <p class="meeeku-slide__tagline">Handsome Kurtas & cozy loungewear for boys (2-5Y). Join early access!</p>
+          <a href="#meeeku-boys-waitlist" class="button button--primary meeeku-btn-pill" style="background-color: #1976D2;">Join Waitlist 🚀</a>
         </div>
       </div>
     </div>
@@ -74,15 +65,14 @@
 .meeeku-slideshow-wrapper {
   position: relative;
   width: 100%;
-  background: linear-gradient(180deg, #FFFFFF 0%, #FFFDF7 100%);
-  border-bottom: 2px solid #F8BBD0;
-  padding: 3rem 0;
+  height: 520px;
   overflow: hidden;
+  background-color: #FFFDF7;
 }
 .meeeku-slideshow-container {
   position: relative;
   width: 100%;
-  min-height: 440px;
+  height: 100%;
 }
 .meeeku-slide {
   position: absolute;
@@ -92,93 +82,113 @@
   height: 100%;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.6s ease-in-out, visibility 0.6s ease-in-out;
+  transition: opacity 0.7s ease-in-out, visibility 0.7s ease-in-out;
   display: flex;
   align-items: center;
 }
 .meeeku-slide.active {
-  position: relative;
   opacity: 1;
   visibility: visible;
 }
-.meeeku-slide__inner {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3rem;
-  align-items: center;
-  margin: 0 auto;
+.meeeku-slide__bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center center;
 }
-.meeeku-slide__content {
-  text-align: left;
+.meeeku-slide__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(61, 35, 85, 0.65) 0%, rgba(61, 35, 85, 0.2) 60%, rgba(0, 0, 0, 0) 100%);
 }
-.meeeku-slide__title {
-  color: #3D2355 !important;
-  font-size: 3.8rem;
-  font-weight: 800;
-  line-height: 1.15;
-  margin-top: 1.2rem;
-  margin-bottom: 1rem;
-}
-.meeeku-slide__sub {
-  color: #6B3FA0;
-  font-size: 1.6rem;
-  margin-bottom: 2rem;
-  line-height: 1.5;
-}
-.meeeku-slide__media {
+.meeeku-slide__content-wrapper {
+  position: relative;
+  z-index: 3;
   display: flex;
-  justify-content: center;
   align-items: center;
+  height: 100%;
 }
-.meeeku-slide-img {
-  max-width: 100%;
-  height: auto;
-  max-height: 400px;
-  object-fit: contain;
-  filter: drop-shadow(0 10px 20px rgba(107, 63, 160, 0.08));
+.meeeku-slide__card {
+  background: rgba(255, 253, 247, 0.92);
+  backdrop-filter: blur(8px);
+  border-radius: 28px;
+  padding: 2.5rem 3rem;
+  max-width: 460px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+  border: 2px solid #F8BBD0;
+}
+.meeeku-slide__headline {
+  color: #3D2355 !important;
+  font-size: 2.6rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-top: 1rem;
+  margin-bottom: 0.6rem;
+}
+.meeeku-slide__tagline {
+  color: #555;
+  font-size: 1.4rem;
+  margin-bottom: 1.8rem;
+  line-height: 1.4;
+}
+.meeeku-btn-pill {
+  border-radius: 30px !important;
+  font-size: 1.4rem !important;
+  padding: 1rem 2rem !important;
 }
 .meeeku-slideshow__nav {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   z-index: 5;
-  background: #FFFDF7;
+  background: rgba(255, 253, 247, 0.85);
   border: 1px solid #F8BBD0;
   color: #3D2355;
   width: 44px;
   height: 44px;
-  border-radius: 50%;
+  border-radius: 50% !important;
   font-size: 2rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: background 0.3s ease, transform 0.3s ease;
-  box-shadow: 0 4px 12px rgba(107, 63, 160, 0.1);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 .meeeku-slideshow__nav:hover {
-  background: #FFF0F5;
+  background: #FFFDF7;
   transform: translateY(-50%) scale(1.1);
 }
 .meeeku-slideshow__nav--prev {
-  left: 1.5rem;
+  left: 2rem;
 }
 .meeeku-slideshow__nav--next {
-  right: 1.5rem;
+  right: 2rem;
 }
 .meeeku-slideshow__dots {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
   display: flex;
-  justify-content: center;
   gap: 0.8rem;
-  margin-top: 2rem;
 }
 .meeeku-dot {
   width: 12px;
   height: 12px;
-  border-radius: 50%;
-  background: #E0E0E0;
+  border-radius: 50% !important;
+  background: rgba(255, 255, 255, 0.6);
   cursor: pointer;
   transition: background 0.3s ease, transform 0.3s ease;
+  border: 1px solid #F8BBD0;
 }
 .meeeku-dot.active {
   background: #FF6097;
@@ -186,12 +196,16 @@
 }
 
 @media screen and (max-width: 749px) {
-  .meeeku-slide__inner {
-    grid-template-columns: 1fr;
-    text-align: center;
+  .meeeku-slideshow-wrapper {
+    height: 450px;
   }
-  .meeeku-slide__content {
-    text-align: center;
+  .meeeku-slide__card {
+    padding: 2rem;
+    max-width: 90%;
+    margin: 0 auto;
+  }
+  .meeeku-slide__headline {
+    font-size: 2.2rem;
   }
 }
 </style>
@@ -220,14 +234,13 @@ function setMeeekuSlide(sectionId, index) {
   slides[currentMeeekuSlide].classList.add('active');
   dots[currentMeeekuSlide].classList.add('active');
 }
-// Auto advance every 5 seconds
 setInterval(function() {
   const container = document.querySelector('.meeeku-slideshow-container');
   if (container) {
     const sectionId = container.id.replace('MeeekuSlideshow-', '');
     moveMeeekuSlide(sectionId, 1);
   }
-}, 5000);
+}, 6000);
 </script>
 
 {% schema %}

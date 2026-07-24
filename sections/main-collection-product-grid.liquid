@@ -129,18 +129,70 @@
           {% endif %}
         >
           {%- if collection.products.size == 0 -%}
-            <div class="collection collection--empty page-width" id="product-grid" data-id="{{ section.id }}">
-              <div class="loading-overlay gradient"></div>
-              <div class="title-wrapper center">
-                <h2 class="title title--primary">
-                  {{ 'sections.collection_template.empty' | t -}}
-                  <br>
-                  {{
-                    'sections.collection_template.use_fewer_filters_html'
-                    | t: link: collection.url, class: 'underlined-link link'
-                  }}
-                </h2>
+            <div class="collection page-width" id="product-grid" data-id="{{ section.id }}">
+              <div class="title-wrapper center" style="margin-bottom: 2rem;">
+                <span class="meeeku-badge meeeku-badge--ethnic">Meeeku Sample Catalog</span>
+                <h2 class="title title--primary" style="margin-top: 0.5rem; color: #3D2355;">Explore Featured Kidswear & Sleepwear (2-5Y)</h2>
               </div>
+              <ul class="grid product-grid grid--2-col-tablet-down grid--3-col-desktop">
+                <!-- Sample Product 1 -->
+                <li class="grid__item">
+                  <div class="card-wrapper underline-links-hover">
+                    <div class="card card--standard card--media" style="--ratio-percent: 125%;">
+                      <div class="card__inner color-scheme-2 gradient ratio">
+                        <div class="card__media">
+                          <img src="{{ 'placeholder_ethnic_1.jpg' | asset_url }}" alt="Royal Pink Lehenga Choli" class="motion-reduce" width="600" height="750" loading="lazy" style="object-fit: cover; object-position: top center;">
+                        </div>
+                      </div>
+                      <div class="card__content">
+                        <div class="card__information">
+                          <span class="meeeku-badge meeeku-badge--ethnic" style="font-size: 1rem; padding: 0.2rem 0.8rem;">Ethnic Wear</span>
+                          <h3 class="card__heading h3" style="margin-top: 0.5rem;"><a href="/products/royal-pink-lehenga" class="full-unstyled-link">Royal Pink & Gold Lehenga Choli</a></h3>
+                          <div class="price" style="margin-top: 0.5rem; font-weight: 700; color: #6B3FA0;">₹2,499.00 INR</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <!-- Sample Product 2 -->
+                <li class="grid__item">
+                  <div class="card-wrapper underline-links-hover">
+                    <div class="card card--standard card--media" style="--ratio-percent: 125%;">
+                      <div class="card__inner color-scheme-2 gradient ratio">
+                        <div class="card__media">
+                          <img src="{{ 'placeholder_nightsuit_1.jpg' | asset_url }}" alt="Lavender Organic Cotton Nightsuit" class="motion-reduce" width="600" height="750" loading="lazy" style="object-fit: cover; object-position: top center;">
+                        </div>
+                      </div>
+                      <div class="card__content">
+                        <div class="card__information">
+                          <span class="meeeku-badge meeeku-badge--nightsuits" style="font-size: 1rem; padding: 0.2rem 0.8rem;">Nightsuits</span>
+                          <h3 class="card__heading h3" style="margin-top: 0.5rem;"><a href="/products/cozy-lavender-nightsuit" class="full-unstyled-link">Cozy Lavender Organic Nightsuit</a></h3>
+                          <div class="price" style="margin-top: 0.5rem; font-weight: 700; color: #6B3FA0;">₹1,299.00 INR</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <!-- Sample Product 3 -->
+                <li class="grid__item">
+                  <div class="card-wrapper underline-links-hover">
+                    <div class="card card--standard card--media" style="--ratio-percent: 125%;">
+                      <div class="card__inner color-scheme-2 gradient ratio">
+                        <div class="card__media">
+                          <img src="{{ 'placeholder_boys_teaser.jpg' | asset_url }}" alt="Pastel Blue Kurta Pyjama Set" class="motion-reduce" width="600" height="750" loading="lazy" style="object-fit: cover; object-position: top center;">
+                        </div>
+                      </div>
+                      <div class="card__content">
+                        <div class="card__information">
+                          <span class="meeeku-badge meeeku-badge--coming-soon" style="font-size: 1rem; padding: 0.2rem 0.8rem;">Boys Teaser</span>
+                          <h3 class="card__heading h3" style="margin-top: 0.5rem;"><a href="/products/pastel-blue-kurta-set" class="full-unstyled-link">Pastel Blue Ethnic Kurta Set</a></h3>
+                          <div class="price" style="margin-top: 0.5rem; font-weight: 700; color: #6B3FA0;">₹1,899.00 INR</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
             </div>
           {%- else -%}
             <div

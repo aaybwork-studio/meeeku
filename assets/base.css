@@ -3813,3 +3813,70 @@ details-disclosure > details {
   margin: 3rem 0;
 }
 
+/* ==========================================================================
+   GLOBAL ROUNDED EDGES & UI REFINEMENTS (No sharp 90-deg corners!)
+   ========================================================================== */
+.button,
+button,
+input[type="submit"],
+.button--primary,
+.button--secondary,
+.button--tertiary {
+  border-radius: 30px !important;
+}
+
+/* Product Card Padding & Hover Clipping Fix */
+.card-wrapper .card {
+  border-radius: 24px !important;
+  overflow: hidden !important;
+}
+.card__content {
+  padding: 1.6rem 1.8rem 2.2rem !important;
+  overflow: visible !important;
+}
+.card-information {
+  padding-bottom: 0.8rem !important;
+}
+.card-information .price {
+  font-size: 1.6rem !important;
+  font-weight: 700 !important;
+  color: #6B3FA0 !important;
+}
+
+/* Contact Form Visible Inputs & Pastel Card Container */
+.contact-form,
+.contact {
+  background: #FFFDF7 !important;
+  border: 2px solid #F8BBD0 !important;
+  border-radius: 24px !important;
+  padding: 3rem 2.5rem !important;
+  max-width: 720px !important;
+  margin: 2rem auto !important;
+  box-shadow: 0 10px 30px rgba(107, 63, 160, 0.08) !important;
+}
+.contact .field__input,
+.contact-form .field__input,
+.field__input {
+  border: 2px solid #F8BBD0 !important;
+  background-color: #FFFFFF !important;
+  border-radius: 20px !important;
+  color: #3D2355 !important;
+  padding: 1.2rem 1.6rem !important;
+  font-size: 1.5rem !important;
+  box-shadow: 0 4px 12px rgba(107, 63, 160, 0.04) !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+.contact .field__input:focus,
+.contact-form .field__input:focus,
+.field__input:focus {
+  border-color: #6B3FA0 !important;
+  box-shadow: 0 0 0 4px rgba(107, 63, 160, 0.15) !important;
+  outline: none !important;
+}
+.contact .field__label,
+.contact-form .field__label {
+  color: #6B3FA0 !important;
+  font-weight: 600 !important;
+}
+
+

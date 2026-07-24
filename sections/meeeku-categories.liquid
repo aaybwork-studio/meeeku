@@ -1,5 +1,5 @@
 {% comment %}
-  Meeeku Category Cards Grid (Indian Ethnic & Nightsuits)
+  Meeeku Category Cards Grid (Clickable)
 {% endcomment %}
 
 <div class="page-width meeeku-categories-section">
@@ -11,7 +11,7 @@
 
   <div class="meeeku-category-grid">
     <!-- Category Card 1: Indian Ethnic -->
-    <div class="meeeku-cat-card">
+    <a href="/collections/all" class="meeeku-cat-card">
       <div class="meeeku-cat-card__media">
         <img src="{{ 'placeholder_ethnic_1.jpg' | asset_url }}" alt="Indian Ethnic Wear for Girls 2-5Y" class="meeeku-cat-img" width="600" height="800" loading="lazy">
         <span class="meeeku-badge meeeku-badge--ethnic meeeku-badge--overlay">Royal Ethnic</span>
@@ -19,14 +19,14 @@
       <div class="meeeku-cat-card__content">
         <h3>Indian Ethnic Wear</h3>
         <p>Vibrant Lehengas, Anarkalis & Kurta sets crafted with lightweight cotton linings.</p>
-        <a href="/collections/indian-ethnic" class="button button--primary">
+        <span class="button button--primary" style="border-radius: 30px;">
           Explore Ethnic Collection 👑
-        </a>
+        </span>
       </div>
-    </div>
+    </a>
 
     <!-- Category Card 2: Nightsuits -->
-    <div class="meeeku-cat-card">
+    <a href="/collections/all" class="meeeku-cat-card">
       <div class="meeeku-cat-card__media">
         <img src="{{ 'placeholder_nightsuit_1.jpg' | asset_url }}" alt="Cozy Nightsuits for Girls 2-5Y" class="meeeku-cat-img" width="600" height="800" loading="lazy">
         <span class="meeeku-badge meeeku-badge--nightsuits meeeku-badge--overlay">100% Organic Cotton</span>
@@ -34,11 +34,11 @@
       <div class="meeeku-cat-card__content">
         <h3>Cozy Nightsuits</h3>
         <p>Breathable, pure organic cotton sleepwear sets featuring whimsical hand-drawn prints.</p>
-        <a href="/collections/nightsuits" class="button button--secondary">
+        <span class="button button--secondary" style="border-radius: 30px;">
           Shop Cozy Nightsuits 🌙
-        </a>
+        </span>
       </div>
-    </div>
+    </a>
   </div>
 </div>
 
@@ -53,14 +53,17 @@
   gap: 3rem;
 }
 .meeeku-cat-card {
+  text-decoration: none !important;
+  color: inherit !important;
   background: #FFFDF7;
   border-radius: 24px;
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(107, 63, 160, 0.08);
   border: 2px solid #F8BBD0;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 }
 .meeeku-cat-card:hover {
   transform: translateY(-8px);
@@ -68,7 +71,7 @@
 }
 .meeeku-cat-card__media {
   position: relative;
-  height: 480px;
+  height: 440px;
   overflow: hidden;
 }
 .meeeku-cat-img {
