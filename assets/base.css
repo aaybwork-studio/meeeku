@@ -3631,10 +3631,25 @@ details-disclosure > details {
   background: linear-gradient(180deg, #FFF0F5 0%, #FFFDF7 100%) !important;
   border-bottom: 2px solid #F8BBD0 !important;
   box-shadow: 0 6px 18px rgba(107, 63, 160, 0.08) !important;
+  width: 100% !important;
+  max-width: 100% !important;
 }
+.header.page-width,
 .header {
+  max-width: 100% !important;
+  width: 100% !important;
+  padding-left: 3rem !important;
+  padding-right: 3rem !important;
   padding-top: 1rem !important;
   padding-bottom: 1rem !important;
+}
+.footer,
+.footer__content-top.page-width,
+.footer__content-bottom.page-width {
+  max-width: 100% !important;
+  width: 100% !important;
+  padding-left: 3rem !important;
+  padding-right: 3rem !important;
 }
 .header__heading-logo {
   max-height: 85px;
