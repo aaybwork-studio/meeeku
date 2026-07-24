@@ -1,0 +1,104 @@
+{% comment %}
+  Meeeku Boys Collection - Coming Soon Teaser & VIP Waitlist Section
+{% endcomment %}
+
+<div class="page-width">
+  <div class="meeeku-boys-banner">
+    <div class="meeeku-boys-banner__header">
+      <span class="meeeku-badge meeeku-badge--coming-soon">Exciting News!</span>
+      <h2 class="h1" style="color: #1565C0; margin-top: 1rem;">Boys Collection Coming Soon 👦✨</h2>
+      <p style="color: #37474F; font-size: 1.6rem; max-width: 600px; margin: 1rem auto 2rem;">
+        We are crafting handsome ethnic wear and super-soft nightsuits for your little princes (2-5 Years). Get early access and exclusive VIP launch discounts!
+      </p>
+    </div>
+
+    <div class="meeeku-boys-preview-grid">
+      <div class="meeeku-boys-card">
+        {% if section.settings.teaser_image %}
+          {{ section.settings.teaser_image | image_url: width: 600 | image_tag: loading: 'lazy', class: 'meeeku-boys-img' }}
+        {% else %}
+          <img src="{{ 'placeholder_boys_teaser.jpg' | asset_url }}" alt="Boys Ethnic & Nightsuits Teaser" class="meeeku-boys-img" width="500" height="400" loading="lazy">
+        {% endif %}
+      </div>
+
+      <div class="meeeku-boys-form-wrapper">
+        <h3>Join the Boys Launch Waitlist</h3>
+        <p style="font-size: 1.4rem; color: #555;">Be the first to know when the Boys collection drops!</p>
+
+        {% form 'customer', class: 'meeeku-boys-waitlist-form' %}
+          <input type="hidden" name="contact[tags]" value="boys-launch-waitlist">
+          <div class="field" style="margin-bottom: 1.5rem;">
+            <input
+              id="NewsletterForm--boys"
+              type="email"
+              name="contact[email]"
+              class="field__input"
+              value="{{ form.email }}"
+              placeholder="Enter your email address"
+              required
+              style="border-radius: 16px;"
+            >
+            <label class="field__label" for="NewsletterForm--boys">Your Email Address</label>
+          </div>
+          <button type="submit" class="button button--primary" style="width: 100%; border-radius: 20px; background-color: #1976D2;">
+            Get VIP Early Access 🚀
+          </button>
+          {% if form.posted_successfully? %}
+            <p class="form-status form-status-list form__message" tabindex="-1" autofocus style="color: #2E7D32; margin-top: 1rem; font-weight: 600;">
+              🎉 You are on the VIP waitlist! We'll notify you as soon as Boys collection launches.
+            </p>
+          {% endif %}
+        {% endform %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.meeeku-boys-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2.5rem;
+  align-items: center;
+  margin-top: 2rem;
+}
+.meeeku-boys-card {
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(21, 101, 192, 0.15);
+  height: 280px;
+}
+.meeeku-boys-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.meeeku-boys-form-wrapper {
+  background: #FFFFFF;
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  border: 1px solid #BBDEFB;
+  text-align: left;
+}
+</style>
+
+{% schema %}
+{
+  "name": "Meeeku Boys Coming Soon",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "teaser_image",
+      "label": "Boys Collection Teaser Image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Meeeku Boys Coming Soon"
+    }
+  ]
+}
+{% endschema %}

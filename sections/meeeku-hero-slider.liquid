@@ -1,0 +1,208 @@
+{% comment %}
+  Meeeku Custom Category Hero Banner & Slider
+  Displays Indian Ethnic & Cozy Nightsuits featured highlights for Girls 2-5Y
+{% endcomment %}
+
+<div class="page-width meeeku-hero-section">
+  <div class="meeeku-hero-header text-center">
+    <span class="meeeku-badge meeeku-badge--ethnic">Girls Collection (2-5 Years)</span>
+    <h2 class="h1 meeeku-hero-title">{{ section.settings.title | escape }}</h2>
+    <p class="meeeku-hero-subtitle">{{ section.settings.subtitle | escape }}</p>
+  </div>
+
+  <div class="meeeku-category-grid">
+    <!-- Category Card 1: Indian Ethnic -->
+    <div class="meeeku-cat-card meeeku-cat-card--ethnic">
+      <div class="meeeku-cat-card__media">
+        {% if section.settings.ethnic_image %}
+          {{ section.settings.ethnic_image | image_url: width: 800 | image_tag: loading: 'lazy', class: 'meeeku-cat-img' }}
+        {% else %}
+          <img src="{{ 'placeholder_ethnic_1.jpg' | asset_url }}" alt="Indian Ethnic Wear for Girls 2-5Y" class="meeeku-cat-img" width="600" height="800" loading="lazy">
+        {% endif %}
+        <span class="meeeku-badge meeeku-badge--ethnic meeeku-badge--overlay">Royal Ethnic</span>
+      </div>
+      <div class="meeeku-cat-card__content">
+        <h3>{{ section.settings.ethnic_title | escape }}</h3>
+        <p>{{ section.settings.ethnic_desc | escape }}</p>
+        <a href="{{ section.settings.ethnic_url | default: '/collections/indian-ethnic' }}" class="button button--primary">
+          Explore Ethnic Wear
+        </a>
+      </div>
+    </div>
+
+    <!-- Category Card 2: Nightsuits -->
+    <div class="meeeku-cat-card meeeku-cat-card--nightsuits">
+      <div class="meeeku-cat-card__media">
+        {% if section.settings.nightsuits_image %}
+          {{ section.settings.nightsuits_image | image_url: width: 800 | image_tag: loading: 'lazy', class: 'meeeku-cat-img' }}
+        {% else %}
+          <img src="{{ 'placeholder_nightsuit_1.jpg' | asset_url }}" alt="Cozy Nightsuits for Girls 2-5Y" class="meeeku-cat-img" width="600" height="800" loading="lazy">
+        {% endif %}
+        <span class="meeeku-badge meeeku-badge--nightsuits meeeku-badge--overlay">100% Organic Cotton</span>
+      </div>
+      <div class="meeeku-cat-card__content">
+        <h3>{{ section.settings.nightsuits_title | escape }}</h3>
+        <p>{{ section.settings.nightsuits_desc | escape }}</p>
+        <a href="{{ section.settings.nightsuits_url | default: '/collections/nightsuits' }}" class="button button--secondary">
+          Shop Cozy Nightsuits
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.meeeku-hero-section {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+.meeeku-hero-header {
+  margin-bottom: 3rem;
+}
+.meeeku-hero-title {
+  color: #3D2355;
+  font-size: 3.6rem;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+.meeeku-hero-subtitle {
+  color: #6B3FA0;
+  font-size: 1.6rem;
+}
+.meeeku-category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 3rem;
+}
+.meeeku-cat-card {
+  background: #FFFDF7;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(107, 63, 160, 0.08);
+  border: 2px solid #F8BBD0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+.meeeku-cat-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 40px rgba(107, 63, 160, 0.16);
+}
+.meeeku-cat-card__media {
+  position: relative;
+  height: 380px;
+  overflow: hidden;
+}
+.meeeku-cat-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.meeeku-cat-card:hover .meeeku-cat-img {
+  transform: scale(1.06);
+}
+.meeeku-badge--overlay {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  z-index: 2;
+}
+.meeeku-cat-card__content {
+  padding: 2.5rem;
+  text-align: center;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.meeeku-cat-card__content h3 {
+  color: #3D2355;
+  font-size: 2.4rem;
+  margin-bottom: 1rem;
+}
+.meeeku-cat-card__content p {
+  color: #666;
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+}
+</style>
+
+{% schema %}
+{
+  "name": "Meeeku Category Hero",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Designed for Little Princesses (2-5Y)"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subheading",
+      "default": "Handcrafted Indian Ethnic wear & cloud-soft organic nightsuits."
+    },
+    {
+      "type": "header",
+      "content": "Indian Ethnic Collection"
+    },
+    {
+      "type": "text",
+      "id": "ethnic_title",
+      "label": "Ethnic Title",
+      "default": "Royal Indian Ethnic"
+    },
+    {
+      "type": "text",
+      "id": "ethnic_desc",
+      "label": "Ethnic Description",
+      "default": "Vibrant Lehengas, Anarkalis & Kurta sets crafted with lightweight, itch-free cotton linings."
+    },
+    {
+      "type": "image_picker",
+      "id": "ethnic_image",
+      "label": "Ethnic Feature Image"
+    },
+    {
+      "type": "url",
+      "id": "ethnic_url",
+      "label": "Ethnic Collection Link"
+    },
+    {
+      "type": "header",
+      "content": "Nightsuits Collection"
+    },
+    {
+      "type": "text",
+      "id": "nightsuits_title",
+      "label": "Nightsuits Title",
+      "default": "Cozy Dream Nightsuits"
+    },
+    {
+      "type": "text",
+      "id": "nightsuits_desc",
+      "label": "Nightsuits Description",
+      "default": "Breathable, pure organic cotton sleepwear sets featuring whimsical hand-drawn prints."
+    },
+    {
+      "type": "image_picker",
+      "id": "nightsuits_image",
+      "label": "Nightsuits Feature Image"
+    },
+    {
+      "type": "url",
+      "id": "nightsuits_url",
+      "label": "Nightsuits Collection Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Meeeku Category Hero"
+    }
+  ]
+}
+{% endschema %}
