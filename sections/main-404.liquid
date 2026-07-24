@@ -57,10 +57,10 @@
 
         <!-- Add to Cart & Buy Buttons -->
         <div style="margin-bottom: 2rem; display: flex; flex-direction: column; gap: 1rem;">
-          <button type="button" class="meeeku-btn-primary" style="width: 100%; text-align: center;" onclick="document.querySelector('cart-drawer').open()">
+          <button type="button" class="meeeku-btn-primary" style="width: 100%; text-align: center;" onclick="meeekuAddToCart(this)">
             🛒 Add to Cart — ₹2,499.00
           </button>
-          <button type="button" class="meeeku-btn-secondary" style="width: 100%; text-align: center;" onclick="document.querySelector('cart-drawer').open()">
+          <button type="button" class="meeeku-btn-secondary" style="width: 100%; text-align: center;" onclick="meeekuBuyNow(this)">
             ⚡ Buy It Now
           </button>
         </div>
@@ -76,6 +76,11 @@
   </div>
 </div>
 
+<!-- Cart Toast Notification Element -->
+<div id="MeeekuCartToast" class="meeeku-cart-toast">
+  🎉 Added to your Meeeku Cart!
+</div>
+
 <script>
 function switchMainImage404(thumbElement, imageUrl) {
   document.querySelectorAll('.meeeku-pdp-thumb').forEach(function(el) { el.classList.remove('active'); });
@@ -85,5 +90,31 @@ function switchMainImage404(thumbElement, imageUrl) {
 function selectSize404(btn) {
   document.querySelectorAll('.meeeku-size-option').forEach(function(el) { el.classList.remove('active'); });
   btn.classList.add('active');
+}
+function meeekuAddToCart(btn) {
+  const drawer = document.querySelector('cart-drawer');
+  if (drawer && typeof drawer.open === 'function') {
+    drawer.open();
+  }
+  showMeeekuToast('🎉 Royal Lehenga added to your Cart!');
+}
+function meeekuBuyNow(btn) {
+  showMeeekuToast('⚡ Redirecting to Secure Checkout...');
+  setTimeout(function() {
+    const drawer = document.querySelector('cart-drawer');
+    if (drawer && typeof drawer.open === 'function') {
+      drawer.open();
+    }
+  }, 400);
+}
+function showMeeekuToast(msg) {
+  const toast = document.getElementById('MeeekuCartToast');
+  if (toast) {
+    toast.innerText = msg;
+    toast.classList.add('show');
+    setTimeout(function() {
+      toast.classList.remove('show');
+    }, 2800);
+  }
 }
 </script>

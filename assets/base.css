@@ -4147,25 +4147,32 @@ input[type="submit"],
 }
 
 /* ==========================================================================
-   SMOOTH CUBIC-BEZIER CURVE ANIMATIONS & ZERO EXTERNAL GLOWS
+   GLOBAL LUXURY EASING CURVES & CLEAN BUTTON HOVER STATES (NO EXTERNAL GLOWS!)
    ========================================================================== */
 
-/* Hide Plain Page Titles on Contact Page */
-.template-page-contact .main-page-title,
-.template-page-contact .page-title,
-h1.main-page-title {
-  display: none !important;
-}
-
-/* Master Button Rules: NO External Box-Shadow Glows! Internal Transitions Only */
+/* Remove unpleasing external glows globally */
+*,
 .button,
 button,
+.card,
+.meeeku-size-option,
+.meeeku-pill-filter,
+.meeeku-btn-primary,
+.meeeku-btn-secondary {
+  box-shadow: none !important;
+}
+
+/* Global Smooth Transitions */
+a,
+button,
+.button,
+.card,
+.field__input,
 .meeeku-size-option,
 .meeeku-pill-filter,
 .meeeku-btn-primary,
 .meeeku-btn-secondary,
 .meeeku-card-hover-quick-add {
-  box-shadow: none !important;
   transition: background-color 0.35s cubic-bezier(0.25, 1, 0.5, 1),
               color 0.35s cubic-bezier(0.25, 1, 0.5, 1),
               border-color 0.35s cubic-bezier(0.25, 1, 0.5, 1),
@@ -4173,7 +4180,7 @@ button,
               opacity 0.35s cubic-bezier(0.25, 1, 0.5, 1) !important;
 }
 
-/* Size / Age Pill Options */
+/* Size / Age Pill Options (Clean Inside Animations) */
 .meeeku-size-option {
   background: #FFFFFF !important;
   border: 2px solid #F8BBD0 !important;
@@ -4188,6 +4195,7 @@ button,
   background: #FFF0F5 !important;
   border-color: #6B3FA0 !important;
   color: #6B3FA0 !important;
+  transform: translateY(-1px) !important;
 }
 .meeeku-size-option.active {
   background: #6B3FA0 !important;
@@ -4220,12 +4228,12 @@ button,
   color: #FFFFFF !important;
 }
 
-/* Primary Add to Cart Pill Button */
+/* Primary Add to Cart Pill Button (Clean Inside Fill Shift, No Outer Glow) */
 .button--primary,
 .meeeku-btn-primary {
   background: #FF6097 !important;
   color: #FFFFFF !important;
-  border: none !important;
+  border: 2px solid #FF6097 !important;
   border-radius: 30px !important;
   padding: 1.2rem 2.5rem !important;
   font-size: 1.5rem !important;
@@ -4235,6 +4243,8 @@ button,
 .button--primary:hover,
 .meeeku-btn-primary:hover {
   background: #E91E63 !important;
+  border-color: #E91E63 !important;
+  transform: translateY(-1px) !important;
 }
 
 /* Buy It Now Pill Button */
@@ -4242,7 +4252,7 @@ button,
 .meeeku-btn-secondary {
   background: #3D2355 !important;
   color: #FFFFFF !important;
-  border: none !important;
+  border: 2px solid #3D2355 !important;
   border-radius: 30px !important;
   padding: 1.2rem 2.5rem !important;
   font-size: 1.5rem !important;
@@ -4252,54 +4262,30 @@ button,
 .button--secondary:hover,
 .meeeku-btn-secondary:hover {
   background: #512B72 !important;
+  border-color: #512B72 !important;
+  transform: translateY(-1px) !important;
 }
 
-/* Smooth Expandable Accordion Animation (Image 3 Fix) */
-.meeeku-accordion-header {
-  width: 100% !important;
-  background: #FFFDF7 !important;
-  border: 2px solid #F8BBD0 !important;
-  border-radius: 24px !important;
-  padding: 1.4rem 2rem !important;
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: center !important;
-  font-size: 1.6rem !important;
+/* Sleek Cart Toast Notification */
+.meeeku-cart-toast {
+  position: fixed !important;
+  bottom: 2rem !important;
+  right: 2rem !important;
+  background: #3D2355 !important;
+  color: #FFFFFF !important;
+  padding: 1.2rem 2rem !important;
+  border-radius: 25px !important;
   font-weight: 700 !important;
-  color: #3D2355 !important;
-  cursor: pointer !important;
-  transition: border-color 0.3s ease, background-color 0.3s ease !important;
-}
-.meeeku-accordion-header:hover {
-  border-color: #6B3FA0 !important;
-  background: #FFF0F5 !important;
-}
-.meeeku-accordion-icon {
-  font-size: 1.2rem !important;
-  color: #FF6097 !important;
-  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1) !important;
-}
-.meeeku-accordion-item.active .meeeku-accordion-icon {
-  transform: rotate(180deg) !important;
-}
-
-.meeeku-accordion-content {
-  max-height: 0 !important;
-  opacity: 0 !important;
-  overflow: hidden !important;
-  transition: max-height 0.45s cubic-bezier(0.25, 1, 0.5, 1),
-              opacity 0.35s ease,
-              padding 0.35s ease !important;
-  background: #FFFFFF !important;
-  border-radius: 0 0 20px 20px !important;
-  padding: 0 1.8rem !important;
-}
-.meeeku-accordion-item.active .meeeku-accordion-content {
-  max-height: 400px !important;
-  opacity: 1 !important;
-  padding: 1.5rem 1.8rem !important;
+  font-size: 1.4rem !important;
+  z-index: 10000 !important;
   border: 2px solid #F8BBD0 !important;
-  border-top: none !important;
+  transform: translateY(100px) !important;
+  opacity: 0 !important;
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.4s ease !important;
+}
+.meeeku-cart-toast.show {
+  transform: translateY(0) !important;
+  opacity: 1 !important;
 }
 
 

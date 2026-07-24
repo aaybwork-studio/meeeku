@@ -1,18 +1,45 @@
 {% comment %}
-  Meeeku Kidswear Smooth Expandable Wash & Care Guide Snippet
+  Meeeku Smooth Accordion: Wash & Fabric Care Instructions
 {% endcomment %}
 
-<div class="meeeku-accordion-item" id="PdpWashCareAcc" style="margin-top: 1.5rem; margin-bottom: 1.5rem;">
-  <div class="meeeku-accordion-header" onclick="document.getElementById('PdpWashCareAcc').classList.toggle('active')">
+<div class="meeeku-accordion-container" style="margin-top: 1.5rem; border: 2px solid #F8BBD0; border-radius: 24px; background: #FFFDF7; overflow: hidden;">
+  <button type="button" class="meeeku-accordion-trigger" onclick="toggleMeeekuAccordion(this)" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1.4rem 2rem; background: transparent; border: none; font-size: 1.6rem; font-weight: 700; color: #3D2355; cursor: pointer; text-align: left;">
     <span>🧺 Wash & Fabric Care Instructions</span>
-    <span class="meeeku-accordion-icon">▼</span>
-  </div>
-  <div class="meeeku-accordion-content">
-    <ul style="padding-left: 1.5rem; margin: 0; line-height: 1.7; font-size: 1.4rem; color: #555;">
-      <li><strong>Gentle Machine Wash</strong> in cold water (30°C) with like colors.</li>
-      <li>Use mild, hypoallergenic child-safe detergent without bleach.</li>
-      <li>Iron inside out on low heat to protect delicate embroidery & silk prints.</li>
-      <li>Dry in shade to preserve vibrant pastel colors.</li>
-    </ul>
+    <span class="meeeku-accordion-arrow" style="transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); color: #FF6097; font-size: 1.2rem;">▼</span>
+  </button>
+
+  <div class="meeeku-accordion-panel" style="max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease, padding 0.35s ease; padding: 0 2rem; border-top: 1px solid transparent;">
+    <div style="font-size: 1.45rem; color: #555; line-height: 1.6; padding-bottom: 1.5rem;">
+      <ul style="padding-left: 1.2rem; margin: 0;">
+        <li style="margin-bottom: 0.6rem;">🌿 <strong>Fabric Lining:</strong> 100% Organic Cotton lining — guaranteed zero itch for soft sensitive skin.</li>
+        <li style="margin-bottom: 0.6rem;">🧼 <strong>Washing:</strong> Gentle hand wash or machine cold wash (delicate cycle) inside out.</li>
+        <li style="margin-bottom: 0.6rem;">✨ <strong>Drying:</strong> Air dry flat in shade. Do not tumble dry or bleach.</li>
+        <li>🔥 <strong>Ironing:</strong> Low heat iron on reverse side for embroidery & metallic zari work.</li>
+      </ul>
+    </div>
   </div>
 </div>
+
+<script>
+function toggleMeeekuAccordion(trigger) {
+  const panel = trigger.nextElementSibling;
+  const arrow = trigger.querySelector('.meeeku-accordion-arrow');
+  const isOpen = panel.classList.contains('open');
+
+  if (isOpen) {
+    panel.classList.remove('open');
+    panel.style.maxHeight = '0px';
+    panel.style.opacity = '0';
+    panel.style.paddingTop = '0px';
+    panel.style.paddingBottom = '0px';
+    arrow.style.transform = 'rotate(0deg)';
+  } else {
+    panel.classList.add('open');
+    panel.style.maxHeight = panel.scrollHeight + 30 + 'px';
+    panel.style.opacity = '1';
+    panel.style.paddingTop = '0px';
+    panel.style.paddingBottom = '1.5rem';
+    arrow.style.transform = 'rotate(180deg)';
+  }
+}
+</script>
