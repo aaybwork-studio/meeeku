@@ -1,11 +1,12 @@
 {
   "sections": {
-    "meeeku_hero": {
-      "type": "meeeku-hero-slider",
-      "settings": {
-        "title": "Designed for Little Princesses (2-5Y)",
-        "subtitle": "Handcrafted Indian Ethnic wear & cloud-soft organic nightsuits."
-      }
+    "meeeku_slideshow": {
+      "type": "meeeku-product-slideshow",
+      "settings": {}
+    },
+    "meeeku_categories": {
+      "type": "meeeku-categories",
+      "settings": {}
     },
     "featured_collection": {
       "type": "featured-collection",
@@ -45,7 +46,8 @@
     }
   },
   "order": [
-    "meeeku_hero",
+    "meeeku_slideshow",
+    "meeeku_categories",
     "featured_collection",
     "meeeku_reviews",
     "meeeku_boys"

@@ -1,0 +1,122 @@
+{% comment %}
+  Meeeku Category Cards Grid (Indian Ethnic & Nightsuits)
+{% endcomment %}
+
+<div class="page-width meeeku-categories-section">
+  <div class="text-center" style="margin-bottom: 3rem;">
+    <span class="meeeku-badge meeeku-badge--ethnic">Explore Collections</span>
+    <h2 class="h1" style="color: #3D2355; margin-top: 1rem;">Shop by Category (2-5 Years)</h2>
+    <p style="color: #6B3FA0; font-size: 1.6rem;">Designed with love, soft fabrics, and zero-itch comfort.</p>
+  </div>
+
+  <div class="meeeku-category-grid">
+    <!-- Category Card 1: Indian Ethnic -->
+    <div class="meeeku-cat-card">
+      <div class="meeeku-cat-card__media">
+        <img src="{{ 'placeholder_ethnic_1.jpg' | asset_url }}" alt="Indian Ethnic Wear for Girls 2-5Y" class="meeeku-cat-img" width="600" height="800" loading="lazy">
+        <span class="meeeku-badge meeeku-badge--ethnic meeeku-badge--overlay">Royal Ethnic</span>
+      </div>
+      <div class="meeeku-cat-card__content">
+        <h3>Indian Ethnic Wear</h3>
+        <p>Vibrant Lehengas, Anarkalis & Kurta sets crafted with lightweight cotton linings.</p>
+        <a href="/collections/indian-ethnic" class="button button--primary">
+          Explore Ethnic Collection 👑
+        </a>
+      </div>
+    </div>
+
+    <!-- Category Card 2: Nightsuits -->
+    <div class="meeeku-cat-card">
+      <div class="meeeku-cat-card__media">
+        <img src="{{ 'placeholder_nightsuit_1.jpg' | asset_url }}" alt="Cozy Nightsuits for Girls 2-5Y" class="meeeku-cat-img" width="600" height="800" loading="lazy">
+        <span class="meeeku-badge meeeku-badge--nightsuits meeeku-badge--overlay">100% Organic Cotton</span>
+      </div>
+      <div class="meeeku-cat-card__content">
+        <h3>Cozy Nightsuits</h3>
+        <p>Breathable, pure organic cotton sleepwear sets featuring whimsical hand-drawn prints.</p>
+        <a href="/collections/nightsuits" class="button button--secondary">
+          Shop Cozy Nightsuits 🌙
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.meeeku-categories-section {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+.meeeku-category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 3rem;
+}
+.meeeku-cat-card {
+  background: #FFFDF7;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(107, 63, 160, 0.08);
+  border: 2px solid #F8BBD0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+.meeeku-cat-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 40px rgba(107, 63, 160, 0.16);
+}
+.meeeku-cat-card__media {
+  position: relative;
+  height: 480px;
+  overflow: hidden;
+}
+.meeeku-cat-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  transition: transform 0.5s ease;
+}
+.meeeku-cat-card:hover .meeeku-cat-img {
+  transform: scale(1.06);
+}
+.meeeku-badge--overlay {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  z-index: 2;
+}
+.meeeku-cat-card__content {
+  padding: 2.5rem;
+  text-align: center;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.meeeku-cat-card__content h3 {
+  color: #3D2355;
+  font-size: 2.4rem;
+  margin-bottom: 1rem;
+}
+.meeeku-cat-card__content p {
+  color: #666;
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+}
+</style>
+
+{% schema %}
+{
+  "name": "Meeeku Category Cards",
+  "tag": "section",
+  "class": "section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Meeeku Category Cards"
+    }
+  ]
+}
+{% endschema %}
