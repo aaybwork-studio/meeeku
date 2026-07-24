@@ -1,35 +1,43 @@
 {% comment %}
-  Meeeku Clean Minimalist Catalog Product Grid (Hover Quick Add)
+  Meeeku Interactive Catalog & Category Teaser Slider Grid
 {% endcomment %}
 
 <div class="page-width meeeku-catalog-section" style="padding-top: 2rem; padding-bottom: 5rem;">
   
-  <!-- Category Filter Pills Bar (No bulky header block!) -->
-  <div class="meeeku-catalog-pills" style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 3rem;">
-    <a href="/collections/all" class="button button--primary meeeku-pill-filter active" style="border-radius: 30px; font-size: 1.4rem; padding: 0.8rem 1.8rem;">All Products</a>
-    <a href="/collections/all" class="button button--secondary meeeku-pill-filter" style="border-radius: 30px; font-size: 1.4rem; padding: 0.8rem 1.8rem;">Royal Ethnic 👑</a>
-    <a href="/collections/all" class="button button--secondary meeeku-pill-filter" style="border-radius: 30px; font-size: 1.4rem; padding: 0.8rem 1.8rem;">Organic Nightsuits 🌙</a>
-    <a href="#meeeku-boys-waitlist" class="button button--secondary meeeku-pill-filter" style="border-radius: 30px; font-size: 1.4rem; padding: 0.8rem 1.8rem; background-color: #FFF8E1; color: #F57F17; border-color: #FFE082;">Boys Line (2-5Y) 👦</a>
+  <!-- Interactive Category Filter Pills Bar -->
+  <div class="meeeku-catalog-pills" style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2.5rem;">
+    <button type="button" class="meeeku-pill-filter active" data-filter="all" onclick="filterCatalog('all', this)">
+      ✨ All Products (2-5Y)
+    </button>
+    <button type="button" class="meeeku-pill-filter" data-filter="ethnic" onclick="filterCatalog('ethnic', this)">
+      👑 Royal Indian Ethnic
+    </button>
+    <button type="button" class="meeeku-pill-filter" data-filter="nightsuits" onclick="filterCatalog('nightsuits', this)">
+      🌙 Organic Nightsuits
+    </button>
+    <button type="button" class="meeeku-pill-filter" data-filter="boys" onclick="filterCatalog('boys', this)" style="background-color: #FFF8E1; color: #F57F17; border-color: #FFE082;">
+      🔒 Boys Line (Coming Soon)
+    </button>
   </div>
 
-  <!-- Clean Minimalist Product Grid -->
+  <!-- Interactive Catalog Grid -->
   <div class="meeeku-catalog-grid">
-    <ul class="grid product-grid grid--2-col-tablet-down grid--3-col-desktop">
+    <ul class="grid product-grid grid--2-col-tablet-down grid--3-col-desktop" id="MeeekuProductGrid">
       
       <!-- Product 1: Royal Pink Lehenga -->
-      <li class="grid__item">
+      <li class="grid__item meeeku-grid-item" data-category="ethnic">
         <div class="card-wrapper">
           <div class="meeeku-card-media-wrapper">
             <a href="/products/royal-pink-lehenga">
               <img src="{{ 'placeholder_ethnic_1.jpg' | asset_url }}" alt="Royal Pink Lehenga Choli" class="meeeku-card-img" width="600" height="750" loading="lazy">
             </a>
-            <!-- Quick Add button visible ONLY on HOVER -->
             <button type="button" class="meeeku-card-hover-quick-add" onclick="document.querySelector('cart-drawer').open()">
-              🛒 + Quick Add
+              🛒 + Quick Add — ₹2,499
             </button>
           </div>
           <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
-            <h3 style="margin: 0 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
+            <span class="meeeku-badge meeeku-badge--ethnic" style="font-size: 1rem; padding: 0.2rem 0.8rem;">Royal Ethnic</span>
+            <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
               <a href="/products/royal-pink-lehenga" style="color: #3D2355; text-decoration: none;">Royal Pink & Gold Lehenga Set</a>
             </h3>
             <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹2,499.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹3,499.00</span></div>
@@ -37,20 +45,41 @@
         </div>
       </li>
 
-      <!-- Product 2: Cozy Lavender Nightsuit -->
-      <li class="grid__item">
+      <!-- Product 2: Yellow & Gold Silk Lehenga -->
+      <li class="grid__item meeeku-grid-item" data-category="ethnic">
+        <div class="card-wrapper">
+          <div class="meeeku-card-media-wrapper">
+            <a href="/products/royal-yellow-lehenga">
+              <img src="{{ 'placeholder_ethnic_2.jpg' | asset_url }}" alt="Yellow Silk Festive Lehenga" class="meeeku-card-img" width="600" height="750" loading="lazy">
+            </a>
+            <button type="button" class="meeeku-card-hover-quick-add" onclick="document.querySelector('cart-drawer').open()">
+              🛒 + Quick Add — ₹2,899
+            </button>
+          </div>
+          <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
+            <span class="meeeku-badge meeeku-badge--ethnic" style="font-size: 1rem; padding: 0.2rem 0.8rem;">Festive Silk</span>
+            <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
+              <a href="/products/royal-yellow-lehenga" style="color: #3D2355; text-decoration: none;">Sunshine Yellow Silk Lehenga Choli</a>
+            </h3>
+            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹2,899.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹3,899.00</span></div>
+          </div>
+        </div>
+      </li>
+
+      <!-- Product 3: Cozy Lavender Nightsuit -->
+      <li class="grid__item meeeku-grid-item" data-category="nightsuits">
         <div class="card-wrapper">
           <div class="meeeku-card-media-wrapper">
             <a href="/products/cozy-lavender-nightsuit">
               <img src="{{ 'placeholder_nightsuit_1.jpg' | asset_url }}" alt="Lavender Organic Cotton Nightsuit" class="meeeku-card-img" width="600" height="750" loading="lazy">
             </a>
-            <!-- Quick Add button visible ONLY on HOVER -->
             <button type="button" class="meeeku-card-hover-quick-add" onclick="document.querySelector('cart-drawer').open()">
-              🛒 + Quick Add
+              🛒 + Quick Add — ₹1,299
             </button>
           </div>
           <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
-            <h3 style="margin: 0 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
+            <span class="meeeku-badge meeeku-badge--nightsuits" style="font-size: 1rem; padding: 0.2rem 0.8rem;">100% Organic</span>
+            <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
               <a href="/products/cozy-lavender-nightsuit" style="color: #3D2355; text-decoration: none;">Cozy Lavender Organic Nightsuit</a>
             </h3>
             <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹1,299.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹1,799.00</span></div>
@@ -58,23 +87,45 @@
         </div>
       </li>
 
-      <!-- Product 3: Pastel Blue Kurta Set -->
-      <li class="grid__item">
+      <!-- Product 4: Pink Unicorn Printed Nightsuit -->
+      <li class="grid__item meeeku-grid-item" data-category="nightsuits">
         <div class="card-wrapper">
           <div class="meeeku-card-media-wrapper">
-            <a href="/products/pastel-blue-kurta-set">
-              <img src="{{ 'placeholder_boys_teaser.jpg' | asset_url }}" alt="Pastel Blue Ethnic Kurta Pyjama Set" class="meeeku-card-img" width="600" height="750" loading="lazy">
+            <a href="/products/pink-unicorn-nightsuit">
+              <img src="{{ 'placeholder_nightsuit_2.jpg' | asset_url }}" alt="Pink Printed Pyjama Nightsuit" class="meeeku-card-img" width="600" height="750" loading="lazy">
             </a>
-            <!-- Quick Add button visible ONLY on HOVER -->
             <button type="button" class="meeeku-card-hover-quick-add" onclick="document.querySelector('cart-drawer').open()">
-              🛒 + Quick Add
+              🛒 + Quick Add — ₹1,399
             </button>
           </div>
           <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
-            <h3 style="margin: 0 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
-              <a href="/products/pastel-blue-kurta-set" style="color: #3D2355; text-decoration: none;">Pastel Blue Ethnic Kurta Set</a>
+            <span class="meeeku-badge meeeku-badge--nightsuits" style="font-size: 1rem; padding: 0.2rem 0.8rem;">Sleepwear</span>
+            <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
+              <a href="/products/pink-unicorn-nightsuit" style="color: #3D2355; text-decoration: none;">Blush Pink Dreamy Cloud Nightsuit</a>
             </h3>
-            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹1,899.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹2,499.00</span></div>
+            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹1,399.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹1,899.00</span></div>
+          </div>
+        </div>
+      </li>
+
+      <!-- Product 5: Boys Teaser / Mystery Slider Card -->
+      <li class="grid__item meeeku-grid-item" data-category="boys">
+        <div class="card-wrapper">
+          <div class="meeeku-card-media-wrapper" style="border: 2px dashed #90CAF9;">
+            <img src="{{ 'teaser_mystery_boys.jpg' | asset_url }}" alt="Boys Line Mystery Teaser" class="meeeku-card-img" width="600" height="750" loading="lazy">
+            <div style="position: absolute; top: 1rem; right: 1rem; background: #1976D2; color: #FFF; padding: 0.4rem 1rem; border-radius: 20px; font-weight: 700; font-size: 1.1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+              🔒 Mystery Launch
+            </div>
+            <a href="#meeeku-boys-waitlist" class="meeeku-card-hover-quick-add" style="background: #1976D2 !important; color: #FFF !important; border-color: #1976D2 !important;">
+              🚀 Join Boys Waitlist
+            </a>
+          </div>
+          <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
+            <span class="meeeku-badge meeeku-badge--coming-soon" style="font-size: 1rem; padding: 0.2rem 0.8rem; background: #E3F2FD; color: #1976D2;">Launching Soon</span>
+            <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
+              <a href="#meeeku-boys-waitlist" style="color: #1976D2; text-decoration: none;">Little Princes Ethnic Line (2-5Y)</a>
+            </h3>
+            <div style="font-size: 1.5rem; font-weight: 700; color: #1976D2;">Sign up for Early Access VIP Drops</div>
           </div>
         </div>
       </li>
@@ -82,6 +133,27 @@
     </ul>
   </div>
 </div>
+
+<script>
+function filterCatalog(category, button) {
+  document.querySelectorAll('.meeeku-pill-filter').forEach(function(el) {
+    el.classList.remove('active');
+  });
+  button.classList.add('active');
+
+  const items = document.querySelectorAll('.meeeku-grid-item');
+  items.forEach(function(item) {
+    const itemCat = item.getAttribute('data-category');
+    if (category === 'all' || itemCat === category) {
+      item.style.display = 'block';
+      item.style.opacity = '1';
+    } else {
+      item.style.display = 'none';
+      item.style.opacity = '0';
+    }
+  });
+}
+</script>
 
 {% schema %}
 {

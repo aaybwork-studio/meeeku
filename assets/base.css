@@ -4146,6 +4146,108 @@ input[type="submit"],
   color: #3D2355 !important;
 }
 
+/* ==========================================================================
+   MASTER BUTTON STYLING, ACTIVE STATES & HOVER ANIMATIONS
+   ========================================================================== */
+
+/* Size / Age Pill Options */
+.meeeku-size-option {
+  background: #FFFFFF !important;
+  border: 2px solid #F8BBD0 !important;
+  color: #3D2355 !important;
+  padding: 0.9rem 1.8rem !important;
+  border-radius: 25px !important;
+  font-size: 1.4rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 4px 12px rgba(107, 63, 160, 0.04) !important;
+}
+.meeeku-size-option:hover {
+  background: #FFF0F5 !important;
+  border-color: #6B3FA0 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 18px rgba(107, 63, 160, 0.12) !important;
+}
+.meeeku-size-option.active {
+  background: #6B3FA0 !important;
+  border-color: #6B3FA0 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 8px 20px rgba(107, 63, 160, 0.25) !important;
+}
+
+/* Category Filter Pills */
+.meeeku-pill-filter {
+  background: #FFFDF7 !important;
+  border: 2px solid #F8BBD0 !important;
+  color: #3D2355 !important;
+  padding: 0.8rem 1.8rem !important;
+  border-radius: 30px !important;
+  font-size: 1.4rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 4px 12px rgba(107, 63, 160, 0.04) !important;
+  text-decoration: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+.meeeku-pill-filter:hover {
+  background: #FFF0F5 !important;
+  border-color: #6B3FA0 !important;
+  color: #6B3FA0 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 18px rgba(107, 63, 160, 0.12) !important;
+}
+.meeeku-pill-filter.active {
+  background: #6B3FA0 !important;
+  border-color: #6B3FA0 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 8px 20px rgba(107, 63, 160, 0.25) !important;
+}
+
+/* Primary Add to Cart Pill Button */
+.button--primary,
+.meeeku-btn-primary {
+  background: linear-gradient(135deg, #FF6097 0%, #E91E63 100%) !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  border-radius: 30px !important;
+  padding: 1.2rem 2.5rem !important;
+  font-size: 1.5rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  box-shadow: 0 8px 24px rgba(255, 96, 151, 0.28) !important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+.button--primary:hover,
+.meeeku-btn-primary:hover {
+  transform: translateY(-3px) scale(1.02) !important;
+  box-shadow: 0 12px 30px rgba(255, 96, 151, 0.42) !important;
+}
+
+/* Buy It Now Pill Button */
+.button--secondary,
+.meeeku-btn-secondary {
+  background: #3D2355 !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  border-radius: 30px !important;
+  padding: 1.2rem 2.5rem !important;
+  font-size: 1.5rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  box-shadow: 0 8px 24px rgba(61, 35, 85, 0.2) !important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+.button--secondary:hover,
+.meeeku-btn-secondary:hover {
+  background: #512B72 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 10px 28px rgba(61, 35, 85, 0.35) !important;
+}
+
+
 
 
 

@@ -48,19 +48,19 @@
         <!-- Age / Size Selector -->
         <div style="margin-bottom: 2rem;">
           <label style="font-weight: 700; color: #3D2355; font-size: 1.5rem; display: block; margin-bottom: 0.8rem;">Select Age / Size:</label>
-          <div style="display: flex; gap: 1rem;">
-            <button type="button" class="button button--secondary meeeku-size-option active" style="border-radius: 20px;" onclick="selectSize404(this)">2 - 3 Years (2Y)</button>
-            <button type="button" class="button button--secondary meeeku-size-option" style="border-radius: 20px;" onclick="selectSize404(this)">3 - 4 Years (3Y)</button>
-            <button type="button" class="button button--secondary meeeku-size-option" style="border-radius: 20px;" onclick="selectSize404(this)">4 - 5 Years (4Y/5Y)</button>
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <button type="button" class="meeeku-size-option active" onclick="selectSize404(this)">2 - 3 Years (2Y)</button>
+            <button type="button" class="meeeku-size-option" onclick="selectSize404(this)">3 - 4 Years (3Y)</button>
+            <button type="button" class="meeeku-size-option" onclick="selectSize404(this)">4 - 5 Years (4Y/5Y)</button>
           </div>
         </div>
 
         <!-- Add to Cart & Buy Buttons -->
         <div style="margin-bottom: 2rem; display: flex; flex-direction: column; gap: 1rem;">
-          <button type="button" class="button button--primary" style="width: 100%; border-radius: 30px; font-size: 1.6rem; padding: 1.2rem;" onclick="document.querySelector('cart-drawer').open()">
+          <button type="button" class="meeeku-btn-primary" style="width: 100%; text-align: center;" onclick="document.querySelector('cart-drawer').open()">
             🛒 Add to Cart — ₹2,499.00
           </button>
-          <button type="button" class="button button--secondary" style="width: 100%; border-radius: 30px; font-size: 1.6rem; padding: 1.2rem; background-color: #3D2355; color: #FFFFFF;">
+          <button type="button" class="meeeku-btn-secondary" style="width: 100%; text-align: center;" onclick="document.querySelector('cart-drawer').open()">
             ⚡ Buy It Now
           </button>
         </div>
