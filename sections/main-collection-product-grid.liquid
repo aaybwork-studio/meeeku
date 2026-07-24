@@ -31,7 +31,7 @@
             <a href="/products/royal-pink-lehenga">
               <img src="{{ 'placeholder_ethnic_1.jpg' | asset_url }}" alt="Royal Pink Lehenga Choli" class="meeeku-card-img" width="600" height="750" loading="lazy">
             </a>
-            <button type="button" class="meeeku-card-hover-quick-add" onclick="document.querySelector('cart-drawer').open()">
+            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Royal Pink & Gold Lehenga Set', '₹2,499.00', '{{ 'placeholder_ethnic_1.jpg' | asset_url }}')">
               🛒 + Quick Add — ₹2,499
             </button>
           </div>
@@ -52,7 +52,7 @@
             <a href="/products/royal-yellow-lehenga">
               <img src="{{ 'placeholder_ethnic_2.jpg' | asset_url }}" alt="Yellow Silk Festive Lehenga" class="meeeku-card-img" width="600" height="750" loading="lazy">
             </a>
-            <button type="button" class="meeeku-card-hover-quick-add" onclick="document.querySelector('cart-drawer').open()">
+            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Sunshine Yellow Silk Lehenga', '₹2,899.00', '{{ 'placeholder_ethnic_2.jpg' | asset_url }}')">
               🛒 + Quick Add — ₹2,899
             </button>
           </div>
@@ -73,7 +73,7 @@
             <a href="/products/cozy-lavender-nightsuit">
               <img src="{{ 'placeholder_nightsuit_1.jpg' | asset_url }}" alt="Lavender Organic Cotton Nightsuit" class="meeeku-card-img" width="600" height="750" loading="lazy">
             </a>
-            <button type="button" class="meeeku-card-hover-quick-add" onclick="document.querySelector('cart-drawer').open()">
+            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Cozy Lavender Organic Nightsuit', '₹1,299.00', '{{ 'placeholder_nightsuit_1.jpg' | asset_url }}')">
               🛒 + Quick Add — ₹1,299
             </button>
           </div>
@@ -94,7 +94,7 @@
             <a href="/products/pink-unicorn-nightsuit">
               <img src="{{ 'placeholder_nightsuit_2.jpg' | asset_url }}" alt="Pink Printed Pyjama Nightsuit" class="meeeku-card-img" width="600" height="750" loading="lazy">
             </a>
-            <button type="button" class="meeeku-card-hover-quick-add" onclick="document.querySelector('cart-drawer').open()">
+            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Blush Pink Cloud Nightsuit', '₹1,399.00', '{{ 'placeholder_nightsuit_2.jpg' | asset_url }}')">
               🛒 + Quick Add — ₹1,399
             </button>
           </div>
@@ -134,6 +134,11 @@
   </div>
 </div>
 
+<!-- Catalog Cart Toast Notification Element -->
+<div id="MeeekuCartToastCatalog" class="meeeku-cart-toast">
+  🎉 Item added to your Meeeku Cart!
+</div>
+
 <script>
 function filterCatalog(category, button) {
   document.querySelectorAll('.meeeku-pill-filter').forEach(function(el) {
@@ -152,6 +157,41 @@ function filterCatalog(category, button) {
       item.style.opacity = '0';
     }
   });
+}
+
+function meeekuAddToCartCatalog(title, price, imgUrl) {
+  // Update Cart Item in Drawer
+  const itemTitle = document.getElementById('MeeekuCartItemTitle');
+  const itemPrice = document.getElementById('MeeekuCartItemPrice');
+  const subtotal = document.getElementById('MeeekuCartSubtotal');
+  const itemImg = document.getElementById('MeeekuCartItemImg');
+  const cartDot = document.getElementById('MeeekuCartDot');
+
+  if (itemTitle) itemTitle.innerText = title;
+  if (itemPrice) itemPrice.innerText = price;
+  if (subtotal) subtotal.innerText = price + ' INR';
+  if (itemImg && imgUrl) itemImg.src = imgUrl;
+  if (cartDot) cartDot.classList.add('has-items');
+
+  // Open Cart Drawer
+  const drawer = document.querySelector('cart-drawer');
+  if (drawer && typeof drawer.open === 'function') {
+    drawer.open();
+  }
+
+  // Show Toast
+  showMeeekuToastCatalog(`🎉 ${title} added to your Cart!`);
+}
+
+function showMeeekuToastCatalog(msg) {
+  const toast = document.getElementById('MeeekuCartToastCatalog');
+  if (toast) {
+    toast.innerText = msg;
+    toast.classList.add('show');
+    setTimeout(function() {
+      toast.classList.remove('show');
+    }, 2800);
+  }
 }
 </script>
 
