@@ -28,37 +28,37 @@
       tabindex="-1"
     >
       {%- if cart == empty -%}
-        <div class="drawer__inner-empty">
-          <div class="cart-drawer__warnings center{% if settings.cart_drawer_collection != blank %} cart-drawer__warnings--has-collection{% endif %}">
-            <div class="cart-drawer__empty-content">
-              <h2 class="cart__empty-text">{{ 'sections.cart.empty' | t }}</h2>
-              <button
-                class="drawer__close"
-                type="button"
-                onclick="this.closest('cart-drawer').close()"
-                aria-label="{{ 'accessibility.close' | t }}"
-              >
-                <span class="svg-wrapper">
-                  {{- 'icon-close.svg' | inline_asset_content -}}
-                </span>
-              </button>
-              <a href="{{ routes.all_products_collection_url }}" class="button">
-                {{ 'general.continue_shopping' | t }}
-              </a>
+        <div class="drawer__inner-empty" id="MeeekuEmptyCartState">
+          <div class="drawer__header">
+            <h2 class="drawer__heading">Your Meeeku Cart 💕</h2>
+            <button class="drawer__close" type="button" onclick="this.closest('cart-drawer').close()" aria-label="Close">
+              <span class="svg-wrapper">{{- 'icon-close.svg' | inline_asset_content -}}</span>
+            </button>
+          </div>
+          <div class="drawer__body" style="padding: 1.5rem 2rem;">
+            <!-- Sample Product Item in Cart -->
+            <div class="meeeku-cart-item" style="display: flex; gap: 1.5rem; align-items: center; background: #FFFDF7; border: 2px solid #F8BBD0; border-radius: 20px; padding: 1.2rem; margin-bottom: 2rem;">
+              <img src="{{ 'placeholder_ethnic_1.jpg' | asset_url }}" alt="Royal Pink Lehenga Choli" width="80" height="100" style="border-radius: 14px; object-fit: cover; width: 70px; height: 90px;">
+              <div style="flex-grow: 1;">
+                <h4 style="margin: 0 0 0.3rem; font-size: 1.5rem; font-weight: 700; color: #3D2355;">Royal Pink & Gold Lehenga Set</h4>
+                <div style="font-size: 1.2rem; color: #666; margin-bottom: 0.4rem;">Size: 2 - 3 Years (2Y)</div>
+                <div style="font-size: 1.6rem; font-weight: 800; color: #6B3FA0;">₹2,499.00</div>
+              </div>
+              <button type="button" style="background: transparent; border: none; font-size: 1.8rem; cursor: pointer; color: #888;" onclick="this.closest('.meeeku-cart-item').remove()">✕</button>
+            </div>
 
-              {%- if shop.customer_accounts_enabled and customer == null -%}
-                <p class="cart__login-title h3">{{ 'sections.cart.login.title' | t }}</p>
-                <p class="cart__login-paragraph">
-                  {{ 'sections.cart.login.paragraph_html' | t: link: routes.account_login_url }}
-                </p>
-              {%- endif -%}
+            <!-- Cart Subtotal Summary -->
+            <div style="border-top: 2px dashed #F8BBD0; padding-top: 1.5rem; margin-top: 1.5rem;">
+              <div style="display: flex; justify-content: space-between; font-size: 1.6rem; font-weight: 700; color: #3D2355; margin-bottom: 0.5rem;">
+                <span>Subtotal:</span>
+                <span>₹2,499.00 INR</span>
+              </div>
+              <p style="font-size: 1.2rem; color: #888; margin-bottom: 1.5rem;">Taxes included & free shipping across India 🚚</p>
+              <a href="/checkout" class="meeeku-btn-primary" style="display: block; text-align: center; text-decoration: none; width: 100%;">
+                ⚡ Proceed to Secure Checkout
+              </a>
             </div>
           </div>
-          {%- if settings.cart_drawer_collection != blank -%}
-            <div class="cart-drawer__collection">
-              {% render 'card-collection', card_collection: settings.cart_drawer_collection, columns: 1 %}
-            </div>
-          {%- endif -%}
         </div>
       {%- endif -%}
       <div class="drawer__header">

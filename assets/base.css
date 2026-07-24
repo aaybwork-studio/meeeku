@@ -4288,6 +4288,24 @@ button,
   opacity: 1 !important;
 }
 
+/* Pink Cart Dot Indicator (No numbers!) */
+.meeeku-cart-dot {
+  position: absolute !important;
+  top: 4px !important;
+  right: 4px !important;
+  width: 10px !important;
+  height: 10px !important;
+  border-radius: 50% !important;
+  background-color: #FF6097 !important;
+  border: 2px solid #FFFDF7 !important;
+  display: block !important;
+  transition: transform 0.3s ease !important;
+}
+
+.cart-count-bubble {
+  display: none !important;
+}
+
 
 
 
