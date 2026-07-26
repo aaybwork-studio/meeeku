@@ -160,17 +160,35 @@ function filterCatalog(category, button) {
 }
 
 function meeekuAddToCartCatalog(title, price, imgUrl) {
-  // Update Cart Item in Drawer
-  const itemTitle = document.getElementById('MeeekuCartItemTitle');
-  const itemPrice = document.getElementById('MeeekuCartItemPrice');
+  const container = document.getElementById('MeeekuCartItemsContainer');
+  const emptyNotice = document.getElementById('MeeekuCartEmptyNotice');
+  const summary = document.getElementById('MeeekuCartSummary');
   const subtotal = document.getElementById('MeeekuCartSubtotal');
-  const itemImg = document.getElementById('MeeekuCartItemImg');
   const cartDot = document.getElementById('MeeekuCartDot');
 
-  if (itemTitle) itemTitle.innerText = title;
-  if (itemPrice) itemPrice.innerText = price;
+  if (emptyNotice) emptyNotice.style.display = 'none';
+  if (summary) summary.style.display = 'block';
+
+  // Create unique ID for item
+  const itemId = 'MeeekuCartItem-' + Date.now();
+
+  const itemHtml = `
+    <div id="${itemId}" class="meeeku-cart-item" style="display: flex; gap: 1.5rem; align-items: center; background: #FFFDF7; border: 2px solid #F8BBD0; border-radius: 20px; padding: 1.2rem; margin-bottom: 1.5rem; box-shadow: 0 4px 14px rgba(107,63,160,0.06);">
+      <img src="${imgUrl}" alt="${title}" width="80" height="100" style="border-radius: 14px; object-fit: cover; width: 70px; height: 90px;">
+      <div style="flex-grow: 1;">
+        <h4 style="margin: 0 0 0.3rem; font-size: 1.5rem; font-weight: 700; color: #3D2355;">${title}</h4>
+        <div style="font-size: 1.2rem; color: #666; margin-bottom: 0.4rem;">Size: 2 - 3 Years (2Y)</div>
+        <div style="font-size: 1.6rem; font-weight: 800; color: #6B3FA0;">${price}</div>
+      </div>
+      <button type="button" style="background: transparent; border: none; font-size: 1.8rem; cursor: pointer; color: #888;" onclick="removeMeeekuCartItem('${itemId}')">✕</button>
+    </div>
+  `;
+
+  if (container) {
+    container.insertAdjacentHTML('beforeend', itemHtml);
+  }
+
   if (subtotal) subtotal.innerText = price + ' INR';
-  if (itemImg && imgUrl) itemImg.src = imgUrl;
   if (cartDot) cartDot.classList.add('has-items');
 
   // Open Cart Drawer
