@@ -1,150 +1,65 @@
 {% comment %}
-  Meeeku Interactive Kids Size & Fit Guide Snippet
-  Tailored for Girls 2-5 Years (Ethnic wear & Nightsuits)
+  Meeeku Size & Fit Guide (0-6Y Range)
 {% endcomment %}
 
-<button type="button" class="button button--tertiary meeeku-size-guide-btn" onclick="openMeeekuSizeGuide()">
-  📏 View 2-5Y Size & Fit Guide
-</button>
+<div class="meeeku-accordion-container" style="margin-top: 1.5rem; border: 2px solid #F8BBD0; border-radius: 24px; background: #FFFDF7; overflow: hidden;">
+  <button type="button" class="meeeku-accordion-trigger" onclick="toggleMeeekuAccordion(this)" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1.4rem 2rem; background: transparent; border: none; font-size: 1.6rem; font-weight: 700; color: #3D2355; cursor: pointer; text-align: left;">
+    <span>📐 Size & Fit Guide (0 - 6 Years)</span>
+    <span class="meeeku-accordion-arrow" style="transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); color: #FF6097; font-size: 1.2rem;">▼</span>
+  </button>
 
-<div id="MeeekuSizeGuideModal" class="meeeku-modal" onclick="if(event.target === this) closeMeeekuSizeGuide()">
-  <div class="meeeku-modal__content">
-    <button type="button" class="meeeku-modal__close" onclick="closeMeeekuSizeGuide()" aria-label="Close modal">&times;</button>
-    <div class="text-center" style="margin-bottom: 2rem;">
-      <span class="meeeku-badge meeeku-badge--ethnic">Meeeku Fit Standards</span>
-      <h3 style="color: #3D2355; font-size: 2.4rem; margin-top: 1rem;">Girls (2 to 5 Years) Size Chart</h3>
-      <p style="color: #666; font-size: 1.4rem;">All measurements are in inches. Crafted with extra ease for active play & soft cotton linings.</p>
-    </div>
-
-    <!-- Size Tabs -->
-    <div class="meeeku-tab-headers" style="display: flex; gap: 1rem; justify-content: center; margin-bottom: 1.5rem;">
-      <button type="button" class="button button--secondary meeeku-tab-btn active" onclick="switchSizeTab('ethnic-size-table', this)">Indian Ethnic Wear</button>
-      <button type="button" class="button button--secondary meeeku-tab-btn" onclick="switchSizeTab('nightsuit-size-table', this)">Nightsuits</button>
-    </div>
-
-    <!-- Ethnic Wear Table -->
-    <div id="ethnic-size-table" class="meeeku-size-tab-content">
-      <table class="meeeku-size-table">
+  <div class="meeeku-accordion-panel" style="max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease, padding 0.35s ease; padding: 0 2rem; border-top: 1px solid transparent;">
+    <div style="font-size: 1.35rem; color: #555; line-height: 1.6; padding-bottom: 1.5rem;">
+      <p style="margin-top: 0; margin-bottom: 1rem; color: #6B3FA0; font-weight: 600;">Meeeku garments are tailored with elasticated waists & 1.5-inch inner margins for growing children!</p>
+      
+      <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 1.3rem;">
         <thead>
-          <tr>
-            <th>Age Group</th>
-            <th>Chest (in)</th>
-            <th>Top/Kurti Length (in)</th>
-            <th>Lehenga/Bottom Length (in)</th>
+          <tr style="background: #FFF0F5; color: #3D2355; font-weight: 700;">
+            <th style="padding: 0.8rem; border-radius: 10px 0 0 10px;">Age Group</th>
+            <th style="padding: 0.8rem;">Chest (in)</th>
+            <th style="padding: 0.8rem;">Waist (in)</th>
+            <th style="padding: 0.8rem; border-radius: 0 10px 10px 0;">Top Length</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td><strong>2 - 3 Years (2Y/3Y)</strong></td>
-            <td>22" - 23"</td>
-            <td>14" - 15"</td>
-            <td>20" - 21"</td>
+          <tr style="border-bottom: 1px solid #F8BBD0;">
+            <td style="padding: 0.8rem; font-weight: 700; color: #6B3FA0;">0 - 1 Year (0-1Y)</td>
+            <td style="padding: 0.8rem;">19 - 20"</td>
+            <td style="padding: 0.8rem;">18 - 19"</td>
+            <td style="padding: 0.8rem;">13"</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #F8BBD0;">
+            <td style="padding: 0.8rem; font-weight: 700; color: #6B3FA0;">1 - 2 Years (1-2Y)</td>
+            <td style="padding: 0.8rem;">21 - 22"</td>
+            <td style="padding: 0.8rem;">19 - 20"</td>
+            <td style="padding: 0.8rem;">14"</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #F8BBD0;">
+            <td style="padding: 0.8rem; font-weight: 700; color: #6B3FA0;">2 - 3 Years (2-3Y)</td>
+            <td style="padding: 0.8rem;">22 - 23"</td>
+            <td style="padding: 0.8rem;">20 - 21"</td>
+            <td style="padding: 0.8rem;">15"</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #F8BBD0;">
+            <td style="padding: 0.8rem; font-weight: 700; color: #6B3FA0;">3 - 4 Years (3-4Y)</td>
+            <td style="padding: 0.8rem;">23 - 24"</td>
+            <td style="padding: 0.8rem;">21 - 22"</td>
+            <td style="padding: 0.8rem;">16"</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #F8BBD0;">
+            <td style="padding: 0.8rem; font-weight: 700; color: #6B3FA0;">4 - 5 Years (4-5Y)</td>
+            <td style="padding: 0.8rem;">24 - 25"</td>
+            <td style="padding: 0.8rem;">22 - 23"</td>
+            <td style="padding: 0.8rem;">17.5"</td>
           </tr>
           <tr>
-            <td><strong>3 - 4 Years (3Y/4Y)</strong></td>
-            <td>24" - 25"</td>
-            <td>16" - 17"</td>
-            <td>22" - 23"</td>
-          </tr>
-          <tr>
-            <td><strong>4 - 5 Years (4Y/5Y)</strong></td>
-            <td>25" - 26"</td>
-            <td>18" - 19"</td>
-            <td>24" - 25"</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Nightsuits Table -->
-    <div id="nightsuit-size-table" class="meeeku-size-tab-content" style="display: none;">
-      <table class="meeeku-size-table">
-        <thead>
-          <tr>
-            <th>Age Group</th>
-            <th>Chest (in)</th>
-            <th>Top Length (in)</th>
-            <th>Pyjama Waist (Elastic)</th>
-            <th>Pyjama Length (in)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>2 - 3 Years</strong></td>
-            <td>23"</td>
-            <td>15"</td>
-            <td>18" - 22"</td>
-            <td>19"</td>
-          </tr>
-          <tr>
-            <td><strong>3 - 4 Years</strong></td>
-            <td>24.5"</td>
-            <td>16.5"</td>
-            <td>19" - 23"</td>
-            <td>21"</td>
-          </tr>
-          <tr>
-            <td><strong>4 - 5 Years</strong></td>
-            <td>26"</td>
-            <td>18"</td>
-            <td>20" - 25"</td>
-            <td>23"</td>
+            <td style="padding: 0.8rem; font-weight: 700; color: #6B3FA0;">5 - 6 Years (5-6Y)</td>
+            <td style="padding: 0.8rem;">25 - 26"</td>
+            <td style="padding: 0.8rem;">23 - 24"</td>
+            <td style="padding: 0.8rem;">19"</td>
           </tr>
         </tbody>
       </table>
-    </div>
-
-    <div style="margin-top: 2rem; background: #FFF0F5; padding: 1.2rem; border-radius: 16px; border: 1px solid #F8BBD0; text-align: center; font-size: 1.3rem; color: #6B3FA0;">
-      💡 <strong>Fit Tip:</strong> If your little one is in-between sizes or prefers a relaxed fit for sleepwear, we recommend ordering one size up!
     </div>
   </div>
 </div>
-
-<style>
-.meeeku-size-guide-btn {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  color: #6B3FA0 !important;
-  font-weight: 700;
-  border-bottom: 2px dashed #F8BBD0;
-  padding: 0.5rem 1rem;
-}
-.meeeku-modal__close {
-  position: absolute;
-  top: 1.5rem;
-  right: 1.5rem;
-  background: none;
-  border: none;
-  font-size: 2.8rem;
-  color: #6B3FA0;
-  cursor: pointer;
-}
-.meeeku-tab-btn {
-  border-radius: 20px !important;
-  font-size: 1.3rem !important;
-  padding: 0.6rem 1.5rem !important;
-}
-.meeeku-tab-btn.active {
-  background-color: #6B3FA0 !important;
-  color: #FFFFFF !important;
-}
-</style>
-
-<script>
-function openMeeekuSizeGuide() {
-  document.getElementById('MeeekuSizeGuideModal').classList.add('is-active');
-}
-function closeMeeekuSizeGuide() {
-  document.getElementById('MeeekuSizeGuideModal').classList.remove('is-active');
-}
-function switchSizeTab(tableId, btnElement) {
-  document.querySelectorAll('.meeeku-size-tab-content').forEach(function(content) {
-    content.style.display = 'none';
-  });
-  document.querySelectorAll('.meeeku-tab-btn').forEach(function(btn) {
-    btn.classList.remove('active');
-  });
-  document.getElementById(tableId).style.display = 'block';
-  btnElement.classList.add('active');
-}
-</script>

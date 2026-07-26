@@ -1,23 +1,49 @@
 {% comment %}
-  Meeeku Interactive Catalog & Category Teaser Slider Grid
+  Meeeku Interactive Catalog & Category Filter Grid with Sort & Age Filters
 {% endcomment %}
 
 <div class="page-width meeeku-catalog-section" style="padding-top: 2rem; padding-bottom: 5rem;">
   
-  <!-- Interactive Category Filter Pills Bar -->
-  <div class="meeeku-catalog-pills" style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2.5rem;">
-    <button type="button" class="meeeku-pill-filter active" data-filter="all" onclick="filterCatalog('all', this)">
-      ✨ All Products (2-5Y)
+  <!-- Category Filter Pills Bar -->
+  <div class="meeeku-catalog-pills" style="display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem;">
+    <button type="button" class="meeeku-pill-filter active" data-filter="all" onclick="setCategoryFilter('all', this)">
+      ✨ All Products (0-6Y)
     </button>
-    <button type="button" class="meeeku-pill-filter" data-filter="ethnic" onclick="filterCatalog('ethnic', this)">
-      👑 Royal Indian Ethnic
+    <button type="button" class="meeeku-pill-filter" data-filter="ethnic" onclick="setCategoryFilter('ethnic', this)">
+      👑 Royal Ethnic
     </button>
-    <button type="button" class="meeeku-pill-filter" data-filter="nightsuits" onclick="filterCatalog('nightsuits', this)">
+    <button type="button" class="meeeku-pill-filter" data-filter="nightsuits" onclick="setCategoryFilter('nightsuits', this)">
       🌙 Organic Nightsuits
     </button>
-    <button type="button" class="meeeku-pill-filter" data-filter="boys" onclick="filterCatalog('boys', this)" style="background-color: #FFF8E1; color: #F57F17; border-color: #FFE082;">
-      🔒 Boys Line (Coming Soon)
+    <button type="button" class="meeeku-pill-filter" data-filter="coords" onclick="setCategoryFilter('coords', this)" style="background-color: #E0F2F1; color: #00695C; border-color: #80CBC4;">
+      🌸 Co-ord Sets (NEW)
     </button>
+    <button type="button" class="meeeku-pill-filter" data-filter="boys" onclick="setCategoryFilter('boys', this)" style="background-color: #FFF8E1; color: #F57F17; border-color: #FFE082;">
+      👦 Boys Line
+    </button>
+  </div>
+
+  <!-- Sort By Price & Age Filter Bar -->
+  <div class="meeeku-filter-toolbar" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; background: #FFFDF7; border: 2px solid #F8BBD0; border-radius: 20px; padding: 1rem 1.8rem; margin-bottom: 3rem;">
+    <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+      <span style="font-weight: 700; color: #3D2355; font-size: 1.4rem;">👶 Filter by Age:</span>
+      <select id="MeeekuAgeFilter" onchange="applyCatalogFiltersAndSort()" style="border: 2px solid #F8BBD0; border-radius: 15px; padding: 0.6rem 1.2rem; font-size: 1.35rem; color: #3D2355; background: #FFF; outline: none; cursor: pointer; font-weight: 600;">
+        <option value="all">All Ages (0 - 6 Years)</option>
+        <option value="infant">Infant (0 - 2 Years)</option>
+        <option value="toddler">Toddler (2 - 4 Years)</option>
+        <option value="kid">Kid (4 - 6 Years)</option>
+      </select>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+      <span style="font-weight: 700; color: #3D2355; font-size: 1.4rem;">📊 Sort By:</span>
+      <select id="MeeekuPriceSort" onchange="applyCatalogFiltersAndSort()" style="border: 2px solid #F8BBD0; border-radius: 15px; padding: 0.6rem 1.2rem; font-size: 1.35rem; color: #3D2355; background: #FFF; outline: none; cursor: pointer; font-weight: 600;">
+        <option value="featured">Featured & Best Sellers</option>
+        <option value="price-low">Price: Low to High</option>
+        <option value="price-high">Price: High to Low</option>
+        <option value="newest">Newest Arrivals</option>
+      </select>
+    </div>
   </div>
 
   <!-- Interactive Catalog Grid -->
@@ -25,7 +51,7 @@
     <ul class="grid product-grid grid--2-col-tablet-down grid--3-col-desktop" id="MeeekuProductGrid">
       
       <!-- Product 1: Royal Pink Lehenga -->
-      <li class="grid__item meeeku-grid-item" data-category="ethnic">
+      <li class="grid__item meeeku-grid-item" data-category="ethnic" data-price="2499" data-age="toddler" data-date="2026-01-10">
         <div class="card-wrapper">
           <div class="meeeku-card-media-wrapper">
             <a href="/products/royal-pink-lehenga">
@@ -46,7 +72,7 @@
       </li>
 
       <!-- Product 2: Yellow & Gold Silk Lehenga -->
-      <li class="grid__item meeeku-grid-item" data-category="ethnic">
+      <li class="grid__item meeeku-grid-item" data-category="ethnic" data-price="2899" data-age="toddler" data-date="2026-01-15">
         <div class="card-wrapper">
           <div class="meeeku-card-media-wrapper">
             <a href="/products/royal-yellow-lehenga">
@@ -66,8 +92,50 @@
         </div>
       </li>
 
-      <!-- Product 3: Cozy Lavender Nightsuit -->
-      <li class="grid__item meeeku-grid-item" data-category="nightsuits">
+      <!-- Product 3: Co-ords 1 (Pastel Floral Block-Print Set) -->
+      <li class="grid__item meeeku-grid-item" data-category="coords" data-price="1899" data-age="toddler" data-date="2026-02-01">
+        <div class="card-wrapper">
+          <div class="meeeku-card-media-wrapper">
+            <a href="/products/pastel-floral-coord">
+              <img src="{{ 'placeholder_coords_1.jpg' | asset_url }}" alt="Pastel Floral Cotton Co-ord Set" class="meeeku-card-img" width="600" height="750" loading="lazy">
+            </a>
+            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Pastel Floral Cotton Co-ord Set', '₹1,899.00', '{{ 'placeholder_coords_1.jpg' | asset_url }}')">
+              🛒 + Quick Add — ₹1,899
+            </button>
+          </div>
+          <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
+            <span class="meeeku-badge" style="font-size: 1rem; padding: 0.2rem 0.8rem; background: #E0F2F1; color: #00695C;">Co-ord Sets</span>
+            <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
+              <a href="/products/pastel-floral-coord" style="color: #3D2355; text-decoration: none;">Pastel Floral Cotton Co-ord Set</a>
+            </h3>
+            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹1,899.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹2,499.00</span></div>
+          </div>
+        </div>
+      </li>
+
+      <!-- Product 4: Co-ords 2 (Indowestern Peplum Dhoti Set) -->
+      <li class="grid__item meeeku-grid-item" data-category="coords" data-price="2199" data-age="infant" data-date="2026-02-05">
+        <div class="card-wrapper">
+          <div class="meeeku-card-media-wrapper">
+            <a href="/products/indowestern-peplum-coord">
+              <img src="{{ 'placeholder_coords_2.jpg' | asset_url }}" alt="Indowestern Peplum Dhoti Co-ord" class="meeeku-card-img" width="600" height="750" loading="lazy">
+            </a>
+            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Indowestern Peplum & Dhoti Co-ord', '₹2,199.00', '{{ 'placeholder_coords_2.jpg' | asset_url }}')">
+              🛒 + Quick Add — ₹2,199
+            </button>
+          </div>
+          <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
+            <span class="meeeku-badge" style="font-size: 1rem; padding: 0.2rem 0.8rem; background: #E0F2F1; color: #00695C;">Festive Co-ord</span>
+            <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
+              <a href="/products/indowestern-peplum-coord" style="color: #3D2355; text-decoration: none;">Indowestern Peplum & Dhoti Co-ord</a>
+            </h3>
+            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹2,199.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹2,999.00</span></div>
+          </div>
+        </div>
+      </li>
+
+      <!-- Product 5: Cozy Lavender Nightsuit -->
+      <li class="grid__item meeeku-grid-item" data-category="nightsuits" data-price="1299" data-age="infant" data-date="2026-01-20">
         <div class="card-wrapper">
           <div class="meeeku-card-media-wrapper">
             <a href="/products/cozy-lavender-nightsuit">
@@ -87,8 +155,8 @@
         </div>
       </li>
 
-      <!-- Product 4: Pink Unicorn Printed Nightsuit -->
-      <li class="grid__item meeeku-grid-item" data-category="nightsuits">
+      <!-- Product 6: Pink Unicorn Printed Nightsuit -->
+      <li class="grid__item meeeku-grid-item" data-category="nightsuits" data-price="1399" data-age="infant" data-date="2026-01-25">
         <div class="card-wrapper">
           <div class="meeeku-card-media-wrapper">
             <a href="/products/pink-unicorn-nightsuit">
@@ -108,24 +176,21 @@
         </div>
       </li>
 
-      <!-- Product 5: Boys Teaser / Mystery Slider Card -->
-      <li class="grid__item meeeku-grid-item" data-category="boys">
+      <!-- Product 7: Boys Royal Kurta Pyjama -->
+      <li class="grid__item meeeku-grid-item" data-category="boys" data-price="1999" data-age="kid" data-date="2026-02-03">
         <div class="card-wrapper">
           <div class="meeeku-card-media-wrapper" style="border: 2px dashed #90CAF9;">
-            <img src="{{ 'teaser_mystery_boys.jpg' | asset_url }}" alt="Boys Line Mystery Teaser" class="meeeku-card-img" width="600" height="750" loading="lazy">
-            <div style="position: absolute; top: 1rem; right: 1rem; background: #1976D2; color: #FFF; padding: 0.4rem 1rem; border-radius: 20px; font-weight: 700; font-size: 1.1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-              🔒 Mystery Launch
-            </div>
-            <a href="#meeeku-boys-waitlist" class="meeeku-card-hover-quick-add" style="background: #1976D2 !important; color: #FFF !important; border-color: #1976D2 !important;">
-              🚀 Join Boys Waitlist
-            </a>
+            <img src="{{ 'hero_scenery_boys.jpg' | asset_url }}" alt="Little Princes Royal Kurta Set" class="meeeku-card-img" width="600" height="750" loading="lazy">
+            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Little Princes Royal Kurta Set', '₹1,999.00', '{{ 'hero_scenery_boys.jpg' | asset_url }}')" style="background: #1976D2 !important; color: #FFF !important; border-color: #1976D2 !important;">
+              🛒 + Quick Add — ₹1,999
+            </button>
           </div>
           <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
-            <span class="meeeku-badge meeeku-badge--coming-soon" style="font-size: 1rem; padding: 0.2rem 0.8rem; background: #E3F2FD; color: #1976D2;">Launching Soon</span>
+            <span class="meeeku-badge" style="font-size: 1rem; padding: 0.2rem 0.8rem; background: #E3F2FD; color: #1976D2;">Boys Collection</span>
             <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
-              <a href="#meeeku-boys-waitlist" style="color: #1976D2; text-decoration: none;">Little Princes Ethnic Line (2-5Y)</a>
+              <a href="/products/boys-royal-kurta" style="color: #1976D2; text-decoration: none;">Little Princes Royal Kurta Set</a>
             </h3>
-            <div style="font-size: 1.5rem; font-weight: 700; color: #1976D2;">Sign up for Early Access VIP Drops</div>
+            <div style="font-size: 1.7rem; font-weight: 800; color: #1976D2;">₹1,999.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹2,699.00</span></div>
           </div>
         </div>
       </li>
@@ -140,16 +205,30 @@
 </div>
 
 <script>
-function filterCatalog(category, button) {
-  document.querySelectorAll('.meeeku-pill-filter').forEach(function(el) {
-    el.classList.remove('active');
-  });
-  button.classList.add('active');
+let currentCategory = 'all';
 
-  const items = document.querySelectorAll('.meeeku-grid-item');
-  items.forEach(function(item) {
+function setCategoryFilter(category, button) {
+  currentCategory = category;
+  document.querySelectorAll('.meeeku-pill-filter').forEach(el => el.classList.remove('active'));
+  button.classList.add('active');
+  applyCatalogFiltersAndSort();
+}
+
+function applyCatalogFiltersAndSort() {
+  const ageFilter = document.getElementById('MeeekuAgeFilter').value;
+  const sortOption = document.getElementById('MeeekuPriceSort').value;
+  const grid = document.getElementById('MeeekuProductGrid');
+  const items = Array.from(document.querySelectorAll('.meeeku-grid-item'));
+
+  // 1. Filter items by Category & Age Group
+  items.forEach(item => {
     const itemCat = item.getAttribute('data-category');
-    if (category === 'all' || itemCat === category) {
+    const itemAge = item.getAttribute('data-age');
+
+    const catMatch = (currentCategory === 'all' || itemCat === currentCategory);
+    const ageMatch = (ageFilter === 'all' || itemAge === ageFilter);
+
+    if (catMatch && ageMatch) {
       item.style.display = 'block';
       item.style.opacity = '1';
     } else {
@@ -157,6 +236,26 @@ function filterCatalog(category, button) {
       item.style.opacity = '0';
     }
   });
+
+  // 2. Sort items by Price or Date
+  items.sort((a, b) => {
+    const priceA = parseFloat(a.getAttribute('data-price')) || 0;
+    const priceB = parseFloat(b.getAttribute('data-price')) || 0;
+    const dateA = new Date(a.getAttribute('data-date')).getTime() || 0;
+    const dateB = new Date(b.getAttribute('data-date')).getTime() || 0;
+
+    if (sortOption === 'price-low') {
+      return priceA - priceB;
+    } else if (sortOption === 'price-high') {
+      return priceB - priceA;
+    } else if (sortOption === 'newest') {
+      return dateB - dateA;
+    }
+    return 0; // Default featured order
+  });
+
+  // Re-append sorted elements to DOM grid
+  items.forEach(item => grid.appendChild(item));
 }
 
 function meeekuAddToCartCatalog(title, price, imgUrl) {
@@ -169,7 +268,6 @@ function meeekuAddToCartCatalog(title, price, imgUrl) {
   if (emptyNotice) emptyNotice.style.display = 'none';
   if (summary) summary.style.display = 'block';
 
-  // Create unique ID for item
   const itemId = 'MeeekuCartItem-' + Date.now();
 
   const itemHtml = `
@@ -191,13 +289,11 @@ function meeekuAddToCartCatalog(title, price, imgUrl) {
   if (subtotal) subtotal.innerText = price + ' INR';
   if (cartDot) cartDot.classList.add('has-items');
 
-  // Open Cart Drawer
   const drawer = document.querySelector('cart-drawer');
   if (drawer && typeof drawer.open === 'function') {
     drawer.open();
   }
 
-  // Show Toast
   showMeeekuToastCatalog(`🎉 ${title} added to your Cart!`);
 }
 
@@ -215,13 +311,13 @@ function showMeeekuToastCatalog(msg) {
 
 {% schema %}
 {
-  "name": "Meeeku Collection Grid",
+  "name": "Meeeku Catalog Grid",
   "tag": "section",
   "class": "section",
   "settings": [],
   "presets": [
     {
-      "name": "Meeeku Collection Grid"
+      "name": "Meeeku Catalog Grid"
     }
   ]
 }
