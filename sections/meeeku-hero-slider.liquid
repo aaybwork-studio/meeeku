@@ -5,7 +5,7 @@
 
 <div class="page-width meeeku-hero-section">
   <div class="meeeku-hero-header text-center">
-    <span class="meeeku-badge meeeku-badge--ethnic">Girls Collection (2-5 Years)</span>
+    <span class="meeeku-badge meeeku-badge--ethnic">Girls Collection</span>
     <h2 class="h1 meeeku-hero-title">{{ section.settings.title | escape }}</h2>
     <p class="meeeku-hero-subtitle">{{ section.settings.subtitle | escape }}</p>
   </div>
@@ -17,7 +17,7 @@
         {% if section.settings.ethnic_image %}
           {{ section.settings.ethnic_image | image_url: width: 800 | image_tag: loading: 'lazy', class: 'meeeku-cat-img' }}
         {% else %}
-          <img src="{{ 'placeholder_ethnic_1.jpg' | asset_url }}" alt="Indian Ethnic Wear for Girls 2-5Y" class="meeeku-cat-img" width="600" height="800" loading="lazy">
+          <img src="{{ 'placeholder_ethnic_1.jpg' | asset_url }}" alt="Indian Ethnic Wear for Girls" class="meeeku-cat-img" width="600" height="800" loading="lazy">
         {% endif %}
         <span class="meeeku-badge meeeku-badge--ethnic meeeku-badge--overlay">Royal Ethnic</span>
       </div>
@@ -36,7 +36,7 @@
         {% if section.settings.nightsuits_image %}
           {{ section.settings.nightsuits_image | image_url: width: 800 | image_tag: loading: 'lazy', class: 'meeeku-cat-img' }}
         {% else %}
-          <img src="{{ 'placeholder_nightsuit_1.jpg' | asset_url }}" alt="Cozy Nightsuits for Girls 2-5Y" class="meeeku-cat-img" width="600" height="800" loading="lazy">
+          <img src="{{ 'placeholder_nightsuit_1.jpg' | asset_url }}" alt="Cozy Nightsuits for Girls" class="meeeku-cat-img" width="600" height="800" loading="lazy">
         {% endif %}
         <span class="meeeku-badge meeeku-badge--nightsuits meeeku-badge--overlay">100% Organic Cotton</span>
       </div>
