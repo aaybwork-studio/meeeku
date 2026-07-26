@@ -135,33 +135,86 @@
             {%- endfor -%}
           {% endpaginate %}
         {%- else -%}
-          {%- for i in (1..section.settings.columns_desktop) -%}
-            <li
-              class="grid__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
-              {% if settings.animations_reveal_on_scroll %}
-                data-cascade
-                style="--animation-order: {{ forloop.index }};"
-              {% endif %}
-            >
-              {% liquid
-                assign ridx = forloop.rindex
-                case ridx
-                  when 5
-                    assign ridx = 1
-                  when 6
-                    assign ridx = 2
-                endcase
-              %}
-              {%- assign placeholder_image = 'product-apparel-' | append: ridx -%}
-              {% render 'card-product',
-                show_vendor: section.settings.show_vendor,
-                media_aspect_ratio: section.settings.image_ratio,
-                image_shape: section.settings.image_shape,
-                lazy_load: false,
-                placeholder_image: placeholder_image
-              %}
-            </li>
-          {%- endfor -%}
+          <!-- Meeeku Featured Catalog Products Fallback Grid -->
+          <li class="grid__item">
+            <div class="card-wrapper">
+              <div class="meeeku-card-media-wrapper">
+                <a href="/products/royal-pink-lehenga">
+                  <img src="{{ 'placeholder_ethnic_1.jpg' | asset_url }}" alt="Royal Pink Lehenga Choli" class="meeeku-card-img" width="600" height="750" loading="lazy">
+                </a>
+                <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Royal Pink & Gold Lehenga Set', '₹2,499.00', '{{ 'placeholder_ethnic_1.jpg' | asset_url }}')">
+                  🛒 + Quick Add — ₹2,499
+                </button>
+              </div>
+              <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
+                <span class="meeeku-badge meeeku-badge--ethnic" style="font-size: 1rem; padding: 0.2rem 0.8rem;">Royal Ethnic</span>
+                <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
+                  <a href="/products/royal-pink-lehenga" style="color: #3D2355; text-decoration: none;">Royal Pink & Gold Lehenga Set</a>
+                </h3>
+                <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹2,499.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹3,499.00</span></div>
+              </div>
+            </div>
+          </li>
+
+          <li class="grid__item">
+            <div class="card-wrapper">
+              <div class="meeeku-card-media-wrapper">
+                <a href="/products/royal-yellow-lehenga">
+                  <img src="{{ 'placeholder_ethnic_2.jpg' | asset_url }}" alt="Yellow Silk Festive Lehenga" class="meeeku-card-img" width="600" height="750" loading="lazy">
+                </a>
+                <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Sunshine Yellow Silk Lehenga', '₹2,899.00', '{{ 'placeholder_ethnic_2.jpg' | asset_url }}')">
+                  🛒 + Quick Add — ₹2,899
+                </button>
+              </div>
+              <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
+                <span class="meeeku-badge meeeku-badge--ethnic" style="font-size: 1rem; padding: 0.2rem 0.8rem;">Festive Silk</span>
+                <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
+                  <a href="/products/royal-yellow-lehenga" style="color: #3D2355; text-decoration: none;">Sunshine Yellow Silk Lehenga Choli</a>
+                </h3>
+                <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹2,899.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹3,899.00</span></div>
+              </div>
+            </div>
+          </li>
+
+          <li class="grid__item">
+            <div class="card-wrapper">
+              <div class="meeeku-card-media-wrapper">
+                <a href="/products/pastel-floral-coord">
+                  <img src="{{ 'placeholder_coords_1.jpg' | asset_url }}" alt="Pastel Floral Cotton Co-ord Set" class="meeeku-card-img" width="600" height="750" loading="lazy">
+                </a>
+                <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Pastel Floral Cotton Co-ord Set', '₹1,899.00', '{{ 'placeholder_coords_1.jpg' | asset_url }}')">
+                  🛒 + Quick Add — ₹1,899
+                </button>
+              </div>
+              <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
+                <span class="meeeku-badge" style="font-size: 1rem; padding: 0.2rem 0.8rem; background: #E0F2F1; color: #00695C;">Co-ord Sets</span>
+                <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
+                  <a href="/products/pastel-floral-coord" style="color: #3D2355; text-decoration: none;">Pastel Floral Cotton Co-ord Set</a>
+                </h3>
+                <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹1,899.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹2,499.00</span></div>
+              </div>
+            </div>
+          </li>
+
+          <li class="grid__item">
+            <div class="card-wrapper">
+              <div class="meeeku-card-media-wrapper">
+                <a href="/products/cozy-lavender-nightsuit">
+                  <img src="{{ 'placeholder_nightsuit_1.jpg' | asset_url }}" alt="Lavender Organic Cotton Nightsuit" class="meeeku-card-img" width="600" height="750" loading="lazy">
+                </a>
+                <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Cozy Lavender Organic Nightsuit', '₹1,299.00', '{{ 'placeholder_nightsuit_1.jpg' | asset_url }}')">
+                  🛒 + Quick Add — ₹1,299
+                </button>
+              </div>
+              <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
+                <span class="meeeku-badge meeeku-badge--nightsuits" style="font-size: 1rem; padding: 0.2rem 0.8rem;">100% Organic</span>
+                <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
+                  <a href="/products/cozy-lavender-nightsuit" style="color: #3D2355; text-decoration: none;">Cozy Lavender Organic Nightsuit</a>
+                </h3>
+                <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹1,299.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹1,799.00</span></div>
+              </div>
+            </div>
+          </li>
         {%- endif -%}
       </ul>
       {%- if show_mobile_slider or show_desktop_slider -%}
