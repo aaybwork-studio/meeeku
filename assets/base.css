@@ -4354,6 +4354,40 @@ button,
     display: inline-block !important;
     font-size: 1.45rem !important;
   }
+  /* Fix Mobile Card Quick Add Floating '+' Badge & Disable Hover Shift */
+  .meeeku-card-hover-quick-add,
+  .meeeku-card-hover-quick-add:hover,
+  .meeeku-card-hover-quick-add:focus,
+  .meeeku-card-media-wrapper:hover .meeeku-card-hover-quick-add {
+    position: absolute !important;
+    top: 10px !important;
+    right: 10px !important;
+    bottom: auto !important;
+    left: auto !important;
+    transform: none !important;
+    margin: 0 !important;
+    width: 38px !important;
+    height: 38px !important;
+    border-radius: 50% !important;
+    background: #FF6097 !important;
+    color: #FFF !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    box-shadow: 0 4px 14px rgba(255, 96, 151, 0.4) !important;
+    border: 2px solid #FFF !important;
+    opacity: 1 !important;
+    z-index: 10 !important;
+    font-size: 0 !important;
+  }
+  .meeeku-card-hover-quick-add::after {
+    content: '+' !important;
+    font-size: 2.2rem !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    color: #FFF !important;
+  }
 }
 
 
