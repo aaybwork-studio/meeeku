@@ -210,9 +210,31 @@ let currentCategory = 'all';
 function setCategoryFilter(category, button) {
   currentCategory = category;
   document.querySelectorAll('.meeeku-pill-filter').forEach(el => el.classList.remove('active'));
-  button.classList.add('active');
+  if (button) button.classList.add('active');
+
+  const newUrl = new URL(window.location);
+  if (category && category !== 'all') {
+    newUrl.searchParams.set('category', category);
+  } else {
+    newUrl.searchParams.delete('category');
+  }
+  window.history.replaceState({}, '', newUrl);
+
   applyCatalogFiltersAndSort();
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const catParam = urlParams.get('category');
+  if (catParam) {
+    const targetButton = document.querySelector(`.meeeku-pill-filter[data-filter="${catParam}"]`);
+    if (targetButton) {
+      setCategoryFilter(catParam, targetButton);
+      return;
+    }
+  }
+  applyCatalogFiltersAndSort();
+});
 
 function applyCatalogFiltersAndSort() {
   const ageFilter = document.getElementById('MeeekuAgeFilter').value;
