@@ -376,29 +376,61 @@ function showMeeekuToastCatalog(msg) {
     padding: 0.6rem 1.2rem !important;
   }
   .meeeku-filter-toolbar {
-    padding: 1rem !important;
-    gap: 1rem !important;
-    flex-direction: column !important;
-    align-items: stretch !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin-bottom: 2rem !important;
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 0.8rem !important;
   }
   .meeeku-filter-toolbar > div {
-    width: 100%;
-    justify-content: space-between;
+    flex: 1 !important;
+    margin: 0 !important;
+    width: 50% !important;
+  }
+  .meeeku-filter-toolbar span {
+    display: none !important;
   }
   .meeeku-filter-toolbar select {
-    flex-grow: 1;
-    max-width: 60%;
+    width: 100% !important;
+    max-width: 100% !important;
+    background: #FFFDF7 !important;
+    border: 1.5px solid #F8BBD0 !important;
+    border-radius: 20px !important;
+    padding: 0.7rem 0.8rem !important;
+    font-size: 1.2rem !important;
+    color: #3D2355 !important;
+    font-weight: 700 !important;
   }
   .meeeku-card-hover-quick-add {
-    position: static !important;
+    position: absolute !important;
+    top: 10px !important;
+    right: 10px !important;
+    bottom: auto !important;
+    left: auto !important;
+    width: 38px !important;
+    height: 38px !important;
+    border-radius: 50% !important;
+    background: #FF6097 !important;
+    color: #FFF !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    box-shadow: 0 4px 14px rgba(255, 96, 151, 0.4) !important;
+    border: 2px solid #FFF !important;
     opacity: 1 !important;
     transform: none !important;
-    width: 100% !important;
-    margin-top: 0.6rem !important;
-    font-size: 1.2rem !important;
-    padding: 0.8rem 0.6rem !important;
-    min-height: 44px !important;
-    border-radius: 14px !important;
+    z-index: 10 !important;
+    font-size: 0 !important;
+  }
+  .meeeku-card-hover-quick-add::after {
+    content: '+' !important;
+    font-size: 2.2rem !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    color: #FFF !important;
   }
 }
 </style>
