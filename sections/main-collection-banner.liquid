@@ -1,162 +1,38 @@
-{% comment %} Meeeku Custom Catalog Hero Banner {% endcomment %}
-{{ 'component-collection-hero.css' | asset_url | stylesheet_tag }}
+{% comment %} Simple Clean Catalog Heading Banner {% endcomment %}
 
-<div class="meeeku-catalog-hero">
-  <div class="page-width meeeku-catalog-hero__inner">
-    
-    <!-- Top Pill Badge -->
-    <div class="meeeku-catalog-badge-wrapper">
-      <span class="meeeku-catalog-badge">
-        ✨ Meeeku Kids Couture Catalog ✨
-      </span>
-    </div>
-
-    <!-- Heading Title -->
-    <h1 class="meeeku-catalog-title">
-      {%- if collection.handle == 'all' or collection.title == 'Products' -%}
-        Explore Our Collections 👑
-      {%- else -%}
-        {{ collection.title | escape }}
-      {%- endif -%}
-    </h1>
-
-    <!-- Subheading / Description -->
-    <p class="meeeku-catalog-subtitle">
-      {%- if collection.description != blank and section.settings.show_collection_description -%}
-        {{ collection.description | strip_html }}
-      {%- else -%}
-        Crafted with super-soft organic cotton, itch-free linings, and royal Indian festive flair for your little dreamers 💕
-      {%- endif -%}
-    </p>
-
-    <!-- Quick Collection Category Pills -->
-    <div class="meeeku-catalog-pills">
-      <a href="/collections/all" class="meeeku-catalog-pill active">
-        <span>✨ All Outfits</span>
-      </a>
-      <a href="/collections/all" class="meeeku-catalog-pill">
-        <span>👑 Royal Ethnic Wear</span>
-      </a>
-      <a href="/collections/all" class="meeeku-catalog-pill">
-        <span>🌙 Organic Nightsuits</span>
-      </a>
-      <a href="/collections/all" class="meeeku-catalog-pill">
-        <span>🎀 Girls Line</span>
-      </a>
-    </div>
-
-  </div>
+<div class="page-width meeeku-catalog-banner">
+  <h1 class="meeeku-catalog-heading">
+    {%- if collection.handle == 'all' or collection.title == 'Products' -%}
+      Catalog
+    {%- else -%}
+      {{ collection.title | escape }}
+    {%- endif -%}
+  </h1>
+  {%- if section.settings.show_collection_description and collection.description != blank -%}
+    <div class="meeeku-catalog-subtext">{{ collection.description }}</div>
+  {%- endif -%}
 </div>
 
 <style>
-.meeeku-catalog-hero {
-  background: linear-gradient(135deg, #FFFDF7 0%, #FFF0F5 50%, #F8E8F5 100%);
-  padding: 4rem 2rem 3.5rem;
-  border-bottom: 2px solid #F8BBD0;
+.meeeku-catalog-banner {
   text-align: center;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 4px 20px rgba(107, 63, 160, 0.04);
+  padding-top: 3.5rem;
+  padding-bottom: 1rem;
 }
 
-.meeeku-catalog-hero::before {
-  content: '';
-  position: absolute;
-  top: -50px;
-  right: -50px;
-  width: 200px;
-  height: 200px;
-  background: radial-gradient(circle, rgba(255, 182, 193, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
-  border-radius: 50%;
-  pointer-events: none;
-}
-
-.meeeku-catalog-hero__inner {
-  max-width: 800px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 2;
-}
-
-.meeeku-catalog-badge-wrapper {
-  margin-bottom: 1.2rem;
-}
-
-.meeeku-catalog-badge {
-  display: inline-block;
-  background: #FFF;
-  border: 1.5px solid #F8BBD0;
-  color: #6B3FA0;
-  font-size: 1.3rem;
-  font-weight: 700;
-  padding: 0.6rem 1.6rem;
-  border-radius: 50px;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  box-shadow: 0 4px 12px rgba(248, 187, 208, 0.25);
-}
-
-.meeeku-catalog-title {
-  font-size: clamp(2.8rem, 5vw, 4.2rem);
+.meeeku-catalog-heading {
+  font-size: clamp(2.8rem, 4vw, 3.8rem);
   font-weight: 800;
   color: #3D2355;
-  margin: 0 0 1rem;
+  margin: 0;
   line-height: 1.2;
   letter-spacing: -0.5px;
 }
 
-.meeeku-catalog-subtitle {
-  font-size: 1.6rem;
+.meeeku-catalog-subtext {
+  font-size: 1.5rem;
   color: #6B3FA0;
-  margin: 0 auto 2.2rem;
-  max-width: 620px;
-  line-height: 1.5;
-  font-weight: 500;
-}
-
-.meeeku-catalog-pills {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.meeeku-catalog-pill {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.8rem 1.6rem;
-  background: #FFFDF7;
-  border: 2px solid #F8BBD0;
-  border-radius: 30px;
-  color: #3D2355;
-  font-size: 1.3rem;
-  font-weight: 700;
-  text-decoration: none;
-  transition: all 0.25s ease;
-  box-shadow: 0 2px 8px rgba(107, 63, 160, 0.05);
-  cursor: pointer;
-}
-
-.meeeku-catalog-pill:hover,
-.meeeku-catalog-pill.active {
-  background: #FF6097;
-  color: #FFFFFF;
-  border-color: #FF6097;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(255, 96, 151, 0.3);
-}
-
-@media screen and (max-width: 749px) {
-  .meeeku-catalog-hero {
-    padding: 3rem 1.5rem 2.5rem;
-  }
-  .meeeku-catalog-pills {
-    gap: 0.6rem;
-  }
-  .meeeku-catalog-pill {
-    padding: 0.6rem 1.2rem;
-    font-size: 1.2rem;
-  }
+  margin-top: 0.8rem;
 }
 </style>
 
@@ -166,26 +42,10 @@
   "class": "section",
   "settings": [
     {
-      "type": "paragraph",
-      "content": "t:sections.main-collection-banner.settings.paragraph.content"
-    },
-    {
       "type": "checkbox",
       "id": "show_collection_description",
       "default": true,
       "label": "t:sections.main-collection-banner.settings.show_collection_description.label"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_collection_image",
-      "default": false,
-      "label": "t:sections.main-collection-banner.settings.show_collection_image.label"
-    },
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "t:sections.all.colors.label",
-      "default": "scheme-1"
     }
   ]
 }
