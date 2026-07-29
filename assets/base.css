@@ -4298,8 +4298,12 @@ button,
   border-radius: 50% !important;
   background-color: #FF6097 !important;
   border: 2px solid #FFFDF7 !important;
-  display: block !important;
+  display: none !important;
   transition: transform 0.3s ease !important;
+}
+
+.meeeku-cart-dot.has-items {
+  display: block !important;
 }
 
 .cart-count-bubble {

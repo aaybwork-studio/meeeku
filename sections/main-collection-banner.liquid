@@ -1,49 +1,164 @@
-{% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
+{% comment %} Meeeku Custom Catalog Hero Banner {% endcomment %}
 {{ 'component-collection-hero.css' | asset_url | stylesheet_tag }}
 
-{%- style -%}
-  @media screen and (max-width: 749px) {
-    .collection-hero--with-image .collection-hero__inner {
-      padding-bottom: calc({{ settings.media_shadow_vertical_offset | at_least: 0 }}px + 2rem);
-    }
-  }
-{%- endstyle -%}
-
-<div class="collection-hero{% if section.settings.show_collection_image and collection.image %} collection-hero--with-image{% endif %} color-{{ section.settings.color_scheme }} gradient">
-  <div class="collection-hero__inner page-width {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
-    <div class="collection-hero__text-wrapper">
-      <h1 class="collection-hero__title">
-        <span class="visually-hidden">{{ 'sections.collection_template.title' | t }}: </span>
-        {{- collection.title | escape -}}
-      </h1>
-
-      {%- if section.settings.show_collection_description -%}
-        <div class="collection-hero__description rte">{{ collection.description }}</div>
-      {%- endif -%}
+<div class="meeeku-catalog-hero">
+  <div class="page-width meeeku-catalog-hero__inner">
+    
+    <!-- Top Pill Badge -->
+    <div class="meeeku-catalog-badge-wrapper">
+      <span class="meeeku-catalog-badge">
+        ✨ Meeeku Kids Couture Catalog ✨
+      </span>
     </div>
 
-    {%- if section.settings.show_collection_image and collection.image -%}
-      <div class="collection-hero__image-container media gradient">
-        <img
-          srcset="
-            {%- if collection.image.width >= 165 -%}{{ collection.image | image_url: width: 165 }} 165w,{%- endif -%}
-            {%- if collection.image.width >= 360 -%}{{ collection.image | image_url: width: 360 }} 360w,{%- endif -%}
-            {%- if collection.image.width >= 535 -%}{{ collection.image | image_url: width: 535 }} 535w,{%- endif -%}
-            {%- if collection.image.width >= 750 -%}{{ collection.image | image_url: width: 750 }} 750w,{%- endif -%}
-            {%- if collection.image.width >= 1070 -%}{{ collection.image | image_url: width: 1070 }} 1070w,{%- endif -%}
-            {%- if collection.image.width >= 1500 -%}{{ collection.image | image_url: width: 1500 }} 1500w,{%- endif -%}
-            {{ collection.image | image_url }} {{ collection.image.width }}w
-          "
-          src="{{ collection.image | image_url: width: 750 }}"
-          sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 100 | divided_by: 2 }}px, (min-width: 750px) calc(50vw - 130px), calc(50vw - 55px)"
-          alt="{{ collection.image.alt | escape }}"
-          width="{{ collection.image.width }}"
-          height="{{ collection.image.height }}"
-        >
-      </div>
-    {%- endif -%}
+    <!-- Heading Title -->
+    <h1 class="meeeku-catalog-title">
+      {%- if collection.handle == 'all' or collection.title == 'Products' -%}
+        Explore Our Collections 👑
+      {%- else -%}
+        {{ collection.title | escape }}
+      {%- endif -%}
+    </h1>
+
+    <!-- Subheading / Description -->
+    <p class="meeeku-catalog-subtitle">
+      {%- if collection.description != blank and section.settings.show_collection_description -%}
+        {{ collection.description | strip_html }}
+      {%- else -%}
+        Crafted with super-soft organic cotton, itch-free linings, and royal Indian festive flair for your little dreamers 💕
+      {%- endif -%}
+    </p>
+
+    <!-- Quick Collection Category Pills -->
+    <div class="meeeku-catalog-pills">
+      <a href="/collections/all" class="meeeku-catalog-pill active">
+        <span>✨ All Outfits</span>
+      </a>
+      <a href="/collections/all" class="meeeku-catalog-pill">
+        <span>👑 Royal Ethnic Wear</span>
+      </a>
+      <a href="/collections/all" class="meeeku-catalog-pill">
+        <span>🌙 Organic Nightsuits</span>
+      </a>
+      <a href="/collections/all" class="meeeku-catalog-pill">
+        <span>🎀 Girls Line</span>
+      </a>
+    </div>
+
   </div>
 </div>
+
+<style>
+.meeeku-catalog-hero {
+  background: linear-gradient(135deg, #FFFDF7 0%, #FFF0F5 50%, #F8E8F5 100%);
+  padding: 4rem 2rem 3.5rem;
+  border-bottom: 2px solid #F8BBD0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(107, 63, 160, 0.04);
+}
+
+.meeeku-catalog-hero::before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(255, 182, 193, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.meeeku-catalog-hero__inner {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.meeeku-catalog-badge-wrapper {
+  margin-bottom: 1.2rem;
+}
+
+.meeeku-catalog-badge {
+  display: inline-block;
+  background: #FFF;
+  border: 1.5px solid #F8BBD0;
+  color: #6B3FA0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  padding: 0.6rem 1.6rem;
+  border-radius: 50px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  box-shadow: 0 4px 12px rgba(248, 187, 208, 0.25);
+}
+
+.meeeku-catalog-title {
+  font-size: clamp(2.8rem, 5vw, 4.2rem);
+  font-weight: 800;
+  color: #3D2355;
+  margin: 0 0 1rem;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+}
+
+.meeeku-catalog-subtitle {
+  font-size: 1.6rem;
+  color: #6B3FA0;
+  margin: 0 auto 2.2rem;
+  max-width: 620px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.meeeku-catalog-pills {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.meeeku-catalog-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.8rem 1.6rem;
+  background: #FFFDF7;
+  border: 2px solid #F8BBD0;
+  border-radius: 30px;
+  color: #3D2355;
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 8px rgba(107, 63, 160, 0.05);
+  cursor: pointer;
+}
+
+.meeeku-catalog-pill:hover,
+.meeeku-catalog-pill.active {
+  background: #FF6097;
+  color: #FFFFFF;
+  border-color: #FF6097;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(255, 96, 151, 0.3);
+}
+
+@media screen and (max-width: 749px) {
+  .meeeku-catalog-hero {
+    padding: 3rem 1.5rem 2.5rem;
+  }
+  .meeeku-catalog-pills {
+    gap: 0.6rem;
+  }
+  .meeeku-catalog-pill {
+    padding: 0.6rem 1.2rem;
+    font-size: 1.2rem;
+  }
+}
+</style>
 
 {% schema %}
 {
