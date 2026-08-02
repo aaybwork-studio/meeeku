@@ -4354,6 +4354,20 @@ button,
     display: inline-block !important;
     font-size: 1.45rem !important;
   }
+
+  .section-header,
+  sticky-header,
+  .header-wrapper {
+    z-index: 99 !important;
+  }
+
+  .meeeku-card-media-wrapper {
+    position: relative !important;
+    overflow: hidden !important;
+    border-radius: 20px !important;
+    z-index: 1 !important;
+  }
+
   /* Fix Mobile Card Quick Add Floating '+' Badge & Disable Hover Shift */
   .meeeku-card-hover-quick-add,
   .meeeku-card-hover-quick-add:hover,
@@ -4378,7 +4392,7 @@ button,
     box-shadow: 0 4px 14px rgba(255, 96, 151, 0.4) !important;
     border: 2px solid #FFF !important;
     opacity: 1 !important;
-    z-index: 10 !important;
+    z-index: 2 !important;
     font-size: 0 !important;
   }
   .meeeku-card-hover-quick-add::after {
@@ -4387,6 +4401,28 @@ button,
     font-weight: 700 !important;
     line-height: 1 !important;
     color: #FFF !important;
+  }
+
+  /* Disable hover transforms on mobile viewports */
+  .meeeku-card-media-wrapper:hover,
+  .meeeku-card-img:hover,
+  .meeeku-btn-primary:hover,
+  .meeeku-btn-secondary:hover,
+  .meeeku-pill-filter:hover,
+  .meeeku-cat-card:hover {
+    transform: none !important;
+  }
+
+  /* Add crisp, satisfying touch tap/click feedback animation on mobile */
+  .meeeku-card-hover-quick-add:active,
+  .meeeku-btn-primary:active,
+  .meeeku-btn-secondary:active,
+  .meeeku-pill-filter:active,
+  .meeeku-cat-card:active,
+  .meeeku-card-media-wrapper:active {
+    transform: scale(0.94) !important;
+    opacity: 0.88 !important;
+    transition: transform 0.08s ease, opacity 0.08s ease !important;
   }
 }
 
