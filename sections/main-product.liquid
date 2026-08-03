@@ -73,6 +73,60 @@
   {%- endif -%}
 
   {% assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src' %}
+  {% liquid
+    assign prod_key = 'yellow_lehenga'
+    assign prod_category_badge = 'Girls Indian Ethnic'
+    assign prod_badge_class = 'meeeku-badge--ethnic'
+    
+    if product.handle contains 'teal' or product.title contains 'Teal'
+      assign prod_key = 'teal_dress'
+      assign prod_category_badge = 'Tulle & Sequins'
+      assign prod_badge_class = ''
+    elsif product.handle contains 'pink-net' or product.handle contains 'blush' or product.title contains 'Blush'
+      assign prod_key = 'pink_net_lehenga'
+      assign prod_category_badge = 'Royal Net & Zari'
+      assign prod_badge_class = 'meeeku-badge--ethnic'
+    elsif product.handle contains 'green' or product.handle contains 'vrindavan' or product.title contains 'Forest'
+      assign prod_key = 'green_lehenga'
+      assign prod_category_badge = '100% Organic Cotton'
+      assign prod_badge_class = 'meeeku-badge--ethnic'
+    elsif product.handle contains 'multicolor' or product.handle contains 'gulmohar' or product.title contains 'Gulmohar'
+      assign prod_key = 'multicolor_coord'
+      assign prod_category_badge = 'Festive Co-ord'
+      assign prod_badge_class = ''
+    elsif product.handle contains 'sage' or product.handle contains 'mint' or product.title contains 'Sage'
+      assign prod_key = 'sage_lehenga'
+      assign prod_category_badge = 'Gota Patti Zari'
+      assign prod_badge_class = 'meeeku-badge--ethnic'
+    elsif product.handle contains 'magenta' or product.handle contains 'phulkari' or product.title contains 'Rani'
+      assign prod_key = 'magenta_lehenga'
+      assign prod_category_badge = 'Phulkari Threadwork'
+      assign prod_badge_class = 'meeeku-badge--ethnic'
+    elsif product.handle contains 'black' or product.handle contains 'midnight' or product.title contains 'Midnight'
+      assign prod_key = 'black_lehenga'
+      assign prod_category_badge = 'Royal Halter Neck'
+      assign prod_badge_class = 'meeeku-badge--ethnic'
+    elsif product.handle contains 'ivory' or product.handle contains 'noor' or product.title contains 'Ivory'
+      assign prod_key = 'ivory_coord'
+      assign prod_category_badge = 'Trouser Co-ord'
+      assign prod_badge_class = ''
+    endif
+
+    assign main_img_name = 'meeeku_prod_' | append: prod_key | append: '.jpg'
+    assign model_img_name = 'meeeku_prod_' | append: prod_key | append: '_model.jpg'
+    assign swirl_img_name = 'meeeku_prod_' | append: prod_key | append: '_swirl.jpg'
+
+    assign display_title = product.title
+    if display_title == blank
+      assign display_title = 'Sunshine Chanderi Floral Lehenga Choli Set'
+    endif
+
+    assign display_price = product.price | money
+    if product.price == 0 or product.price == null
+      assign display_price = '₹3,499.00'
+    endif
+  %}
+
   {%- if product.title == blank or product.media.size == 0 -%}
     <div class="page-width" style="margin-top: 2rem; margin-bottom: 4rem;">
       <div class="grid grid--1-col grid--2-col-tablet" style="align-items: flex-start;">
@@ -82,27 +136,27 @@
           <div class="meeeku-pdp-gallery">
             <!-- Far-Left Vertical Thumbnails -->
             <div class="meeeku-pdp-thumbnails">
-              <div class="meeeku-pdp-thumb active" onclick="switchMainImage(this, '{{ 'meeeku_prod_yellow_lehenga.jpg' | asset_url }}')">
-                <img src="{{ 'meeeku_prod_yellow_lehenga.jpg' | asset_url }}" alt="Lehenga Flatlay View" width="80" height="100">
+              <div class="meeeku-pdp-thumb active" onclick="switchMainImage(this, '{{ main_img_name | asset_url }}')">
+                <img src="{{ main_img_name | asset_url }}" alt="{{ display_title }} Flatlay View" width="80" height="100">
               </div>
-              <div class="meeeku-pdp-thumb" onclick="switchMainImage(this, '{{ 'meeeku_prod_yellow_lehenga_model.jpg' | asset_url }}')">
-                <img src="{{ 'meeeku_prod_yellow_lehenga_model.jpg' | asset_url }}" alt="5-7Y Child Model View" width="80" height="100">
+              <div class="meeeku-pdp-thumb" onclick="switchMainImage(this, '{{ model_img_name | asset_url }}')">
+                <img src="{{ model_img_name | asset_url }}" alt="5-7Y Child Model View" width="80" height="100">
               </div>
-              <div class="meeeku-pdp-thumb" onclick="switchMainImage(this, '{{ 'meeeku_prod_yellow_lehenga_swirl.jpg' | asset_url }}')">
-                <img src="{{ 'meeeku_prod_yellow_lehenga_swirl.jpg' | asset_url }}" alt="Fabric Swirl Detail" width="80" height="100">
+              <div class="meeeku-pdp-thumb" onclick="switchMainImage(this, '{{ swirl_img_name | asset_url }}')">
+                <img src="{{ swirl_img_name | asset_url }}" alt="Fabric Swirl Detail" width="80" height="100">
               </div>
             </div>
             <!-- Large Hero Main Image -->
             <div class="meeeku-pdp-main-media">
-              <img id="MeeekuMainPdpImage" src="{{ 'meeeku_prod_yellow_lehenga.jpg' | asset_url }}" alt="Sunshine Chanderi Floral Lehenga Choli Set" class="meeeku-pdp-main-img" width="600" height="750" loading="eager">
+              <img id="MeeekuMainPdpImage" src="{{ main_img_name | asset_url }}" alt="{{ display_title }}" class="meeeku-pdp-main-img" width="600" height="750" loading="eager">
             </div>
           </div>
         </div>
 
         <!-- RIGHT COLUMN: Details, Pricing, Size Pill Selectors & Cart CTAs -->
         <div class="grid__item product__info-container" style="padding-left: 2rem;">
-          <span class="meeeku-badge meeeku-badge--ethnic" style="margin-bottom: 1rem; display: inline-block;">Girls Indian Ethnic</span>
-          <h1 class="h1" style="color: #3D2355; margin-bottom: 0.8rem; font-size: 3rem;">Sunshine Chanderi Floral Lehenga Choli Set</h1>
+          <span class="meeeku-badge {{ prod_badge_class }}" style="margin-bottom: 1rem; display: inline-block;">{{ prod_category_badge }}</span>
+          <h1 class="h1" style="color: #3D2355; margin-bottom: 0.8rem; font-size: 3rem;">{{ display_title }}</h1>
           
           <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
             <div class="meeeku-rating-stars" style="color: #FFB300; font-size: 1.6rem;">⭐⭐⭐⭐⭐</div>
@@ -110,14 +164,18 @@
           </div>
 
           <div style="margin-bottom: 2rem;">
-            <span style="font-size: 2.8rem; font-weight: 800; color: #6B3FA0;">₹3,499.00 INR</span>
+            <span style="font-size: 2.8rem; font-weight: 800; color: #6B3FA0;">{{ display_price }} INR</span>
             <span style="font-size: 1.8rem; color: #888; text-decoration: line-through; margin-left: 1rem;">₹4,199.00</span>
             <span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; margin-left: 1rem; padding: 0.3rem 1rem;">SAVE 17%</span>
           </div>
 
-          <p style="color: #555; font-size: 1.5rem; line-height: 1.6; margin-bottom: 2rem;">
-            Bring radiant sunshine to festive occasions with this lightweight Chanderi cotton lehenga. Detailed with delicate tone-on-tone floral embroidery and finished with a comfortable elasticated waistband. Fully lined with 100% soft skin-safe muslin cotton for zero-itch twirling all day long.
-          </p>
+          <div style="color: #555; font-size: 1.5rem; line-height: 1.6; margin-bottom: 2rem;">
+            {% if product.description != blank %}
+              {{ product.description }}
+            {% else %}
+              Bring radiant sunshine to festive occasions with this handcrafted ensemble. Detailed with delicate embroidery and finished with a comfortable elasticated waistband. Fully lined with 100% soft skin-safe muslin cotton for zero-itch twirling all day long.
+            {% endif %}
+          </div>
 
             <!-- Size Selector -->
             <div style="margin-bottom: 2rem;">
@@ -135,7 +193,7 @@
             <!-- Add to Cart & Buy Buttons -->
             <div style="margin-bottom: 2rem; display: flex; flex-direction: column; gap: 1rem;">
               <button type="button" class="meeeku-btn-primary" style="width: 100%; text-align: center;" onclick="meeekuAddToCartPdp(this)">
-                🛒 Add to Cart — ₹2,499.00
+                🛒 Add to Cart — {{ display_price }}
               </button>
               <button type="button" class="meeeku-btn-secondary" style="width: 100%; text-align: center;" onclick="meeekuBuyNowPdp(this)">
                 ⚡ Buy It Now

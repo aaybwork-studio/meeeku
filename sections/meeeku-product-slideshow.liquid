@@ -1,5 +1,5 @@
 {% comment %}
-  Meeeku Full-Width Scenery Hero Carousel with Direct <img> Tags & Left/Right/Left Overlay Cards
+  Meeeku Full-Width Scenery Hero Carousel with Lifestyle Model Banners & Overlay Cards
 {% endcomment %}
 
 <div class="meeeku-slideshow-wrapper">
@@ -9,18 +9,11 @@
     <div class="meeeku-slide active" data-index="0">
       <div class="meeeku-hero-bg meeeku-hero-bg--1"></div>
       <div class="page-width meeeku-slide__content-wrapper">
-        <div class="meeeku-hero-grid">
-          <div class="meeeku-hero-col-text">
-            <span class="meeeku-badge meeeku-badge--ethnic">Girls Indian Ethnic</span>
-            <h2 class="meeeku-slide__headline">Sunshine Chanderi Lehengas</h2>
-            <p class="meeeku-slide__tagline">Handcrafted with 100% soft muslin cotton lining for zero-itch festive twirling all day long.</p>
-            <a href="/collections/all?category=ethnic" class="button button--primary meeeku-btn-pill">Shop Ethnic Wear 👑</a>
-          </div>
-          <div class="meeeku-hero-col-media">
-            <div class="meeeku-hero-portrait-frame">
-              <img src="{{ 'meeeku_prod_yellow_lehenga_model.jpg' | asset_url }}" alt="Sunshine Chanderi Lehenga Child Model View" class="meeeku-hero-portrait-img" width="600" height="750" loading="eager">
-            </div>
-          </div>
+        <div class="meeeku-hero-col-text">
+          <span class="meeeku-badge meeeku-badge--ethnic">Girls Indian Ethnic</span>
+          <h2 class="meeeku-slide__headline">Sunshine Chanderi Lehengas</h2>
+          <p class="meeeku-slide__tagline">Handcrafted with 100% soft muslin cotton lining for zero-itch festive twirling all day long.</p>
+          <a href="/collections/all?category=ethnic" class="button button--primary meeeku-btn-pill">Shop Ethnic Wear 👑</a>
         </div>
       </div>
     </div>
@@ -29,18 +22,11 @@
     <div class="meeeku-slide" data-index="1">
       <div class="meeeku-hero-bg meeeku-hero-bg--2"></div>
       <div class="page-width meeeku-slide__content-wrapper">
-        <div class="meeeku-hero-grid">
-          <div class="meeeku-hero-col-text">
-            <span class="meeeku-badge" style="background: #E0F7FA; color: #00838F; border-color: #4DD0E1;">Tulle & Sequins</span>
-            <h2 class="meeeku-slide__headline">Teal Bloom Sequined Dresses</h2>
-            <p class="meeeku-slide__tagline">Voluminous tulle net skirts with sparkling floral sequin embroidery and matching headbands.</p>
-            <a href="/collections/all?category=dresses" class="button button--secondary meeeku-btn-pill">Shop Festive Dresses ✨</a>
-          </div>
-          <div class="meeeku-hero-col-media">
-            <div class="meeeku-hero-portrait-frame">
-              <img src="{{ 'meeeku_prod_teal_dress_model.jpg' | asset_url }}" alt="Teal Bloom Sequined Dress Child Model View" class="meeeku-hero-portrait-img" width="600" height="750" loading="lazy">
-            </div>
-          </div>
+        <div class="meeeku-hero-col-text">
+          <span class="meeeku-badge" style="background: #E0F7FA; color: #00838F; border-color: #4DD0E1;">Tulle & Sequins</span>
+          <h2 class="meeeku-slide__headline">Teal Bloom Sequined Dresses</h2>
+          <p class="meeeku-slide__tagline">Voluminous tulle net skirts with sparkling floral sequin embroidery and matching headbands.</p>
+          <a href="/collections/all?category=dresses" class="button button--secondary meeeku-btn-pill">Shop Festive Dresses ✨</a>
         </div>
       </div>
     </div>
@@ -49,18 +35,11 @@
     <div class="meeeku-slide" data-index="2">
       <div class="meeeku-hero-bg meeeku-hero-bg--3"></div>
       <div class="page-width meeeku-slide__content-wrapper">
-        <div class="meeeku-hero-grid">
-          <div class="meeeku-hero-col-text">
-            <span class="meeeku-badge" style="background: #FFF8E1; color: #F57F17; border-color: #FFE082;">Trouser Co-ords</span>
-            <h2 class="meeeku-slide__headline">Ivory Noor Pleated Co-ords</h2>
-            <p class="meeeku-slide__tagline">Short-sleeved embroidered collar shirt paired with comfortable relaxed pleated trousers.</p>
-            <a href="/collections/all?category=coords" class="button button--primary meeeku-btn-pill" style="background-color: #F57F17; border-color: #F57F17;">Explore Co-ord Sets 🌸</a>
-          </div>
-          <div class="meeeku-hero-col-media">
-            <div class="meeeku-hero-portrait-frame">
-              <img src="{{ 'meeeku_prod_ivory_coord_model.jpg' | asset_url }}" alt="Ivory Noor Pleated Co-ord Child Model View" class="meeeku-hero-portrait-img" width="600" height="750" loading="lazy">
-            </div>
-          </div>
+        <div class="meeeku-hero-col-text">
+          <span class="meeeku-badge" style="background: #FFF8E1; color: #F57F17; border-color: #FFE082;">Trouser Co-ords</span>
+          <h2 class="meeeku-slide__headline">Ivory Noor Pleated Co-ords</h2>
+          <p class="meeeku-slide__tagline">Short-sleeved embroidered collar shirt paired with comfortable relaxed pleated trousers.</p>
+          <a href="/collections/all?category=coords" class="button button--primary meeeku-btn-pill" style="background-color: #F57F17; border-color: #F57F17;">Explore Co-ord Sets 🌸</a>
         </div>
       </div>
     </div>
@@ -84,7 +63,7 @@
   position: relative;
   z-index: 1;
   width: 100%;
-  height: 520px;
+  height: 580px;
   overflow: hidden;
   background-color: #FFFDF7;
 }
@@ -116,15 +95,17 @@
   width: 100%;
   height: 100%;
   z-index: 1;
+  background-size: cover;
+  background-position: center center;
 }
 .meeeku-hero-bg--1 {
-  background: linear-gradient(135deg, #FFF0F5 0%, #F3E5F5 50%, #FFFDF7 100%);
+  background-image: url("{{ 'meeeku_hero_scenery_ethnic_wide.jpg' | asset_url }}");
 }
 .meeeku-hero-bg--2 {
-  background: linear-gradient(135deg, #E0F7FA 0%, #F3E5F5 50%, #FFFDF7 100%);
+  background-image: url("{{ 'meeeku_hero_scenery_dresses_wide.jpg' | asset_url }}");
 }
 .meeeku-hero-bg--3 {
-  background: linear-gradient(135deg, #FFF8E1 0%, #F3E5F5 50%, #FFFDF7 100%);
+  background-image: url("{{ 'meeeku_hero_scenery_coords_wide.jpg' | asset_url }}");
 }
 .meeeku-slide__content-wrapper {
   position: relative;
@@ -134,27 +115,20 @@
   height: 100%;
   width: 100%;
 }
-.meeeku-hero-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  gap: 3rem;
-  width: 100%;
-}
 .meeeku-hero-col-text {
   text-align: left;
   max-width: 520px;
-  background: rgba(255, 253, 247, 0.88);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(255, 253, 247, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border-radius: 28px;
   padding: 3rem;
   border: 2px solid #F8BBD0;
-  box-shadow: 0 12px 32px rgba(107, 63, 160, 0.08);
+  box-shadow: 0 12px 36px rgba(107, 63, 160, 0.14);
 }
 .meeeku-slide__headline {
   color: #3D2355 !important;
-  font-size: 3.2rem;
+  font-size: 3.4rem;
   font-weight: 800;
   line-height: 1.2;
   margin-top: 1rem;
@@ -170,30 +144,6 @@
   border-radius: 30px !important;
   font-size: 1.5rem !important;
   padding: 1.1rem 2.4rem !important;
-}
-.meeeku-hero-col-media {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.meeeku-hero-portrait-frame {
-  width: 320px;
-  height: 420px;
-  border-radius: 28px;
-  overflow: hidden;
-  box-shadow: 0 16px 40px rgba(107, 63, 160, 0.16);
-  border: 4px solid #FFFDF7;
-  background: #FFFDF7;
-  transition: transform 0.4s ease;
-}
-.meeeku-hero-portrait-frame:hover {
-  transform: translateY(-6px) scale(1.02);
-}
-.meeeku-hero-portrait-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top center;
 }
 .meeeku-slideshow__nav {
   position: absolute;
@@ -251,24 +201,14 @@
 
 @media screen and (max-width: 850px) {
   .meeeku-slideshow-wrapper {
-    height: auto !important;
-    padding-top: 2rem;
-    padding-bottom: 3rem;
-  }
-  .meeeku-hero-grid {
-    grid-template-columns: 1fr !important;
-    gap: 2rem !important;
+    height: 440px !important;
   }
   .meeeku-hero-col-text {
     max-width: 100% !important;
     padding: 2rem 1.6rem !important;
   }
-  .meeeku-hero-portrait-frame {
-    width: 260px !important;
-    height: 340px !important;
-  }
   .meeeku-slide__headline {
-    font-size: 2.4rem !important;
+    font-size: 2.5rem !important;
   }
   .meeeku-slideshow__nav {
     display: none !important;
