@@ -7,7 +7,7 @@
     
     <!-- Slide 1: Indian Ethnic -->
     <div class="meeeku-slide active" data-index="0">
-      <div class="meeeku-hero-bg meeeku-hero-bg--1"></div>
+      <div class="meeeku-hero-bg meeeku-hero-bg--1" style="background-image: url('{{ 'meeeku_hero_scenery_ethnic_wide.jpg' | asset_url }}')"></div>
       <div class="page-width meeeku-slide__content-wrapper">
         <div class="meeeku-hero-col-text">
           <span class="meeeku-badge meeeku-badge--ethnic">Girls Indian Ethnic</span>
@@ -20,7 +20,7 @@
 
     <!-- Slide 2: Festive Indo-Western Dresses -->
     <div class="meeeku-slide" data-index="1">
-      <div class="meeeku-hero-bg meeeku-hero-bg--2"></div>
+      <div class="meeeku-hero-bg meeeku-hero-bg--2" style="background-image: url('{{ 'meeeku_hero_scenery_dresses_wide.jpg' | asset_url }}')"></div>
       <div class="page-width meeeku-slide__content-wrapper">
         <div class="meeeku-hero-col-text">
           <span class="meeeku-badge" style="background: #E0F7FA; color: #00838F; border-color: #4DD0E1;">Tulle & Sequins</span>
@@ -33,7 +33,7 @@
 
     <!-- Slide 3: Festive Trouser Co-ords -->
     <div class="meeeku-slide" data-index="2">
-      <div class="meeeku-hero-bg meeeku-hero-bg--3"></div>
+      <div class="meeeku-hero-bg meeeku-hero-bg--3" style="background-image: url('{{ 'meeeku_hero_scenery_coords_wide.jpg' | asset_url }}')"></div>
       <div class="page-width meeeku-slide__content-wrapper">
         <div class="meeeku-hero-col-text">
           <span class="meeeku-badge" style="background: #FFF8E1; color: #F57F17; border-color: #FFE082;">Trouser Co-ords</span>
@@ -99,13 +99,13 @@
   background-position: center center;
 }
 .meeeku-hero-bg--1 {
-  background-image: url("{{ 'meeeku_hero_scenery_ethnic_wide.jpg' | asset_url }}");
+  /* background-image set via inline style - Liquid not processed in CSS blocks */
 }
 .meeeku-hero-bg--2 {
-  background-image: url("{{ 'meeeku_hero_scenery_dresses_wide.jpg' | asset_url }}");
+  /* background-image set via inline style - Liquid not processed in CSS blocks */
 }
 .meeeku-hero-bg--3 {
-  background-image: url("{{ 'meeeku_hero_scenery_coords_wide.jpg' | asset_url }}");
+  /* background-image set via inline style - Liquid not processed in CSS blocks */
 }
 .meeeku-slide__content-wrapper {
   position: relative;
