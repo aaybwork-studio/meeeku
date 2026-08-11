@@ -77,6 +77,8 @@
     assign prod_key = 'yellow_lehenga'
     assign prod_category_badge = 'Chanderi Cotton'
     assign prod_badge_class = 'meeeku-badge--ethnic'
+    assign default_price_val = '₹3,199.00'
+    assign default_mrp_val = '₹3,899.00'
     
     assign t = product.title | downcase
     assign h = product.handle | downcase
@@ -85,34 +87,50 @@
       assign prod_key = 'teal_dress'
       assign prod_category_badge = 'Tulle & Sequins'
       assign prod_badge_class = ''
+      assign default_price_val = '₹2,999.00'
+      assign default_mrp_val = '₹3,699.00'
     elsif h contains 'pink-net' or h contains 'blush' or h contains 'rose' or h contains 'royal-pink' or h contains 'jacquard' or t contains 'blush' or t contains 'rose' or t contains 'pink' or t contains 'royal'
       assign prod_key = 'pink_net_lehenga'
       assign prod_category_badge = 'Royal Net & Zari'
       assign prod_badge_class = 'meeeku-badge--ethnic'
+      assign default_price_val = '₹3,299.00'
+      assign default_mrp_val = '₹3,999.00'
     elsif h contains 'green' or h contains 'vrindavan' or h contains 'forest' or t contains 'forest' or t contains 'green' or t contains 'vrindavan'
       assign prod_key = 'green_lehenga'
       assign prod_category_badge = '100% Organic Cotton'
       assign prod_badge_class = 'meeeku-badge--ethnic'
+      assign default_price_val = '₹3,199.00'
+      assign default_mrp_val = '₹3,899.00'
     elsif h contains 'multicolor' or h contains 'gulmohar' or h contains 'abstract' or h contains 'splash' or t contains 'gulmohar' or t contains 'abstract' or t contains 'multicolor'
       assign prod_key = 'multicolor_coord'
       assign prod_category_badge = 'Festive Co-ord'
       assign prod_badge_class = ''
+      assign default_price_val = '₹2,899.00'
+      assign default_mrp_val = '₹3,599.00'
     elsif h contains 'sage' or h contains 'mint' or h contains 'gota' or t contains 'sage' or t contains 'mint' or t contains 'gota'
       assign prod_key = 'sage_lehenga'
       assign prod_category_badge = 'Gota Patti Zari'
       assign prod_badge_class = 'meeeku-badge--ethnic'
+      assign default_price_val = '₹3,199.00'
+      assign default_mrp_val = '₹3,899.00'
     elsif h contains 'magenta' or h contains 'phulkari' or h contains 'rani' or t contains 'phulkari' or t contains 'rani'
       assign prod_key = 'magenta_lehenga'
       assign prod_category_badge = 'Phulkari Threadwork'
       assign prod_badge_class = 'meeeku-badge--ethnic'
+      assign default_price_val = '₹2,799.00'
+      assign default_mrp_val = '₹3,499.00'
     elsif h contains 'black' or h contains 'midnight' or h contains 'blossom' or h contains 'halter' or t contains 'midnight' or t contains 'blossom' or t contains 'halter'
       assign prod_key = 'black_lehenga'
       assign prod_category_badge = 'Royal Halter Neck'
       assign prod_badge_class = 'meeeku-badge--ethnic'
-    elsif h contains 'ivory' or h contains 'noor' or h contains 'trouser' or h contains 'coord' or t contains 'ivory' or t contains 'noor' or t contains 'trouser' or t contains 'pleated'
-      assign prod_key = 'ivory_coord'
-      assign prod_category_badge = 'Trouser Co-ord'
-      assign prod_badge_class = ''
+      assign default_price_val = '₹2,799.00'
+      assign default_mrp_val = '₹3,499.00'
+    elsif h contains 'olive' or h contains 'oneshoulder' or h contains 'silk' or h contains 'ivory' or h contains 'noor' or h contains 'trouser' or h contains 'coord' or t contains 'olive' or t contains 'silk' or t contains 'ivory'
+      assign prod_key = 'olive_lehenga'
+      assign prod_category_badge = 'Zardozi Silk'
+      assign prod_badge_class = 'meeeku-badge--ethnic'
+      assign default_price_val = '₹3,299.00'
+      assign default_mrp_val = '₹3,999.00'
     endif
 
     assign main_img_name = 'meeeku_prod_' | append: prod_key | append: '.jpg'
@@ -121,12 +139,12 @@
 
     assign display_title = product.title
     if display_title == blank
-      assign display_title = 'Sunshine Chanderi Floral Lehenga Choli Set'
+      assign display_title = 'Sunshine Chanderi Lehenga'
     endif
 
     assign display_price = product.price | money
-    if product.price == 0 or product.price == blank
-      assign display_price = '₹3,499.00'
+    if product.price == 0 or product.price == blank or display_price contains '0.00'
+      assign display_price = default_price_val
     endif
   %}
 
