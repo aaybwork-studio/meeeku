@@ -347,6 +347,183 @@
         }, 2800);
       }
     }
+
+    /* Client-Side Fail-Safe Product Auto-Router for main-product.liquid */
+    document.addEventListener('DOMContentLoaded', function() {
+      const PRODUCTS_DB = {
+        'yellow_lehenga': {
+          title: 'Sunshine Chanderi Lehenga',
+          price: '₹3,199.00',
+          mrp: '₹3,899.00',
+          badge: 'Chanderi Cotton',
+          badgeClass: 'meeeku-badge--ethnic',
+          desc: 'Bring radiant sunshine to festive occasions with this lightweight Chanderi cotton lehenga. Detailed with delicate tone-on-tone floral embroidery and finished with a comfortable elasticated waistband. Fully lined with 100% soft skin-safe muslin cotton for zero-itch twirling all day long.',
+          mainImg: '{{ "meeeku_prod_yellow_lehenga.jpg" | asset_url }}',
+          modelImg: '{{ "meeeku_prod_yellow_lehenga_model.jpg" | asset_url }}',
+          swirlImg: '{{ "meeeku_prod_yellow_lehenga_swirl.jpg" | asset_url }}'
+        },
+        'teal_dress': {
+          title: 'Teal Bloom Dress',
+          price: '₹2,999.00',
+          mrp: '₹3,699.00',
+          badge: 'Tulle & Sequins',
+          badgeClass: '',
+          desc: 'Crafted for magical celebrations, this teal dress features hand-embroidered gold floral sequin motifs paired with a light, layered tulle net skirt. Fully lined with 100% soft breathable cotton.',
+          mainImg: '{{ "meeeku_prod_teal_dress.jpg" | asset_url }}',
+          modelImg: '{{ "meeeku_prod_teal_dress_model.jpg" | asset_url }}',
+          swirlImg: '{{ "meeeku_prod_teal_dress_swirl.jpg" | asset_url }}'
+        },
+        'pink_net_lehenga': {
+          title: 'Blush Rose Net Lehenga',
+          price: '₹3,299.00',
+          mrp: '₹3,999.00',
+          badge: 'Royal Net & Zari',
+          badgeClass: 'meeeku-badge--ethnic',
+          desc: 'A dream in pink, this ensemble pairs a high-neck jacquard top with a cloud-like tiered net lehenga skirt. Features scalloped gold lace trimming and skin-safe cotton inner lining.',
+          mainImg: '{{ "meeeku_prod_pink_net_lehenga.jpg" | asset_url }}',
+          modelImg: '{{ "meeeku_prod_pink_net_lehenga_model.jpg" | asset_url }}',
+          swirlImg: '{{ "meeeku_prod_pink_net_lehenga_swirl.jpg" | asset_url }}'
+        },
+        'green_lehenga': {
+          title: 'Forest Vrindavan Lehenga',
+          price: '₹3,199.00',
+          mrp: '₹3,899.00',
+          badge: '100% Organic Cotton',
+          badgeClass: 'meeeku-badge--ethnic',
+          desc: 'Inspired by nature, this deep emerald green lehenga is adorned with crisp white floral embroidery and dainty silver gota patti accents. Made from breathable 100% organic cotton.',
+          mainImg: '{{ "meeeku_prod_green_lehenga.jpg" | asset_url }}',
+          modelImg: '{{ "meeeku_prod_green_lehenga_model.jpg" | asset_url }}',
+          swirlImg: '{{ "meeeku_prod_green_lehenga_swirl.jpg" | asset_url }}'
+        },
+        'multicolor_coord': {
+          title: 'Gulmohar Splash Co-ord',
+          price: '₹2,899.00',
+          mrp: '₹3,599.00',
+          badge: 'Festive Co-ord',
+          badgeClass: '',
+          desc: 'Bright, bold, and delightfully artistic. This vibrant abstract printed co-ord set brings festive joy with rich hues of magenta, marigold yellow, and ocean blue.',
+          mainImg: '{{ "meeeku_prod_multicolor_coord.jpg" | asset_url }}',
+          modelImg: '{{ "meeeku_prod_multicolor_coord_model.jpg" | asset_url }}',
+          swirlImg: '{{ "meeeku_prod_multicolor_coord_swirl.jpg" | asset_url }}'
+        },
+        'sage_lehenga': {
+          title: 'Sage Mint Gota Lehenga',
+          price: '₹3,199.00',
+          mrp: '₹3,899.00',
+          badge: 'Gota Patti Zari',
+          badgeClass: 'meeeku-badge--ethnic',
+          desc: 'Elegance meets playfulness in soft sage mint. Decorated with intricate red flower embroidery and silver zigzag gota patti detailing, lined with skin-safe cotton.',
+          mainImg: '{{ "meeeku_prod_sage_lehenga.jpg" | asset_url }}',
+          modelImg: '{{ "meeeku_prod_sage_lehenga_model.jpg" | asset_url }}',
+          swirlImg: '{{ "meeeku_prod_sage_lehenga_swirl.jpg" | asset_url }}'
+        },
+        'magenta_lehenga': {
+          title: 'Rani Pink Phulkari Lehenga',
+          price: '₹2,799.00',
+          mrp: '₹3,499.00',
+          badge: 'Phulkari Threadwork',
+          badgeClass: 'meeeku-badge--ethnic',
+          desc: 'Vibrant Rani magenta lehenga featuring multi-colored floral boti embroidery and a scalloped embroidered hem. Ideal for weddings, festive occasions, and family celebrations.',
+          mainImg: '{{ "meeeku_prod_magenta_lehenga.jpg" | asset_url }}',
+          modelImg: '{{ "meeeku_prod_magenta_lehenga_model.jpg" | asset_url }}',
+          swirlImg: '{{ "meeeku_prod_magenta_lehenga_swirl.jpg" | asset_url }}'
+        },
+        'black_lehenga': {
+          title: 'Midnight Blossom Halter Lehenga',
+          price: '₹2,799.00',
+          mrp: '₹3,499.00',
+          badge: 'Royal Halter Neck',
+          badgeClass: 'meeeku-badge--ethnic',
+          desc: 'Striking midnight black paired with rich crimson floral motifs. High-neck halter silhouette designed for modern little princesses who love to twirl.',
+          mainImg: '{{ "meeeku_prod_black_lehenga.jpg" | asset_url }}',
+          modelImg: '{{ "meeeku_prod_black_lehenga_model.jpg" | asset_url }}',
+          swirlImg: '{{ "meeeku_prod_black_lehenga_swirl.jpg" | asset_url }}'
+        },
+        'olive_lehenga': {
+          title: 'Olive Silk One-Shoulder Lehenga',
+          price: '₹3,299.00',
+          mrp: '₹3,999.00',
+          badge: 'Zardozi Silk',
+          badgeClass: 'meeeku-badge--ethnic',
+          desc: 'Exquisite chartreuse olive green silk ensemble. Features an asymmetrical one-shoulder crop top with intricate silver zardozi embroidery vines and a shoulder fabric floral accent, paired with a rich flared satin silk skirt.',
+          mainImg: '{{ "meeeku_prod_olive_lehenga.jpg" | asset_url }}',
+          modelImg: '{{ "meeeku_prod_olive_lehenga_model.jpg" | asset_url }}',
+          swirlImg: '{{ "meeeku_prod_olive_lehenga_swirl.jpg" | asset_url }}'
+        }
+      };
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const itemParam = urlParams.get('item');
+      const path = window.location.pathname.toLowerCase();
+      const full = path + (itemParam ? '?item=' + itemParam : '');
+
+      let foundKey = null;
+      if (itemParam && PRODUCTS_DB[itemParam]) {
+        foundKey = itemParam;
+      } else if (full.includes('teal') || full.includes('sequin')) {
+        foundKey = 'teal_dress';
+      } else if (full.includes('pink') || full.includes('blush') || full.includes('rose')) {
+        foundKey = 'pink_net_lehenga';
+      } else if (full.includes('green') || full.includes('vrindavan') || full.includes('forest')) {
+        foundKey = 'green_lehenga';
+      } else if (full.includes('multicolor') || full.includes('gulmohar') || full.includes('splash')) {
+        foundKey = 'multicolor_coord';
+      } else if (full.includes('sage') || full.includes('mint') || full.includes('gota')) {
+        foundKey = 'sage_lehenga';
+      } else if (full.includes('magenta') || full.includes('phulkari') || full.includes('rani')) {
+        foundKey = 'magenta_lehenga';
+      } else if (full.includes('black') || full.includes('midnight') || full.includes('halter')) {
+        foundKey = 'black_lehenga';
+      } else if (full.includes('olive') || full.includes('oneshoulder') || full.includes('silk') || full.includes('coord') || full.includes('ivory')) {
+        foundKey = 'olive_lehenga';
+      } else if (full.includes('yellow') || full.includes('sunshine') || full.includes('chanderi')) {
+        foundKey = 'yellow_lehenga';
+      }
+
+      if (foundKey && PRODUCTS_DB[foundKey]) {
+        const item = PRODUCTS_DB[foundKey];
+        
+        // Update Title
+        const titleEls = document.querySelectorAll('.grid__item h1, h1.h1, .product__title h1');
+        titleEls.forEach(el => el.textContent = item.title);
+
+        // Update Badge
+        const badgeEl = document.querySelector('.grid__item .meeeku-badge');
+        if (badgeEl) {
+          badgeEl.textContent = item.badge;
+          if (item.badgeClass) badgeEl.className = 'meeeku-badge ' + item.badgeClass;
+        }
+
+        // Update Price
+        const priceEls = document.querySelectorAll('.grid__item span');
+        priceEls.forEach(el => {
+          if (el.textContent.includes('INR')) el.textContent = item.price + ' INR';
+        });
+
+        // Update Hero Main Image
+        const mainImgEl = document.getElementById('MeeekuMainPdpImage');
+        if (mainImgEl) {
+          mainImgEl.src = item.modelImg;
+          mainImgEl.alt = item.title;
+        }
+
+        // Update Thumbnails
+        const thumbs = document.querySelectorAll('.meeeku-pdp-thumb');
+        if (thumbs.length >= 3) {
+          const img1 = thumbs[0].querySelector('img');
+          if (img1) img1.src = item.modelImg;
+          thumbs[0].onclick = function() { switchMainImage(thumbs[0], item.modelImg); };
+
+          const img2 = thumbs[1].querySelector('img');
+          if (img2) img2.src = item.mainImg;
+          thumbs[1].onclick = function() { switchMainImage(thumbs[1], item.mainImg); };
+
+          const img3 = thumbs[2].querySelector('img');
+          if (img3) img3.src = item.swirlImg;
+          thumbs[2].onclick = function() { switchMainImage(thumbs[2], item.swirlImg); };
+        }
+      }
+    });
     <style>
     .meeeku-pdp-size-grid {
       display: flex;
