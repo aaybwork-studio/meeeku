@@ -1,7 +1,96 @@
 {% comment %}
-  Meeeku Sample Product & 404 Handler Template
-  Ensures sample product clicks always render the full Meeeku Product Details Page (PDP)!
+  Meeeku Dynamic Product & 404 Handler Template
+  Ensures every product link dynamically renders the exact matching Product Details Page (PDP),
+  showing Model photo, Flat-lay photo, Fabric Swirl, correct price, clean title, and Size Guide!
 {% endcomment %}
+
+{% liquid
+  assign path_str = request.path | downcase
+  assign prod_key = 'yellow_lehenga'
+  assign prod_title = 'Sunshine Chanderi Lehenga'
+  assign prod_price = '₹3,199.00'
+  assign prod_mrp = '₹3,899.00'
+  assign prod_badge = 'Chanderi Cotton'
+  assign prod_badge_class = 'meeeku-badge--ethnic'
+  assign prod_desc = 'Bring radiant sunshine to festive occasions with this lightweight Chanderi cotton lehenga. Detailed with delicate tone-on-tone floral embroidery and finished with a comfortable elasticated waistband. Fully lined with 100% soft skin-safe muslin cotton for zero-itch twirling all day long.'
+
+  if path_str contains 'teal' or path_str contains 'bloom' or path_str contains 'sequin' or path_str contains 'dress'
+    assign prod_key = 'teal_dress'
+    assign prod_title = 'Teal Bloom Dress'
+    assign prod_price = '₹2,999.00'
+    assign prod_mrp = '₹3,699.00'
+    assign prod_badge = 'Tulle & Sequins'
+    assign prod_badge_class = ''
+    assign prod_desc = 'Crafted for magical celebrations, this teal dress features hand-embroidered gold floral sequin motifs paired with a light, layered tulle net skirt. Fully lined with 100% soft breathable cotton.'
+
+  elsif path_str contains 'pink-net' or path_str contains 'blush' or path_str contains 'rose' or path_str contains 'pink' or path_str contains 'jacquard'
+    assign prod_key = 'pink_net_lehenga'
+    assign prod_title = 'Blush Rose Net Lehenga'
+    assign prod_price = '₹3,299.00'
+    assign prod_mrp = '₹3,999.00'
+    assign prod_badge = 'Royal Net & Zari'
+    assign prod_badge_class = 'meeeku-badge--ethnic'
+    assign prod_desc = 'A dream in pink, this ensemble pairs a high-neck jacquard top with a cloud-like tiered net lehenga skirt. Features scalloped gold lace trimming and skin-safe cotton inner lining.'
+
+  elsif path_str contains 'green' or path_str contains 'vrindavan' or path_str contains 'forest'
+    assign prod_key = 'green_lehenga'
+    assign prod_title = 'Forest Vrindavan Lehenga'
+    assign prod_price = '₹3,199.00'
+    assign prod_mrp = '₹3,899.00'
+    assign prod_badge = '100% Organic Cotton'
+    assign prod_badge_class = 'meeeku-badge--ethnic'
+    assign prod_desc = 'Inspired by nature, this deep emerald green lehenga is adorned with crisp white floral embroidery and dainty silver gota patti accents. Made from breathable 100% organic cotton.'
+
+  elsif path_str contains 'multicolor' or path_str contains 'gulmohar' or path_str contains 'abstract' or path_str contains 'splash'
+    assign prod_key = 'multicolor_coord'
+    assign prod_title = 'Gulmohar Splash Co-ord'
+    assign prod_price = '₹2,899.00'
+    assign prod_mrp = '₹3,599.00'
+    assign prod_badge = 'Festive Co-ord'
+    assign prod_badge_class = ''
+    assign prod_desc = 'Bright, bold, and delightfully artistic. This vibrant abstract printed co-ord set brings festive joy with rich hues of magenta, marigold yellow, and ocean blue.'
+
+  elsif path_str contains 'sage' or path_str contains 'mint' or path_str contains 'gota'
+    assign prod_key = 'sage_lehenga'
+    assign prod_title = 'Sage Mint Gota Lehenga'
+    assign prod_price = '₹3,199.00'
+    assign prod_mrp = '₹3,899.00'
+    assign prod_badge = 'Gota Patti Zari'
+    assign prod_badge_class = 'meeeku-badge--ethnic'
+    assign prod_desc = 'Elegance meets playfulness in soft sage mint. Decorated with intricate red flower embroidery and silver zigzag gota patti detailing, lined with skin-safe cotton.'
+
+  elsif path_str contains 'magenta' or path_str contains 'phulkari' or path_str contains 'rani' or path_str contains 'phulkari'
+    assign prod_key = 'magenta_lehenga'
+    assign prod_title = 'Rani Pink Phulkari Lehenga'
+    assign prod_price = '₹2,799.00'
+    assign prod_mrp = '₹3,499.00'
+    assign prod_badge = 'Phulkari Threadwork'
+    assign prod_badge_class = 'meeeku-badge--ethnic'
+    assign prod_desc = 'Vibrant Rani magenta lehenga featuring multi-colored floral boti embroidery and a scalloped embroidered hem. Ideal for weddings, festive occasions, and family celebrations.'
+
+  elsif path_str contains 'black' or path_str contains 'midnight' or path_str contains 'blossom' or path_str contains 'halter'
+    assign prod_key = 'black_lehenga'
+    assign prod_title = 'Midnight Blossom Halter Lehenga'
+    assign prod_price = '₹2,799.00'
+    assign prod_mrp = '₹3,499.00'
+    assign prod_badge = 'Royal Halter Neck'
+    assign prod_badge_class = 'meeeku-badge--ethnic'
+    assign prod_desc = 'Striking midnight black paired with rich crimson floral motifs. High-neck halter silhouette designed for modern little princesses who love to twirl.'
+
+  elsif path_str contains 'olive' or path_str contains 'oneshoulder' or path_str contains 'silk' or path_str contains 'ivory' or path_str contains 'noor' or path_str contains 'coord'
+    assign prod_key = 'olive_lehenga'
+    assign prod_title = 'Olive Silk One-Shoulder Lehenga'
+    assign prod_price = '₹3,299.00'
+    assign prod_mrp = '₹3,999.00'
+    assign prod_badge = 'Zardozi Silk'
+    assign prod_badge_class = 'meeeku-badge--ethnic'
+    assign prod_desc = 'Exquisite chartreuse olive green silk ensemble. Features an asymmetrical one-shoulder crop top with intricate silver zardozi embroidery vines and a shoulder fabric floral accent, paired with a rich flared satin silk skirt.'
+  endif
+
+  assign main_img = 'meeeku_prod_' | append: prod_key | append: '.jpg'
+  assign model_img = 'meeeku_prod_' | append: prod_key | append: '_model.jpg'
+  assign swirl_img = 'meeeku_prod_' | append: prod_key | append: '_swirl.jpg'
+%}
 
 <div class="page-width" style="margin-top: 2rem; margin-bottom: 4rem;">
   <div class="grid grid--1-col grid--2-col-tablet" style="align-items: flex-start;">
@@ -9,46 +98,49 @@
     <!-- LEFT COLUMN: Sticky Gallery + Far-Left Thumbnails -->
     <div class="grid__item product__media-wrapper">
       <div class="meeeku-pdp-gallery">
-        <!-- Far-Left Vertical Thumbnails -->
+        <!-- Far-Left Vertical Thumbnails: 1=Model, 2=Dress, 3=Fabric -->
         <div class="meeeku-pdp-thumbnails">
-          <div class="meeeku-pdp-thumb active" onclick="switchMainImage404(this, '{{ 'placeholder_ethnic_1.jpg' | asset_url }}')">
-            <img src="{{ 'placeholder_ethnic_1.jpg' | asset_url }}" alt="Lehenga Front View" width="80" height="100">
+          <div class="meeeku-pdp-thumb active" onclick="switchMainImage404(this, '{{ model_img | asset_url }}')" title="Child Model View">
+            <img src="{{ model_img | asset_url }}" alt="{{ prod_title }} - Model View" width="80" height="100">
+            <span class="meeeku-thumb-label">Model</span>
           </div>
-          <div class="meeeku-pdp-thumb" onclick="switchMainImage404(this, '{{ 'carousel_product_1.jpg' | asset_url }}')">
-            <img src="{{ 'carousel_product_1.jpg' | asset_url }}" alt="Lehenga Full View" width="80" height="100">
+          <div class="meeeku-pdp-thumb" onclick="switchMainImage404(this, '{{ main_img | asset_url }}')" title="Product Flat-lay">
+            <img src="{{ main_img | asset_url }}" alt="{{ prod_title }} - Flat-lay" width="80" height="100">
+            <span class="meeeku-thumb-label">Dress</span>
           </div>
-          <div class="meeeku-pdp-thumb" onclick="switchMainImage404(this, '{{ 'placeholder_nightsuit_1.jpg' | asset_url }}')">
-            <img src="{{ 'placeholder_nightsuit_1.jpg' | asset_url }}" alt="Nightsuit Preview" width="80" height="100">
+          <div class="meeeku-pdp-thumb" onclick="switchMainImage404(this, '{{ swirl_img | asset_url }}')" title="Fabric Detail">
+            <img src="{{ swirl_img | asset_url }}" alt="{{ prod_title }} - Fabric Detail" width="80" height="100">
+            <span class="meeeku-thumb-label">Fabric</span>
           </div>
         </div>
-        <!-- Large Hero Main Image -->
+        <!-- Large Hero Main Image (defaults to MODEL photo) -->
         <div class="meeeku-pdp-main-media">
-          <img id="MeeekuMainPdpImage404" src="{{ 'placeholder_ethnic_1.jpg' | asset_url }}" alt="Royal Pink & Gold Lehenga Choli" class="meeeku-pdp-main-img" width="600" height="750" loading="eager">
+          <img id="MeeekuMainPdpImage404" src="{{ model_img | asset_url }}" alt="{{ prod_title }}" class="meeeku-pdp-main-img" width="600" height="750" loading="eager">
         </div>
       </div>
     </div>
 
     <!-- RIGHT COLUMN: Scrolling Product Details & Actions -->
-    <div class="grid__item product__info-wrapper">
-      <div class="product__info-container" style="padding-left: 1rem;">
-        <span class="meeeku-badge meeeku-badge--ethnic">Girls Indian Ethnic</span>
-        <h1 style="color: #3D2355; font-size: 3.2rem; font-weight: 800; margin-top: 1rem; margin-bottom: 0.5rem;">Royal Pink & Gold Lehenga Choli Set</h1>
-        <div style="font-size: 1.5rem; color: #FF6097; font-weight: 700; margin-bottom: 1rem;">⭐⭐⭐⭐⭐ 4.9 (128 verified reviews)</div>
+    <div class="grid__item product__info-wrapper" style="padding-left: 2rem;">
+      <div class="product__info-container">
+        <span class="meeeku-badge {{ prod_badge_class }}" style="margin-bottom: 1rem; display: inline-block;">{{ prod_badge }}</span>
+        <h1 style="color: #3D2355; font-size: 3.2rem; font-weight: 800; margin-top: 0.5rem; margin-bottom: 0.8rem;">{{ prod_title }}</h1>
+        <div style="font-size: 1.5rem; color: #FF6097; font-weight: 700; margin-bottom: 1.5rem;">⭐⭐⭐⭐⭐ 4.9 (128 verified reviews)</div>
         
         <div class="price price--large" style="margin-bottom: 1.5rem;">
-          <span class="price-item price-item--regular" style="font-size: 2.4rem; font-weight: 800; color: #6B3FA0;">₹2,499.00 INR</span>
-          <span class="price-item price-item--compare" style="text-decoration: line-through; color: #888; margin-left: 1rem; font-size: 1.8rem;">₹3,499.00</span>
-          <span class="meeeku-badge meeeku-badge--coming-soon" style="margin-left: 1rem; background-color: #E8F5E9; color: #2E7D32;">SAVE 30%</span>
+          <span class="price-item price-item--regular" style="font-size: 2.8rem; font-weight: 800; color: #6B3FA0;">{{ prod_price }} INR</span>
+          <span class="price-item price-item--compare" style="text-decoration: line-through; color: #888; margin-left: 1rem; font-size: 1.8rem;">{{ prod_mrp }}</span>
+          <span class="meeeku-badge meeeku-badge--coming-soon" style="margin-left: 1rem; background-color: #E8F5E9; color: #2E7D32; padding: 0.3rem 1rem;">SAVE 18%</span>
         </div>
 
         <p style="font-size: 1.5rem; color: #555; line-height: 1.6; margin-bottom: 2rem;">
-          Handcrafted festive Lehenga set made with lightweight organza and 100% soft breathable cotton lining. Guaranteed zero-itch comfort for your little princess during Diwali and weddings!
+          {{ prod_desc }}
         </p>
 
         <!-- Size Selector -->
         <div style="margin-bottom: 2rem;">
           <label style="font-weight: 700; color: #3D2355; font-size: 1.5rem; display: block; margin-bottom: 0.8rem;">Select Size:</label>
-          <div style="display: flex; gap: 0.8rem; flex-wrap: wrap;">
+          <div class="meeeku-pdp-size-grid">
             <button type="button" class="meeeku-size-option" onclick="selectSize404(this)">0 - 1Y</button>
             <button type="button" class="meeeku-size-option" onclick="selectSize404(this)">1 - 2Y</button>
             <button type="button" class="meeeku-size-option active" onclick="selectSize404(this)">2 - 3Y</button>
@@ -60,18 +152,56 @@
 
         <!-- Add to Cart & Buy Buttons -->
         <div style="margin-bottom: 2rem; display: flex; flex-direction: column; gap: 1rem;">
-          <button type="button" class="meeeku-btn-primary" style="width: 100%; text-align: center;" onclick="meeekuAddToCart(this)">
-            🛒 Add to Cart — ₹2,499.00
+          <button type="button" class="meeeku-btn-primary" style="width: 100%; text-align: center;" onclick="meeekuAddToCart(this, '{{ prod_title }}', '{{ prod_price }}', '{{ main_img | asset_url }}')">
+            🛒 Add to Cart — {{ prod_price }}
           </button>
           <button type="button" class="meeeku-btn-secondary" style="width: 100%; text-align: center;" onclick="meeekuBuyNow(this)">
             ⚡ Buy It Now
           </button>
         </div>
 
-        <!-- Trust Badges & Interactive Snippets -->
+        <!-- Trust Badges -->
         {% render 'meeeku-trust-badges' %}
-        {% render 'meeeku-size-guide' %}
-        {% render 'meeeku-wash-care' %}
+
+        <!-- Sizing Guide — always visible inline -->
+        <div class="meeeku-size-guide-inline" style="margin-top: 2rem; background: #FFFDF7; border: 1.5px solid #F8BBD0; border-radius: 20px; padding: 1.8rem 2rem;">
+          <h3 style="color: #3D2355; font-size: 1.6rem; font-weight: 800; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.6rem;">📏 Size & Fit Guide (0 – 6 Years)</h3>
+          <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 1.3rem; min-width: 340px;">
+              <thead>
+                <tr style="background: #F8BBD0; color: #3D2355;">
+                  <th style="padding: 0.8rem 1rem; text-align: left; border-radius: 10px 0 0 0;">Age</th>
+                  <th style="padding: 0.8rem 1rem; text-align: center;">Height (cm)</th>
+                  <th style="padding: 0.8rem 1rem; text-align: center;">Chest (cm)</th>
+                  <th style="padding: 0.8rem 1rem; text-align: center;">Waist (cm)</th>
+                  <th style="padding: 0.8rem 1rem; text-align: right; border-radius: 0 10px 0 0;">Size Label</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="background: #FFF;"><td style="padding: 0.7rem 1rem;">0 – 1Y</td><td style="text-align:center;">70–80</td><td style="text-align:center;">44–47</td><td style="text-align:center;">43–46</td><td style="text-align:right; padding-right:1rem;">XS</td></tr>
+                <tr style="background: #FFF9F4;"><td style="padding: 0.7rem 1rem;">1 – 2Y</td><td style="text-align:center;">80–90</td><td style="text-align:center;">47–50</td><td style="text-align:center;">46–49</td><td style="text-align:right; padding-right:1rem;">S</td></tr>
+                <tr style="background: #FFF;"><td style="padding: 0.7rem 1rem;">2 – 3Y</td><td style="text-align:center;">90–98</td><td style="text-align:center;">50–53</td><td style="text-align:center;">49–52</td><td style="text-align:right; padding-right:1rem;">M</td></tr>
+                <tr style="background: #FFF9F4;"><td style="padding: 0.7rem 1rem;">3 – 4Y</td><td style="text-align:center;">98–104</td><td style="text-align:center;">53–56</td><td style="text-align:center;">52–55</td><td style="text-align:right; padding-right:1rem;">L</td></tr>
+                <tr style="background: #FFF;"><td style="padding: 0.7rem 1rem;">4 – 5Y</td><td style="text-align:center;">104–110</td><td style="text-align:center;">56–59</td><td style="text-align:center;">55–58</td><td style="text-align:right; padding-right:1rem;">XL</td></tr>
+                <tr style="background: #FFF9F4;"><td style="padding: 0.7rem 1rem;">5 – 6Y</td><td style="text-align:center;">110–116</td><td style="text-align:center;">59–62</td><td style="text-align:center;">58–61</td><td style="text-align:right; padding-right:1rem;">XXL</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="font-size: 1.25rem; color: #888; margin-top: 1rem;">💡 <em>We recommend measuring your child and sizing up if between sizes. All garments have elasticated waistbands for a comfortable fit.</em></p>
+        </div>
+
+        <!-- Wash & Care Accordion -->
+        <div class="meeeku-pdp-accordions" style="margin-top: 1.5rem;">
+          <details class="meeeku-pdp-accordion" style="background: #FFFDF7; border: 1.5px solid #F8BBD0; border-radius: 16px; margin-bottom: 1rem; padding: 1rem 1.4rem;">
+            <summary style="font-weight: 700; color: #3D2355; font-size: 1.5rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+              <span>🧺 Wash & Fabric Care</span>
+              <span class="meeeku-accordion-arrow" style="font-size: 1.4rem; color: #6B3FA0;">▼</span>
+            </summary>
+            <div style="padding-top: 1rem;">
+              {% render 'meeeku-wash-care' %}
+            </div>
+          </details>
+        </div>
 
       </div>
     </div>
@@ -94,7 +224,7 @@ function selectSize404(btn) {
   document.querySelectorAll('.meeeku-size-option').forEach(function(el) { el.classList.remove('active'); });
   btn.classList.add('active');
 }
-function meeekuAddToCart(btn) {
+function meeekuAddToCart(btn, title, price, imgUrl) {
   const container = document.getElementById('MeeekuCartItemsContainer');
   const emptyNotice = document.getElementById('MeeekuCartEmptyNotice');
   const summary = document.getElementById('MeeekuCartSummary');
@@ -105,15 +235,14 @@ function meeekuAddToCart(btn) {
   if (summary) summary.style.display = 'block';
 
   const itemId = 'MeeekuCartItem-' + Date.now();
-  const imgUrl = document.getElementById('MeeekuMainPdpImage404') ? document.getElementById('MeeekuMainPdpImage404').src : '{{ "placeholder_ethnic_1.jpg" | asset_url }}';
 
   const itemHtml = `
     <div id="${itemId}" class="meeeku-cart-item" style="display: flex; gap: 1.5rem; align-items: center; background: #FFFDF7; border: 2px solid #F8BBD0; border-radius: 20px; padding: 1.2rem; margin-bottom: 1.5rem; box-shadow: 0 4px 14px rgba(107,63,160,0.06);">
-      <img src="${imgUrl}" alt="Royal Pink Lehenga Choli" width="80" height="100" style="border-radius: 14px; object-fit: cover; width: 70px; height: 90px;">
+      <img src="${imgUrl}" alt="${title}" width="80" height="100" style="border-radius: 14px; object-fit: cover; width: 70px; height: 90px;">
       <div style="flex-grow: 1;">
-        <h4 style="margin: 0 0 0.3rem; font-size: 1.5rem; font-weight: 700; color: #3D2355;">Royal Pink & Gold Lehenga Set</h4>
+        <h4 style="margin: 0 0 0.3rem; font-size: 1.5rem; font-weight: 700; color: #3D2355;">${title}</h4>
         <div style="font-size: 1.2rem; color: #666; margin-bottom: 0.4rem;">Size: 2 - 3 Years (2Y)</div>
-        <div style="font-size: 1.6rem; font-weight: 800; color: #6B3FA0;">₹2,499.00</div>
+        <div style="font-size: 1.6rem; font-weight: 800; color: #6B3FA0;">${price}</div>
       </div>
       <button type="button" style="background: transparent; border: none; font-size: 1.8rem; cursor: pointer; color: #888;" onclick="removeMeeekuCartItem('${itemId}')">✕</button>
     </div>
@@ -123,14 +252,14 @@ function meeekuAddToCart(btn) {
     container.insertAdjacentHTML('beforeend', itemHtml);
   }
 
-  if (subtotal) subtotal.innerText = '₹2,499.00 INR';
+  if (subtotal) subtotal.innerText = price + ' INR';
   if (cartDot) cartDot.classList.add('has-items');
 
   const drawer = document.querySelector('cart-drawer');
   if (drawer && typeof drawer.open === 'function') {
     drawer.open();
   }
-  showMeeekuToast('🎉 Royal Lehenga added to your Cart!');
+  showMeeekuToast('🎉 Added ' + title + ' to your Meeeku Cart!');
 }
 function meeekuBuyNow(btn) {
   showMeeekuToast('⚡ Redirecting to Secure Checkout...');
