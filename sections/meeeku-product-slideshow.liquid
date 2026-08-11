@@ -7,7 +7,7 @@
     
     <!-- Slide 1: Indian Ethnic -->
     <div class="meeeku-slide active" data-index="0">
-      <div class="meeeku-hero-bg meeeku-hero-bg--1" style="background-image: url('{{ 'meeeku_hero_scenery_ethnic_wide.jpg' | asset_url }}')"></div>
+      <img src="{{ 'meeeku_hero_scenery_ethnic_wide.jpg' | asset_url }}" alt="Sunshine Chanderi Lehengas" class="meeeku-hero-bg-img" width="1920" height="1080" loading="eager">
       <div class="page-width meeeku-slide__content-wrapper">
         <div class="meeeku-hero-col-text">
           <span class="meeeku-badge meeeku-badge--ethnic">Girls Indian Ethnic</span>
@@ -20,7 +20,7 @@
 
     <!-- Slide 2: Festive Indo-Western Dresses -->
     <div class="meeeku-slide" data-index="1">
-      <div class="meeeku-hero-bg meeeku-hero-bg--2" style="background-image: url('{{ 'meeeku_hero_scenery_dresses_wide.jpg' | asset_url }}')"></div>
+      <img src="{{ 'meeeku_hero_scenery_dresses_wide.jpg' | asset_url }}" alt="Teal Bloom Sequined Dresses" class="meeeku-hero-bg-img" width="1920" height="1080" loading="lazy">
       <div class="page-width meeeku-slide__content-wrapper">
         <div class="meeeku-hero-col-text">
           <span class="meeeku-badge" style="background: #E0F7FA; color: #00838F; border-color: #4DD0E1;">Tulle & Sequins</span>
@@ -33,7 +33,7 @@
 
     <!-- Slide 3: Festive Co-ords -->
     <div class="meeeku-slide" data-index="2">
-      <div class="meeeku-hero-bg meeeku-hero-bg--3" style="background-image: url('{{ 'meeeku_hero_scenery_coords_wide.jpg' | asset_url }}')"></div>
+      <img src="{{ 'meeeku_hero_scenery_coords_wide.jpg' | asset_url }}" alt="Gulmohar Splash & Festive Co-ords" class="meeeku-hero-bg-img" width="1920" height="1080" loading="lazy">
       <div class="page-width meeeku-slide__content-wrapper">
         <div class="meeeku-hero-col-text">
           <span class="meeeku-badge" style="background: #FFF8E1; color: #F57F17; border-color: #FFE082;">Festive Co-ord Sets</span>
@@ -88,15 +88,15 @@
   opacity: 1;
   visibility: visible;
 }
-.meeeku-hero-bg {
+.meeeku-hero-bg-img {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  object-fit: cover;
+  object-position: center center;
   z-index: 1;
-  background-size: cover;
-  background-position: center center;
 }
 .meeeku-hero-bg--1 {
   /* background-image set via inline style - Liquid not processed in CSS blocks */
