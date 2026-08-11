@@ -75,38 +75,41 @@
   {% assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src' %}
   {% liquid
     assign prod_key = 'yellow_lehenga'
-    assign prod_category_badge = 'Girls Indian Ethnic'
+    assign prod_category_badge = 'Chanderi Cotton'
     assign prod_badge_class = 'meeeku-badge--ethnic'
     
-    if product.handle contains 'teal' or product.title contains 'Teal'
+    assign t = product.title | downcase
+    assign h = product.handle | downcase
+
+    if h contains 'teal' or h contains 'bloom' or h contains 'sequin' or t contains 'teal' or t contains 'bloom'
       assign prod_key = 'teal_dress'
       assign prod_category_badge = 'Tulle & Sequins'
       assign prod_badge_class = ''
-    elsif product.handle contains 'pink-net' or product.handle contains 'blush' or product.title contains 'Blush'
+    elsif h contains 'pink-net' or h contains 'blush' or h contains 'rose' or h contains 'royal-pink' or h contains 'jacquard' or t contains 'blush' or t contains 'rose' or t contains 'pink' or t contains 'royal'
       assign prod_key = 'pink_net_lehenga'
       assign prod_category_badge = 'Royal Net & Zari'
       assign prod_badge_class = 'meeeku-badge--ethnic'
-    elsif product.handle contains 'green' or product.handle contains 'vrindavan' or product.title contains 'Forest'
+    elsif h contains 'green' or h contains 'vrindavan' or h contains 'forest' or t contains 'forest' or t contains 'green' or t contains 'vrindavan'
       assign prod_key = 'green_lehenga'
       assign prod_category_badge = '100% Organic Cotton'
       assign prod_badge_class = 'meeeku-badge--ethnic'
-    elsif product.handle contains 'multicolor' or product.handle contains 'gulmohar' or product.title contains 'Gulmohar'
+    elsif h contains 'multicolor' or h contains 'gulmohar' or h contains 'abstract' or h contains 'splash' or t contains 'gulmohar' or t contains 'abstract' or t contains 'multicolor'
       assign prod_key = 'multicolor_coord'
       assign prod_category_badge = 'Festive Co-ord'
       assign prod_badge_class = ''
-    elsif product.handle contains 'sage' or product.handle contains 'mint' or product.title contains 'Sage'
+    elsif h contains 'sage' or h contains 'mint' or h contains 'gota' or t contains 'sage' or t contains 'mint' or t contains 'gota'
       assign prod_key = 'sage_lehenga'
       assign prod_category_badge = 'Gota Patti Zari'
       assign prod_badge_class = 'meeeku-badge--ethnic'
-    elsif product.handle contains 'magenta' or product.handle contains 'phulkari' or product.title contains 'Rani'
+    elsif h contains 'magenta' or h contains 'phulkari' or h contains 'rani' or t contains 'phulkari' or t contains 'rani'
       assign prod_key = 'magenta_lehenga'
       assign prod_category_badge = 'Phulkari Threadwork'
       assign prod_badge_class = 'meeeku-badge--ethnic'
-    elsif product.handle contains 'black' or product.handle contains 'midnight' or product.title contains 'Midnight'
+    elsif h contains 'black' or h contains 'midnight' or h contains 'blossom' or h contains 'halter' or t contains 'midnight' or t contains 'blossom' or t contains 'halter'
       assign prod_key = 'black_lehenga'
       assign prod_category_badge = 'Royal Halter Neck'
       assign prod_badge_class = 'meeeku-badge--ethnic'
-    elsif product.handle contains 'ivory' or product.handle contains 'noor' or product.title contains 'Ivory'
+    elsif h contains 'ivory' or h contains 'noor' or h contains 'trouser' or h contains 'coord' or t contains 'ivory' or t contains 'noor' or t contains 'trouser' or t contains 'pleated'
       assign prod_key = 'ivory_coord'
       assign prod_category_badge = 'Trouser Co-ord'
       assign prod_badge_class = ''
@@ -122,7 +125,7 @@
     endif
 
     assign display_price = product.price | money
-    if product.price == 0 or product.price == null
+    if product.price == 0 or product.price == blank
       assign display_price = '₹3,499.00'
     endif
   %}
@@ -135,21 +138,24 @@
         <!-- LEFT COLUMN: Sticky Gallery + Far-Left Thumbnails -->
         <div class="grid__item product__media-wrapper">
           <div class="meeeku-pdp-gallery">
-            <!-- Far-Left Vertical Thumbnails -->
+            <!-- Far-Left Vertical Thumbnails: 1=Model, 2=Flatlay, 3=Swirl -->
             <div class="meeeku-pdp-thumbnails">
-              <div class="meeeku-pdp-thumb active" onclick="switchMainImage(this, '{{ main_img_name | asset_url }}')">
-                <img src="{{ main_img_name | asset_url }}" alt="{{ display_title }} Flatlay View" width="80" height="100">
+              <div class="meeeku-pdp-thumb active" onclick="switchMainImage(this, '{{ model_img_name | asset_url }}')" title="Child Model Photo">
+                <img src="{{ model_img_name | asset_url }}" alt="{{ display_title }} - Model View" width="80" height="100">
+                <span class="meeeku-thumb-label">Model</span>
               </div>
-              <div class="meeeku-pdp-thumb" onclick="switchMainImage(this, '{{ model_img_name | asset_url }}')">
-                <img src="{{ model_img_name | asset_url }}" alt="5-7Y Child Model View" width="80" height="100">
+              <div class="meeeku-pdp-thumb" onclick="switchMainImage(this, '{{ main_img_name | asset_url }}')" title="Product Flat-lay">
+                <img src="{{ main_img_name | asset_url }}" alt="{{ display_title }} - Flat-lay" width="80" height="100">
+                <span class="meeeku-thumb-label">Dress</span>
               </div>
-              <div class="meeeku-pdp-thumb" onclick="switchMainImage(this, '{{ swirl_img_name | asset_url }}')">
-                <img src="{{ swirl_img_name | asset_url }}" alt="Fabric Swirl Detail" width="80" height="100">
+              <div class="meeeku-pdp-thumb" onclick="switchMainImage(this, '{{ swirl_img_name | asset_url }}')" title="Fabric Close-up">
+                <img src="{{ swirl_img_name | asset_url }}" alt="{{ display_title }} - Fabric Detail" width="80" height="100">
+                <span class="meeeku-thumb-label">Fabric</span>
               </div>
             </div>
-            <!-- Large Hero Main Image -->
+            <!-- Large Hero Main Image — defaults to MODEL photo -->
             <div class="meeeku-pdp-main-media">
-              <img id="MeeekuMainPdpImage" src="{{ main_img_name | asset_url }}" alt="{{ display_title }}" class="meeeku-pdp-main-img" width="600" height="750" loading="eager">
+              <img id="MeeekuMainPdpImage" src="{{ model_img_name | asset_url }}" alt="{{ display_title }}" class="meeeku-pdp-main-img" width="600" height="750" loading="eager">
             </div>
           </div>
         </div>
@@ -204,18 +210,35 @@
             <!-- Trust Badges -->
             {% render 'meeeku-trust-badges' %}
 
-            <!-- Clean Collapsible Accordions on Mobile -->
-            <div class="meeeku-pdp-accordions" style="margin-top: 1.5rem;">
-              <details class="meeeku-pdp-accordion" style="background: #FFFDF7; border: 1.5px solid #F8BBD0; border-radius: 16px; margin-bottom: 1rem; padding: 1rem 1.4rem;">
-                <summary style="font-weight: 700; color: #3D2355; font-size: 1.5rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
-                  <span>📏 Size & Fit Guide</span>
-                  <span class="meeeku-accordion-arrow" style="font-size: 1.4rem; color: #6B3FA0;">▼</span>
-                </summary>
-                <div style="padding-top: 1rem;">
-                  {% render 'meeeku-size-guide' %}
-                </div>
-              </details>
+            <!-- Sizing Guide — always visible inline -->
+            <div class="meeeku-size-guide-inline" style="margin-top: 2rem; background: #FFFDF7; border: 1.5px solid #F8BBD0; border-radius: 20px; padding: 1.8rem 2rem;">
+              <h3 style="color: #3D2355; font-size: 1.6rem; font-weight: 800; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.6rem;">📏 Size & Fit Guide (0 – 6 Years)</h3>
+              <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 1.3rem; min-width: 340px;">
+                  <thead>
+                    <tr style="background: #F8BBD0; color: #3D2355;">
+                      <th style="padding: 0.8rem 1rem; text-align: left; border-radius: 10px 0 0 0;">Age</th>
+                      <th style="padding: 0.8rem 1rem; text-align: center;">Height (cm)</th>
+                      <th style="padding: 0.8rem 1rem; text-align: center;">Chest (cm)</th>
+                      <th style="padding: 0.8rem 1rem; text-align: center;">Waist (cm)</th>
+                      <th style="padding: 0.8rem 1rem; text-align: right; border-radius: 0 10px 0 0;">Size Label</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style="background: #FFF;"><td style="padding: 0.7rem 1rem;">0 – 1Y</td><td style="text-align:center;">70–80</td><td style="text-align:center;">44–47</td><td style="text-align:center;">43–46</td><td style="text-align:right; padding-right:1rem;">XS</td></tr>
+                    <tr style="background: #FFF9F4;"><td style="padding: 0.7rem 1rem;">1 – 2Y</td><td style="text-align:center;">80–90</td><td style="text-align:center;">47–50</td><td style="text-align:center;">46–49</td><td style="text-align:right; padding-right:1rem;">S</td></tr>
+                    <tr style="background: #FFF;"><td style="padding: 0.7rem 1rem;">2 – 3Y</td><td style="text-align:center;">90–98</td><td style="text-align:center;">50–53</td><td style="text-align:center;">49–52</td><td style="text-align:right; padding-right:1rem;">M</td></tr>
+                    <tr style="background: #FFF9F4;"><td style="padding: 0.7rem 1rem;">3 – 4Y</td><td style="text-align:center;">98–104</td><td style="text-align:center;">53–56</td><td style="text-align:center;">52–55</td><td style="text-align:right; padding-right:1rem;">L</td></tr>
+                    <tr style="background: #FFF;"><td style="padding: 0.7rem 1rem;">4 – 5Y</td><td style="text-align:center;">104–110</td><td style="text-align:center;">56–59</td><td style="text-align:center;">55–58</td><td style="text-align:right; padding-right:1rem;">XL</td></tr>
+                    <tr style="background: #FFF9F4;"><td style="padding: 0.7rem 1rem;">5 – 6Y</td><td style="text-align:center;">110–116</td><td style="text-align:center;">59–62</td><td style="text-align:center;">58–61</td><td style="text-align:right; padding-right:1rem;">XXL</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p style="font-size: 1.25rem; color: #888; margin-top: 1rem;">💡 <em>We recommend measuring your child and sizing up if between sizes. All garments have elasticated waistbands for a comfortable fit.</em></p>
+            </div>
 
+            <!-- Wash & Fabric Care Accordion -->
+            <div class="meeeku-pdp-accordions" style="margin-top: 1.5rem;">
               <details class="meeeku-pdp-accordion" style="background: #FFFDF7; border: 1.5px solid #F8BBD0; border-radius: 16px; margin-bottom: 1rem; padding: 1rem 1.4rem;">
                 <summary style="font-weight: 700; color: #3D2355; font-size: 1.5rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
                   <span>🧺 Wash & Fabric Care</span>
@@ -358,8 +381,8 @@
     }
     </style>
 
-    {%- comment -%}End of Meeeku custom PDP gallery{%- endcomment -%}
-    <div class="page-width">
+    {%- comment -%}Shopify default product gallery hidden — Meeeku custom gallery always active{%- endcomment -%}
+  {%- endif -%}
       <div class="product product--{{ section.settings.media_size }} product--{{ section.settings.media_position }} product--{{ section.settings.gallery_layout }} product--mobile-{{ section.settings.mobile_thumbnails }} grid grid--1-col {% if product.media.size > 0 %}grid--2-col-tablet{% else %}product--no-media{% endif %}">
         <div class="grid__item product__media-wrapper">
           {% render 'product-media-gallery', variant_images: variant_images %}
