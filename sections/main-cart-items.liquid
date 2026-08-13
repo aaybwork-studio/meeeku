@@ -51,6 +51,128 @@
       {%- endif -%}
     </div>
 
+    <!-- Smart Meeeku Cart Fallback Container -->
+    <div id="MeeekuLocalCartWrapper" style="display: none; margin-top: 2rem; background: #FFFDF7; border: 2.5px solid #F8BBD0; border-radius: 28px; padding: 2.5rem; box-shadow: 0 10px 30px rgba(107, 63, 160, 0.08);">
+      <h2 style="color: #3D2355; font-size: 2.4rem; font-weight: 800; margin-bottom: 2rem; display: flex; align-items: center; gap: 0.8rem;">
+        🛍️ Your Meeeku Shopping Bag
+      </h2>
+
+      <div id="MeeekuLocalCartList"></div>
+
+      <div style="margin-top: 2.5rem; border-top: 2px dashed #F8BBD0; padding-top: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;">
+        <div>
+          <div style="font-size: 1.4rem; color: #666;">Estimated Total:</div>
+          <div id="MeeekuLocalCartTotal" style="font-size: 2.6rem; font-weight: 800; color: #3D2355;">₹0.00</div>
+          <div style="font-size: 1.25rem; color: #FF6097; font-weight: 700; margin-top: 0.2rem;">✨ Free Shipping Across India Included</div>
+        </div>
+        
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+          <button type="button" class="button button--secondary" onclick="meeekuClearCart()" style="border-radius: 30px; padding: 1.1rem 2rem; font-size: 1.4rem; border-color: #F8BBD0; color: #6B3FA0;">
+            Clear Cart
+          </button>
+          <button type="button" class="button button--primary" onclick="meeekuProceedToCheckout()" style="border-radius: 30px; padding: 1.2rem 2.8rem; font-size: 1.6rem; font-weight: 800; background: linear-gradient(135deg, #FF6097, #E91E63); border: none; box-shadow: 0 4px 16px rgba(255, 96, 151, 0.4);">
+            🔒 Proceed to Checkout
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+    function renderMeeekuLocalCart() {
+      let cart = [];
+      try {
+        cart = JSON.parse(localStorage.getItem('meeeku_cart') || '[]');
+      } catch (e) { cart = []; }
+
+      const wrapper = document.getElementById('MeeekuLocalCartWrapper');
+      const list = document.getElementById('MeeekuLocalCartList');
+      const totalEl = document.getElementById('MeeekuLocalCartTotal');
+      const warnings = document.querySelector('.cart__warnings');
+
+      if (!wrapper || !list) return;
+
+      if (cart.length > 0) {
+        if (warnings) warnings.style.display = 'none';
+        wrapper.style.display = 'block';
+
+        let total = 0;
+        let html = '';
+
+        cart.forEach((item, index) => {
+          let numPrice = parseFloat((item.price || '0').replace(/[^0-9.]/g, '')) || 0;
+          let lineTotal = numPrice * item.quantity;
+          total += lineTotal;
+
+          html += `
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding: 1.2rem 0; border-bottom: 1px solid #F8BBD0; flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 1.5rem; flex: 1; min-width: 260px;">
+                <img src="${item.img || 'https://raw.githubusercontent.com/aaybwork-studio/meeeku/main/assets/meeeku_prod_yellow_lehenga.jpg'}" alt="${item.title}" style="width: 80px; height: 95px; object-fit: cover; border-radius: 14px; border: 1.5px solid #F8BBD0;">
+                <div>
+                  <h3 style="margin: 0 0 0.4rem; color: #3D2355; font-size: 1.7rem; font-weight: 700;">${item.title}</h3>
+                  <div style="font-size: 1.3rem; color: #6B3FA0; background: #F3E5F5; display: inline-block; padding: 0.2rem 0.8rem; border-radius: 12px; font-weight: 700;">Size: ${item.size || '2 - 3Y'}</div>
+                  <div style="font-size: 1.4rem; color: #888; margin-top: 0.4rem;">${item.price}</div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 1.2rem;">
+                <div style="display: flex; align-items: center; background: #FFF; border: 1.5px solid #F8BBD0; border-radius: 25px; padding: 0.3rem 0.8rem;">
+                  <button type="button" onclick="meeekuUpdateQty(${index}, -1)" style="background: none; border: none; font-size: 1.6rem; font-weight: 800; color: #FF6097; cursor: pointer; padding: 0 0.5rem;">-</button>
+                  <span style="font-size: 1.5rem; font-weight: 800; padding: 0 0.8rem; color: #3D2355;">${item.quantity}</span>
+                  <button type="button" onclick="meeekuUpdateQty(${index}, 1)" style="background: none; border: none; font-size: 1.6rem; font-weight: 800; color: #FF6097; cursor: pointer; padding: 0 0.5rem;">+</button>
+                </div>
+                <div style="font-size: 1.8rem; font-weight: 800; color: #3D2355; min-width: 100px; text-align: right;">₹${lineTotal.toLocaleString('en-IN')}.00</div>
+                <button type="button" onclick="meeekuRemoveItem(${index})" style="background: #FFEBEE; border: none; color: #D32F2F; border-radius: 50%; width: 36px; height: 36px; cursor: pointer; font-size: 1.4rem; display: flex; align-items: center; justify-content: center;">🗑️</button>
+              </div>
+            </div>
+          `;
+        });
+
+        list.innerHTML = html;
+        if (totalEl) totalEl.innerText = '₹' + total.toLocaleString('en-IN') + '.00';
+      } else {
+        wrapper.style.display = 'none';
+        if (warnings) warnings.style.display = 'block';
+      }
+    }
+
+    function meeekuUpdateQty(index, delta) {
+      let cart = [];
+      try { cart = JSON.parse(localStorage.getItem('meeeku_cart') || '[]'); } catch (e) { cart = []; }
+      if (cart[index]) {
+        cart[index].quantity += delta;
+        if (cart[index].quantity <= 0) cart.splice(index, 1);
+        localStorage.setItem('meeeku_cart', JSON.stringify(cart));
+        renderMeeekuLocalCart();
+      }
+    }
+
+    function meeekuRemoveItem(index) {
+      let cart = [];
+      try { cart = JSON.parse(localStorage.getItem('meeeku_cart') || '[]'); } catch (e) { cart = []; }
+      cart.splice(index, 1);
+      localStorage.setItem('meeeku_cart', JSON.stringify(cart));
+      renderMeeekuLocalCart();
+    }
+
+    function meeekuClearCart() {
+      localStorage.removeItem('meeeku_cart');
+      renderMeeekuLocalCart();
+    }
+
+    function meeekuProceedToCheckout() {
+      let cart = [];
+      try { cart = JSON.parse(localStorage.getItem('meeeku_cart') || '[]'); } catch (e) { cart = []; }
+      
+      const validItem = cart.find(i => i.id && !isNaN(parseInt(i.id)));
+      if (validItem) {
+        window.location.href = '/cart/' + validItem.id + ':' + validItem.quantity + '?checkout';
+      } else {
+        window.location.href = '/checkout';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', renderMeeekuLocalCart);
+    </script>
+
     <form action="{{ routes.cart_url }}" class="cart__contents critical-hidden" method="post" id="cart">
       <div class="cart__items" id="main-cart-items" data-id="{{ section.id }}">
         <div class="js-contents">

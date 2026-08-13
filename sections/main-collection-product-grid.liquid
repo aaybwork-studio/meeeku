@@ -423,6 +423,44 @@ function handleMeeekuWaitlistSubmit(e) {
 }
 
 function meeekuAddToCartCatalog(title, price, imgUrl, variantId) {
+  let cart = [];
+  try {
+    cart = JSON.parse(localStorage.getItem('meeeku_cart') || '[]');
+  } catch (e) { cart = []; }
+
+  const itemKey = (variantId || title) + '_2-3Y';
+  const existing = cart.find(i => i.key === itemKey);
+  if (existing) {
+    existing.quantity += 1;
+  } else {
+    cart.push({
+      key: itemKey,
+      id: variantId || '',
+      title: title,
+      price: price,
+      img: imgUrl,
+      size: '2 - 3Y',
+      quantity: 1
+    });
+  }
+
+  localStorage.setItem('meeeku_cart', JSON.stringify(cart));
+
+  if (variantId && !isNaN(parseInt(variantId))) {
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items: [{ id: parseInt(variantId), quantity: 1 }] })
+    }).catch(() => {});
+  }
+
+  const dot = document.getElementById('MeeekuCartDot');
+  if (dot) dot.classList.add('has-items');
+
+  const totalCount = cart.reduce((sum, i) => sum + i.quantity, 0);
+  const countBubbles = document.querySelectorAll('.cart-count-bubble span');
+  countBubbles.forEach(b => b.textContent = totalCount);
+
   showMeeekuToastCatalog(`🎉 ${title} added to your Cart!`);
 }
 
