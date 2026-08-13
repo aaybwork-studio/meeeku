@@ -44,7 +44,7 @@ Meeeku_Client_Deliverables/
 | 7 | **Rani Pink Phulkari Lehenga** | Phulkari Threadwork | ₹2,799.00 | ₹3,499.00 | Rani Magenta, Multi-color Threadwork |
 | 8 | **Midnight Blossom Halter Lehenga** | Royal Halter Neck | ₹2,799.00 | ₹3,499.00 | Midnight Black, Crimson Floral Blockprint |
 | 9 | **Olive Silk One-Shoulder Lehenga** | Zardozi Silk | ₹3,299.00 | ₹3,999.00 | Olive Chartreuse Satin Silk, Silver Zardozi Vines |
-| 10 | **Ivory Noor Chikankari Co-ord** | Festive Co-ord | ₹2,899.00 | ₹3,599.00 | Pure Cotton, White Chikankari Threadwork |
+
 
 ---
 
