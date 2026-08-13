@@ -10,16 +10,19 @@
       ✨ All Products
     </button>
     <button type="button" class="meeeku-pill-filter" data-filter="ethnic" onclick="setCategoryFilter('ethnic', this)">
-      👑 Royal Ethnic
-    </button>
-    <button type="button" class="meeeku-pill-filter" data-filter="nightsuits" onclick="setCategoryFilter('nightsuits', this)">
-      🌙 Organic Nightsuits
+      👑 Royal Ethnic Lehengas
     </button>
     <button type="button" class="meeeku-pill-filter" data-filter="coords" onclick="setCategoryFilter('coords', this)" style="background-color: #E0F2F1; color: #00695C; border-color: #80CBC4;">
-      🌸 Co-ord Sets (NEW)
+      🌸 Festive Co-ords
+    </button>
+    <button type="button" class="meeeku-pill-filter" data-filter="nightsuits" onclick="setCategoryFilter('nightsuits', this)" style="background-color: #F3E5F5; color: #4A148C; border-color: #CE93D8;">
+      🌙 Organic Nightsuits <span style="font-size: 0.95rem; background: #9C27B0; color: #FFF; padding: 0.15rem 0.6rem; border-radius: 12px; margin-left: 0.4rem;">Coming Soon ⏳</span>
     </button>
     <button type="button" class="meeeku-pill-filter" data-filter="boys" onclick="setCategoryFilter('boys', this)" style="background-color: #FFF8E1; color: #F57F17; border-color: #FFE082;">
-      👦 Boys Line
+      👦 Boys Line <span style="font-size: 0.95rem; background: #F57F17; color: #FFF; padding: 0.15rem 0.6rem; border-radius: 12px; margin-left: 0.4rem;">Coming Soon ⏳</span>
+    </button>
+    <button type="button" class="meeeku-pill-filter" data-filter="dresses" onclick="setCategoryFilter('dresses', this)" style="background-color: #E0F7FA; color: #00838F; border-color: #80DEEA;">
+      👗 Western Dresses <span style="font-size: 0.95rem; background: #00838F; color: #FFF; padding: 0.15rem 0.6rem; border-radius: 12px; margin-left: 0.4rem;">Coming Soon ⏳</span>
     </button>
   </div>
 
@@ -44,6 +47,21 @@
         <option value="newest">Newest Arrivals</option>
       </select>
     </div>
+  </div>
+
+  <!-- Dynamic Coming Soon & VIP Waitlist Teaser Banner -->
+  <div id="MeeekuComingSoonBanner" style="display: none; background: #FFFDF7; border: 2.5px dashed #CE93D8; border-radius: 24px; padding: 3.5rem 2rem; text-align: center; margin-bottom: 3rem; box-shadow: 0 10px 30px rgba(107, 63, 160, 0.06);">
+    <span class="meeeku-badge" style="background: #EDE7F6; color: #512DA8; border: 1.5px solid #D1C4E9; font-weight: 800; font-size: 1.2rem; padding: 0.4rem 1.2rem; border-radius: 30px;">⏳ LAUNCHING SOON</span>
+    <h3 id="MeeekuComingSoonTitle" style="color: #3D2355; font-size: 2.8rem; font-weight: 800; margin: 1.2rem 0 0.6rem;">Category Launching Soon</h3>
+    <p id="MeeekuComingSoonDesc" style="color: #6B3FA0; font-size: 1.55rem; max-width: 620px; margin: 0 auto 2rem; line-height: 1.6;">
+      We are currently crafting zero-itch, pure cotton sleepwear and festive outfits for this collection. Join our VIP waitlist to get early access & 15% OFF at launch!
+    </p>
+    <form onsubmit="handleMeeekuWaitlistSubmit(event)" style="display: flex; gap: 1rem; justify-content: center; max-width: 520px; margin: 0 auto; flex-wrap: wrap;">
+      <input type="email" placeholder="Enter your email address" required style="border: 2px solid #CE93D8; border-radius: 30px; padding: 1rem 1.6rem; font-size: 1.35rem; flex: 1; min-width: 240px; outline: none; background: #FFF;">
+      <button type="submit" class="button button--primary" style="border-radius: 30px; background: #7B1FA2; border-color: #7B1FA2; font-weight: 700; padding: 1rem 2rem; cursor: pointer; font-size: 1.35rem;">
+        🔔 Join Launch Waitlist (15% OFF)
+      </button>
+    </form>
   </div>
 
   <!-- Interactive Catalog Grid -->
@@ -312,20 +330,47 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
+const COMING_SOON_INFO = {
+  'nightsuits': {
+    title: '🌙 Organic Cotton Nightsuits — Launching Soon ⏳',
+    desc: 'Our cloud-soft 100% organic cotton sleepwear sets with whimsical prints are currently in final production. Join our VIP waitlist to claim 15% OFF + early access at launch!'
+  },
+  'boys': {
+    title: '👦 Boys Collection — Launching Soon ⏳',
+    desc: 'We are crafting handsome ethnic kurta sets and comfy pyjamas for your little princes. Enter your email to receive launch notifications & 15% OFF!'
+  },
+  'dresses': {
+    title: '👗 Western & Tulle Dresses — Launching Soon ⏳',
+    desc: 'New twirl-ready tulle net dresses and casual partywear silhouettes drop next month. Subscribe now for first access & 15% discount!'
+  }
+};
+
 function applyCatalogFiltersAndSort() {
   const ageFilter = document.getElementById('MeeekuAgeFilter').value;
   const sortOption = document.getElementById('MeeekuPriceSort').value;
   const grid = document.getElementById('MeeekuProductGrid');
   const items = Array.from(document.querySelectorAll('.meeeku-grid-item'));
+  const banner = document.getElementById('MeeekuComingSoonBanner');
+  const bannerTitle = document.getElementById('MeeekuComingSoonTitle');
+  const bannerDesc = document.getElementById('MeeekuComingSoonDesc');
+
+  if (COMING_SOON_INFO[currentCategory]) {
+    const info = COMING_SOON_INFO[currentCategory];
+    if (bannerTitle) bannerTitle.innerText = info.title;
+    if (bannerDesc) bannerDesc.innerText = info.desc;
+    if (banner) banner.style.display = 'block';
+  } else {
+    if (banner) banner.style.display = 'none';
+  }
 
   items.forEach(item => {
     const itemCat = item.getAttribute('data-category');
     const itemAge = item.getAttribute('data-age');
 
-    const catMatch = (currentCategory === 'all' || itemCat === currentCategory);
+    const catMatch = (currentCategory === 'all' || (itemCat && itemCat.includes(currentCategory)));
     const ageMatch = (ageFilter === 'all' || itemAge === ageFilter);
 
-    if (catMatch && ageMatch) {
+    if (catMatch && ageMatch && !COMING_SOON_INFO[currentCategory]) {
       item.style.display = 'block';
       item.style.opacity = '1';
     } else {
@@ -351,6 +396,15 @@ function applyCatalogFiltersAndSort() {
   });
 
   items.forEach(item => grid.appendChild(item));
+}
+
+function handleMeeekuWaitlistSubmit(e) {
+  e.preventDefault();
+  const input = e.target.querySelector('input[type="email"]');
+  if (input && input.value) {
+    showMeeekuToastCatalog('🎉 You are on the VIP Waitlist! 15% OFF code saved for launch.');
+    input.value = '';
+  }
 }
 
 function meeekuAddToCartCatalog(title, price, imgUrl, variantId) {

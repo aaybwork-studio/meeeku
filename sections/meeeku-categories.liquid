@@ -1,59 +1,81 @@
 {% comment %}
-  Meeeku Category Cards Grid (Clickable)
+  Meeeku Category Cards Grid (With Active Catalog vs Coming Soon Indicators)
 {% endcomment %}
 
 <div class="page-width meeeku-categories-section">
   <div class="text-center" style="margin-bottom: 3rem;">
     <span class="meeeku-badge meeeku-badge--ethnic">Explore Collections</span>
     <h2 class="h1" style="color: #3D2355; margin-top: 1rem;">Shop by Category</h2>
-    <p style="color: #6B3FA0; font-size: 1.6rem;">Designed with love, soft fabrics, and zero-itch comfort.</p>
+    <p style="color: #6B3FA0; font-size: 1.6rem;">Handcrafted Lehengas & Co-ords in stock, plus exciting new launches coming soon!</p>
   </div>
 
   <div class="meeeku-category-grid">
-    <!-- Category Card 1: Indian Ethnic -->
+    <!-- Category Card 1: Indian Ethnic Lehengas (IN STOCK) -->
     <a href="/collections/all?category=ethnic" class="meeeku-cat-card">
       <div class="meeeku-cat-card__media">
-        <img src="{{ 'meeeku_prod_yellow_lehenga.jpg' | asset_url }}" alt="Indian Ethnic Wear for Girls" class="meeeku-cat-img" width="600" height="800" loading="lazy">
-        <span class="meeeku-badge meeeku-badge--ethnic meeeku-badge--overlay">Royal Ethnic</span>
+        <img src="{{ 'meeeku_prod_yellow_lehenga.jpg' | asset_url }}" alt="Indian Ethnic Lehengas for Girls" class="meeeku-cat-img" width="600" height="800" loading="lazy">
+        <span class="meeeku-badge meeeku-badge--ethnic meeeku-badge--overlay">In Stock • Twirl Ready</span>
       </div>
       <div class="meeeku-cat-card__content">
-        <h3>Indian Ethnic Wear</h3>
-        <p>Vibrant Lehengas, Anarkalis & Chanderi Kurta sets crafted with soft cotton linings.</p>
+        <h3>Royal Ethnic Lehengas</h3>
+        <p>Vibrant Chanderi, Jacquard & Phulkari Lehengas with 100% soft cotton linings.</p>
         <span class="button button--primary" style="border-radius: 30px;">
-          Explore Ethnic Collection 👑
+          Explore Lehengas 👑
         </span>
       </div>
     </a>
 
-    <!-- Category Card 2: Indo-Western Co-ords -->
+    <!-- Category Card 2: Festive Co-ords (IN STOCK) -->
     <a href="/collections/all?category=coords" class="meeeku-cat-card">
       <div class="meeeku-cat-card__media">
         <img src="{{ 'meeeku_prod_multicolor_coord.jpg' | asset_url }}" alt="Co-ord Sets for Girls" class="meeeku-cat-img" width="600" height="800" loading="lazy">
-        <span class="meeeku-badge meeeku-badge--overlay" style="background: #E0F2F1; color: #00695C; border-color: #80CBC4;">Festive Co-ords</span>
+        <span class="meeeku-badge meeeku-badge--overlay" style="background: #E0F2F1; color: #00695C; border-color: #80CBC4;">In Stock • New Arrivals</span>
       </div>
       <div class="meeeku-cat-card__content">
         <h3>Festive Co-ord Sets</h3>
-        <p>Vibrant abstract printed co-ords & regal olive silk two-piece sets for comfortable playful twirls.</p>
+        <p>Vibrant abstract printed co-ords & regal olive silk two-piece sets for comfortable play.</p>
         <span class="button button--secondary" style="border-radius: 30px;">
           Shop Festive Co-ords 🌸
         </span>
       </div>
     </a>
 
-    <!-- Category Card 3: Indo-Western Dresses -->
-    <a href="/collections/all?category=dresses" class="meeeku-cat-card">
+    <!-- Category Card 3: Organic Nightsuits (COMING SOON) -->
+    <a href="/collections/all?category=nightsuits" class="meeeku-cat-card meeeku-cat-card--coming-soon">
       <div class="meeeku-cat-card__media">
-        <img src="{{ 'meeeku_prod_teal_dress.jpg' | asset_url }}" alt="Indo-Western Dresses for Girls" class="meeeku-cat-img" width="600" height="800" loading="lazy">
-        <span class="meeeku-badge meeeku-badge--overlay" style="background: #E0F7FA; color: #00838F; border-color: #4DD0E1;">Tulle & Sequins</span>
+        <img src="{{ 'placeholder_nightsuit_1.jpg' | asset_url }}" alt="Organic Cotton Nightsuits" class="meeeku-cat-img" width="600" height="800" loading="lazy">
+        <span class="meeeku-badge meeeku-badge--overlay" style="background: #EDE7F6; color: #512DA8; border: 1.5px solid #D1C4E9; font-weight: 800;">⏳ COMING SOON</span>
       </div>
       <div class="meeeku-cat-card__content">
-        <h3>Tulle & Festive Dresses</h3>
-        <p>Sparkling sequined tops with voluminous tulle net skirts and zero-itch cotton lining.</p>
-        <span class="button button--primary" style="border-radius: 30px; background: #00838F; border-color: #00838F;">
-          Shop Festive Dresses ✨
+        <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+          <h3 style="margin: 0;">Organic Nightsuits</h3>
+          <span style="font-size: 1rem; background: #9C27B0; color: #FFF; padding: 0.2rem 0.6rem; border-radius: 12px; font-weight: 700;">Coming Soon</span>
+        </div>
+        <p>Pure organic cotton sleepwear sets with whimsical hand-drawn prints in final production.</p>
+        <span class="button button--secondary" style="border-radius: 30px; background: #EDE7F6; color: #512DA8; border-color: #D1C4E9; font-weight: 700;">
+          🔔 Join Nightsuits Waitlist (15% OFF)
         </span>
       </div>
     </a>
+
+    <!-- Category Card 4: Boys Collection (COMING SOON) -->
+    <a href="/collections/all?category=boys" class="meeeku-cat-card meeeku-cat-card--coming-soon">
+      <div class="meeeku-cat-card__media">
+        <img src="{{ 'placeholder_boys_teaser.jpg' | asset_url }}" alt="Boys Collection Coming Soon" class="meeeku-cat-img" width="600" height="800" loading="lazy">
+        <span class="meeeku-badge meeeku-badge--overlay" style="background: #FFF8E1; color: #F57F17; border: 1.5px solid #FFE082; font-weight: 800;">⏳ COMING SOON</span>
+      </div>
+      <div class="meeeku-cat-card__content">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+          <h3 style="margin: 0;">Boys Collection</h3>
+          <span style="font-size: 1rem; background: #F57F17; color: #FFF; padding: 0.2rem 0.6rem; border-radius: 12px; font-weight: 700;">Coming Soon</span>
+        </div>
+        <p>Handsome ethnic kurta sets and super-soft sleepwear for your little princes dropping soon.</p>
+        <span class="button button--primary" style="border-radius: 30px; background: #F57F17; border-color: #F57F17; font-weight: 700;">
+          👦 Join Boys Waitlist (15% OFF)
+        </span>
+      </div>
+    </a>
+
   </div>
 </div>
 
@@ -64,8 +86,8 @@
 }
 .meeeku-category-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 3rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2.5rem;
 }
 .meeeku-cat-card {
   text-decoration: none !important;
@@ -84,9 +106,13 @@
   transform: translateY(-8px);
   box-shadow: 0 16px 40px rgba(107, 63, 160, 0.16);
 }
+.meeeku-cat-card--coming-soon {
+  border: 2px dashed #B39DDB;
+  background: #FCF9FF;
+}
 .meeeku-cat-card__media {
   position: relative;
-  height: 440px;
+  height: 380px;
   overflow: hidden;
 }
 .meeeku-cat-img {
@@ -106,7 +132,7 @@
   z-index: 2;
 }
 .meeeku-cat-card__content {
-  padding: 2.5rem;
+  padding: 2rem 1.8rem;
   text-align: center;
   flex-grow: 1;
   display: flex;
@@ -115,13 +141,14 @@
 }
 .meeeku-cat-card__content h3 {
   color: #3D2355;
-  font-size: 2.4rem;
-  margin-bottom: 1rem;
+  font-size: 2.2rem;
+  margin-bottom: 0.8rem;
 }
 .meeeku-cat-card__content p {
   color: #666;
-  font-size: 1.5rem;
-  margin-bottom: 2rem;
+  font-size: 1.45rem;
+  margin-bottom: 1.8rem;
+  line-height: 1.5;
 }
 </style>
 
