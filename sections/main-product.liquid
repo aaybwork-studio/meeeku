@@ -2,7 +2,7 @@
   Meeeku Clean & Scoped Single Product Template
 {% endcomment %}
 
-<div id="MainProduct-{{ section.id }}" class="page-width meeeku-pdp-container" style="padding-top: 2rem; padding-bottom: 5rem;">
+<product-info id="MainProduct-{{ section.id }}" class="product-info page-width meeeku-pdp-container" data-section="{{ section.id }}" data-product-id="{{ product.id }}" style="display: block; padding-top: 2rem; padding-bottom: 5rem;">
   
   {% liquid
     assign prod_key = 'yellow_lehenga'
@@ -195,7 +195,7 @@
 
     </div>
   </div>
-</div>
+</product-info>
 
 <style>
 .meeeku-pdp-layout {

@@ -1,169 +1,256 @@
 {% comment %}
-  Meeeku Category Cards Grid (With Active Catalog vs Coming Soon Indicators)
+  Meeeku Luxury Bento Category Grid (Hero In-Stock Collection + Coming Soon Teasers)
 {% endcomment %}
 
 <div class="page-width meeeku-categories-section">
-  <div class="text-center" style="margin-bottom: 3rem;">
-    <span class="meeeku-badge meeeku-badge--ethnic">Explore Collections</span>
-    <h2 class="h1" style="color: #3D2355; margin-top: 1rem;">Shop by Category</h2>
-    <p style="color: #6B3FA0; font-size: 1.6rem;">Handcrafted Lehengas & Co-ords in stock, plus exciting new launches coming soon!</p>
+  <div class="text-center" style="margin-bottom: 3.5rem;">
+    <span class="meeeku-badge meeeku-badge--ethnic" style="font-size: 1.25rem; padding: 0.4rem 1.4rem;">Explore Collections</span>
+    <h2 class="h1" style="color: #3D2355; margin-top: 1rem; font-size: 3.6rem; font-weight: 800;">Shop by Category</h2>
+    <p style="color: #6B3FA0; font-size: 1.65rem; max-width: 600px; margin: 0.5rem auto 0;">100% Soft Cotton Muslin Lining • Zero-Itch Guarantee • Handcrafted for Little Princesses (0-6Y)</p>
   </div>
 
-  <div class="meeeku-category-grid">
-    <!-- Category Card 1: Indian Ethnic Lehengas (IN STOCK) -->
-    <a href="/collections/all?category=ethnic" class="meeeku-cat-card">
-      <div class="meeeku-cat-card__media">
-        <img src="{{ 'meeeku_prod_yellow_lehenga.jpg' | asset_url }}" alt="Indian Ethnic Lehengas for Girls" class="meeeku-cat-img" width="600" height="800" loading="lazy">
-        <span class="meeeku-badge meeeku-badge--ethnic meeeku-badge--overlay">In Stock • Twirl Ready</span>
+  <div class="meeeku-bento-grid">
+    <!-- Bento Hero Card: Royal Ethnic Lehengas (IN STOCK - Full Width / 2 Column Span) -->
+    <a href="/collections/all?category=ethnic" class="meeeku-bento-card meeeku-bento-card--hero">
+      <div class="meeeku-bento-card__media">
+        <img src="{{ 'meeeku_prod_yellow_lehenga.jpg' | asset_url }}" alt="Royal Indian Ethnic Lehengas" class="meeeku-bento-img" width="800" height="900" loading="eager">
+        <span class="meeeku-badge meeeku-badge--overlay-hero">👑 IN STOCK • 10 HANDCRAFTED STYLES</span>
       </div>
-      <div class="meeeku-cat-card__content">
-        <h3>Royal Ethnic Lehengas</h3>
-        <p>Vibrant Chanderi, Jacquard & Phulkari Lehengas with 100% soft cotton linings.</p>
-        <span class="button button--primary" style="border-radius: 30px;">
-          Explore Lehengas 👑
+      <div class="meeeku-bento-card__content">
+        <div class="meeeku-bento-tag">Featured Collection</div>
+        <h3>Royal Indian Ethnic Lehengas</h3>
+        <p>Vibrant Chanderi, Phulkari, Jacquard & Zardozi Lehengas crafted with 100% soft skin-safe muslin cotton linings for itch-free twirling all day.</p>
+        <span class="button button--primary meeeku-bento-btn">
+          Explore 10 Royal Lehengas 👑
         </span>
       </div>
     </a>
 
-    <!-- Category Card 2: Festive Co-ords (COMING SOON) -->
-    <a href="/collections/all?category=coords" class="meeeku-cat-card meeeku-cat-card--coming-soon">
-      <div class="meeeku-cat-card__media">
-        <img src="{{ 'placeholder_coords_1.jpg' | asset_url }}" alt="Co-ord Sets for Girls Coming Soon" class="meeeku-cat-img" width="600" height="800" loading="lazy">
-        <span class="meeeku-badge meeeku-badge--overlay" style="background: #E0F2F1; color: #00695C; border: 1.5px solid #80CBC4; font-weight: 800;">⏳ COMING SOON</span>
+    <!-- Bento Card 2: Festive Co-ords (COMING SOON) -->
+    <a href="/collections/all?category=coords" class="meeeku-bento-card meeeku-bento-card--sub meeeku-bento-card--coords">
+      <div class="meeeku-bento-card__media">
+        <img src="{{ 'placeholder_coords_1.jpg' | asset_url }}" alt="Festive Co-ord Sets Coming Soon" class="meeeku-bento-img" width="500" height="600" loading="lazy">
+        <span class="meeeku-badge meeeku-badge--overlay-sub" style="background: #E0F2F1; color: #00695C; border: 1.5px solid #80CBC4;">⏳ COMING SOON</span>
       </div>
-      <div class="meeeku-cat-card__content">
-        <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 0.5rem;">
-          <h3 style="margin: 0;">Festive Co-ord Sets</h3>
-          <span style="font-size: 1rem; background: #00695C; color: #FFF; padding: 0.2rem 0.6rem; border-radius: 12px; font-weight: 700;">Coming Soon</span>
-        </div>
-        <p>Vibrant 2-piece printed co-ord sets crafted with zero-itch cotton linings in design.</p>
-        <span class="button button--secondary" style="border-radius: 30px; background: #E0F2F1; color: #00695C; border-color: #80CBC4; font-weight: 700;">
+      <div class="meeeku-bento-card__content">
+        <h3>Festive Co-ord Sets</h3>
+        <p>Vibrant 2-piece printed co-ord sets crafted with zero-itch cotton linings in final design.</p>
+        <span class="button button--secondary meeeku-bento-btn-sub" style="background: #E0F2F1; color: #00695C; border-color: #80CBC4;">
           🔔 Join Co-ords Waitlist (15% OFF)
         </span>
       </div>
     </a>
 
-    <!-- Category Card 3: Organic Nightsuits (COMING SOON) -->
-    <a href="/collections/all?category=nightsuits" class="meeeku-cat-card meeeku-cat-card--coming-soon">
-      <div class="meeeku-cat-card__media">
-        <img src="{{ 'placeholder_nightsuit_1.jpg' | asset_url }}" alt="Organic Cotton Nightsuits" class="meeeku-cat-img" width="600" height="800" loading="lazy">
-        <span class="meeeku-badge meeeku-badge--overlay" style="background: #EDE7F6; color: #512DA8; border: 1.5px solid #D1C4E9; font-weight: 800;">⏳ COMING SOON</span>
+    <!-- Bento Card 3: Organic Nightsuits (COMING SOON) -->
+    <a href="/collections/all?category=nightsuits" class="meeeku-bento-card meeeku-bento-card--sub meeeku-bento-card--nightsuits">
+      <div class="meeeku-bento-card__media">
+        <img src="{{ 'placeholder_nightsuit_1.jpg' | asset_url }}" alt="Organic Cotton Nightsuits Coming Soon" class="meeeku-bento-img" width="500" height="600" loading="lazy">
+        <span class="meeeku-badge meeeku-badge--overlay-sub" style="background: #EDE7F6; color: #512DA8; border: 1.5px solid #D1C4E9;">⏳ COMING SOON</span>
       </div>
-      <div class="meeeku-cat-card__content">
-        <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 0.5rem;">
-          <h3 style="margin: 0;">Organic Nightsuits</h3>
-          <span style="font-size: 1rem; background: #9C27B0; color: #FFF; padding: 0.2rem 0.6rem; border-radius: 12px; font-weight: 700;">Coming Soon</span>
-        </div>
-        <p>Pure organic cotton sleepwear sets with whimsical hand-drawn prints in final production.</p>
-        <span class="button button--secondary" style="border-radius: 30px; background: #EDE7F6; color: #512DA8; border-color: #D1C4E9; font-weight: 700;">
+      <div class="meeeku-bento-card__content">
+        <h3>Organic Nightsuits</h3>
+        <p>Pure organic cotton sleepwear sets featuring whimsical hand-drawn prints in production.</p>
+        <span class="button button--secondary meeeku-bento-btn-sub" style="background: #EDE7F6; color: #512DA8; border-color: #D1C4E9;">
           🔔 Join Nightsuits Waitlist (15% OFF)
         </span>
       </div>
     </a>
 
-    <!-- Category Card 4: Boys Collection (COMING SOON) -->
-    <a href="/collections/all?category=boys" class="meeeku-cat-card meeeku-cat-card--coming-soon">
-      <div class="meeeku-cat-card__media">
-        <img src="{{ 'placeholder_boys_teaser.jpg' | asset_url }}" alt="Boys Collection Coming Soon" class="meeeku-cat-img" width="600" height="800" loading="lazy">
-        <span class="meeeku-badge meeeku-badge--overlay" style="background: #FFF8E1; color: #F57F17; border: 1.5px solid #FFE082; font-weight: 800;">⏳ COMING SOON</span>
+    <!-- Bento Card 4: Boys Collection (COMING SOON) -->
+    <a href="/collections/all?category=boys" class="meeeku-bento-card meeeku-bento-card--sub meeeku-bento-card--boys">
+      <div class="meeeku-bento-card__media">
+        <img src="{{ 'placeholder_boys_teaser.jpg' | asset_url }}" alt="Boys Collection Coming Soon" class="meeeku-bento-img" width="500" height="600" loading="lazy">
+        <span class="meeeku-badge meeeku-badge--overlay-sub" style="background: #FFF8E1; color: #F57F17; border: 1.5px solid #FFE082;">⏳ COMING SOON</span>
       </div>
-      <div class="meeeku-cat-card__content">
-        <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 0.5rem;">
-          <h3 style="margin: 0;">Boys Collection</h3>
-          <span style="font-size: 1rem; background: #F57F17; color: #FFF; padding: 0.2rem 0.6rem; border-radius: 12px; font-weight: 700;">Coming Soon</span>
-        </div>
-        <p>Handsome ethnic kurta sets and super-soft sleepwear for your little princes dropping soon.</p>
-        <span class="button button--primary" style="border-radius: 30px; background: #F57F17; border-color: #F57F17; font-weight: 700;">
+      <div class="meeeku-bento-card__content">
+        <h3>Boys Collection</h3>
+        <p>Handsome ethnic kurta sets and super-soft pyjamas for your little princes dropping soon.</p>
+        <span class="button button--primary meeeku-bento-btn-sub" style="background: #F57F17; border-color: #F57F17; color: #FFF;">
           👦 Join Boys Waitlist (15% OFF)
         </span>
       </div>
     </a>
-
   </div>
 </div>
 
 <style>
 .meeeku-categories-section {
   padding-top: 4rem;
-  padding-bottom: 4rem;
+  padding-bottom: 5rem;
 }
-.meeeku-category-grid {
+.meeeku-bento-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2.5rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.2rem;
 }
-.meeeku-cat-card {
+.meeeku-bento-card {
   text-decoration: none !important;
   color: inherit !important;
   background: #FFFDF7;
-  border-radius: 24px;
+  border-radius: 28px;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(107, 63, 160, 0.08);
+  box-shadow: 0 10px 30px rgba(107, 63, 160, 0.07);
   border: 2px solid #F8BBD0;
   transition: transform 0.35s ease, box-shadow 0.35s ease;
   display: flex;
   flex-direction: column;
   cursor: pointer;
+  position: relative;
 }
-.meeeku-cat-card:hover {
+.meeeku-bento-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 16px 40px rgba(107, 63, 160, 0.16);
+  box-shadow: 0 18px 45px rgba(107, 63, 160, 0.16);
 }
-.meeeku-cat-card--coming-soon {
+.meeeku-bento-card--hero {
+  grid-column: span 3;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  background: linear-gradient(135deg, #FFFDF7 0%, #FFF5F8 100%);
+  border: 2.5px solid #FF6097;
+}
+.meeeku-bento-card--hero .meeeku-bento-card__media {
+  height: 420px;
+  position: relative;
+  overflow: hidden;
+}
+.meeeku-bento-card--hero .meeeku-bento-card__content {
+  padding: 3.5rem;
+  text-align: left;
+}
+.meeeku-bento-tag {
+  display: inline-block;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #FF6097;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.8rem;
+}
+.meeeku-bento-card--hero h3 {
+  color: #3D2355;
+  font-size: 3.2rem;
+  font-weight: 800;
+  margin-bottom: 1.2rem;
+  line-height: 1.25;
+}
+.meeeku-bento-card--hero p {
+  color: #555;
+  font-size: 1.6rem;
+  line-height: 1.6;
+  margin-bottom: 2.2rem;
+}
+.meeeku-bento-btn {
+  border-radius: 30px !important;
+  font-size: 1.55rem !important;
+  padding: 1.2rem 2.8rem !important;
+  font-weight: 700 !important;
+}
+
+.meeeku-bento-card--sub {
   border: 2px dashed #B39DDB;
   background: #FCF9FF;
 }
-.meeeku-cat-card__media {
+.meeeku-bento-card--coords { border-color: #80CBC4; background: #F4FBFB; }
+.meeeku-bento-card--nightsuits { border-color: #CE93D8; background: #FAFAFE; }
+.meeeku-bento-card--boys { border-color: #FFE082; background: #FFFDF5; }
+
+.meeeku-bento-card--sub .meeeku-bento-card__media {
+  height: 280px;
   position: relative;
-  height: 380px;
   overflow: hidden;
 }
-.meeeku-cat-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top center;
-  transition: transform 0.5s ease;
-}
-.meeeku-cat-card:hover .meeeku-cat-img {
-  transform: scale(1.06);
-}
-.meeeku-badge--overlay {
-  position: absolute;
-  top: 1.5rem;
-  left: 1.5rem;
-  z-index: 2;
-}
-.meeeku-cat-card__content {
-  padding: 2rem 1.8rem;
+.meeeku-bento-card--sub .meeeku-bento-card__content {
+  padding: 2.2rem 1.8rem;
   text-align: center;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
-.meeeku-cat-card__content h3 {
+.meeeku-bento-card--sub h3 {
   color: #3D2355;
   font-size: 2.2rem;
-  margin-bottom: 0.8rem;
+  font-weight: 800;
+  margin-bottom: 0.6rem;
 }
-.meeeku-cat-card__content p {
+.meeeku-bento-card--sub p {
   color: #666;
   font-size: 1.45rem;
-  margin-bottom: 1.8rem;
   line-height: 1.5;
+  margin-bottom: 1.8rem;
+}
+.meeeku-bento-btn-sub {
+  border-radius: 30px !important;
+  font-size: 1.35rem !important;
+  padding: 1rem 1.8rem !important;
+  font-weight: 700 !important;
+  width: 100%;
+}
+.meeeku-bento-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  transition: transform 0.5s ease;
+}
+.meeeku-bento-card:hover .meeeku-bento-img {
+  transform: scale(1.06);
+}
+.meeeku-badge--overlay-hero {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  z-index: 2;
+  background: linear-gradient(135deg, #FF6097, #E91E63);
+  color: #FFF;
+  font-weight: 800;
+  padding: 0.5rem 1.4rem;
+  border-radius: 30px;
+  font-size: 1.15rem;
+  box-shadow: 0 4px 14px rgba(255, 96, 151, 0.4);
+}
+.meeeku-badge--overlay-sub {
+  position: absolute;
+  top: 1.2rem;
+  left: 1.2rem;
+  z-index: 2;
+  font-weight: 800;
+  padding: 0.4rem 1.1rem;
+  border-radius: 30px;
+  font-size: 1.1rem;
+}
+
+@media screen and (max-width: 989px) {
+  .meeeku-bento-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .meeeku-bento-card--hero {
+    grid-column: span 1;
+    grid-template-columns: 1fr;
+  }
+  .meeeku-bento-card--hero .meeeku-bento-card__media {
+    height: 320px;
+  }
+  .meeeku-bento-card--hero .meeeku-bento-card__content {
+    padding: 2.2rem 1.8rem;
+  }
+  .meeeku-bento-card--hero h3 {
+    font-size: 2.5rem;
+  }
 }
 </style>
 
 {% schema %}
 {
-  "name": "Meeeku Category Cards",
+  "name": "Meeeku Bento Categories",
   "tag": "section",
   "class": "section",
   "settings": [],
   "presets": [
     {
-      "name": "Meeeku Category Cards"
+      "name": "Meeeku Bento Categories"
     }
   ]
 }

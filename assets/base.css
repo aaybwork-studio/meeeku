@@ -4472,6 +4472,32 @@ button,
   }
 }
 
+/* Vibrant Meeeku Sale Badges & Badge Overlays */
+.badge,
+.card__badge .badge,
+.card__badge span,
+.meeeku-sale-badge {
+  background: linear-gradient(135deg, #FF6097, #E91E63) !important;
+  color: #FFFFFF !important;
+  border: 1.5px solid #FFFFFF !important;
+  font-weight: 800 !important;
+  font-size: 1.15rem !important;
+  padding: 0.4rem 1.1rem !important;
+  border-radius: 20px !important;
+  box-shadow: 0 4px 14px rgba(255, 96, 151, 0.4) !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  display: inline-block !important;
+  z-index: 5 !important;
+}
+
+.card__badge {
+  position: absolute !important;
+  top: 1rem !important;
+  left: 1rem !important;
+  z-index: 5 !important;
+}
+
 
 
 
