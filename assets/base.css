@@ -4498,6 +4498,71 @@ button,
   z-index: 5 !important;
 }
 
+/* Quick Add Modal Clean Compact PDP Layout Scoping */
+quick-add-modal .meeeku-pdp-container {
+  padding: 1rem 1.5rem !important;
+  max-width: 100% !important;
+}
+
+quick-add-modal .meeeku-pdp-layout {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 2rem !important;
+  align-items: center !important;
+}
+
+quick-add-modal .meeeku-pdp-gallery-col {
+  width: 42% !important;
+  flex-shrink: 0 !important;
+}
+
+quick-add-modal .meeeku-pdp-info-col {
+  width: 58% !important;
+}
+
+quick-add-modal .meeeku-pdp-thumbs-list {
+  display: none !important;
+}
+
+quick-add-modal .meeeku-pdp-hero-image {
+  max-height: 320px !important;
+  border-radius: 18px !important;
+  overflow: hidden !important;
+}
+
+quick-add-modal .meeeku-pdp-hero-image img {
+  max-height: 320px !important;
+  width: 100% !important;
+  object-fit: cover !important;
+}
+
+quick-add-modal .meeeku-size-guide-inline,
+quick-add-modal .meeeku-pdp-accordions {
+  display: none !important;
+}
+
+quick-add-modal .meeeku-pdp-title {
+  font-size: 2.2rem !important;
+  margin-bottom: 0.4rem !important;
+}
+
+quick-add-modal .meeeku-pdp-price {
+  font-size: 2.2rem !important;
+}
+
+@media screen and (max-width: 749px) {
+  quick-add-modal .meeeku-pdp-layout {
+    flex-direction: column !important;
+  }
+  quick-add-modal .meeeku-pdp-gallery-col,
+  quick-add-modal .meeeku-pdp-info-col {
+    width: 100% !important;
+  }
+  quick-add-modal .meeeku-pdp-hero-image {
+    max-height: 240px !important;
+  }
+}
+
 
 
 
