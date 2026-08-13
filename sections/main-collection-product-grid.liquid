@@ -50,10 +50,15 @@
   </div>
 
   <!-- Dynamic Coming Soon & VIP Waitlist Teaser Banner -->
-  <div id="MeeekuComingSoonBanner" style="display: none; background: #FFFDF7; border: 2.5px dashed #CE93D8; border-radius: 24px; padding: 3.5rem 2rem; text-align: center; margin-bottom: 3rem; box-shadow: 0 10px 30px rgba(107, 63, 160, 0.06);">
+  <div id="MeeekuComingSoonBanner" style="display: none; background: #FFFDF7; border: 2.5px dashed #CE93D8; border-radius: 24px; padding: 3rem 2rem; text-align: center; margin-bottom: 3rem; box-shadow: 0 10px 30px rgba(107, 63, 160, 0.06);">
     <span class="meeeku-badge" style="background: #EDE7F6; color: #512DA8; border: 1.5px solid #D1C4E9; font-weight: 800; font-size: 1.2rem; padding: 0.4rem 1.2rem; border-radius: 30px;">⏳ LAUNCHING SOON</span>
-    <h3 id="MeeekuComingSoonTitle" style="color: #3D2355; font-size: 2.8rem; font-weight: 800; margin: 1.2rem 0 0.6rem;">Category Launching Soon</h3>
-    <p id="MeeekuComingSoonDesc" style="color: #6B3FA0; font-size: 1.55rem; max-width: 620px; margin: 0 auto 2rem; line-height: 1.6;">
+    
+    <div id="MeeekuComingSoonImgWrap" style="margin: 1.5rem auto 1rem; max-width: 320px; max-height: 240px; border-radius: 20px; overflow: hidden; border: 2px solid #F8BBD0; box-shadow: 0 8px 20px rgba(0,0,0,0.06);">
+      <img id="MeeekuComingSoonImg" src="{{ 'placeholder_coords_1.jpg' | asset_url }}" alt="Category Sneak Peek Teaser" style="width: 100%; height: 220px; object-fit: cover;">
+    </div>
+
+    <h3 id="MeeekuComingSoonTitle" style="color: #3D2355; font-size: 2.6rem; font-weight: 800; margin: 0.8rem 0 0.5rem;">Category Launching Soon</h3>
+    <p id="MeeekuComingSoonDesc" style="color: #6B3FA0; font-size: 1.5rem; max-width: 600px; margin: 0 auto 1.8rem; line-height: 1.6;">
       We are currently crafting zero-itch, pure cotton sleepwear and festive outfits for this collection. Join our VIP waitlist to get early access & 15% OFF at launch!
     </p>
     <form onsubmit="handleMeeekuWaitlistSubmit(event)" style="display: flex; gap: 1rem; justify-content: center; max-width: 520px; margin: 0 auto; flex-wrap: wrap;">
@@ -331,17 +336,25 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 const COMING_SOON_INFO = {
+  'coords': {
+    title: '🌸 Festive Co-ord Sets — Launching Soon ⏳',
+    desc: 'Our real 2-piece festive co-ord sets with soft cotton linings are currently in design. Explore our Royal Ethnic Lehengas in stock now, or join the waitlist for 15% OFF co-ords at drop!',
+    img: "{{ 'placeholder_coords_1.jpg' | asset_url }}"
+  },
   'nightsuits': {
     title: '🌙 Organic Cotton Nightsuits — Launching Soon ⏳',
-    desc: 'Our cloud-soft 100% organic cotton sleepwear sets with whimsical prints are currently in final production. Join our VIP waitlist to claim 15% OFF + early access at launch!'
+    desc: 'Our cloud-soft 100% organic cotton sleepwear sets with whimsical prints are currently in final production. Join our VIP waitlist to claim 15% OFF + early access at launch!',
+    img: "{{ 'placeholder_nightsuit_1.jpg' | asset_url }}"
   },
   'boys': {
-    title: '👦 Boys Collection — Launching Soon ⏳',
-    desc: 'We are crafting handsome ethnic kurta sets and comfy pyjamas for your little princes. Enter your email to receive launch notifications & 15% OFF!'
+    title: '👦 Boys Line Collection — Launching Soon ⏳',
+    desc: 'We are crafting handsome ethnic kurta sets and comfy pyjamas for your little princes. Enter your email to receive launch notifications & 15% OFF!',
+    img: "{{ 'placeholder_boys_teaser.jpg' | asset_url }}"
   },
   'dresses': {
-    title: '👗 Western & Tulle Dresses — Launching Soon ⏳',
-    desc: 'New twirl-ready tulle net dresses and casual partywear silhouettes drop next month. Subscribe now for first access & 15% discount!'
+    title: '👗 Western & Tulle Partywear — Launching Soon ⏳',
+    desc: 'New twirl-ready tulle net dresses and casual partywear silhouettes drop next month. Subscribe now for first access & 15% discount!',
+    img: "{{ 'placeholder_ethnic_1.jpg' | asset_url }}"
   }
 };
 
@@ -353,11 +366,13 @@ function applyCatalogFiltersAndSort() {
   const banner = document.getElementById('MeeekuComingSoonBanner');
   const bannerTitle = document.getElementById('MeeekuComingSoonTitle');
   const bannerDesc = document.getElementById('MeeekuComingSoonDesc');
+  const bannerImg = document.getElementById('MeeekuComingSoonImg');
 
   if (COMING_SOON_INFO[currentCategory]) {
     const info = COMING_SOON_INFO[currentCategory];
     if (bannerTitle) bannerTitle.innerText = info.title;
     if (bannerDesc) bannerDesc.innerText = info.desc;
+    if (bannerImg && info.img) bannerImg.src = info.img;
     if (banner) banner.style.display = 'block';
   } else {
     if (banner) banner.style.display = 'none';
