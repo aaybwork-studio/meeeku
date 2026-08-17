@@ -8,58 +8,19 @@
       "type": "meeeku-categories",
       "settings": {}
     },
-    "meeeku_everyday_tees": {
-      "type": "meeeku-everyday-tees",
+    "meeeku_featured_products": {
+      "type": "meeeku-featured-products",
       "settings": {}
-    },
-    "meeeku_coords": {
-      "type": "meeeku-coords",
-      "settings": {}
-    },
-    "featured_collection": {
-      "type": "featured-collection",
-      "settings": {
-        "title": "Handcrafted Indian Ethnic Lehengas",
-        "heading_size": "h1",
-        "description": "<p>Explore 100% soft cotton lined Lehengas & Phulkari sets for little princesses (0-6Y). Zero-itch guaranteed.</p>",
-        "show_description": true,
-        "description_style": "body",
-        "collection": "all",
-        "products_to_show": 8,
-        "columns_desktop": 4,
-        "color_scheme": "scheme-1",
-        "full_width": false,
-        "show_view_all": true,
-        "view_all_style": "solid",
-        "enable_desktop_slider": true,
-        "swipe_on_mobile": true,
-        "image_ratio": "portrait",
-        "image_shape": "default",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "standard",
-        "columns_mobile": "2",
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
     },
     "meeeku_reviews": {
       "type": "meeeku-reviews",
-      "settings": {}
-    },
-    "meeeku_boys": {
-      "type": "meeeku-boys-coming-soon",
       "settings": {}
     }
   },
   "order": [
     "meeeku_slideshow",
     "meeeku_categories",
-    "meeeku_everyday_tees",
-    "meeeku_coords",
-    "featured_collection",
-    "meeeku_reviews",
-    "meeeku_boys"
+    "meeeku_featured_products",
+    "meeeku_reviews"
   ]
 }
