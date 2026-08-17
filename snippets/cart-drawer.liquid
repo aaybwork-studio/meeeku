@@ -1,73 +1,65 @@
 {% comment %}
-  Meeeku Universal Cart Drawer Component
+  Meeeku Universal Slide-Out Cart Drawer Component
   Guarantees flawless real-time cart item addition, dynamic pricing subtotal calculation,
   in-cart size selection modification, item removal, and persistent checkout across all pages!
 {% endcomment %}
 
-{{ 'quantity-popover.css' | asset_url | stylesheet_tag }}
-{{ 'component-card.css' | asset_url | stylesheet_tag }}
+<!-- Meeeku Dedicated Slide-out Cart Drawer -->
+<div id="MeeekuCartDrawerElement" class="meeeku-cart-drawer">
+  <div class="meeeku-drawer-overlay" onclick="closeMeeekuCart()"></div>
+  <div class="meeeku-drawer-inner" role="dialog" aria-modal="true" aria-label="Your Meeeku Bag">
+    
+    <!-- Drawer Header -->
+    <div class="meeeku-drawer-header">
+      <div style="display: flex; align-items: center; gap: 0.8rem;">
+        <span style="font-size: 2.2rem;">🛍️</span>
+        <h2 style="margin: 0; font-size: 2rem; font-weight: 800; color: #3D2355;">Your Meeeku Bag</h2>
+      </div>
+      <button type="button" class="meeeku-drawer-close" onclick="closeMeeekuCart()" aria-label="Close Bag">
+        ✕
+      </button>
+    </div>
 
-<script src="{{ 'cart.js' | asset_url }}" defer="defer"></script>
+    <!-- Drawer Body -->
+    <div class="meeeku-drawer-body">
+      
+      <!-- Empty State -->
+      <div id="MeeekuCartEmptyNotice" style="text-align: center; padding: 4rem 1.5rem; display: block;">
+        <div style="font-size: 4.5rem; margin-bottom: 1.2rem;">🌸</div>
+        <p style="font-size: 1.8rem; color: #3D2355; font-weight: 800; margin-bottom: 0.8rem;">Your shopping bag is empty</p>
+        <p style="font-size: 1.4rem; color: #666; margin-bottom: 2.2rem; max-width: 280px; margin-left: auto; margin-right: auto; line-height: 1.5;">
+          Discover 100% skin-safe cotton tees, cozy co-ords, and festive twirling lehengas!
+        </p>
+        <a href="/collections/all" class="meeeku-btn-primary" style="display: inline-block; text-decoration: none; padding: 1.1rem 2.5rem; font-size: 1.45rem; border-radius: 30px;" onclick="closeMeeekuCart()">
+          Explore Collections ✨
+        </a>
+      </div>
 
-<cart-drawer id="MeeekuCartDrawerElement" class="drawer{% if cart == empty %} is-empty{% endif %}">
-  <div id="CartDrawer" class="cart-drawer">
-    <div id="CartDrawer-Overlay" class="cart-drawer__overlay" onclick="closeMeeekuCart()"></div>
-    <div
-      class="drawer__inner gradient color-{{ settings.cart_color_scheme }}"
-      role="dialog"
-      aria-modal="true"
-      aria-label="Your Meeeku Cart"
-      tabindex="-1"
-    >
-      <div class="meeeku-cart-drawer-content">
-        <!-- Drawer Header -->
-        <div class="drawer__header" style="display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 2rem; border-bottom: 2px solid #F8BBD0; background: #FFFDF7;">
-          <h2 class="drawer__heading" style="margin: 0; font-size: 2rem; font-weight: 800; color: #3D2355;">Your Meeeku Bag 💕</h2>
-          <button class="drawer__close" type="button" onclick="closeMeeekuCart()" aria-label="Close" style="background: transparent; border: none; font-size: 2.2rem; cursor: pointer; color: #3D2355; padding: 0.5rem; line-height: 1;">
-            ✕
-          </button>
+      <!-- Dynamic Items Container -->
+      <div id="MeeekuCartItemsContainer" style="display: none; flex-direction: column; gap: 1.2rem;"></div>
+
+      <!-- Cart Subtotal & Checkout Summary -->
+      <div id="MeeekuCartSummary" style="display: none; border-top: 2px dashed #F8BBD0; padding-top: 1.6rem; margin-top: 1.6rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 1.8rem; font-weight: 800; color: #3D2355; margin-bottom: 0.6rem;">
+          <span>Subtotal:</span>
+          <span id="MeeekuCartSubtotal" style="color: #6B3FA0; font-size: 2rem;">₹0.00</span>
         </div>
-
-        <!-- Drawer Body -->
-        <div class="drawer__body" style="padding: 1.8rem; max-height: calc(100vh - 180px); overflow-y: auto;">
-          
-          <!-- Empty State -->
-          <div id="MeeekuCartEmptyNotice" style="text-align: center; padding: 4rem 1.5rem; display: block;">
-            <div style="font-size: 4rem; margin-bottom: 1rem;">🛍️</div>
-            <p style="font-size: 1.7rem; color: #6B3FA0; font-weight: 700; margin-bottom: 0.8rem;">Your shopping bag is empty</p>
-            <p style="font-size: 1.35rem; color: #777; margin-bottom: 2rem; max-width: 280px; margin-left: auto; margin-right: auto;">Explore our 100% skin-safe cotton outfits for your little ones!</p>
-            <a href="/collections/all" class="meeeku-btn-primary" style="display: inline-block; text-decoration: none; padding: 1rem 2.2rem; font-size: 1.4rem;" onclick="closeMeeekuCart()">
-              Explore Collections ✨
-            </a>
-          </div>
-
-          <!-- Dynamic Items Container -->
-          <div id="MeeekuCartItemsContainer" style="display: none; flex-direction: column; gap: 1.2rem;"></div>
-
-          <!-- Cart Subtotal & Checkout Summary -->
-          <div id="MeeekuCartSummary" style="display: none; border-top: 2px dashed #F8BBD0; padding-top: 1.5rem; margin-top: 1.5rem;">
-            <div style="display: flex; justify-content: space-between; font-size: 1.7rem; font-weight: 800; color: #3D2355; margin-bottom: 0.5rem;">
-              <span>Subtotal:</span>
-              <span id="MeeekuCartSubtotal">₹0.00</span>
-            </div>
-            <p style="font-size: 1.2rem; color: #2E7D32; font-weight: 600; margin-bottom: 1.5rem;">
-              🎉 Free Express Shipping Across India Included
-            </p>
-            <div style="display: flex; flex-direction: column; gap: 0.8rem;">
-              <button type="button" onclick="window.location.href='/cart'" class="button button--secondary" style="width: 100%; border-radius: 25px; padding: 1rem; font-size: 1.4rem; font-weight: 700; color: #6B3FA0; border-color: #F8BBD0; background: #FFF;">
-                View Full Bag & Change Sizes
-              </button>
-              <button type="button" onclick="window.location.href='/checkout'" class="meeeku-btn-primary" style="display: block; text-align: center; text-decoration: none; width: 100%; font-size: 1.6rem; padding: 1.2rem; border: none; cursor: pointer;">
-                ⚡ Proceed to Secure Checkout
-              </button>
-            </div>
-          </div>
-
+        <p style="font-size: 1.25rem; color: #2E7D32; font-weight: 700; margin: 0 0 1.5rem; display: flex; align-items: center; gap: 0.4rem;">
+          <span>🚚</span> Free Express Shipping Included Across India
+        </p>
+        <div style="display: flex; flex-direction: column; gap: 0.9rem;">
+          <a href="/cart" class="button button--secondary" style="width: 100%; border-radius: 25px; padding: 1.1rem; font-size: 1.45rem; font-weight: 700; color: #6B3FA0; border: 2px solid #F8BBD0; background: #FFF; text-align: center; text-decoration: none;">
+            View Full Cart & Edit Sizes 📝
+          </a>
+          <a href="/checkout" class="meeeku-btn-primary" style="display: block; text-align: center; text-decoration: none; width: 100%; font-size: 1.65rem; padding: 1.25rem; border-radius: 30px; box-shadow: 0 6px 20px rgba(255, 96, 151, 0.4);">
+            ⚡ Proceed to Checkout
+          </a>
         </div>
       </div>
+
     </div>
   </div>
-</cart-drawer>
+</div>
 
 <!-- Global Toast Notification -->
 <div id="MeeekuCartToast" class="meeeku-cart-toast">
@@ -110,7 +102,6 @@ function renderMeeekuCartDrawer() {
   const summary = document.getElementById('MeeekuCartSummary');
   const subtotalEl = document.getElementById('MeeekuCartSubtotal');
   const cartDot = document.getElementById('MeeekuCartDot');
-  const drawerEl = document.getElementById('MeeekuCartDrawerElement');
 
   if (!container || !emptyNotice || !summary) return;
 
@@ -119,7 +110,6 @@ function renderMeeekuCartDrawer() {
     container.style.display = 'none';
     summary.style.display = 'none';
     if (cartDot) cartDot.classList.remove('has-items');
-    if (drawerEl) drawerEl.classList.add('is-empty');
     return;
   }
 
@@ -127,7 +117,6 @@ function renderMeeekuCartDrawer() {
   container.style.display = 'flex';
   summary.style.display = 'block';
   if (cartDot) cartDot.classList.add('has-items');
-  if (drawerEl) drawerEl.classList.remove('is-empty');
 
   let totalPaise = 0;
   let itemsHtml = '';
@@ -158,7 +147,7 @@ function renderMeeekuCartDrawer() {
 
     itemsHtml += `
       <div id="drawer-item-${item.id || index}" class="meeeku-cart-item" style="display: flex; gap: 1.2rem; align-items: center; background: #FFFDF7; border: 1.5px solid #F8BBD0; border-radius: 18px; padding: 1.2rem; box-shadow: 0 2px 10px rgba(107,63,160,0.04);">
-        <img src="${item.img || item.image || 'https://raw.githubusercontent.com/aaybwork-studio/meeeku/main/assets/meeeku_prod_yellow_lehenga.jpg'}" alt="${item.title}" width="70" height="90" style="border-radius: 12px; object-fit: cover; width: 65px; height: 85px; border: 1px solid #FFE0EC; flex-shrink: 0;">
+        <img src="${item.img || item.image || 'https://raw.githubusercontent.com/aaybwork-studio/meeeku/main/assets/meeeku_prod_yellow_lehenga.jpg'}" alt="${item.title}" width="70" height="90" style="border-radius: 12px; object-fit: cover; width: 68px; height: 88px; border: 1.5px solid #FFE0EC; flex-shrink: 0;">
         <div style="flex-grow: 1;">
           <h4 style="margin: 0 0 0.3rem; font-size: 1.45rem; font-weight: 700; color: #3D2355; line-height: 1.3;">${item.title}</h4>
           
@@ -170,7 +159,7 @@ function renderMeeekuCartDrawer() {
           </div>
 
           <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.4rem;">
-            <div style="font-size: 1.5rem; font-weight: 800; color: #6B3FA0;">₹${numericPrice.toLocaleString('en-IN')}.00</div>
+            <div style="font-size: 1.55rem; font-weight: 800; color: #6B3FA0;">₹${numericPrice.toLocaleString('en-IN')}.00</div>
             
             <div style="display: flex; align-items: center; background: #FFF; border: 1px solid #F8BBD0; border-radius: 20px; padding: 0.15rem 0.6rem;">
               <button type="button" onclick="meeekuDrawerUpdateQty(${index}, -1)" style="background: none; border: none; font-size: 1.5rem; font-weight: 800; color: #FF6097; cursor: pointer; padding: 0 0.3rem; line-height: 1;">−</button>
@@ -223,6 +212,7 @@ function openMeeekuCart() {
   const drawer = document.getElementById('MeeekuCartDrawerElement');
   if (drawer) {
     drawer.classList.add('active');
+    document.body.style.overflow = 'hidden';
   }
 }
 
@@ -230,6 +220,7 @@ function closeMeeekuCart() {
   const drawer = document.getElementById('MeeekuCartDrawerElement');
   if (drawer) {
     drawer.classList.remove('active');
+    document.body.style.overflow = '';
   }
 }
 
@@ -297,7 +288,7 @@ function showMeeekuToast(msg) {
   }
 }
 
-// Global hook: Open drawer when clicking header cart bubble
+// Global hooks
 document.addEventListener('DOMContentLoaded', function() {
   renderMeeekuCartDrawer();
   
@@ -312,87 +303,143 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <style>
-/* Cart Drawer Styles */
-.drawer {
-  position: fixed;
-  z-index: 100000 !important;
+/* Universal Meeeku Cart Drawer Styles */
+.meeeku-cart-drawer {
+  position: fixed !important;
+  z-index: 999999 !important;
   left: 0;
   top: 0;
   width: 100vw;
   height: 100vh;
   display: flex;
   justify-content: flex-end;
-  background-color: rgba(61, 35, 85, 0.4);
-  backdrop-filter: blur(4px);
+  background-color: rgba(61, 35, 85, 0.45);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
   transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
 }
 
-.drawer.active {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
+.meeeku-cart-drawer.active {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
 }
 
-.drawer .drawer__inner {
-  width: 440px;
-  max-width: 100vw;
-  height: 100%;
-  background: #FFFDF7;
-  box-shadow: -8px 0 30px rgba(107, 63, 160, 0.2);
-  display: flex;
-  flex-direction: column;
-  transform: translateX(100%);
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  overflow-y: auto;
-}
-
-.drawer.active .drawer__inner {
-  transform: translateX(0);
-}
-
-.cart-drawer__overlay {
+.meeeku-drawer-overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  cursor: pointer;
+}
+
+.meeeku-drawer-inner {
+  position: relative;
+  width: 440px;
+  max-width: 100vw;
+  height: 100%;
+  background: #FFFDF7;
+  box-shadow: -8px 0 35px rgba(107, 63, 160, 0.25);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 2;
+  overflow: hidden;
+}
+
+.meeeku-cart-drawer.active .meeeku-drawer-inner {
+  transform: translateX(0) !important;
+}
+
+.meeeku-drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 2px solid #F8BBD0;
+  background: #FFFDF7;
+  flex-shrink: 0;
+}
+
+.meeeku-drawer-close {
+  background: #FFF;
+  border: 1.5px solid #F8BBD0;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: #3D2355;
+  transition: all 0.2s ease;
+}
+
+.meeeku-drawer-close:hover {
+  background: #FF6097;
+  color: #FFF;
+  border-color: #FF6097;
+}
+
+.meeeku-drawer-body {
+  padding: 1.8rem;
+  flex-grow: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.meeeku-cart-toast {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  background: #3D2355;
+  color: #FFFFFF;
+  padding: 1.2rem 2.2rem;
+  border-radius: 30px;
+  font-size: 1.45rem;
+  font-weight: 700;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  z-index: 1000000;
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  pointer-events: none;
+  border: 1.5px solid #F8BBD0;
+}
+
+.meeeku-cart-toast.show {
+  transform: translateY(0);
+  opacity: 1;
 }
 
 @media screen and (max-width: 749px) {
-  .drawer .drawer__inner {
+  .meeeku-drawer-inner {
     width: 100% !important;
     max-width: 100vw !important;
   }
-  .drawer__header {
+  .meeeku-drawer-header {
     padding: 1.2rem 1.5rem !important;
   }
-  .drawer__heading {
-    font-size: 1.7rem !important;
-  }
-  .drawer__close {
-    min-width: 44px !important;
-    min-height: 44px !important;
-    font-size: 2.2rem !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-  }
-  .drawer__body {
+  .meeeku-drawer-body {
     padding: 1.2rem !important;
-    max-height: calc(100vh - 150px) !important;
-    -webkit-overflow-scrolling: touch !important;
   }
   .meeeku-cart-item {
     gap: 1rem !important;
     padding: 1rem !important;
     border-radius: 16px !important;
   }
-  .meeeku-cart-item img {
-    width: 60px !important;
-    height: 75px !important;
+  .meeeku-cart-toast {
+    bottom: 20px;
+    right: 20px;
+    left: 20px;
+    text-align: center;
+    font-size: 1.35rem;
   }
 }
 </style>
