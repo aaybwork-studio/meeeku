@@ -161,7 +161,7 @@
         <!-- Size Selector -->
         <div style="margin-bottom: 1.8rem;">
           <label id="MeeekuPdpSizeLabel" style="font-weight: 700; color: #3D2355; font-size: 1.45rem; display: block; margin-bottom: 0.8rem;">
-            {% if is_tee %}Select Size (0 – 3 Years):{% else %}Select Size (0 – 6 Years):{% endif %}
+            {% if is_tee %}Select Size (0 – 3 Years):{% else %}Select Size (0 – 7 Years):{% endif %}
           </label>
           <div class="meeeku-pdp-size-grid" id="MeeekuPdpSizeGrid">
             {% if is_tee %}
@@ -576,7 +576,7 @@ const MEEEKU_PDP_CATALOG = {
     discount: 'SAVE 17%',
     is_tee: false,
     desc: 'Handcrafted pure Chanderi silk-cotton lehenga with intricate golden zari work, soft cotton inner lining, and elasticated drawstring waistband for maximum comfort during festivals and weddings.',
-    sizes: ['2 - 3Y', '4 - 5Y', '6 - 7Y'],
+    sizes: ['0 - 1Y', '1 - 2Y', '2 - 3Y', '3 - 4Y', '4 - 5Y', '5 - 6Y', '6 - 7Y'],
     images: {
       model: "{{ 'meeeku_prod_yellow_lehenga_model.jpg' | asset_url }}",
       flatlay: "{{ 'meeeku_prod_yellow_lehenga.jpg' | asset_url }}",
@@ -592,7 +592,7 @@ const MEEEKU_PDP_CATALOG = {
     discount: 'SAVE 19%',
     is_tee: false,
     desc: 'Twirl-ready teal blue indo-western party dress with shimmering sequin floral embroidery, tiered tulle flare, and 100% breathable cotton lining.',
-    sizes: ['2 - 3Y', '4 - 5Y', '6 - 7Y'],
+    sizes: ['0 - 1Y', '1 - 2Y', '2 - 3Y', '3 - 4Y', '4 - 5Y', '5 - 6Y', '6 - 7Y'],
     images: {
       model: "{{ 'meeeku_prod_teal_dress_model.jpg' | asset_url }}",
       flatlay: "{{ 'meeeku_prod_teal_dress.jpg' | asset_url }}",
@@ -608,7 +608,7 @@ const MEEEKU_PDP_CATALOG = {
     discount: 'SAVE 18%',
     is_tee: false,
     desc: 'Ethereal blush rose jacquard choli paired with a full-flair net lehenga skirt and delicate hand-embroidered dupatta with skin-soft inner lining.',
-    sizes: ['2 - 3Y', '4 - 5Y', '6 - 7Y'],
+    sizes: ['0 - 1Y', '1 - 2Y', '2 - 3Y', '3 - 4Y', '4 - 5Y', '5 - 6Y', '6 - 7Y'],
     images: {
       model: "{{ 'meeeku_prod_pink_net_lehenga_model.jpg' | asset_url }}",
       flatlay: "{{ 'meeeku_prod_pink_net_lehenga.jpg' | asset_url }}",
@@ -624,7 +624,7 @@ const MEEEKU_PDP_CATALOG = {
     discount: 'SAVE 18%',
     is_tee: false,
     desc: 'Deep emerald forest green pure cotton lehenga with traditional floral motifs, gotta patti borders, and zero-itch lightweight fabric.',
-    sizes: ['2 - 3Y', '4 - 5Y', '6 - 7Y'],
+    sizes: ['0 - 1Y', '1 - 2Y', '2 - 3Y', '3 - 4Y', '4 - 5Y', '5 - 6Y', '6 - 7Y'],
     images: {
       model: "{{ 'meeeku_prod_green_lehenga_model.jpg' | asset_url }}",
       flatlay: "{{ 'meeeku_prod_green_lehenga.jpg' | asset_url }}",
@@ -640,7 +640,7 @@ const MEEEKU_PDP_CATALOG = {
     discount: 'SAVE 18%',
     is_tee: false,
     desc: 'Contemporary vibrant co-ord set with abstract artisan floral prints, breezy peplum top, and comfortable dhoti pants.',
-    sizes: ['2 - 3Y', '4 - 5Y', '6 - 7Y'],
+    sizes: ['0 - 1Y', '1 - 2Y', '2 - 3Y', '3 - 4Y', '4 - 5Y', '5 - 6Y', '6 - 7Y'],
     images: {
       model: "{{ 'meeeku_prod_multicolor_coord_model.jpg' | asset_url }}",
       flatlay: "{{ 'meeeku_prod_multicolor_coord.jpg' | asset_url }}",
@@ -656,7 +656,7 @@ const MEEEKU_PDP_CATALOG = {
     discount: 'SAVE 17%',
     is_tee: false,
     desc: 'Rich crimson red Jaipuri Bandhani printed lehenga with hand-embroidered mirrorwork blouse and scalloped gotta border.',
-    sizes: ['2 - 3Y', '4 - 5Y', '6 - 7Y'],
+    sizes: ['0 - 1Y', '1 - 2Y', '2 - 3Y', '3 - 4Y', '4 - 5Y', '5 - 6Y', '6 - 7Y'],
     images: {
       model: "{{ 'meeeku_prod_red_bandhani_lehenga_model.jpg' | asset_url }}",
       flatlay: "{{ 'meeeku_prod_red_bandhani_lehenga.jpg' | asset_url }}",
@@ -672,7 +672,7 @@ const MEEEKU_PDP_CATALOG = {
     discount: 'SAVE 20%',
     is_tee: false,
     desc: 'Celebratory Rani pink lehenga adorned with traditional geometric Phulkari threadwork and lightweight chiffon dupatta.',
-    sizes: ['2 - 3Y', '4 - 5Y', '6 - 7Y'],
+    sizes: ['0 - 1Y', '1 - 2Y', '2 - 3Y', '3 - 4Y', '4 - 5Y', '5 - 6Y', '6 - 7Y'],
     images: {
       model: "{{ 'meeeku_prod_magenta_lehenga_model.jpg' | asset_url }}",
       flatlay: "{{ 'meeeku_prod_magenta_lehenga.jpg' | asset_url }}",
@@ -688,7 +688,7 @@ const MEEEKU_PDP_CATALOG = {
     discount: 'SAVE 20%',
     is_tee: false,
     desc: 'Dramatic midnight navy & gold printed halter neck lehenga with metallic thread detailing and lightweight twirl skirt.',
-    sizes: ['2 - 3Y', '4 - 5Y', '6 - 7Y'],
+    sizes: ['0 - 1Y', '1 - 2Y', '2 - 3Y', '3 - 4Y', '4 - 5Y', '5 - 6Y', '6 - 7Y'],
     images: {
       model: "{{ 'meeeku_prod_black_lehenga_model.jpg' | asset_url }}",
       flatlay: "{{ 'meeeku_prod_black_lehenga.jpg' | asset_url }}",
@@ -704,7 +704,7 @@ const MEEEKU_PDP_CATALOG = {
     discount: 'SAVE 18%',
     is_tee: false,
     desc: 'Modern designer olive green raw silk one-shoulder lehenga with subtle antique gold zardozi embroidery and breathable cotton lining.',
-    sizes: ['2 - 3Y', '4 - 5Y', '6 - 7Y'],
+    sizes: ['0 - 1Y', '1 - 2Y', '2 - 3Y', '3 - 4Y', '4 - 5Y', '5 - 6Y', '6 - 7Y'],
     images: {
       model: "{{ 'meeeku_prod_olive_lehenga_model.jpg' | asset_url }}",
       flatlay: "{{ 'meeeku_prod_olive_lehenga.jpg' | asset_url }}",
@@ -791,7 +791,7 @@ function hydrateMeeekuPdp() {
   // Size Label & Size Grid
   const sizeLabelEl = document.getElementById('MeeekuPdpSizeLabel');
   if (sizeLabelEl) {
-    sizeLabelEl.textContent = data.is_coord ? 'Select Size (0 – 3 Years):' : (data.is_tee ? 'Select Size (0 – 3 Years):' : 'Select Size (0 – 6 Years):');
+    sizeLabelEl.textContent = data.is_coord ? 'Select Size (0 – 3 Years):' : (data.is_tee ? 'Select Size (0 – 3 Years):' : 'Select Size (0 – 7 Years):');
   }
 
   const sizeGridEl = document.getElementById('MeeekuPdpSizeGrid');

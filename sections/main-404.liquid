@@ -318,7 +318,7 @@
             {% if is_tee or is_coord %}
               Select Size (0 – 3 Years):
             {% else %}
-              Select Size (0 – 6 Years):
+              Select Size (0 – 7 Years):
             {% endif %}
           </label>
           <div class="meeeku-pdp-size-grid" id="MeeekuPdpSizeGrid404">
@@ -922,7 +922,7 @@ function hydrateUniversalPdp() {
   const sizeGridEl = document.getElementById('MeeekuPdpSizeGrid404');
   const sizeLabelEl = document.getElementById('MeeekuPdpSizeLabel404');
   if (sizeLabelEl) {
-    sizeLabelEl.textContent = (data.is_tee || data.is_coord) ? 'Select Size (0 – 3 Years):' : 'Select Size (0 – 6 Years):';
+    sizeLabelEl.textContent = (data.is_tee || data.is_coord) ? 'Select Size (0 – 3 Years):' : 'Select Size (0 – 7 Years):';
   }
   if (sizeGridEl && data.sizes) {
     let sizeButtonsHtml = '';
