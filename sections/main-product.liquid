@@ -893,25 +893,34 @@ function meeekuSelectVariantBtn(btn, variantId, priceFormatted) {
 function meeekuAddToCartUnified(title, price, img, variantId, sizeTitle) {
   let cart = [];
   try {
-    cart = JSON.parse(localStorage.getItem('meeeku_cart') || '[]');
+    cart = JSON.parse(localStorage.getItem('meeeku_active_cart') || localStorage.getItem('meeeku_user_cart') || localStorage.getItem('meeeku_cart') || '[]');
   } catch (e) { cart = []; }
 
-  const itemKey = (variantId || title) + '_' + (sizeTitle || 'Default');
-  const existing = cart.find(i => i.key === itemKey);
+  let titleLower = (title || '').toLowerCase();
+  let isCoord = titleLower.includes('co-ord') || titleLower.includes('set') || titleLower.includes('lounge') || titleLower.includes('peplum') || titleLower.includes('eyelet') || titleLower.includes('stardust') || titleLower.includes('kitty') || titleLower.includes('meadow') || titleLower.includes('storybook');
+  let finalPrice = isCoord ? '₹1,299.00' : price;
+  const size = sizeTitle || '0 - 6M';
+
+  const existing = cart.find(i => i.title === title && i.size === size);
   if (existing) {
-    existing.quantity += 1;
+    let q = existing.qty || existing.quantity || 1;
+    existing.qty = q + 1;
+    existing.quantity = q + 1;
+    existing.price = finalPrice;
   } else {
     cart.push({
-      key: itemKey,
-      id: variantId || '',
+      id: variantId || ('item_' + Date.now()),
       title: title,
-      price: price,
+      price: finalPrice,
       img: img,
-      size: sizeTitle || '2 - 3Y',
+      size: size,
+      qty: 1,
       quantity: 1
     });
   }
 
+  localStorage.setItem('meeeku_active_cart', JSON.stringify(cart));
+  localStorage.setItem('meeeku_user_cart', JSON.stringify(cart));
   localStorage.setItem('meeeku_cart', JSON.stringify(cart));
   
   if (variantId && !isNaN(parseInt(variantId))) {

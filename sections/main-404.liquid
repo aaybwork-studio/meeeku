@@ -791,43 +791,35 @@ function selectSize404(btn) {
 }
 
 function meeekuAddToCart(btn, title, price, imgUrl) {
-  const container = document.getElementById('MeeekuCartItemsContainer');
-  const emptyNotice = document.getElementById('MeeekuCartEmptyNotice');
-  const summary = document.getElementById('MeeekuCartSummary');
-  const subtotal = document.getElementById('MeeekuCartSubtotal');
-  const cartDot = document.getElementById('MeeekuCartDot');
-
-  if (emptyNotice) emptyNotice.style.display = 'none';
-  if (summary) summary.style.display = 'block';
-
-  const itemId = 'MeeekuCartItem-' + Date.now();
   const selectedSizeEl = document.querySelector('.meeeku-size-option.active');
-  const selectedSize = selectedSizeEl ? selectedSizeEl.innerText : '0 - 6M';
+  const selectedSize = selectedSizeEl ? selectedSizeEl.innerText.trim() : '0 - 6M';
+  
+  if (typeof meeekuAddToCartCatalog === 'function') {
+    meeekuAddToCartCatalog(title, price, imgUrl, selectedSize);
+  } else {
+    let cart = [];
+    try {
+      cart = JSON.parse(localStorage.getItem('meeeku_active_cart') || '[]');
+    } catch(e) { cart = []; }
+    
+    let titleLower = (title || '').toLowerCase();
+    let isCoord = titleLower.includes('co-ord') || titleLower.includes('set') || titleLower.includes('lounge') || titleLower.includes('peplum') || titleLower.includes('eyelet') || titleLower.includes('stardust') || titleLower.includes('kitty') || titleLower.includes('meadow') || titleLower.includes('storybook');
+    let finalPrice = isCoord ? '₹1,299.00' : price;
 
-  const itemHtml = `
-    <div id="${itemId}" class="meeeku-cart-item" style="display: flex; gap: 1.5rem; align-items: center; background: #FFFDF7; border: 2px solid #F8BBD0; border-radius: 20px; padding: 1.2rem; margin-bottom: 1.5rem; box-shadow: 0 4px 14px rgba(107,63,160,0.06);">
-      <img src="${imgUrl}" alt="${title}" width="80" height="100" style="border-radius: 14px; object-fit: cover; width: 70px; height: 90px;">
-      <div style="flex-grow: 1;">
-        <h4 style="margin: 0 0 0.3rem; font-size: 1.5rem; font-weight: 700; color: #3D2355;">${title}</h4>
-        <div style="font-size: 1.2rem; color: #666; margin-bottom: 0.4rem;">Size: ${selectedSize}</div>
-        <div style="font-size: 1.6rem; font-weight: 800; color: #6B3FA0;">${price}</div>
-      </div>
-      <button type="button" style="background: transparent; border: none; font-size: 1.8rem; cursor: pointer; color: #888;" onclick="removeMeeekuCartItem('${itemId}')">✕</button>
-    </div>
-  `;
-
-  if (container) {
-    container.insertAdjacentHTML('beforeend', itemHtml);
+    cart.push({
+      id: 'item_' + Date.now(),
+      title: title,
+      price: finalPrice,
+      img: imgUrl,
+      size: selectedSize,
+      qty: 1
+    });
+    localStorage.setItem('meeeku_active_cart', JSON.stringify(cart));
+    localStorage.setItem('meeeku_user_cart', JSON.stringify(cart));
+    localStorage.setItem('meeeku_cart', JSON.stringify(cart));
+    showMeeekuToast('🎉 Added ' + title + ' (' + selectedSize + ') to Bag!');
+    if (typeof openMeeekuCart === 'function') openMeeekuCart();
   }
-
-  if (subtotal) subtotal.innerText = price + ' INR';
-  if (cartDot) cartDot.classList.add('has-items');
-
-  const drawer = document.querySelector('cart-drawer');
-  if (drawer && typeof drawer.open === 'function') {
-    drawer.open();
-  }
-  showMeeekuToast('🎉 Added ' + title + ' (' + selectedSize + ') to your Meeeku Cart!');
 }
 
 function meeekuBuyNow(btn) {
