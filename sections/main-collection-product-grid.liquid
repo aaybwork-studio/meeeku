@@ -9,6 +9,9 @@
     <button type="button" class="meeeku-pill-filter active" data-filter="all" onclick="setCategoryFilter('all', this)">
       ✨ All Products
     </button>
+    <button type="button" class="meeeku-pill-filter" data-filter="tees" onclick="setCategoryFilter('tees', this)" style="background-color: #E8F5E9; color: #2E7D32; border-color: #A5D6A7; font-weight: 700;">
+      👕 Everyday T-Shirts (Flat ₹599)
+    </button>
     <button type="button" class="meeeku-pill-filter" data-filter="ethnic" onclick="setCategoryFilter('ethnic', this)">
       👑 Royal Ethnic Lehengas
     </button>
@@ -72,6 +75,168 @@
   <!-- Interactive Catalog Grid -->
   <div class="meeeku-catalog-grid">
     <ul class="grid product-grid grid--2-col-tablet-down grid--3-col-desktop" id="MeeekuProductGrid">
+      
+      <!-- T-Shirt 1: Snuggle Bunny Blush Cotton Tee -->
+      <li class="grid__item meeeku-grid-item" data-category="tees" data-price="599" data-age="all" data-date="2026-08-17">
+        <div class="card-wrapper meeeku-interactive-card">
+          <div class="meeeku-card-media-wrapper">
+            <a href="/products/snuggle-bunny-blush-tee?item=bunny_tee" class="meeeku-card-link">
+              <img src="{{ 'meeeku_prod_bunny_tee.jpg' | asset_url }}" alt="Snuggle Bunny Blush Cotton Tee" class="meeeku-card-img" width="600" height="750" loading="lazy">
+            </a>
+            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Snuggle Bunny Blush Cotton Tee', '₹599.00', '{{ 'meeeku_prod_bunny_tee.jpg' | asset_url }}')">
+              🛒 + Quick Add — ₹599
+            </button>
+          </div>
+          <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
+              <span class="meeeku-badge" style="background: #FCE4EC; color: #C2185B; font-size: 1rem; padding: 0.2rem 0.8rem;">Everyday Cotton</span>
+              <span style="font-size: 1.1rem; color: #666; font-weight: 600;">0-6M to 2-3Y</span>
+            </div>
+            <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
+              <a href="/products/snuggle-bunny-blush-tee?item=bunny_tee" style="color: #3D2355; text-decoration: none;">Snuggle Bunny Blush Cotton Tee</a>
+            </h3>
+            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">
+              ₹599.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹899.00</span>
+              <span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">33% OFF</span>
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <!-- T-Shirt 2: Little Leopard Safari Cotton Tee -->
+      <li class="grid__item meeeku-grid-item" data-category="tees" data-price="599" data-age="all" data-date="2026-08-17">
+        <div class="card-wrapper meeeku-interactive-card">
+          <div class="meeeku-card-media-wrapper">
+            <a href="/products/little-leopard-safari-tee?item=leopard_tee" class="meeeku-card-link">
+              <img src="{{ 'meeeku_prod_leopard_tee.jpg' | asset_url }}" alt="Little Leopard Safari Cotton Tee" class="meeeku-card-img" width="600" height="750" loading="lazy">
+            </a>
+            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Little Leopard Safari Cotton Tee', '₹599.00', '{{ 'meeeku_prod_leopard_tee.jpg' | asset_url }}')">
+              🛒 + Quick Add — ₹599
+            </button>
+          </div>
+          <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
+              <span class="meeeku-badge" style="background: #FFF8E1; color: #F57F17; font-size: 1rem; padding: 0.2rem 0.8rem;">Combed Cotton</span>
+              <span style="font-size: 1.1rem; color: #666; font-weight: 600;">0-6M to 2-3Y</span>
+            </div>
+            <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
+              <a href="/products/little-leopard-safari-tee?item=leopard_tee" style="color: #3D2355; text-decoration: none;">Little Leopard Safari Cotton Tee</a>
+            </h3>
+            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">
+              ₹599.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹899.00</span>
+              <span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">33% OFF</span>
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <!-- T-Shirt 3: Tiny Dino Doodles Cotton Tee -->
+      <li class="grid__item meeeku-grid-item" data-category="tees" data-price="599" data-age="all" data-date="2026-08-17">
+        <div class="card-wrapper meeeku-interactive-card">
+          <div class="meeeku-card-media-wrapper">
+            <a href="/products/tiny-dino-doodles-tee?item=dino_tee" class="meeeku-card-link">
+              <img src="{{ 'meeeku_prod_dino_tee.jpg' | asset_url }}" alt="Tiny Dino Doodles Cotton Tee" class="meeeku-card-img" width="600" height="750" loading="lazy">
+            </a>
+            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Tiny Dino Doodles Cotton Tee', '₹599.00', '{{ 'meeeku_prod_dino_tee.jpg' | asset_url }}')">
+              🛒 + Quick Add — ₹599
+            </button>
+          </div>
+          <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
+              <span class="meeeku-badge" style="background: #E0F2F1; color: #00796B; font-size: 1rem; padding: 0.2rem 0.8rem;">Organic Cotton</span>
+              <span style="font-size: 1.1rem; color: #666; font-weight: 600;">0-6M to 2-3Y</span>
+            </div>
+            <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
+              <a href="/products/tiny-dino-doodles-tee?item=dino_tee" style="color: #3D2355; text-decoration: none;">Tiny Dino Doodles Cotton Tee</a>
+            </h3>
+            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">
+              ₹599.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹899.00</span>
+              <span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">33% OFF</span>
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <!-- T-Shirt 4: Little Night Owl Starlit Cotton Tee -->
+      <li class="grid__item meeeku-grid-item" data-category="tees" data-price="599" data-age="all" data-date="2026-08-17">
+        <div class="card-wrapper meeeku-interactive-card">
+          <div class="meeeku-card-media-wrapper">
+            <a href="/products/little-night-owl-starlit-tee?item=owl_tee" class="meeeku-card-link">
+              <img src="{{ 'meeeku_prod_owl_tee.jpg' | asset_url }}" alt="Little Night Owl Starlit Cotton Tee" class="meeeku-card-img" width="600" height="750" loading="lazy">
+            </a>
+            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Little Night Owl Starlit Cotton Tee', '₹599.00', '{{ 'meeeku_prod_owl_tee.jpg' | asset_url }}')">
+              🛒 + Quick Add — ₹599
+            </button>
+          </div>
+          <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
+              <span class="meeeku-badge" style="background: #EDE7F6; color: #512DA8; font-size: 1rem; padding: 0.2rem 0.8rem;">Pure Soft Cotton</span>
+              <span style="font-size: 1.1rem; color: #666; font-weight: 600;">0-6M to 2-3Y</span>
+            </div>
+            <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
+              <a href="/products/little-night-owl-starlit-tee?item=owl_tee" style="color: #3D2355; text-decoration: none;">Little Night Owl Starlit Cotton Tee</a>
+            </h3>
+            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">
+              ₹599.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹899.00</span>
+              <span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">33% OFF</span>
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <!-- T-Shirt 5: Mighty Little Lion Cotton Tee -->
+      <li class="grid__item meeeku-grid-item" data-category="tees" data-price="599" data-age="all" data-date="2026-08-17">
+        <div class="card-wrapper meeeku-interactive-card">
+          <div class="meeeku-card-media-wrapper">
+            <a href="/products/mighty-little-lion-tee?item=lion_tee" class="meeeku-card-link">
+              <img src="{{ 'meeeku_prod_lion_tee.jpg' | asset_url }}" alt="Mighty Little Lion Cotton Tee" class="meeeku-card-img" width="600" height="750" loading="lazy">
+            </a>
+            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Mighty Little Lion Cotton Tee', '₹599.00', '{{ 'meeeku_prod_lion_tee.jpg' | asset_url }}')">
+              🛒 + Quick Add — ₹599
+            </button>
+          </div>
+          <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
+              <span class="meeeku-badge" style="background: #FFF3E0; color: #E65100; font-size: 1rem; padding: 0.2rem 0.8rem;">Everyday Cotton</span>
+              <span style="font-size: 1.1rem; color: #666; font-weight: 600;">0-6M to 2-3Y</span>
+            </div>
+            <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
+              <a href="/products/mighty-little-lion-tee?item=lion_tee" style="color: #3D2355; text-decoration: none;">Mighty Little Lion Cotton Tee</a>
+            </h3>
+            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">
+              ₹599.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹899.00</span>
+              <span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">33% OFF</span>
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <!-- T-Shirt 6: Cosmic Safari Doodle Cotton Tee -->
+      <li class="grid__item meeeku-grid-item" data-category="tees" data-price="599" data-age="all" data-date="2026-08-17">
+        <div class="card-wrapper meeeku-interactive-card">
+          <div class="meeeku-card-media-wrapper">
+            <a href="/products/cosmic-safari-doodle-tee?item=cosmic_safari_tee" class="meeeku-card-link">
+              <img src="{{ 'meeeku_prod_cosmic_safari_tee.jpg' | asset_url }}" alt="Cosmic Safari Doodle Cotton Tee" class="meeeku-card-img" width="600" height="750" loading="lazy">
+            </a>
+            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Cosmic Safari Doodle Cotton Tee', '₹599.00', '{{ 'meeeku_prod_cosmic_safari_tee.jpg' | asset_url }}')">
+              🛒 + Quick Add — ₹599
+            </button>
+          </div>
+          <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
+              <span class="meeeku-badge" style="background: #E1F5FE; color: #0288D1; font-size: 1rem; padding: 0.2rem 0.8rem;">Storybook Cotton</span>
+              <span style="font-size: 1.1rem; color: #666; font-weight: 600;">0-6M to 2-3Y</span>
+            </div>
+            <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
+              <a href="/products/cosmic-safari-doodle-tee?item=cosmic_safari_tee" style="color: #3D2355; text-decoration: none;">Cosmic Safari Doodle Cotton Tee</a>
+            </h3>
+            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">
+              ₹599.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹899.00</span>
+              <span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">33% OFF</span>
+            </div>
+          </div>
+        </div>
+      </li>
       
       <!-- Product 1: Sunshine Chanderi Lehenga -->
       <li class="grid__item meeeku-grid-item" data-category="ethnic" data-price="3199" data-age="toddler" data-date="2026-01-15">

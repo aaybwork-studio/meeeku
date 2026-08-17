@@ -133,6 +133,23 @@
                   {%- endif -%}
                 </li>
               {%- endfor -%}
+            {%- else -%}
+              <li>
+                <a href="/" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Home</a>
+              </li>
+              <li>
+                <a href="/collections/all?category=tees" class="menu-drawer__menu-item list-menu__item link link--text focus-inset" style="color: #2E7D32; font-weight: 700;">👕 Everyday T-Shirts (₹599)</a>
+              </li>
+              <li>
+                <a href="/collections/all?category=ethnic" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">👑 Royal Ethnic</a>
+              </li>
+              <li>
+                <a href="/collections/all?category=coords" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">🌸 Festive Co-ords</a>
+              </li>
+              <li>
+                <a href="/pages/contact" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Contact Us</a>
+              </li>
+            {%- endif -%}
             </ul>
           </nav>
           <div class="menu-drawer__utility-links">

@@ -14,7 +14,61 @@
     assign t = product.title | downcase
     assign h = product.handle | downcase
 
-    if h contains 'teal' or h contains 'bloom' or h contains 'sequin' or t contains 'teal' or t contains 'bloom'
+    assign is_tee = false
+    assign discount_label = 'SAVE 17%'
+    
+    assign t = product.title | downcase
+    assign h = product.handle | downcase
+
+    if h contains 'bunny' or h contains 'snuggle' or t contains 'bunny' or t contains 'snuggle'
+      assign prod_key = 'bunny_tee'
+      assign prod_category_badge = '100% Combed Cotton'
+      assign prod_badge_class = 'meeeku-badge--ethnic'
+      assign default_price_val = '₹599.00'
+      assign default_mrp_val = '₹899.00'
+      assign discount_label = 'SAVE 33%'
+      assign is_tee = true
+    elsif h contains 'leopard' or h contains 'safari' or t contains 'leopard'
+      assign prod_key = 'leopard_tee'
+      assign prod_category_badge = '100% Combed Cotton'
+      assign prod_badge_class = 'meeeku-badge--ethnic'
+      assign default_price_val = '₹599.00'
+      assign default_mrp_val = '₹899.00'
+      assign discount_label = 'SAVE 33%'
+      assign is_tee = true
+    elsif h contains 'dino' or h contains 'dinosaur' or t contains 'dino'
+      assign prod_key = 'dino_tee'
+      assign prod_category_badge = '100% Organic Cotton'
+      assign prod_badge_class = 'meeeku-badge--ethnic'
+      assign default_price_val = '₹599.00'
+      assign default_mrp_val = '₹899.00'
+      assign discount_label = 'SAVE 33%'
+      assign is_tee = true
+    elsif h contains 'owl' or h contains 'starlit' or t contains 'owl'
+      assign prod_key = 'owl_tee'
+      assign prod_category_badge = '100% Pure Soft Cotton'
+      assign prod_badge_class = 'meeeku-badge--ethnic'
+      assign default_price_val = '₹599.00'
+      assign default_mrp_val = '₹899.00'
+      assign discount_label = 'SAVE 33%'
+      assign is_tee = true
+    elsif h contains 'lion' or h contains 'mighty' or t contains 'lion'
+      assign prod_key = 'lion_tee'
+      assign prod_category_badge = '100% Combed Cotton'
+      assign prod_badge_class = 'meeeku-badge--ethnic'
+      assign default_price_val = '₹599.00'
+      assign default_mrp_val = '₹899.00'
+      assign discount_label = 'SAVE 33%'
+      assign is_tee = true
+    elsif h contains 'cosmic' or h contains 'galaxy' or t contains 'cosmic'
+      assign prod_key = 'cosmic_safari_tee'
+      assign prod_category_badge = '100% Breathable Cotton'
+      assign prod_badge_class = 'meeeku-badge--ethnic'
+      assign default_price_val = '₹599.00'
+      assign default_mrp_val = '₹899.00'
+      assign discount_label = 'SAVE 33%'
+      assign is_tee = true
+    elsif h contains 'teal' or h contains 'bloom' or h contains 'sequin' or t contains 'teal' or t contains 'bloom'
       assign prod_key = 'teal_dress'
       assign prod_category_badge = 'Royal Tulle & Sequins'
       assign prod_badge_class = 'meeeku-badge--ethnic'
@@ -74,9 +128,19 @@
     assign model_img_name = 'meeeku_prod_' | append: prod_key | append: '_model.jpg'
     assign swirl_img_name = 'meeeku_prod_' | append: prod_key | append: '_swirl.jpg'
 
+    if is_tee
+      assign hero_image_src = main_img_name | asset_url
+    else
+      assign hero_image_src = model_img_name | asset_url
+    endif
+
     assign display_title = product.title
     if display_title == blank
-      assign display_title = 'Sunshine Chanderi Lehenga'
+      if is_tee
+        assign display_title = 'Snuggle Bunny Blush Cotton Tee'
+      else
+        assign display_title = 'Sunshine Chanderi Lehenga'
+      endif
     endif
 
     assign display_price = product.price | money
@@ -88,26 +152,28 @@
   %}
 
   <div class="meeeku-pdp-layout">
-    <!-- LEFT COLUMN: Image Gallery (Model View + Thumbnails) -->
+    <!-- LEFT COLUMN: Image Gallery -->
     <div class="meeeku-pdp-gallery-col">
       <div class="meeeku-pdp-gallery-wrapper">
-        <div class="meeeku-pdp-thumbs-list">
-          <div class="meeeku-pdp-thumb-item active" onclick="meeekuSwitchMainPdpImg(this, '{{ model_img_name | asset_url }}')">
-            <img src="{{ model_img_name | asset_url }}" alt="Model View" width="80" height="100">
-            <span>Model</span>
+        {% unless is_tee %}
+          <div class="meeeku-pdp-thumbs-list">
+            <div class="meeeku-pdp-thumb-item active" onclick="meeekuSwitchMainPdpImg(this, '{{ model_img_name | asset_url }}')">
+              <img src="{{ model_img_name | asset_url }}" alt="Model View" width="80" height="100">
+              <span>Model</span>
+            </div>
+            <div class="meeeku-pdp-thumb-item" onclick="meeekuSwitchMainPdpImg(this, '{{ main_img_name | asset_url }}')">
+              <img src="{{ main_img_name | asset_url }}" alt="Flatlay View" width="80" height="100">
+              <span>Lehenga</span>
+            </div>
+            <div class="meeeku-pdp-thumb-item" onclick="meeekuSwitchMainPdpImg(this, '{{ swirl_img_name | asset_url }}')">
+              <img src="{{ swirl_img_name | asset_url }}" alt="Fabric Detail" width="80" height="100">
+              <span>Fabric</span>
+            </div>
           </div>
-          <div class="meeeku-pdp-thumb-item" onclick="meeekuSwitchMainPdpImg(this, '{{ main_img_name | asset_url }}')">
-            <img src="{{ main_img_name | asset_url }}" alt="Flatlay View" width="80" height="100">
-            <span>Lehenga</span>
-          </div>
-          <div class="meeeku-pdp-thumb-item" onclick="meeekuSwitchMainPdpImg(this, '{{ swirl_img_name | asset_url }}')">
-            <img src="{{ swirl_img_name | asset_url }}" alt="Fabric Detail" width="80" height="100">
-            <span>Fabric</span>
-          </div>
-        </div>
+        {% endunless %}
 
-        <div class="meeeku-pdp-hero-image">
-          <img id="MeeekuMainPdpImage" src="{{ model_img_name | asset_url }}" alt="{{ display_title }}" width="600" height="750" loading="eager">
+        <div class="meeeku-pdp-hero-image" style="{% if is_tee %}width: 100%; max-width: 520px; margin: 0 auto;{% endif %}">
+          <img id="MeeekuMainPdpImage" src="{{ hero_image_src }}" alt="{{ display_title }}" width="600" height="750" loading="eager" style="border-radius: 24px; width: 100%; object-fit: cover; border: 2px solid #F8BBD0; box-shadow: 0 12px 36px rgba(107, 63, 160, 0.08);">
         </div>
       </div>
     </div>
@@ -125,12 +191,14 @@
       <div style="margin-bottom: 1.5rem; display: flex; align-items: baseline; gap: 1rem;">
         <span class="meeeku-pdp-price" id="MeeekuDisplayPriceText">{{ display_price }} INR</span>
         <span style="font-size: 1.6rem; color: #888; text-decoration: line-through;">{{ default_mrp_val }}</span>
-        <span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1.1rem; padding: 0.2rem 0.8rem;">SAVE 17%</span>
+        <span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1.1rem; padding: 0.2rem 0.8rem;">{{ discount_label }}</span>
       </div>
 
       <div style="color: #555; font-size: 1.45rem; line-height: 1.6; margin-bottom: 1.8rem;">
         {% if product.description != blank %}
           {{ product.description }}
+        {% elsif is_tee %}
+          Crafted from 100% ultra-soft combed cotton, this everyday essential tee features playful storybook art, smooth zero-itch collar ribbing, and easy-stretch movement. Gentle on delicate baby skin for playtime, daycare, and cozy naps.
         {% else %}
           Bring radiant sunshine to festive occasions with this handcrafted cotton lehenga. Detailed with delicate embroidery and finished with a comfortable elasticated waistband. Fully lined with 100% soft skin-safe muslin cotton for zero-itch twirling all day long.
         {% endif %}
@@ -141,7 +209,9 @@
         
         <!-- Size Selector -->
         <div style="margin-bottom: 1.8rem;">
-          <label style="font-weight: 700; color: #3D2355; font-size: 1.45rem; display: block; margin-bottom: 0.8rem;">Select Size (0 – 6 Years):</label>
+          <label style="font-weight: 700; color: #3D2355; font-size: 1.45rem; display: block; margin-bottom: 0.8rem;">
+            {% if is_tee %}Select Size (0 – 3 Years):{% else %}Select Size (0 – 6 Years):{% endif %}
+          </label>
           <div class="meeeku-pdp-size-grid">
             {% if product.variants.size > 0 %}
               {% for variant in product.variants %}
@@ -149,6 +219,12 @@
                   {{ variant.title }}
                 </button>
               {% endfor %}
+            {% elsif is_tee %}
+              <button type="button" class="meeeku-size-btn" onclick="meeekuSelectVariantBtn(this, '', '{{ display_price }}')">0 - 6M</button>
+              <button type="button" class="meeeku-size-btn active" onclick="meeekuSelectVariantBtn(this, '', '{{ display_price }}')">6 - 12M</button>
+              <button type="button" class="meeeku-size-btn" onclick="meeekuSelectVariantBtn(this, '', '{{ display_price }}')">12 - 18M</button>
+              <button type="button" class="meeeku-size-btn" onclick="meeekuSelectVariantBtn(this, '', '{{ display_price }}')">18 - 24M</button>
+              <button type="button" class="meeeku-size-btn" onclick="meeekuSelectVariantBtn(this, '', '{{ display_price }}')">2 - 3Y</button>
             {% else %}
               <button type="button" class="meeeku-size-btn" onclick="meeekuSelectVariantBtn(this, '', '{{ display_price }}')">2 - 3Y</button>
               <button type="button" class="meeeku-size-btn active" onclick="meeekuSelectVariantBtn(this, '', '{{ display_price }}')">4 - 5Y</button>
@@ -173,7 +249,9 @@
 
       <!-- Sizing Guide Inline -->
       <div class="meeeku-size-guide-inline" style="margin-top: 2rem; background: #FFFDF7; border: 1.5px solid #F8BBD0; border-radius: 20px; padding: 1.8rem;">
-        <h3 style="color: #3D2355; font-size: 1.5rem; font-weight: 800; margin-bottom: 1rem;">📏 Size & Fit Guide (0 – 6 Years)</h3>
+        <h3 style="color: #3D2355; font-size: 1.5rem; font-weight: 800; margin-bottom: 1rem;">
+          {% if is_tee %}📏 T-Shirt Size & Fit Guide (0 – 3 Years){% else %}📏 Size & Fit Guide (0 – 6 Years){% endif %}
+        </h3>
         <div style="overflow-x: auto;">
           <table style="width: 100%; border-collapse: collapse; font-size: 1.25rem;">
             <thead>
@@ -181,13 +259,21 @@
                 <th style="padding: 0.6rem 0.8rem; text-align: left;">Age</th>
                 <th style="padding: 0.6rem 0.8rem; text-align: center;">Height (cm)</th>
                 <th style="padding: 0.6rem 0.8rem; text-align: center;">Chest (cm)</th>
-                <th style="padding: 0.6rem 0.8rem; text-align: center;">Waist (cm)</th>
+                <th style="padding: 0.6rem 0.8rem; text-align: center;">{% if is_tee %}Length (cm){% else %}Waist (cm){% endif %}</th>
               </tr>
             </thead>
             <tbody>
-              <tr><td style="padding: 0.5rem 0.8rem;">2 – 3Y</td><td style="text-align:center;">90–98</td><td style="text-align:center;">50–53</td><td style="text-align:center;">49–52</td></tr>
-              <tr style="background: #FFF9F4;"><td style="padding: 0.5rem 0.8rem;">4 – 5Y</td><td style="text-align:center;">104–110</td><td style="text-align:center;">56–59</td><td style="text-align:center;">55–58</td></tr>
-              <tr><td style="padding: 0.5rem 0.8rem;">6 – 7Y</td><td style="text-align:center;">116–122</td><td style="text-align:center;">62–65</td><td style="text-align:center;">61–64</td></tr>
+              {% if is_tee %}
+                <tr><td style="padding: 0.5rem 0.8rem;">0 – 6M</td><td style="text-align:center;">60–68</td><td style="text-align:center;">44–46</td><td style="text-align:center;">31</td></tr>
+                <tr style="background: #FFF9F4;"><td style="padding: 0.5rem 0.8rem;">6 – 12M</td><td style="text-align:center;">68–76</td><td style="text-align:center;">46–48</td><td style="text-align:center;">33</td></tr>
+                <tr><td style="padding: 0.5rem 0.8rem;">12 – 18M</td><td style="text-align:center;">76–84</td><td style="text-align:center;">48–50</td><td style="text-align:center;">35</td></tr>
+                <tr style="background: #FFF9F4;"><td style="padding: 0.5rem 0.8rem;">18 – 24M</td><td style="text-align:center;">84–90</td><td style="text-align:center;">50–52</td><td style="text-align:center;">37</td></tr>
+                <tr><td style="padding: 0.5rem 0.8rem;">2 – 3Y</td><td style="text-align:center;">90–98</td><td style="text-align:center;">52–54</td><td style="text-align:center;">40</td></tr>
+              {% else %}
+                <tr><td style="padding: 0.5rem 0.8rem;">2 – 3Y</td><td style="text-align:center;">90–98</td><td style="text-align:center;">50–53</td><td style="text-align:center;">49–52</td></tr>
+                <tr style="background: #FFF9F4;"><td style="padding: 0.5rem 0.8rem;">4 – 5Y</td><td style="text-align:center;">104–110</td><td style="text-align:center;">56–59</td><td style="text-align:center;">55–58</td></tr>
+                <tr><td style="padding: 0.5rem 0.8rem;">6 – 7Y</td><td style="text-align:center;">116–122</td><td style="text-align:center;">62–65</td><td style="text-align:center;">61–64</td></tr>
+              {% endif %}
             </tbody>
           </table>
         </div>

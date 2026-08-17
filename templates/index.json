@@ -8,6 +8,10 @@
       "type": "meeeku-categories",
       "settings": {}
     },
+    "meeeku_everyday_tees": {
+      "type": "meeeku-everyday-tees",
+      "settings": {}
+    },
     "featured_collection": {
       "type": "featured-collection",
       "settings": {
@@ -48,6 +52,7 @@
   "order": [
     "meeeku_slideshow",
     "meeeku_categories",
+    "meeeku_everyday_tees",
     "featured_collection",
     "meeeku_reviews",
     "meeeku_boys"
