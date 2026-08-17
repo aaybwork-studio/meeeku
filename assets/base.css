@@ -3627,6 +3627,9 @@ details-disclosure > details {
 }
 
 /* Sleek Full-Width Navbar & Footer Alignment */
+.shopify-section-group-header-group,
+.section-header,
+sticky-header,
 .header-wrapper {
   background: linear-gradient(180deg, #FFF0F5 0%, #FFFDF7 100%) !important;
   border-bottom: 2px solid #F8BBD0 !important;
@@ -3635,7 +3638,7 @@ details-disclosure > details {
   max-width: 100% !important;
   position: sticky !important;
   top: 0 !important;
-  z-index: 1000 !important;
+  z-index: 9999 !important;
 }
 .header.page-width,
 .header {
@@ -4074,7 +4077,7 @@ input[type="submit"],
   transform: translateX(-50%) translateY(15px) !important;
   opacity: 0 !important;
   transition: opacity 0.3s ease, transform 0.3s ease !important;
-  z-index: 5 !important;
+  z-index: 2 !important;
   width: 86% !important;
   border-radius: 30px !important;
   background: rgba(255, 253, 247, 0.94) !important;
