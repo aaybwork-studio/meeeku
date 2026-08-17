@@ -10,13 +10,13 @@
       ✨ All Products
     </button>
     <button type="button" class="meeeku-pill-filter" data-filter="tees" onclick="setCategoryFilter('tees', this)" style="background-color: #E8F5E9; color: #2E7D32; border-color: #A5D6A7; font-weight: 700;">
-      👕 Everyday T-Shirts (Flat ₹599)
+      👕 Everyday T-Shirts
     </button>
     <button type="button" class="meeeku-pill-filter" data-filter="ethnic" onclick="setCategoryFilter('ethnic', this)">
       👑 Royal Ethnic Lehengas
     </button>
     <button type="button" class="meeeku-pill-filter" data-filter="coords" onclick="setCategoryFilter('coords', this)" style="background-color: #E0F2F1; color: #00695C; border-color: #80CBC4; font-weight: 700;">
-      🌸 2-Piece Co-ords (Flat ₹1,299)
+      🌸 2-Piece Co-ords
     </button>
     <button type="button" class="meeeku-pill-filter" data-filter="nightsuits" onclick="setCategoryFilter('nightsuits', this)" style="background-color: #F3E5F5; color: #4A148C; border-color: #CE93D8;">
       🌙 Organic Nightsuits <span style="font-size: 0.95rem; background: #9C27B0; color: #FFF; padding: 0.15rem 0.6rem; border-radius: 12px; margin-left: 0.4rem;">Coming Soon ⏳</span>
@@ -30,25 +30,31 @@
   </div>
 
   <!-- Sort By Price & Age Filter Bar -->
-  <div class="meeeku-filter-toolbar" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; background: #FFFDF7; border: 2px solid #F8BBD0; border-radius: 20px; padding: 1rem 1.8rem; margin-bottom: 3rem;">
+  <div class="meeeku-filter-toolbar">
     <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
       <span style="font-weight: 700; color: #3D2355; font-size: 1.4rem;">👶 Filter by Age:</span>
-      <select id="MeeekuAgeFilter" onchange="applyCatalogFiltersAndSort()" style="border: 2px solid #F8BBD0; border-radius: 15px; padding: 0.6rem 1.2rem; font-size: 1.35rem; color: #3D2355; background: #FFF; outline: none; cursor: pointer; font-weight: 600;">
-        <option value="all">All Ages (0 - 6 Years)</option>
-        <option value="infant">Infant (0 - 2 Years)</option>
-        <option value="toddler">Toddler (2 - 4 Years)</option>
-        <option value="kid">Kid (4 - 6 Years)</option>
-      </select>
+      <div class="meeeku-select-wrapper">
+        <select id="MeeekuAgeFilter" onchange="applyCatalogFiltersAndSort()" class="meeeku-filter-select">
+          <option value="all">All Ages (0 - 6 Years)</option>
+          <option value="infant">Infant (0 - 2 Years)</option>
+          <option value="toddler">Toddler (2 - 4 Years)</option>
+          <option value="kid">Kid (4 - 6 Years)</option>
+        </select>
+        <span class="meeeku-select-arrow">▾</span>
+      </div>
     </div>
 
     <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
       <span style="font-weight: 700; color: #3D2355; font-size: 1.4rem;">📊 Sort By:</span>
-      <select id="MeeekuPriceSort" onchange="applyCatalogFiltersAndSort()" style="border: 2px solid #F8BBD0; border-radius: 15px; padding: 0.6rem 1.2rem; font-size: 1.35rem; color: #3D2355; background: #FFF; outline: none; cursor: pointer; font-weight: 600;">
-        <option value="featured">Featured & Best Sellers</option>
-        <option value="price-low">Price: Low to High</option>
-        <option value="price-high">Price: High to Low</option>
-        <option value="newest">Newest Arrivals</option>
-      </select>
+      <div class="meeeku-select-wrapper">
+        <select id="MeeekuPriceSort" onchange="applyCatalogFiltersAndSort()" class="meeeku-filter-select">
+          <option value="featured">Featured & Best Sellers</option>
+          <option value="price-low">Price: Low to High</option>
+          <option value="price-high">Price: High to Low</option>
+          <option value="newest">Newest Arrivals</option>
+        </select>
+        <span class="meeeku-select-arrow">▾</span>
+      </div>
     </div>
   </div>
 
@@ -77,7 +83,7 @@
     <ul class="grid product-grid grid--2-col-tablet-down grid--3-col-desktop" id="MeeekuProductGrid">
       
       <!-- T-Shirt 1: Periwinkle Daisy Frill Cotton Tee -->
-      <li class="grid__item meeeku-grid-item" data-category="tees" data-price="599" data-age="all" data-date="2026-08-17">
+      <li class="grid__item meeeku-grid-item" data-category="tees" data-price="599" data-age="infant,toddler" data-date="2026-08-17" data-bestseller-rank="3">
         <div class="card-wrapper meeeku-interactive-card">
           <div class="meeeku-card-media-wrapper">
             <a href="/products/daisy-frill-blue-tee?item=daisy_frill_tee" class="meeeku-card-link">
@@ -105,7 +111,7 @@
       </li>
 
       <!-- T-Shirt 2: Snuggle Bunny Blush Cotton Tee -->
-      <li class="grid__item meeeku-grid-item" data-category="tees" data-price="599" data-age="all" data-date="2026-08-17">
+      <li class="grid__item meeeku-grid-item" data-category="tees" data-price="599" data-age="infant,toddler" data-date="2026-08-17" data-bestseller-rank="6">
         <div class="card-wrapper meeeku-interactive-card">
           <div class="meeeku-card-media-wrapper">
             <a href="/products/snuggle-bunny-blush-tee?item=bunny_tee" class="meeeku-card-link">
@@ -133,7 +139,7 @@
       </li>
 
       <!-- T-Shirt 3: Little Leopard Safari Cotton Tee -->
-      <li class="grid__item meeeku-grid-item" data-category="tees" data-price="599" data-age="all" data-date="2026-08-17">
+      <li class="grid__item meeeku-grid-item" data-category="tees" data-price="599" data-age="infant,toddler" data-date="2026-08-17" data-bestseller-rank="12">
         <div class="card-wrapper meeeku-interactive-card">
           <div class="meeeku-card-media-wrapper">
             <a href="/products/little-leopard-safari-tee?item=leopard_tee" class="meeeku-card-link">
@@ -161,7 +167,7 @@
       </li>
 
       <!-- T-Shirt 4: Tiny Dino Doodles Cotton Tee -->
-      <li class="grid__item meeeku-grid-item" data-category="tees" data-price="599" data-age="all" data-date="2026-08-17">
+      <li class="grid__item meeeku-grid-item" data-category="tees" data-price="599" data-age="infant,toddler" data-date="2026-08-17" data-bestseller-rank="10">
         <div class="card-wrapper meeeku-interactive-card">
           <div class="meeeku-card-media-wrapper">
             <a href="/products/tiny-dino-doodles-tee?item=dino_tee" class="meeeku-card-link">
@@ -189,7 +195,7 @@
       </li>
 
       <!-- T-Shirt 4: Little Night Owl Starlit Cotton Tee -->
-      <li class="grid__item meeeku-grid-item" data-category="tees" data-price="599" data-age="all" data-date="2026-08-17">
+      <li class="grid__item meeeku-grid-item" data-category="tees" data-price="599" data-age="infant,toddler" data-date="2026-08-17" data-bestseller-rank="15">
         <div class="card-wrapper meeeku-interactive-card">
           <div class="meeeku-card-media-wrapper">
             <a href="/products/little-night-owl-starlit-tee?item=owl_tee" class="meeeku-card-link">
@@ -216,7 +222,7 @@
       </li>
 
       <!-- T-Shirt 5: Mighty Little Lion Cotton Tee -->
-      <li class="grid__item meeeku-grid-item" data-category="tees" data-price="599" data-age="all" data-date="2026-08-17">
+      <li class="grid__item meeeku-grid-item" data-category="tees" data-price="599" data-age="infant,toddler" data-date="2026-08-17" data-bestseller-rank="18">
         <div class="card-wrapper meeeku-interactive-card">
           <div class="meeeku-card-media-wrapper">
             <a href="/products/mighty-little-lion-tee?item=lion_tee" class="meeeku-card-link">
@@ -243,7 +249,7 @@
       </li>
 
       <!-- T-Shirt 6: Cosmic Safari Doodle Cotton Tee -->
-      <li class="grid__item meeeku-grid-item" data-category="tees" data-price="599" data-age="all" data-date="2026-08-17">
+      <li class="grid__item meeeku-grid-item" data-category="tees" data-price="599" data-age="infant,toddler" data-date="2026-08-17" data-bestseller-rank="19">
         <div class="card-wrapper meeeku-interactive-card">
           <div class="meeeku-card-media-wrapper">
             <a href="/products/cosmic-safari-doodle-tee?item=cosmic_safari_tee" class="meeeku-card-link">
@@ -271,7 +277,7 @@
       
       
       <!-- Co-ord 1: Vanilla Cream Ruffled Eyelet Co-ord Set -->
-      <li class="grid__item meeeku-grid-item" data-category="coords" data-price="1299" data-age="all" data-date="2026-08-17">
+      <li class="grid__item meeeku-grid-item" data-category="coords" data-price="1299" data-age="infant,toddler" data-date="2026-08-17" data-bestseller-rank="2">
         <div class="card-wrapper meeeku-interactive-card">
           <div class="meeeku-card-media-wrapper">
             <a href="/products/vanilla-cream-eyelet-coord?item=vanilla_cream_coord" class="meeeku-card-link">
@@ -298,7 +304,7 @@
       </li>
 
       <!-- Co-ord 2: Pink Ribbon Bow Peplum Co-ord Set -->
-      <li class="grid__item meeeku-grid-item" data-category="coords" data-price="1299" data-age="all" data-date="2026-08-17">
+      <li class="grid__item meeeku-grid-item" data-category="coords" data-price="1299" data-age="infant,toddler" data-date="2026-08-17" data-bestseller-rank="5">
         <div class="card-wrapper meeeku-interactive-card">
           <div class="meeeku-card-media-wrapper">
             <a href="/products/pink-ribbon-peplum-coord?item=pink_ribbon_peplum_coord" class="meeeku-card-link">
@@ -325,7 +331,7 @@
       </li>
 
       <!-- Co-ord 3: Little Farm Friends Storybook Co-ord Set -->
-      <li class="grid__item meeeku-grid-item" data-category="coords" data-price="1299" data-age="all" data-date="2026-08-17">
+      <li class="grid__item meeeku-grid-item" data-category="coords" data-price="1299" data-age="infant,toddler" data-date="2026-08-17" data-bestseller-rank="8">
         <div class="card-wrapper meeeku-interactive-card">
           <div class="meeeku-card-media-wrapper">
             <a href="/products/farm-friends-storybook-coord?item=farm_friends_coord" class="meeeku-card-link">
@@ -352,7 +358,7 @@
       </li>
 
       <!-- Co-ord 4: Wildflower Meadow Ruffle Co-ord Set -->
-      <li class="grid__item meeeku-grid-item" data-category="coords" data-price="1299" data-age="all" data-date="2026-08-17">
+      <li class="grid__item meeeku-grid-item" data-category="coords" data-price="1299" data-age="infant,toddler" data-date="2026-08-17" data-bestseller-rank="11">
         <div class="card-wrapper meeeku-interactive-card">
           <div class="meeeku-card-media-wrapper">
             <a href="/products/wildflower-meadow-ruffle-coord?item=wildflower_meadow_coord" class="meeeku-card-link">
@@ -379,7 +385,7 @@
       </li>
 
       <!-- Co-ord 5: Sky Blue Stardust Polka Co-ord Set -->
-      <li class="grid__item meeeku-grid-item" data-category="coords" data-price="1299" data-age="all" data-date="2026-08-17">
+      <li class="grid__item meeeku-grid-item" data-category="coords" data-price="1299" data-age="infant,toddler" data-date="2026-08-17" data-bestseller-rank="14">
         <div class="card-wrapper meeeku-interactive-card">
           <div class="meeeku-card-media-wrapper">
             <a href="/products/sky-blue-stardust-polka-coord?item=sky_blue_polka_coord" class="meeeku-card-link">
@@ -406,7 +412,7 @@
       </li>
 
       <!-- Co-ord 6: Playful Kitty Doodles Cotton Co-ord Set -->
-      <li class="grid__item meeeku-grid-item" data-category="coords" data-price="1299" data-age="all" data-date="2026-08-17">
+      <li class="grid__item meeeku-grid-item" data-category="coords" data-price="1299" data-age="infant,toddler" data-date="2026-08-17" data-bestseller-rank="17">
         <div class="card-wrapper meeeku-interactive-card">
           <div class="meeeku-card-media-wrapper">
             <a href="/products/playful-kitty-doodles-coord?item=playful_kitty_coord" class="meeeku-card-link">
@@ -433,7 +439,7 @@
       </li>
 
       <!-- Product 1: Sunshine Chanderi Lehenga -->
-      <li class="grid__item meeeku-grid-item" data-category="ethnic" data-price="3199" data-age="toddler" data-date="2026-01-15">
+      <li class="grid__item meeeku-grid-item" data-category="ethnic" data-price="3199" data-age="toddler,kid" data-date="2026-01-15" data-bestseller-rank="1">
         <div class="card-wrapper meeeku-interactive-card">
           <div class="meeeku-card-media-wrapper">
             <a href="/products/sunshine-chanderi-lehenga?item=yellow_lehenga" class="meeeku-card-link">
@@ -449,7 +455,7 @@
             <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
               <a href="/products/sunshine-chanderi-lehenga?item=yellow_lehenga" style="color: #3D2355; text-decoration: none;">Sunshine Chanderi Lehenga</a>
             </h3>
-            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹3,199.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹3,899.00</span></div>
+            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹3,199.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹3,899.00</span><span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">18% OFF</span></div>
           </div>
         </div>
       </li>
@@ -471,7 +477,7 @@
             <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
               <a href="/products/teal-bloom-sequin-dress?item=teal_dress" style="color: #3D2355; text-decoration: none;">Teal Bloom Sequin Lehenga</a>
             </h3>
-            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹2,999.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹3,699.00</span></div>
+            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹2,999.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹3,699.00</span><span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">19% OFF</span></div>
           </div>
         </div>
       </li>
@@ -493,13 +499,13 @@
             <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
               <a href="/products/blush-rose-net-lehenga?item=pink_net_lehenga" style="color: #3D2355; text-decoration: none;">Blush Rose Net Lehenga</a>
             </h3>
-            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹3,299.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹3,999.00</span></div>
+            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹3,299.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹3,999.00</span><span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">18% OFF</span></div>
           </div>
         </div>
       </li>
 
       <!-- Product 4: Forest Vrindavan Lehenga -->
-      <li class="grid__item meeeku-grid-item" data-category="ethnic" data-price="3199" data-age="kid" data-date="2026-01-18">
+      <li class="grid__item meeeku-grid-item" data-category="ethnic" data-price="3199" data-age="toddler,kid" data-date="2026-01-18" data-bestseller-rank="9">
         <div class="card-wrapper meeeku-interactive-card">
           <div class="meeeku-card-media-wrapper">
             <a href="/products/forest-vrindavan-green-lehenga?item=green_lehenga" class="meeeku-card-link">
@@ -515,7 +521,7 @@
             <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
               <a href="/products/forest-vrindavan-green-lehenga?item=green_lehenga" style="color: #3D2355; text-decoration: none;">Forest Vrindavan Lehenga</a>
             </h3>
-            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹3,199.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹3,899.00</span></div>
+            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹3,199.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹3,899.00</span><span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">18% OFF</span></div>
           </div>
         </div>
       </li>
@@ -537,7 +543,7 @@
             <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
               <a href="/products/gulmohar-splash-abstract-coord?item=multicolor_coord" style="color: #3D2355; text-decoration: none;">Gulmohar Splash Printed Lehenga</a>
             </h3>
-            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹2,899.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹3,599.00</span></div>
+            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹2,899.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹3,599.00</span><span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">19% OFF</span></div>
           </div>
         </div>
       </li>
@@ -559,7 +565,7 @@
             <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
               <a href="/products/sage-mint-gota-lehenga?item=sage_lehenga" style="color: #3D2355; text-decoration: none;">Sage Mint Gota Lehenga</a>
             </h3>
-            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹3,199.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹3,899.00</span></div>
+            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹3,199.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹3,899.00</span><span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">18% OFF</span></div>
           </div>
         </div>
       </li>
@@ -581,13 +587,13 @@
             <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
               <a href="/products/rani-pink-phulkari-lehenga?item=magenta_lehenga" style="color: #3D2355; text-decoration: none;">Rani Pink Phulkari Lehenga</a>
             </h3>
-            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹2,799.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹3,499.00</span></div>
+            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹2,799.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹3,499.00</span><span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">20% OFF</span></div>
           </div>
         </div>
       </li>
 
       <!-- Product 8: Midnight Blossom Halter Lehenga -->
-      <li class="grid__item meeeku-grid-item" data-category="ethnic" data-price="2799" data-age="kid" data-date="2026-01-28">
+      <li class="grid__item meeeku-grid-item" data-category="ethnic" data-price="2799" data-age="toddler,kid" data-date="2026-01-28" data-bestseller-rank="21">
         <div class="card-wrapper meeeku-interactive-card">
           <div class="meeeku-card-media-wrapper">
             <a href="/products/midnight-blossom-halter-lehenga?item=black_lehenga" class="meeeku-card-link">
@@ -603,13 +609,13 @@
             <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
               <a href="/products/midnight-blossom-halter-lehenga?item=black_lehenga" style="color: #3D2355; text-decoration: none;">Midnight Blossom Halter Lehenga</a>
             </h3>
-            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹2,799.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹3,499.00</span></div>
+            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹2,799.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹3,499.00</span><span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">20% OFF</span></div>
           </div>
         </div>
       </li>
 
       <!-- Product 9: Olive Silk One-Shoulder Lehenga -->
-      <li class="grid__item meeeku-grid-item" data-category="ethnic" data-price="3299" data-age="toddler" data-date="2026-02-08">
+      <li class="grid__item meeeku-grid-item" data-category="ethnic" data-price="3299" data-age="toddler,kid" data-date="2026-02-08" data-bestseller-rank="22">
         <div class="card-wrapper meeeku-interactive-card">
           <div class="meeeku-card-media-wrapper">
             <a href="/products/olive-silk-oneshoulder-lehenga?item=olive_lehenga" class="meeeku-card-link">
@@ -625,7 +631,7 @@
             <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
               <a href="/products/olive-silk-oneshoulder-lehenga?item=olive_lehenga" style="color: #3D2355; text-decoration: none;">Olive Silk One-Shoulder Lehenga</a>
             </h3>
-            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹3,299.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹3,999.00</span></div>
+            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹3,299.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹3,999.00</span><span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">18% OFF</span></div>
           </div>
         </div>
       </li>
@@ -733,11 +739,11 @@ function applyCatalogFiltersAndSort() {
   }
 
   items.forEach(item => {
-    const itemCat = item.getAttribute('data-category');
-    const itemAge = item.getAttribute('data-age');
+    const itemCat = item.getAttribute('data-category') || '';
+    const itemAge = item.getAttribute('data-age') || '';
 
-    const catMatch = (currentCategory === 'all' || (itemCat && itemCat.includes(currentCategory)));
-    const ageMatch = (ageFilter === 'all' || itemAge === ageFilter);
+    const catMatch = (currentCategory === 'all' || itemCat.includes(currentCategory));
+    const ageMatch = (ageFilter === 'all' || itemAge.includes(ageFilter));
 
     if (catMatch && ageMatch && !COMING_SOON_INFO[currentCategory]) {
       item.style.display = 'block';
@@ -749,19 +755,23 @@ function applyCatalogFiltersAndSort() {
   });
 
   items.sort((a, b) => {
+    const rankA = parseInt(a.getAttribute('data-bestseller-rank')) || 99;
+    const rankB = parseInt(b.getAttribute('data-bestseller-rank')) || 99;
     const priceA = parseFloat(a.getAttribute('data-price')) || 0;
     const priceB = parseFloat(b.getAttribute('data-price')) || 0;
     const dateA = new Date(a.getAttribute('data-date')).getTime() || 0;
     const dateB = new Date(b.getAttribute('data-date')).getTime() || 0;
 
-    if (sortOption === 'price-low') {
+    if (sortOption === 'featured') {
+      return rankA - rankB;
+    } else if (sortOption === 'price-low') {
       return priceA - priceB;
     } else if (sortOption === 'price-high') {
       return priceB - priceA;
     } else if (sortOption === 'newest') {
       return dateB - dateA;
     }
-    return 0;
+    return rankA - rankB;
   });
 
   items.forEach(item => grid.appendChild(item));
@@ -935,6 +945,56 @@ function showMeeekuToastCatalog(msg) {
   border-color: #FF6097;
 }
 
+.meeeku-filter-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  background: #FFFDF7;
+  border: 1.5px solid #F8BBD0;
+  border-radius: 20px;
+  padding: 1.2rem 2rem;
+  margin-bottom: 3rem;
+  box-shadow: 0 4px 16px rgba(107, 63, 160, 0.05);
+}
+
+.meeeku-select-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.meeeku-filter-select {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 1.5px solid #F8BBD0;
+  border-radius: 25px;
+  padding: 0.7rem 2.8rem 0.7rem 1.4rem;
+  font-size: 1.35rem;
+  color: #3D2355;
+  background: #FFFFFF;
+  outline: none;
+  cursor: pointer;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(107, 63, 160, 0.04);
+}
+
+.meeeku-filter-select:focus,
+.meeeku-filter-select:hover {
+  border-color: #6B3FA0;
+}
+
+.meeeku-select-arrow {
+  position: absolute;
+  right: 1.2rem;
+  pointer-events: none;
+  color: #6B3FA0;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
 @media screen and (max-width: 749px) {
   .meeeku-catalog-pills {
     justify-content: flex-start !important;
@@ -955,32 +1015,27 @@ function showMeeekuToastCatalog(msg) {
     padding: 0.6rem 1.2rem !important;
   }
   .meeeku-filter-toolbar {
-    background: transparent !important;
-    border: none !important;
-    padding: 0 !important;
+    background: #FFFDF7 !important;
+    border: 1.5px solid #F8BBD0 !important;
+    border-radius: 16px !important;
+    padding: 1rem !important;
     margin-bottom: 2rem !important;
     display: flex !important;
-    flex-direction: row !important;
+    flex-direction: column !important;
     gap: 0.8rem !important;
   }
   .meeeku-filter-toolbar > div {
-    flex: 1 !important;
-    margin: 0 !important;
-    width: 50% !important;
-  }
-  .meeeku-filter-toolbar span {
-    display: none !important;
-  }
-  .meeeku-filter-toolbar select {
     width: 100% !important;
-    max-width: 100% !important;
-    background: #FFFDF7 !important;
-    border: 1.5px solid #F8BBD0 !important;
-    border-radius: 20px !important;
-    padding: 0.7rem 0.8rem !important;
+    justify-content: space-between !important;
+  }
+  .meeeku-select-wrapper {
+    flex: 1 !important;
+    max-width: 220px !important;
+  }
+  .meeeku-filter-select {
+    width: 100% !important;
     font-size: 1.2rem !important;
-    color: #3D2355 !important;
-    font-weight: 700 !important;
+    padding: 0.6rem 2.2rem 0.6rem 1rem !important;
   }
   .meeeku-card-hover-quick-add {
     position: absolute !important;
