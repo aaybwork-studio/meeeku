@@ -1,18 +1,19 @@
 {% comment %}
-  Meeeku Scoped & Universal Client-Hydrated Single Product Template
-  Supports 100% accurate dynamic switching for all Ethnic Lehengas and Everyday T-Shirts
+  Meeeku Universal Single Product Template OS 2.0
+  Fully supports all 22 Ethnic Lehengas, Co-ord Sets, and Everyday T-Shirts
 {% endcomment %}
 
 <product-info id="MainProduct-{{ section.id }}" class="product-info page-width meeeku-pdp-container" data-section="{{ section.id }}" data-product-id="{{ product.id }}" style="display: block; padding-top: 2rem; padding-bottom: 5rem;">
   
   {% liquid
     assign prod_key = 'yellow_lehenga'
-    assign prod_category_badge = 'Chanderi Cotton'
+    assign prod_category_badge = 'Royal Chanderi Cotton'
     assign prod_badge_class = 'meeeku-badge--ethnic'
     assign default_price_val = '₹3,199.00'
     assign default_mrp_val = '₹3,899.00'
     assign discount_label = 'SAVE 17%'
     assign is_tee = false
+    assign is_coord = false
     
     assign t = product.title | downcase
     assign h = product.handle | downcase
@@ -66,21 +67,102 @@
       assign default_mrp_val = '₹899.00'
       assign discount_label = 'SAVE 33%'
       assign is_tee = true
+    elsif h contains 'vanilla' or h contains 'eyelet' or t contains 'vanilla'
+      assign prod_key = 'vanilla_cream_coord'
+      assign prod_category_badge = '100% Combed Organic Cotton'
+      assign default_price_val = '₹1,299.00'
+      assign default_mrp_val = '₹1,699.00'
+      assign discount_label = 'SAVE 24%'
+      assign is_coord = true
+    elsif h contains 'ribbon' or h contains 'peplum' or t contains 'ribbon'
+      assign prod_key = 'pink_ribbon_peplum_coord'
+      assign prod_category_badge = '100% Breathable Ribbed Cotton'
+      assign default_price_val = '₹1,299.00'
+      assign default_mrp_val = '₹1,699.00'
+      assign discount_label = 'SAVE 24%'
+      assign is_coord = true
+    elsif h contains 'farm' or h contains 'storybook' or t contains 'farm'
+      assign prod_key = 'farm_friends_coord'
+      assign prod_category_badge = '100% Hypoallergenic Soft Cotton'
+      assign default_price_val = '₹1,299.00'
+      assign default_mrp_val = '₹1,699.00'
+      assign discount_label = 'SAVE 24%'
+      assign is_coord = true
+    elsif h contains 'wildflower' or h contains 'meadow' or t contains 'wildflower'
+      assign prod_key = 'wildflower_meadow_coord'
+      assign prod_category_badge = '100% Pure Organic Cotton'
+      assign default_price_val = '₹1,299.00'
+      assign default_mrp_val = '₹1,699.00'
+      assign discount_label = 'SAVE 24%'
+      assign is_coord = true
+    elsif h contains 'stardust' or h contains 'polka' or t contains 'stardust' or t contains 'polka'
+      assign prod_key = 'sky_blue_polka_coord'
+      assign prod_category_badge = '100% Pure Combed Cotton'
+      assign default_price_val = '₹1,299.00'
+      assign default_mrp_val = '₹1,699.00'
+      assign discount_label = 'SAVE 24%'
+      assign is_coord = true
+    elsif h contains 'kitty' or h contains 'playful' or t contains 'kitty'
+      assign prod_key = 'playful_kitty_coord'
+      assign prod_category_badge = '100% Pure Organic Cotton'
+      assign default_price_val = '₹1,299.00'
+      assign default_mrp_val = '₹1,699.00'
+      assign discount_label = 'SAVE 24%'
+      assign is_coord = true
     elsif h contains 'teal' or h contains 'bloom' or h contains 'sequin' or t contains 'teal'
       assign prod_key = 'teal_dress'
       assign prod_category_badge = 'Royal Tulle & Sequins'
       assign default_price_val = '₹2,999.00'
       assign default_mrp_val = '₹3,699.00'
+      assign discount_label = 'SAVE 19%'
     elsif h contains 'pink-net' or h contains 'blush' or h contains 'rose' or t contains 'blush'
       assign prod_key = 'pink_net_lehenga'
       assign prod_category_badge = 'Royal Net & Zari'
       assign default_price_val = '₹3,299.00'
       assign default_mrp_val = '₹3,999.00'
+      assign discount_label = 'SAVE 18%'
     elsif h contains 'green' or h contains 'vrindavan' or t contains 'forest'
       assign prod_key = 'green_lehenga'
       assign prod_category_badge = '100% Organic Cotton'
       assign default_price_val = '₹3,199.00'
       assign default_mrp_val = '₹3,899.00'
+      assign discount_label = 'SAVE 18%'
+    elsif h contains 'gulmohar' or h contains 'multicolor' or t contains 'gulmohar'
+      assign prod_key = 'multicolor_coord'
+      assign prod_category_badge = 'Festive Co-ord Lehenga'
+      assign default_price_val = '₹2,899.00'
+      assign default_mrp_val = '₹3,599.00'
+      assign discount_label = 'SAVE 19%'
+    elsif h contains 'sage' or h contains 'gota' or t contains 'sage'
+      assign prod_key = 'sage_lehenga'
+      assign prod_category_badge = 'Gota Patti Zari'
+      assign default_price_val = '₹3,199.00'
+      assign default_mrp_val = '₹3,899.00'
+      assign discount_label = 'SAVE 18%'
+    elsif h contains 'magenta' or h contains 'phulkari' or h contains 'rani' or t contains 'rani' or t contains 'phulkari'
+      assign prod_key = 'magenta_lehenga'
+      assign prod_category_badge = 'Phulkari Threadwork'
+      assign default_price_val = '₹2,799.00'
+      assign default_mrp_val = '₹3,499.00'
+      assign discount_label = 'SAVE 20%'
+    elsif h contains 'black' or h contains 'midnight' or h contains 'halter' or t contains 'midnight'
+      assign prod_key = 'black_lehenga'
+      assign prod_category_badge = 'Royal Halter Neck'
+      assign default_price_val = '₹2,799.00'
+      assign default_mrp_val = '₹3,499.00'
+      assign discount_label = 'SAVE 20%'
+    elsif h contains 'olive' or h contains 'oneshoulder' or t contains 'olive'
+      assign prod_key = 'olive_lehenga'
+      assign prod_category_badge = 'Zardozi Silk'
+      assign default_price_val = '₹3,299.00'
+      assign default_mrp_val = '₹3,999.00'
+      assign discount_label = 'SAVE 18%'
+    elsif h contains 'bandhani' or h contains 'surajmukhi' or t contains 'bandhani'
+      assign prod_key = 'red_bandhani_lehenga'
+      assign prod_category_badge = 'Jaipuri Bandhani'
+      assign default_price_val = '₹3,499.00'
+      assign default_mrp_val = '₹4,199.00'
+      assign discount_label = 'SAVE 17%'
     endif
 
     assign main_img_name = 'meeeku_prod_' | append: prod_key | append: '.jpg'
@@ -91,6 +173,8 @@
     if display_title == blank
       if is_tee
         assign display_title = 'Periwinkle Daisy Frill Cotton Tee'
+      elsif is_coord
+        assign display_title = 'Vanilla Cream Ruffled Eyelet Co-ord Set'
       else
         assign display_title = 'Sunshine Chanderi Lehenga'
       endif
@@ -150,6 +234,8 @@
           {{ product.description }}
         {% elsif is_tee %}
           Crafted from 100% ultra-soft combed cotton, this everyday essential tee features playful storybook art, smooth zero-itch collar ribbing, and easy-stretch movement. Gentle on delicate baby skin for playtime, daycare, and cozy naps.
+        {% elsif is_coord %}
+          A luxurious 2-piece lounge set crafted from heavyweight, butter-soft combed cotton. Features delicate ruffles, gentle neckband ease, and matching elasticated bottoms for all-day comfort.
         {% else %}
           Bring radiant sunshine to festive occasions with this handcrafted cotton lehenga. Detailed with delicate embroidery and finished with a comfortable elasticated waistband. Fully lined with 100% soft skin-safe muslin cotton for zero-itch twirling all day long.
         {% endif %}
@@ -161,16 +247,18 @@
         <!-- Size Selector -->
         <div style="margin-bottom: 1.8rem;">
           <label id="MeeekuPdpSizeLabel" style="font-weight: 700; color: #3D2355; font-size: 1.45rem; display: block; margin-bottom: 0.8rem;">
-            {% if is_tee %}Select Size (0 – 3 Years):{% else %}Select Size (0 – 7 Years):{% endif %}
+            {% if is_tee or is_coord %}Select Size (0 – 3 Years):{% else %}Select Size (0 – 7 Years):{% endif %}
           </label>
           <div class="meeeku-pdp-size-grid" id="MeeekuPdpSizeGrid">
-            {% if is_tee %}
+            {% if is_tee or is_coord %}
               <button type="button" class="meeeku-size-btn" onclick="meeekuSelectVariantBtn(this, '', '{{ display_price }}')">0 - 6M</button>
               <button type="button" class="meeeku-size-btn active" onclick="meeekuSelectVariantBtn(this, '', '{{ display_price }}')">6 - 12M</button>
               <button type="button" class="meeeku-size-btn" onclick="meeekuSelectVariantBtn(this, '', '{{ display_price }}')">12 - 18M</button>
               <button type="button" class="meeeku-size-btn" onclick="meeekuSelectVariantBtn(this, '', '{{ display_price }}')">18 - 24M</button>
               <button type="button" class="meeeku-size-btn" onclick="meeekuSelectVariantBtn(this, '', '{{ display_price }}')">2 - 3Y</button>
             {% else %}
+              <button type="button" class="meeeku-size-btn" onclick="meeekuSelectVariantBtn(this, '', '{{ display_price }}')">0 - 1Y</button>
+              <button type="button" class="meeeku-size-btn" onclick="meeekuSelectVariantBtn(this, '', '{{ display_price }}')">1 - 2Y</button>
               <button type="button" class="meeeku-size-btn" onclick="meeekuSelectVariantBtn(this, '', '{{ display_price }}')">2 - 3Y</button>
               <button type="button" class="meeeku-size-btn active" onclick="meeekuSelectVariantBtn(this, '', '{{ display_price }}')">4 - 5Y</button>
               <button type="button" class="meeeku-size-btn" onclick="meeekuSelectVariantBtn(this, '', '{{ display_price }}')">6 - 7Y</button>
@@ -180,10 +268,10 @@
 
         <!-- Add to Cart & Buy It Now CTAs -->
         <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem;">
-          <button type="submit" name="add" class="meeeku-btn-primary" style="width: 100%; text-align: center; font-size: 1.5rem; padding: 1.2rem;">
+          <button type="submit" name="add" class="meeeku-btn-primary" style="width: 100%; text-align: center; font-size: 1.5rem; padding: 1.2rem; cursor: pointer;">
             🛒 Add to Cart — <span id="MeeekuBtnPriceLabel">{{ display_price }}</span>
           </button>
-          <button type="button" class="meeeku-btn-secondary" style="width: 100%; text-align: center; font-size: 1.5rem; padding: 1.2rem;" onclick="meeekuTriggerBuyNow()">
+          <button type="button" class="meeeku-btn-secondary" style="width: 100%; text-align: center; font-size: 1.5rem; padding: 1.2rem; cursor: pointer;" onclick="meeekuTriggerBuyNow()">
             ⚡ Buy It Now
           </button>
         </div>
@@ -195,7 +283,7 @@
       <!-- Sizing Guide Inline -->
       <div class="meeeku-size-guide-inline" style="margin-top: 2rem; background: #FFFDF7; border: 1.5px solid #F8BBD0; border-radius: 20px; padding: 1.8rem;">
         <h3 id="MeeekuSizeGuideHeading" style="color: #3D2355; font-size: 1.5rem; font-weight: 800; margin-bottom: 1rem;">
-          {% if is_tee %}📏 T-Shirt Size & Fit Guide (0 – 3 Years){% else %}📏 Size & Fit Guide (0 – 6 Years){% endif %}
+          {% if is_tee %}📏 T-Shirt Size & Fit Guide (0 – 3 Years){% elsif is_coord %}📏 2-Piece Co-ord Size Guide (0 – 3 Years){% else %}📏 Size & Fit Guide (0 – 7 Years){% endif %}
         </h3>
         <div id="MeeekuSizeGuideTableWrap" style="overflow-x: auto;">
           <table style="width: 100%; border-collapse: collapse; font-size: 1.25rem;">
@@ -204,17 +292,19 @@
                 <th style="padding: 0.6rem 0.8rem; text-align: left;">Age</th>
                 <th style="padding: 0.6rem 0.8rem; text-align: center;">Height (cm)</th>
                 <th style="padding: 0.6rem 0.8rem; text-align: center;">Chest (cm)</th>
-                <th style="padding: 0.6rem 0.8rem; text-align: center;">{% if is_tee %}Length (cm){% else %}Waist (cm){% endif %}</th>
+                <th style="padding: 0.6rem 0.8rem; text-align: center;">{% if is_tee %}Length (cm){% elsif is_coord %}Length (cm){% else %}Waist (cm){% endif %}</th>
               </tr>
             </thead>
             <tbody id="MeeekuSizeGuideTbody">
-              {% if is_tee %}
+              {% if is_tee or is_coord %}
                 <tr><td style="padding: 0.5rem 0.8rem;">0 – 6M</td><td style="text-align:center;">60–68</td><td style="text-align:center;">44–46</td><td style="text-align:center;">31</td></tr>
                 <tr style="background: #FFF9F4;"><td style="padding: 0.5rem 0.8rem;">6 – 12M</td><td style="text-align:center;">68–76</td><td style="text-align:center;">46–48</td><td style="text-align:center;">33</td></tr>
                 <tr><td style="padding: 0.5rem 0.8rem;">12 – 18M</td><td style="text-align:center;">76–84</td><td style="text-align:center;">48–50</td><td style="text-align:center;">35</td></tr>
                 <tr style="background: #FFF9F4;"><td style="padding: 0.5rem 0.8rem;">18 – 24M</td><td style="text-align:center;">84–90</td><td style="text-align:center;">50–52</td><td style="text-align:center;">37</td></tr>
                 <tr><td style="padding: 0.5rem 0.8rem;">2 – 3Y</td><td style="text-align:center;">90–98</td><td style="text-align:center;">52–54</td><td style="text-align:center;">40</td></tr>
               {% else %}
+                <tr><td style="padding: 0.5rem 0.8rem;">0 – 1Y</td><td style="text-align:center;">70–80</td><td style="text-align:center;">46–49</td><td style="text-align:center;">45–48</td></tr>
+                <tr style="background: #FFF9F4;"><td style="padding: 0.5rem 0.8rem;">1 – 2Y</td><td style="text-align:center;">80–90</td><td style="text-align:center;">48–51</td><td style="text-align:center;">47–50</td></tr>
                 <tr><td style="padding: 0.5rem 0.8rem;">2 – 3Y</td><td style="text-align:center;">90–98</td><td style="text-align:center;">50–53</td><td style="text-align:center;">49–52</td></tr>
                 <tr style="background: #FFF9F4;"><td style="padding: 0.5rem 0.8rem;">4 – 5Y</td><td style="text-align:center;">104–110</td><td style="text-align:center;">56–59</td><td style="text-align:center;">55–58</td></tr>
                 <tr><td style="padding: 0.5rem 0.8rem;">6 – 7Y</td><td style="text-align:center;">116–122</td><td style="text-align:center;">62–65</td><td style="text-align:center;">61–64</td></tr>
@@ -564,12 +654,12 @@ const MEEEKU_PDP_CATALOG = {
     images: {
       model: "{{ 'meeeku_prod_cosmic_safari_tee_model.jpg' | asset_url }}",
       flatlay: "{{ 'meeeku_prod_cosmic_safari_tee.jpg' | asset_url }}",
-      detail: "{{ 'meeeku_prod_cosmic_safari_tee.jpg' | asset_url }}"
+      detail: "{{ 'meeeku_prod_cosmic_safari_tee_detail.jpg' | asset_url }}"
     }
   },
   'yellow_lehenga': {
     title: 'Sunshine Chanderi Lehenga',
-    badge: 'Chanderi Cotton',
+    badge: 'Royal Chanderi Cotton',
     badgeClass: 'meeeku-badge--ethnic',
     price: '₹3,199.00',
     mrp: '₹3,899.00',
@@ -583,9 +673,6 @@ const MEEEKU_PDP_CATALOG = {
       back: "{{ 'meeeku_prod_yellow_lehenga_back.jpg' | asset_url }}",
       detail: "{{ 'meeeku_prod_yellow_lehenga_detail.jpg' | asset_url }}",
       swirl: "{{ 'meeeku_prod_yellow_lehenga_swirl.jpg' | asset_url }}"
-    }}",
-      flatlay: "{{ 'meeeku_prod_yellow_lehenga.jpg' | asset_url }}",
-      detail: "{{ 'meeeku_prod_yellow_lehenga_swirl.jpg' | asset_url }}"
     }
   },
   'teal_dress': {
@@ -604,9 +691,6 @@ const MEEEKU_PDP_CATALOG = {
       hanger: "{{ 'meeeku_prod_teal_dress_hanger.jpg' | asset_url }}",
       detail: "{{ 'meeeku_prod_teal_dress_detail.jpg' | asset_url }}",
       swirl: "{{ 'meeeku_prod_teal_dress_swirl.jpg' | asset_url }}"
-    }}",
-      flatlay: "{{ 'meeeku_prod_teal_dress.jpg' | asset_url }}",
-      detail: "{{ 'meeeku_prod_teal_dress_swirl.jpg' | asset_url }}"
     }
   },
   'pink_net_lehenga': {
@@ -625,9 +709,6 @@ const MEEEKU_PDP_CATALOG = {
       hanger: "{{ 'meeeku_prod_pink_net_lehenga_hanger.jpg' | asset_url }}",
       detail: "{{ 'meeeku_prod_pink_net_lehenga_detail.jpg' | asset_url }}",
       swirl: "{{ 'meeeku_prod_pink_net_lehenga_swirl.jpg' | asset_url }}"
-    }}",
-      flatlay: "{{ 'meeeku_prod_pink_net_lehenga.jpg' | asset_url }}",
-      detail: "{{ 'meeeku_prod_pink_net_lehenga_swirl.jpg' | asset_url }}"
     }
   },
   'green_lehenga': {
@@ -647,20 +728,17 @@ const MEEEKU_PDP_CATALOG = {
       back: "{{ 'meeeku_prod_green_lehenga_back.jpg' | asset_url }}",
       detail: "{{ 'meeeku_prod_green_lehenga_detail.jpg' | asset_url }}",
       swirl: "{{ 'meeeku_prod_green_lehenga_swirl.jpg' | asset_url }}"
-    }}",
-      flatlay: "{{ 'meeeku_prod_green_lehenga.jpg' | asset_url }}",
-      detail: "{{ 'meeeku_prod_green_lehenga_swirl.jpg' | asset_url }}"
     }
   },
   'multicolor_coord': {
-    title: 'Gulmohar Festive Co-ord Set',
-    badge: 'Festive Co-ord',
+    title: 'Gulmohar Splash Co-ord',
+    badge: 'Festive Co-ord Lehenga',
     badgeClass: 'meeeku-badge--ethnic',
-    price: '₹2,699.00',
-    mrp: '₹3,299.00',
-    discount: 'SAVE 18%',
+    price: '₹2,899.00',
+    mrp: '₹3,599.00',
+    discount: 'SAVE 19%',
     is_tee: false,
-    desc: 'Contemporary vibrant co-ord set with abstract artisan floral prints, breezy peplum top, and comfortable dhoti pants.',
+    desc: 'Contemporary vibrant co-ord set with abstract artisan floral prints, breezy peplum top, and comfortable dhoti flared skirt in skin-soft rayon cotton.',
     sizes: ['0 - 1Y', '1 - 2Y', '2 - 3Y', '3 - 4Y', '4 - 5Y', '5 - 6Y', '6 - 7Y'],
     images: {
       model: "{{ 'meeeku_prod_multicolor_coord_model.jpg' | asset_url }}",
@@ -668,9 +746,80 @@ const MEEEKU_PDP_CATALOG = {
       back: "{{ 'meeeku_prod_multicolor_coord_back.jpg' | asset_url }}",
       detail: "{{ 'meeeku_prod_multicolor_coord_detail.jpg' | asset_url }}",
       swirl: "{{ 'meeeku_prod_multicolor_coord_swirl.jpg' | asset_url }}"
-    }}",
-      flatlay: "{{ 'meeeku_prod_multicolor_coord.jpg' | asset_url }}",
-      detail: "{{ 'meeeku_prod_multicolor_coord_swirl.jpg' | asset_url }}"
+    }
+  },
+  'sage_lehenga': {
+    title: 'Sage Mint Gota Lehenga',
+    badge: 'Gota Patti Zari',
+    badgeClass: 'meeeku-badge--ethnic',
+    price: '₹3,199.00',
+    mrp: '₹3,899.00',
+    discount: 'SAVE 18%',
+    is_tee: false,
+    desc: 'Elegance meets playfulness in soft sage mint. Decorated with intricate red flower embroidery and silver zigzag gota patti detailing, lined with skin-safe cotton.',
+    sizes: ['0 - 1Y', '1 - 2Y', '2 - 3Y', '3 - 4Y', '4 - 5Y', '5 - 6Y', '6 - 7Y'],
+    images: {
+      model: "{{ 'meeeku_prod_sage_lehenga_model.jpg' | asset_url }}",
+      flatlay: "{{ 'meeeku_prod_sage_lehenga.jpg' | asset_url }}",
+      hanger: "{{ 'meeeku_prod_sage_lehenga_hanger.jpg' | asset_url }}",
+      back: "{{ 'meeeku_prod_sage_lehenga_back.jpg' | asset_url }}",
+      detail: "{{ 'meeeku_prod_sage_lehenga_detail.jpg' | asset_url }}",
+      swirl: "{{ 'meeeku_prod_sage_lehenga_swirl.jpg' | asset_url }}"
+    }
+  },
+  'magenta_lehenga': {
+    title: 'Rani Pink Phulkari Lehenga',
+    badge: 'Phulkari Threadwork',
+    badgeClass: 'meeeku-badge--ethnic',
+    price: '₹2,799.00',
+    mrp: '₹3,499.00',
+    discount: 'SAVE 20%',
+    is_tee: false,
+    desc: 'Celebratory Rani pink magenta lehenga adorned with traditional multi-colored Phulkari threadwork and lightweight dupatta.',
+    sizes: ['0 - 1Y', '1 - 2Y', '2 - 3Y', '3 - 4Y', '4 - 5Y', '5 - 6Y', '6 - 7Y'],
+    images: {
+      model: "{{ 'meeeku_prod_magenta_lehenga_model.jpg' | asset_url }}",
+      flatlay: "{{ 'meeeku_prod_magenta_lehenga.jpg' | asset_url }}",
+      hanger: "{{ 'meeeku_prod_magenta_lehenga_hanger.jpg' | asset_url }}",
+      back: "{{ 'meeeku_prod_magenta_lehenga_back.jpg' | asset_url }}",
+      detail: "{{ 'meeeku_prod_magenta_lehenga_detail.jpg' | asset_url }}",
+      swirl: "{{ 'meeeku_prod_magenta_lehenga_swirl.jpg' | asset_url }}"
+    }
+  },
+  'black_lehenga': {
+    title: 'Midnight Blossom Halter Lehenga',
+    badge: 'Royal Halter Neck',
+    badgeClass: 'meeeku-badge--ethnic',
+    price: '₹2,799.00',
+    mrp: '₹3,499.00',
+    discount: 'SAVE 20%',
+    is_tee: false,
+    desc: 'Dramatic midnight black & crimson floral printed halter neck lehenga with metallic thread detailing and lightweight twirl skirt.',
+    sizes: ['0 - 1Y', '1 - 2Y', '2 - 3Y', '3 - 4Y', '4 - 5Y', '5 - 6Y', '6 - 7Y'],
+    images: {
+      model: "{{ 'meeeku_prod_black_lehenga_model.jpg' | asset_url }}",
+      flatlay: "{{ 'meeeku_prod_black_lehenga.jpg' | asset_url }}",
+      back: "{{ 'meeeku_prod_black_lehenga_back.jpg' | asset_url }}",
+      detail: "{{ 'meeeku_prod_black_lehenga_detail.jpg' | asset_url }}",
+      swirl: "{{ 'meeeku_prod_black_lehenga_swirl.jpg' | asset_url }}"
+    }
+  },
+  'olive_lehenga': {
+    title: 'Olive Silk One-Shoulder Lehenga',
+    badge: 'Zardozi Silk',
+    badgeClass: 'meeeku-badge--ethnic',
+    price: '₹3,299.00',
+    mrp: '₹3,999.00',
+    discount: 'SAVE 18%',
+    is_tee: false,
+    desc: 'Modern designer chartreuse olive green raw silk one-shoulder lehenga with subtle antique gold zardozi embroidery and breathable cotton lining.',
+    sizes: ['0 - 1Y', '1 - 2Y', '2 - 3Y', '3 - 4Y', '4 - 5Y', '5 - 6Y', '6 - 7Y'],
+    images: {
+      model: "{{ 'meeeku_prod_olive_lehenga_model.jpg' | asset_url }}",
+      flatlay: "{{ 'meeeku_prod_olive_lehenga.jpg' | asset_url }}",
+      hanger: "{{ 'meeeku_prod_olive_lehenga_hanger.jpg' | asset_url }}",
+      detail: "{{ 'meeeku_prod_olive_lehenga_detail.jpg' | asset_url }}",
+      swirl: "{{ 'meeeku_prod_olive_lehenga_swirl.jpg' | asset_url }}"
     }
   },
   'red_bandhani_lehenga': {
@@ -685,72 +834,8 @@ const MEEEKU_PDP_CATALOG = {
     sizes: ['0 - 1Y', '1 - 2Y', '2 - 3Y', '3 - 4Y', '4 - 5Y', '5 - 6Y', '6 - 7Y'],
     images: {
       model: "{{ 'meeeku_prod_red_bandhani_lehenga_model.jpg' | asset_url }}",
-      flatlay: "{{ 'meeeku_prod_red_bandhani_lehenga.jpg' | asset_url }}",
-      detail: "{{ 'meeeku_prod_red_bandhani_lehenga_swirl.jpg' | asset_url }}"
-    }
-  },
-  'magenta_lehenga': {
-    title: 'Rani Pink Phulkari Lehenga',
-    badge: 'Phulkari Threadwork',
-    badgeClass: 'meeeku-badge--ethnic',
-    price: '₹2,799.00',
-    mrp: '₹3,499.00',
-    discount: 'SAVE 20%',
-    is_tee: false,
-    desc: 'Celebratory Rani pink lehenga adorned with traditional geometric Phulkari threadwork and lightweight chiffon dupatta.',
-    sizes: ['0 - 1Y', '1 - 2Y', '2 - 3Y', '3 - 4Y', '4 - 5Y', '5 - 6Y', '6 - 7Y'],
-    images: {
-      model: "{{ 'meeeku_prod_magenta_lehenga_model.jpg' | asset_url }}",
-      flatlay: "{{ 'meeeku_prod_magenta_lehenga.jpg' | asset_url }}",
-      hanger: "{{ 'meeeku_prod_magenta_lehenga_hanger.jpg' | asset_url }}",
-      back: "{{ 'meeeku_prod_magenta_lehenga_back.jpg' | asset_url }}",
-      detail: "{{ 'meeeku_prod_magenta_lehenga_detail.jpg' | asset_url }}",
-      swirl: "{{ 'meeeku_prod_magenta_lehenga_swirl.jpg' | asset_url }}"
-    }}",
-      flatlay: "{{ 'meeeku_prod_magenta_lehenga.jpg' | asset_url }}",
-      detail: "{{ 'meeeku_prod_magenta_lehenga_swirl.jpg' | asset_url }}"
-    }
-  },
-  'black_lehenga': {
-    title: 'Midnight Blossom Halter Lehenga',
-    badge: 'Royal Halter Neck',
-    badgeClass: 'meeeku-badge--ethnic',
-    price: '₹2,799.00',
-    mrp: '₹3,499.00',
-    discount: 'SAVE 20%',
-    is_tee: false,
-    desc: 'Dramatic midnight navy & gold printed halter neck lehenga with metallic thread detailing and lightweight twirl skirt.',
-    sizes: ['0 - 1Y', '1 - 2Y', '2 - 3Y', '3 - 4Y', '4 - 5Y', '5 - 6Y', '6 - 7Y'],
-    images: {
-      model: "{{ 'meeeku_prod_black_lehenga_model.jpg' | asset_url }}",
-      flatlay: "{{ 'meeeku_prod_black_lehenga.jpg' | asset_url }}",
-      back: "{{ 'meeeku_prod_black_lehenga_back.jpg' | asset_url }}",
-      detail: "{{ 'meeeku_prod_black_lehenga_detail.jpg' | asset_url }}",
-      swirl: "{{ 'meeeku_prod_black_lehenga_swirl.jpg' | asset_url }}"
-    }}",
-      flatlay: "{{ 'meeeku_prod_black_lehenga.jpg' | asset_url }}",
-      detail: "{{ 'meeeku_prod_black_lehenga_swirl.jpg' | asset_url }}"
-    }
-  },
-  'olive_lehenga': {
-    title: 'Olive Silk One-Shoulder Lehenga',
-    badge: 'Zardozi Silk',
-    badgeClass: 'meeeku-badge--ethnic',
-    price: '₹3,299.00',
-    mrp: '₹3,999.00',
-    discount: 'SAVE 18%',
-    is_tee: false,
-    desc: 'Modern designer olive green raw silk one-shoulder lehenga with subtle antique gold zardozi embroidery and breathable cotton lining.',
-    sizes: ['0 - 1Y', '1 - 2Y', '2 - 3Y', '3 - 4Y', '4 - 5Y', '5 - 6Y', '6 - 7Y'],
-    images: {
-      model: "{{ 'meeeku_prod_olive_lehenga_model.jpg' | asset_url }}",
-      flatlay: "{{ 'meeeku_prod_olive_lehenga.jpg' | asset_url }}",
-      hanger: "{{ 'meeeku_prod_olive_lehenga_hanger.jpg' | asset_url }}",
-      detail: "{{ 'meeeku_prod_olive_lehenga_detail.jpg' | asset_url }}",
-      swirl: "{{ 'meeeku_prod_olive_lehenga_swirl.jpg' | asset_url }}"
-    }}",
-      flatlay: "{{ 'meeeku_prod_olive_lehenga.jpg' | asset_url }}",
-      detail: "{{ 'meeeku_prod_olive_lehenga_swirl.jpg' | asset_url }}"
+      flatlay: "{{ 'meeeku_prod_red_bandhani_lehenga_model.jpg' | asset_url }}",
+      detail: "{{ 'meeeku_prod_red_bandhani_lehenga_model.jpg' | asset_url }}"
     }
   }
 };
@@ -786,13 +871,15 @@ function resolvePdpProductKey() {
   if (path.includes('lion') || path.includes('mighty')) return 'lion_tee';
   if (path.includes('cosmic') || path.includes('galaxy')) return 'cosmic_safari_tee';
   if (path.includes('teal') || path.includes('bloom')) return 'teal_dress';
-  if (path.includes('pink-net') || path.includes('blush-rose')) return 'pink_net_lehenga';
-  if (path.includes('green') || path.includes('vrindavan')) return 'green_lehenga';
+  if (path.includes('pink-net') || path.includes('blush') || path.includes('rose')) return 'pink_net_lehenga';
+  if (path.includes('green') || path.includes('vrindavan') || path.includes('forest')) return 'green_lehenga';
   if (path.includes('gulmohar') || path.includes('multicolor')) return 'multicolor_coord';
+  if (path.includes('sage') || path.includes('gota')) return 'sage_lehenga';
+  if (path.includes('magenta') || path.includes('phulkari') || path.includes('rani')) return 'magenta_lehenga';
+  if (path.includes('black') || path.includes('midnight') || path.includes('halter')) return 'black_lehenga';
+  if (path.includes('olive') || path.includes('oneshoulder')) return 'olive_lehenga';
   if (path.includes('bandhani') || path.includes('surajmukhi')) return 'red_bandhani_lehenga';
-  if (path.includes('magenta') || path.includes('phulkari')) return 'magenta_lehenga';
-  if (path.includes('black') || path.includes('midnight')) return 'black_lehenga';
-  if (path.includes('olive')) return 'olive_lehenga';
+  if (path.includes('sunshine') || path.includes('chanderi')) return 'yellow_lehenga';
 
   return '{{ prod_key }}';
 }
@@ -807,7 +894,7 @@ function hydrateMeeekuPdp() {
   // Title
   const titleEl = document.getElementById('MeeekuPdpTitle');
   if (titleEl) titleEl.textContent = data.title;
-  document.title = data.title + ' — Meeeku (Varsha Creations)';
+  document.title = data.title + ' — Meeeku Kidswear';
 
   // Badge
   const badgeEl = document.getElementById('MeeekuPdpBadge');
@@ -842,7 +929,7 @@ function hydrateMeeekuPdp() {
     data.sizes.forEach((sz, idx) => {
       const btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'meeeku-size-btn' + (idx === 1 ? ' active' : '');
+      btn.className = 'meeeku-size-btn' + (idx === 1 || (data.sizes.length <= 3 && idx === 0) ? ' active' : '');
       btn.textContent = sz;
       btn.onclick = function() {
         meeekuSelectVariantBtn(btn, '', data.price);
@@ -884,7 +971,7 @@ function hydrateMeeekuPdp() {
   const guideHeading = document.getElementById('MeeekuSizeGuideHeading');
   const guideTbody = document.getElementById('MeeekuSizeGuideTbody');
   if (guideHeading) {
-    guideHeading.textContent = data.is_coord ? '📏 2-Piece Co-ord Size Guide (0 – 3 Years)' : (data.is_tee ? '📏 T-Shirt Size & Fit Guide (0 – 3 Years)' : '📏 Size & Fit Guide (0 – 6 Years)');
+    guideHeading.textContent = data.is_coord ? '📏 2-Piece Co-ord Size Guide (0 – 3 Years)' : (data.is_tee ? '📏 T-Shirt Size & Fit Guide (0 – 3 Years)' : '📏 Size & Fit Guide (0 – 7 Years)');
   }
   if (guideTbody) {
     if (data.is_coord) {
@@ -894,7 +981,6 @@ function hydrateMeeekuPdp() {
         <tr><td style="padding: 0.5rem 0.8rem;">12 – 18M</td><td style="text-align:center;">76–84</td><td style="text-align:center;">48–50</td><td style="text-align:center;">45–48</td></tr>
         <tr style="background: #FFF9F4;"><td style="padding: 0.5rem 0.8rem;">18 – 24M</td><td style="text-align:center;">84–90</td><td style="text-align:center;">50–52</td><td style="text-align:center;">48–50</td></tr>
         <tr><td style="padding: 0.5rem 0.8rem;">2 – 3Y</td><td style="text-align:center;">90–98</td><td style="text-align:center;">52–54</td><td style="text-align:center;">50–53</td></tr>
-        
       `;
     } else if (data.is_tee) {
       guideTbody.innerHTML = `
@@ -906,6 +992,8 @@ function hydrateMeeekuPdp() {
       `;
     } else {
       guideTbody.innerHTML = `
+        <tr><td style="padding: 0.5rem 0.8rem;">0 – 1Y</td><td style="text-align:center;">70–80</td><td style="text-align:center;">46–49</td><td style="text-align:center;">45–48</td></tr>
+        <tr style="background: #FFF9F4;"><td style="padding: 0.5rem 0.8rem;">1 – 2Y</td><td style="text-align:center;">80–90</td><td style="text-align:center;">48–51</td><td style="text-align:center;">47–50</td></tr>
         <tr><td style="padding: 0.5rem 0.8rem;">2 – 3Y</td><td style="text-align:center;">90–98</td><td style="text-align:center;">50–53</td><td style="text-align:center;">49–52</td></tr>
         <tr style="background: #FFF9F4;"><td style="padding: 0.5rem 0.8rem;">4 – 5Y</td><td style="text-align:center;">104–110</td><td style="text-align:center;">56–59</td><td style="text-align:center;">55–58</td></tr>
         <tr><td style="padding: 0.5rem 0.8rem;">6 – 7Y</td><td style="text-align:center;">116–122</td><td style="text-align:center;">62–65</td><td style="text-align:center;">61–64</td></tr>
