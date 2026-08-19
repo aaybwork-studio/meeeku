@@ -83,6 +83,58 @@
   <!-- Interactive Catalog Grid -->
   <div class="meeeku-catalog-grid">
     <ul class="grid product-grid grid--2-col-tablet-down grid--3-col-desktop" id="MeeekuProductGrid">
+      {% if collection.products.size > 0 %}
+        {% for product in collection.products %}
+          {% liquid
+            assign p_type = product.type | downcase
+            assign p_tags = product.tags | join: ',' | downcase
+            assign p_title = product.title | downcase
+            assign cat = 'ethnic'
+            if p_type contains 'tee' or p_tags contains 'tee' or p_title contains 'tee'
+              assign cat = 'tees'
+            elsif p_type contains 'co-ord' or p_type contains 'set' or p_tags contains 'coord' or p_title contains 'co-ord'
+              assign cat = 'coords'
+            endif
+            
+            assign first_img = product.featured_image | default: product.images.first
+            assign second_img = product.images[1] | default: first_img
+          %}
+          <li class="grid__item meeeku-grid-item" data-category="{{ cat }}" data-price="{{ product.price | divided_by: 100 }}" data-age="all" data-date="{{ product.published_at | date: '%Y-%m-%d' }}">
+            <div class="card-wrapper meeeku-interactive-card">
+              <div class="meeeku-card-media-wrapper">
+                <a href="{{ product.url }}" class="meeeku-card-link">
+                  {% if first_img %}
+                    <img src="{{ first_img | image_url: width: 600 }}" alt="{{ product.title | escape }}" class="meeeku-card-img meeeku-img-primary" width="600" height="750" loading="lazy">
+                  {% endif %}
+                  {% if second_img and second_img != first_img %}
+                    <img src="{{ second_img | image_url: width: 600 }}" alt="{{ product.title | escape }}" class="meeeku-card-img meeeku-img-secondary" width="600" height="750" loading="lazy">
+                  {% endif %}
+                </a>
+                <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('{{ product.title | escape }}', '{{ product.price | money }}', '{{ first_img | image_url: width: 400 }}', '{{ product.selected_or_first_available_variant.id }}')">
+                  🛒 + Quick Add — {{ product.price | money }}
+                </button>
+              </div>
+              <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
+                  <span class="meeeku-badge meeeku-badge--{{ cat }}" style="font-size: 1rem; padding: 0.2rem 0.8rem;">{{ product.type | default: 'Meeeku Pure Cotton' }}</span>
+                </div>
+                <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
+                  <a href="{{ product.url }}" style="color: #3D2355; text-decoration: none;">{{ product.title }}</a>
+                </h3>
+                <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">
+                  {{ product.price | money }}
+                  {% if product.compare_at_price > product.price %}
+                    <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">{{ product.compare_at_price | money }}</span>
+                    <span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">
+                      {{ product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price }}% OFF
+                    </span>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </li>
+        {% endfor %}
+      {% else %}
       
       <!-- T-Shirt 1: Periwinkle Daisy Frill Cotton Tee -->
       <li class="grid__item meeeku-grid-item" data-category="tees" data-price="599" data-age="0-6m,6-12m,1-2y,2-3y" data-date="2026-08-17" data-bestseller-rank="3">
@@ -664,6 +716,7 @@
           </div>
         </div>
       </li>
+      {% endif %}
 
     </ul>
   </div>
