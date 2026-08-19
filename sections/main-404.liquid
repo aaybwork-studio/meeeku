@@ -5,14 +5,8 @@
   Photos, Sizes, Sizing Chart, and Add to Cart even if the product is drafted or unrouted!
 {% endcomment %}
 
-{% liquid
-  assign is_product_url = false
-  if request.path contains '/products/'
-    assign is_product_url = true
-  endif
-%}
-
-{% if is_product_url %}
+<!-- Product PDP Fallback (shown by JS if URL contains /products/) -->
+<div id="MeeekuProductFallbackWrapper" style="display: none;">
   <product-info id="MainProduct-404" class="product-info page-width meeeku-pdp-container" style="display: block; padding-top: 2rem; padding-bottom: 5rem;">
     <div class="meeeku-pdp-layout">
       
@@ -485,8 +479,10 @@
   }
   </script>
 
-{% else %}
-  <!-- Standard Clean 404 Page -->
+</div><!-- end MeeekuProductFallbackWrapper -->
+
+<!-- Standard Clean 404 Page (shown by JS if URL is NOT /products/) -->
+<div id="MeeekuStandard404Wrapper" style="display: none;">
   <div class="template-404 page-width page-margin center" style="padding: 6rem 2rem; text-align: center;">
     <span class="meeeku-badge meeeku-badge--ethnic" style="font-size: 1.4rem; padding: 0.5rem 1.6rem; border-radius: 30px; margin-bottom: 1.5rem; display: inline-block;">
       🌸 Page Not Found
@@ -506,7 +502,19 @@
       </a>
     </div>
   </div>
-{% endif %}
+</div>
+
+<!-- JS Router: detect /products/ in browser URL and show the right section -->
+<script>
+(function() {
+  var path = window.location.pathname.toLowerCase();
+  if (path.indexOf('/products/') !== -1) {
+    document.getElementById('MeeekuProductFallbackWrapper').style.display = 'block';
+  } else {
+    document.getElementById('MeeekuStandard404Wrapper').style.display = 'block';
+  }
+})();
+</script>
 
 {% schema %}
 {
