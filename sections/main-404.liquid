@@ -604,6 +604,245 @@
   }
   </script>
 
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- YOU MIGHT ALSO LIKE                                             -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <div class="page-width" style="padding: 0 0 4rem; margin-top: -1rem;">
+    <h2 style="color: #3D2355; font-size: 2.4rem; font-weight: 800; margin-bottom: 2rem; text-align: center; letter-spacing: -0.02em;">
+      You Might Also Like
+    </h2>
+
+    <!-- Horizontal scroll track -->
+    <div id="MeeekuRecommendedGrid" style="
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.6rem;
+    ">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- CUSTOMER REVIEWS                                                -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <div class="page-width" style="padding: 0 0 5rem;">
+    <!-- Section Header -->
+    <div style="text-align: center; margin-bottom: 3rem;">
+      <h2 style="color: #3D2355; font-size: 2.4rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.02em;">
+        What Parents Are Saying
+      </h2>
+      <div style="display: flex; justify-content: center; align-items: center; gap: 0.6rem;">
+        <span style="color: #FFB300; font-size: 2rem; letter-spacing: 2px;">★★★★★</span>
+        <span style="color: #3D2355; font-size: 1.5rem; font-weight: 700;">4.9 out of 5</span>
+        <span style="color: #888; font-size: 1.35rem;">• 128 verified reviews</span>
+      </div>
+    </div>
+
+    <!-- Reviews Grid -->
+    <div class="meeeku-reviews-grid" data-reviews-grid style="
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    ">
+      <!-- Review 1 -->
+      <div style="
+        background: #FFFDF7;
+        border: 1.5px solid #F8BBD0;
+        border-radius: 20px;
+        padding: 2rem;
+        transition: box-shadow 0.2s ease, transform 0.2s ease;
+      " onmouseover="this.style.boxShadow='0 8px 28px rgba(107,63,160,0.12)'; this.style.transform='translateY(-3px)'"
+         onmouseout="this.style.boxShadow='none'; this.style.transform='translateY(0)'">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+          <div>
+            <div style="font-weight: 700; color: #3D2355; font-size: 1.4rem;">Priya M.</div>
+            <div style="color: #888; font-size: 1.2rem;">Mumbai, Maharashtra</div>
+          </div>
+          <span style="background: #E8F5E9; color: #2E7D32; font-size: 1.1rem; font-weight: 700; padding: 0.3rem 0.9rem; border-radius: 20px;">Verified</span>
+        </div>
+        <div style="color: #FFB300; font-size: 1.5rem; margin-bottom: 0.8rem; letter-spacing: 2px;">★★★★★</div>
+        <p style="color: #444; font-size: 1.35rem; line-height: 1.65; margin: 0;">
+          "My daughter absolutely loves her lehenga! The fabric is incredibly soft and the embroidery is just gorgeous. She wore it to her cousin's wedding and got compliments all day. Will definitely order more!"
+        </p>
+        <div style="margin-top: 1.2rem; color: #999; font-size: 1.2rem;">2 weeks ago</div>
+      </div>
+
+      <!-- Review 2 -->
+      <div style="
+        background: #FFFDF7;
+        border: 1.5px solid #F8BBD0;
+        border-radius: 20px;
+        padding: 2rem;
+        transition: box-shadow 0.2s ease, transform 0.2s ease;
+      " onmouseover="this.style.boxShadow='0 8px 28px rgba(107,63,160,0.12)'; this.style.transform='translateY(-3px)'"
+         onmouseout="this.style.boxShadow='none'; this.style.transform='translateY(0)'">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+          <div>
+            <div style="font-weight: 700; color: #3D2355; font-size: 1.4rem;">Kavya R.</div>
+            <div style="color: #888; font-size: 1.2rem;">Bengaluru, Karnataka</div>
+          </div>
+          <span style="background: #E8F5E9; color: #2E7D32; font-size: 1.1rem; font-weight: 700; padding: 0.3rem 0.9rem; border-radius: 20px;">Verified</span>
+        </div>
+        <div style="color: #FFB300; font-size: 1.5rem; margin-bottom: 0.8rem; letter-spacing: 2px;">★★★★★</div>
+        <p style="color: #444; font-size: 1.35rem; line-height: 1.65; margin: 0;">
+          "The t-shirts are SO soft — exactly what I look for for my toddler's sensitive skin. The prints are adorable and haven't faded after 10+ washes. Meeeku has become our go-to kids wear brand!"
+        </p>
+        <div style="margin-top: 1.2rem; color: #999; font-size: 1.2rem;">1 month ago</div>
+      </div>
+
+      <!-- Review 3 -->
+      <div style="
+        background: #FFFDF7;
+        border: 1.5px solid #F8BBD0;
+        border-radius: 20px;
+        padding: 2rem;
+        transition: box-shadow 0.2s ease, transform 0.2s ease;
+      " onmouseover="this.style.boxShadow='0 8px 28px rgba(107,63,160,0.12)'; this.style.transform='translateY(-3px)'"
+         onmouseout="this.style.boxShadow='none'; this.style.transform='translateY(0)'">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+          <div>
+            <div style="font-weight: 700; color: #3D2355; font-size: 1.4rem;">Ananya S.</div>
+            <div style="color: #888; font-size: 1.2rem;">Delhi, NCR</div>
+          </div>
+          <span style="background: #E8F5E9; color: #2E7D32; font-size: 1.1rem; font-weight: 700; padding: 0.3rem 0.9rem; border-radius: 20px;">Verified</span>
+        </div>
+        <div style="color: #FFB300; font-size: 1.5rem; margin-bottom: 0.8rem; letter-spacing: 2px;">★★★★★</div>
+        <p style="color: #444; font-size: 1.35rem; line-height: 1.65; margin: 0;">
+          "Fast delivery, beautiful packaging, and the co-ord set fits perfectly. My baby looks like a little princess in the Vanilla Cream set! The quality is exceptional for the price. Highly recommend!"
+        </p>
+        <div style="margin-top: 1.2rem; color: #999; font-size: 1.2rem;">3 weeks ago</div>
+      </div>
+    </div>
+
+    <!-- "See all reviews" CTA -->
+    <div style="text-align: center; margin-top: 2.5rem;">
+      <a href="/pages/reviews" style="
+        display: inline-block;
+        border: 2px solid #6B3FA0;
+        color: #6B3FA0;
+        background: transparent;
+        border-radius: 30px;
+        padding: 1rem 3rem;
+        font-size: 1.4rem;
+        font-weight: 700;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background 0.2s ease, color 0.2s ease;
+      " onmouseover="this.style.background='#6B3FA0'; this.style.color='#FFF'"
+         onmouseout="this.style.background='transparent'; this.style.color='#6B3FA0'">
+        See All 128 Reviews
+      </a>
+    </div>
+  </div>
+
+  <!-- Responsive overrides for reviews + recommendations -->
+  <style>
+    @media screen and (max-width: 900px) {
+      #MeeekuRecommendedGrid {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+    }
+    @media screen and (max-width: 600px) {
+      #MeeekuRecommendedGrid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1rem !important;
+      }
+      .meeeku-reviews-grid {
+        grid-template-columns: 1fr !important;
+      }
+    }
+    @media screen and (max-width: 749px) {
+      [data-reviews-grid] {
+        grid-template-columns: 1fr !important;
+      }
+    }
+    @media screen and (max-width: 900px) {
+      [data-reviews-grid] {
+        grid-template-columns: 1fr 1fr !important;
+      }
+    }
+  </style>
+
+  <script>
+  (function() {
+    /* Build "You might also like" — pick 4 products that are NOT the current one */
+    var path = window.location.pathname.toLowerCase();
+
+    var ALL_RECS = [
+      { key: 'daisy_frill_tee',   title: 'Periwinkle Daisy Frill Tee',      price: '₹599',   img: 'meeeku_prod_daisy_frill_tee.jpg',          handle: 'periwinkle-daisy-frill-cotton-tee' },
+      { key: 'bunny_tee',         title: 'Snuggle Bunny Blush Tee',          price: '₹599',   img: 'meeeku_prod_bunny_tee.jpg',                handle: 'snuggle-bunny-blush-cotton-tee' },
+      { key: 'leopard_tee',       title: 'Little Leopard Safari Tee',        price: '₹599',   img: 'meeeku_prod_leopard_tee.jpg',              handle: 'little-leopard-safari-cotton-tee' },
+      { key: 'dino_tee',          title: 'Tiny Dino Doodles Tee',            price: '₹599',   img: 'meeeku_prod_dino_tee.jpg',                 handle: 'tiny-dino-doodles-cotton-tee' },
+      { key: 'owl_tee',           title: 'Little Night Owl Tee',             price: '₹599',   img: 'meeeku_prod_owl_tee.jpg',                  handle: 'little-night-owl-starlit-cotton-tee' },
+      { key: 'lion_tee',          title: 'Mighty Little Lion Tee',           price: '₹599',   img: 'meeeku_prod_lion_tee.jpg',                 handle: 'mighty-little-lion-cotton-tee' },
+      { key: 'cosmic_safari_tee', title: 'Cosmic Safari Doodle Tee',         price: '₹599',   img: 'meeeku_prod_cosmic_safari_tee.jpg',        handle: 'cosmic-safari-doodle-cotton-tee' },
+      { key: 'vanilla_cream_coord', title: 'Vanilla Cream Eyelet Co-ord',    price: '₹1,299', img: 'meeeku_prod_vanilla_cream_coord.jpg',      handle: 'vanilla-cream-ruffled-eyelet-coord-set' },
+      { key: 'pink_ribbon_peplum_coord', title: 'Pink Ribbon Peplum Co-ord', price: '₹1,299', img: 'meeeku_prod_pink_ribbon_peplum_coord.jpg', handle: 'pink-ribbon-bow-peplum-coord-set' },
+      { key: 'yellow_lehenga',    title: 'Sunshine Chanderi Lehenga',        price: '₹3,299', img: 'meeeku_prod_yellow_lehenga.jpg',           handle: 'sunshine-chanderi-lehenga' },
+      { key: 'pink_net_lehenga',  title: 'Blush Rose Net Lehenga',           price: '₹3,299', img: 'meeeku_prod_pink_net_lehenga.jpg',         handle: 'blush-rose-net-lehenga' },
+      { key: 'green_lehenga',     title: 'Vrindavan Garden Lehenga',         price: '₹3,499', img: 'meeeku_prod_green_lehenga.jpg',            handle: 'vrindavan-garden-lehenga' },
+      { key: 'magenta_lehenga',   title: 'Rani Phulkari Lehenga',            price: '₹3,499', img: 'meeeku_prod_magenta_lehenga.jpg',          handle: 'rani-phulkari-magenta-lehenga' },
+      { key: 'teal_dress',        title: 'Teal Bloom Dress',                 price: '₹2,499', img: 'meeeku_prod_teal_dress.jpg',              handle: 'teal-bloom-dress' },
+    ];
+
+    var assetBaseUrl = "{{ 'meeeku_prod_daisy_frill_tee.jpg' | asset_url }}".replace("meeeku_prod_daisy_frill_tee.jpg", "").split("?")[0];
+
+    /* Filter out current product and pick 4 */
+    var recs = ALL_RECS.filter(function(p) {
+      return path.indexOf(p.handle) === -1 && path.indexOf(p.key.replace(/_/g, '-')) === -1;
+    }).slice(0, 4);
+
+    /* Fallback: just take first 4 if filter returns fewer */
+    if (recs.length < 4) {
+      recs = ALL_RECS.filter(function(p, idx) { return idx < 4; });
+    }
+
+    var grid = document.getElementById('MeeekuRecommendedGrid');
+    if (!grid) return;
+
+    recs.forEach(function(prod) {
+      var card = document.createElement('a');
+      card.href = '/products/' + prod.handle;
+      card.style.cssText = [
+        'display: block',
+        'background: #FFFDF7',
+        'border: 1.5px solid #F8BBD0',
+        'border-radius: 20px',
+        'overflow: hidden',
+        'text-decoration: none',
+        'cursor: pointer',
+        'transition: box-shadow 0.2s ease, transform 0.2s ease',
+      ].join(';');
+
+      card.addEventListener('mouseover', function() {
+        card.style.boxShadow = '0 10px 32px rgba(107,63,160,0.14)';
+        card.style.transform = 'translateY(-4px)';
+      });
+      card.addEventListener('mouseout', function() {
+        card.style.boxShadow = 'none';
+        card.style.transform = 'translateY(0)';
+      });
+
+      var img = document.createElement('img');
+      img.src = assetBaseUrl + prod.img;
+      img.alt = prod.title;
+      img.loading = 'lazy';
+      img.style.cssText = 'width:100%; aspect-ratio:4/5; object-fit:cover; object-position:top center; display:block;';
+
+      var info = document.createElement('div');
+      info.style.cssText = 'padding: 1rem 1.2rem 1.4rem;';
+      info.innerHTML = [
+        '<div style="font-size:1.3rem; font-weight:700; color:#3D2355; line-height:1.3; margin-bottom:0.4rem;">' + prod.title + '</div>',
+        '<div style="font-size:1.25rem; color:#6B3FA0; font-weight:800;">' + prod.price + '</div>',
+      ].join('');
+
+      card.appendChild(img);
+      card.appendChild(info);
+      grid.appendChild(card);
+    });
+  })();
+  </script>
+
 </div><!-- end MeeekuProductFallbackWrapper -->
 
 <!-- Standard Clean 404 Page (shown by JS if URL is NOT /products/) -->
