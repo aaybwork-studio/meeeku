@@ -147,6 +147,37 @@
   </div>
 </div>
 
+<!-- 3. Dynamic Policy Screen (Activated if URL is policy / terms / refund / privacy) -->
+<div id="MeeekuPolicyScreen" style="display: none;">
+  <div class="page-width page-width--narrow" style="padding: 4.5rem 2rem 7rem; max-width: 860px; margin: 0 auto;">
+    
+    <div style="text-align: center; margin-bottom: 3rem;">
+      <span class="meeeku-badge meeeku-badge--popular" id="MeeekuPolicyBadge" style="margin-bottom: 0.8rem; display: inline-block; font-size: 1.2rem; padding: 0.4rem 1.4rem;">
+        Meeeku Customer Care
+      </span>
+      <h1 id="MeeekuPolicyTitle" style="color: #3D2355; font-size: 3.4rem; font-weight: 800; margin: 0.6rem 0 0.8rem; line-height: 1.2;">
+        Policy
+      </h1>
+      <p id="MeeekuPolicySubtitle" style="color: #777; font-size: 1.4rem; margin: 0;">
+        Last updated: January 2026
+      </p>
+    </div>
+
+    <div id="MeeekuPolicyBody" style="background: #FFFDF7; border: 1.5px solid #F8BBD0; border-radius: 24px; padding: 3.5rem 3rem; box-shadow: 0 8px 24px rgba(107,63,160,0.06); font-size: 1.55rem; line-height: 1.8; color: #444;">
+    </div>
+
+    <div style="margin-top: 3.5rem; text-align: center; display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;">
+      <a href="/collections/all" style="display: inline-block; background: #FF6097; color: #FFF; border-radius: 30px; padding: 1.2rem 3rem; font-size: 1.5rem; font-weight: 700; text-decoration: none; box-shadow: 0 6px 20px rgba(255,96,151,0.3);">
+        Continue Shopping ✨
+      </a>
+      <a href="/pages/contact" style="display: inline-block; background: #FFF0F5; color: #6B3FA0; border: 2px solid #F8BBD0; border-radius: 30px; padding: 1.2rem 3rem; font-size: 1.5rem; font-weight: 700; text-decoration: none;">
+        Contact Support 💬
+      </a>
+    </div>
+
+  </div>
+</div>
+
 <style>
 .meeeku-pdp-layout {
   display: grid;
@@ -266,6 +297,87 @@
 <script>
 (function() {
   var path = window.location.pathname.toLowerCase();
+
+  // Helper to render Policy Screen
+  function renderPolicy(title, badge, bodyHTML) {
+    var screen404 = document.getElementById('Meeeku404Screen');
+    var screenPolicy = document.getElementById('MeeekuPolicyScreen');
+    if (screen404) screen404.style.display = 'none';
+    if (screenPolicy) screenPolicy.style.display = 'block';
+
+    document.title = title + ' – Meeeku Kidswear';
+    var titleEl = document.getElementById('MeeekuPolicyTitle');
+    var badgeEl = document.getElementById('MeeekuPolicyBadge');
+    var bodyEl = document.getElementById('MeeekuPolicyBody');
+    if (titleEl) titleEl.textContent = title;
+    if (badgeEl) badgeEl.textContent = badge;
+    if (bodyEl) bodyEl.innerHTML = bodyHTML;
+  }
+
+  // 1. Check Policy URLs
+  if (path.indexOf('refund') !== -1 || path.indexOf('return') !== -1) {
+    renderPolicy(
+      'Refund & Return Policy',
+      'Meeeku 7-Day Hassle-Free Guarantee',
+      '<h3 style="color: #3D2355; font-size: 2rem; margin-top: 0; margin-bottom: 1rem;">7-Day Easy Returns & Exchanges</h3>' +
+      '<p>We want your little one to be 100% happy with every Meeeku outfit! If you are not completely satisfied with your purchase or need a different size, you can initiate a return or exchange within <strong>7 days of delivery</strong>.</p>' +
+      '<h4 style="color: #3D2355; font-size: 1.7rem; margin: 2rem 0 0.8rem;">Conditions for Returns & Exchanges:</h4>' +
+      '<ul style="margin: 0; padding-left: 2rem; color: #555;">' +
+        '<li>The product must be unused, unwashed, and in its original pristine condition.</li>' +
+        '<li>All original tags, packaging, and labels must remain attached.</li>' +
+        '<li>Sale and discounted items are eligible for size exchange or store credit.</li>' +
+      '</ul>' +
+      '<h4 style="color: #3D2355; font-size: 1.7rem; margin: 2rem 0 0.8rem;">How to Initiate a Return or Size Exchange:</h4>' +
+      '<p>Simply reach out to our Customer Care team with your Order Number:</p>' +
+      '<ul style="margin: 0; padding-left: 2rem; color: #555;">' +
+        '<li><strong>Email:</strong> <a href="mailto:Support@meeeku.com" style="color: #FF6097; font-weight: 700;">Support@meeeku.com</a></li>' +
+        '<li><strong>WhatsApp / Phone:</strong> <a href="tel:8860204205" style="color: #6B3FA0; font-weight: 700;">+91 8860204205</a></li>' +
+      '</ul>' +
+      '<p style="margin-top: 1rem;">Our courier partner will arrange a convenient reverse pickup from your doorstep within <strong>24–48 business hours</strong>.</p>' +
+      '<h4 style="color: #3D2355; font-size: 1.7rem; margin: 2rem 0 0.8rem;">Refund Timelines:</h4>' +
+      '<p>Once the returned item is inspected at our warehouse, refunds for prepaid orders will be processed directly to your original payment method (Bank/UPI/Card) within <strong>3–5 business days</strong>. Cash on Delivery (COD) orders receive instant store credit or direct UPI transfer.</p>'
+    );
+    return;
+  }
+
+  if (path.indexOf('terms') !== -1 || path.indexOf('tos') !== -1 || path.indexOf('service') !== -1) {
+    renderPolicy(
+      'Terms of Service',
+      'Customer Care & Transparency',
+      '<h3 style="color: #3D2355; font-size: 2rem; margin-top: 0; margin-bottom: 1rem;">Welcome to Meeeku Kidswear</h3>' +
+      '<p>These terms and conditions govern your use of the Meeeku website (meeeku.com) and the purchase of any products from us. By placing an order with Meeeku, you agree to these terms.</p>' +
+      '<h4 style="color: #3D2355; font-size: 1.7rem; margin: 2rem 0 0.8rem;">1. Products & Pricing</h4>' +
+      '<p>All prices are listed in Indian Rupees (INR, ₹) inclusive of all applicable taxes. We make every effort to display accurate product photos, colors, size dimensions, and fabric compositions. Slight color variations may occur due to screen brightness and studio lighting.</p>' +
+      '<h4 style="color: #3D2355; font-size: 1.7rem; margin: 2rem 0 0.8rem;">2. Shipping & Delivery</h4>' +
+      '<p>Orders are dispatched within 24 hours from our facility. We partner with reliable courier services (Bluedart, Delhivery, DTDC) to deliver nationwide across India in <strong>2 to 5 business days</strong>. Tracking links are sent via SMS and Email upon dispatch.</p>' +
+      '<h4 style="color: #3D2355; font-size: 1.7rem; margin: 2rem 0 0.8rem;">3. Payments & Security</h4>' +
+      '<p>We support secure online payments including UPI (Google Pay, PhonePe, Paytm), Credit/Debit Cards, Net Banking, and Cash on Delivery (COD). All payment transactions are encrypted and processed through certified RBI-compliant gateways.</p>' +
+      '<h4 style="color: #3D2355; font-size: 1.7rem; margin: 2rem 0 0.8rem;">4. Customer Inquiries</h4>' +
+      '<p>For any queries or assistance regarding your order, please contact our support team at <a href="mailto:Support@meeeku.com" style="color: #FF6097; font-weight: 700;">Support@meeeku.com</a> or <a href="tel:8860204205" style="color: #6B3FA0; font-weight: 700;">+91 8860204205</a> (Mon – Sun, 10 AM – 7 PM IST).</p>'
+    );
+    return;
+  }
+
+  if (path.indexOf('privacy') !== -1) {
+    renderPolicy(
+      'Privacy Policy',
+      '100% Data & Privacy Protection',
+      '<h3 style="color: #3D2355; font-size: 2rem; margin-top: 0; margin-bottom: 1rem;">Your Privacy is Protected</h3>' +
+      '<p>At Meeeku Kidswear, we deeply value the trust you place in us. This Privacy Policy outlines how your personal information is collected, used, and safeguarded.</p>' +
+      '<h4 style="color: #3D2355; font-size: 1.7rem; margin: 2rem 0 0.8rem;">Information We Collect:</h4>' +
+      '<ul style="margin: 0; padding-left: 2rem; color: #555;">' +
+        '<li><strong>Contact Details:</strong> Your name, email address, phone number, and delivery address to fulfill your orders and send tracking updates.</li>' +
+        '<li><strong>Order History:</strong> Products purchased to help provide better customer service and size recommendations.</li>' +
+      '</ul>' +
+      '<h4 style="color: #3D2355; font-size: 1.7rem; margin: 2rem 0 0.8rem;">We Never Sell Your Data:</h4>' +
+      '<p>Meeeku does NOT sell, rent, or trade your personal information with third-party marketers. Your data is strictly used for order processing and optional newsletter updates.</p>' +
+      '<h4 style="color: #3D2355; font-size: 1.7rem; margin: 2rem 0 0.8rem;">Payment Security:</h4>' +
+      '<p>We do not store your credit card or banking credentials. All payments are processed through secure 256-bit SSL encrypted payment partners (Razorpay / Shopify Payments).</p>'
+    );
+    return;
+  }
+
+  // 2. Check Product PDP URLs
   var match = path.match(/\/products\/([^/?#]+)/);
   if (!match) return; // Standard 404 page
 
