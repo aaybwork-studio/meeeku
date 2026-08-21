@@ -92,30 +92,54 @@
             assign p_title = product.title | downcase
             assign p_handle = product.handle | downcase
 
-            assign cat_list = ''
-            if p_type contains 'tee' or p_tags contains 'tee' or p_title contains 'tee' or p_handle contains 'tee'
-              assign cat_list = cat_list | append: 'tees '
-            endif
-            if p_type contains 'ethnic' or p_tags contains 'ethnic' or p_tags contains 'lehenga' or p_title contains 'lehenga' or p_handle contains 'lehenga'
-              assign cat_list = cat_list | append: 'ethnic '
-            endif
-            if p_type contains 'co-ord' or p_type contains 'coord' or p_tags contains 'coord' or p_tags contains 'set' or p_title contains 'co-ord' or p_title contains 'coord' or p_title contains 'set' or p_handle contains 'coord'
-              assign cat_list = cat_list | append: 'coords '
-            endif
-            if p_type contains 'dress' or p_tags contains 'dress' or p_title contains 'dress' or p_handle contains 'dress'
-              assign cat_list = cat_list | append: 'dresses '
-            endif
-            if p_type contains 'boy' or p_tags contains 'boy' or p_title contains 'boy'
-              assign cat_list = cat_list | append: 'boys '
-            endif
-            if p_type contains 'night' or p_tags contains 'night' or p_title contains 'night' or p_tags contains 'sleep'
-              assign cat_list = cat_list | append: 'nightsuits '
+            assign is_ethnic = false
+            assign is_tee = false
+            assign is_dress = false
+            assign is_nightsuit = false
+            assign is_boy = false
+            assign is_coord = false
+
+            if p_title contains 'lehenga' or p_handle contains 'lehenga' or p_type contains 'lehenga' or p_type contains 'ethnic' or p_tags contains 'lehenga' or p_tags contains 'royal ethnic' or p_tags contains 'indian ethnic'
+              assign is_ethnic = true
+            elsif p_title contains 'tee' or p_title contains 't-shirt' or p_handle contains 'tee' or p_type contains 'tee' or p_type contains 't-shirt' or p_tags contains 'basic tee'
+              assign is_tee = true
+            elsif p_title contains 'dress' or p_handle contains 'dress' or p_type contains 'dress' or p_tags contains 'dresses'
+              assign is_dress = true
+            elsif p_title contains 'night' or p_title contains 'sleep' or p_type contains 'night' or p_tags contains 'nightsuit'
+              assign is_nightsuit = true
+            elsif p_title contains 'boy' or p_type contains 'boy' or p_tags contains 'boys'
+              assign is_boy = true
+            elsif p_title contains 'co-ord' or p_title contains 'coord' or p_handle contains 'coord' or p_type contains 'co-ord' or p_type contains 'coord' or p_tags contains 'co-ord' or p_tags contains 'coord'
+              assign is_coord = true
+            else
+              assign is_ethnic = true
             endif
 
-            if cat_list == ''
-              assign cat_list = 'all ethnic'
-            else
-              assign cat_list = cat_list | prepend: 'all '
+            assign cat_list = 'all '
+            if is_ethnic
+              assign cat_list = cat_list | append: 'ethnic'
+              assign badge_label = 'Royal Ethnic Lehenga'
+              assign badge_style = 'background: #FFF0F5; color: #6B3FA0; border: 1px solid #F8BBD0;'
+            elsif is_tee
+              assign cat_list = cat_list | append: 'tees'
+              assign badge_label = '100% Combed Cotton'
+              assign badge_style = 'background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;'
+            elsif is_coord
+              assign cat_list = cat_list | append: 'coords'
+              assign badge_label = '2-Piece Co-ord Set'
+              assign badge_style = 'background: #E0F2F1; color: #00695C; border: 1px solid #80CBC4;'
+            elsif is_dress
+              assign cat_list = cat_list | append: 'dresses'
+              assign badge_label = 'Indo-Western Dress'
+              assign badge_style = 'background: #E0F7FA; color: #00838F; border: 1px solid #80DEEA;'
+            elsif is_nightsuit
+              assign cat_list = cat_list | append: 'nightsuits'
+              assign badge_label = 'Organic Nightsuit'
+              assign badge_style = 'background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;'
+            elsif is_boy
+              assign cat_list = cat_list | append: 'boys'
+              assign badge_label = 'Boys Line'
+              assign badge_style = 'background: #FFF8E1; color: #F57F17; border: 1px solid #FFE082;'
             endif
 
             assign age_keys = 'all'
@@ -164,7 +188,7 @@
               </div>
               <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
-                  <span class="meeeku-badge meeeku-badge--ethnic" style="font-size: 1rem; padding: 0.2rem 0.8rem;">{{ product.type | default: 'Meeeku Pure Cotton' }}</span>
+                  <span class="meeeku-badge" style="font-size: 1rem; padding: 0.2rem 0.8rem; {{ badge_style }}">{{ badge_label }}</span>
                 </div>
                 <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
                   <a href="{{ product.url }}" style="color: #3D2355; text-decoration: none;">{{ product.title }}</a>
@@ -416,11 +440,21 @@ function showMeeekuToastCatalog(msg) {
 
         // Category mapping
         var cat = 'all ';
-        if (type.indexOf('tee') !== -1 || tags.indexOf('tee') !== -1 || titleLower.indexOf('tee') !== -1) cat += 'tees';
-        else if (type.indexOf('coord') !== -1 || tags.indexOf('coord') !== -1 || titleLower.indexOf('co-ord') !== -1 || titleLower.indexOf('set') !== -1) cat += 'coords';
-        else if (type.indexOf('dress') !== -1 || tags.indexOf('dress') !== -1) cat += 'dresses';
-        else if (type.indexOf('night') !== -1 || tags.indexOf('night') !== -1) cat += 'nightsuits';
-        else cat += 'ethnic';
+        if (titleLower.indexOf('lehenga') !== -1 || handle.indexOf('lehenga') !== -1 || type.indexOf('lehenga') !== -1 || type.indexOf('ethnic') !== -1 || tags.indexOf('lehenga') !== -1 || tags.indexOf('ethnic') !== -1) {
+          cat += 'ethnic';
+        } else if (titleLower.indexOf('tee') !== -1 || handle.indexOf('tee') !== -1 || type.indexOf('tee') !== -1 || tags.indexOf('tee') !== -1) {
+          cat += 'tees';
+        } else if (titleLower.indexOf('dress') !== -1 || handle.indexOf('dress') !== -1 || type.indexOf('dress') !== -1 || tags.indexOf('dress') !== -1) {
+          cat += 'dresses';
+        } else if (titleLower.indexOf('night') !== -1 || titleLower.indexOf('sleep') !== -1 || type.indexOf('night') !== -1 || tags.indexOf('night') !== -1) {
+          cat += 'nightsuits';
+        } else if (titleLower.indexOf('boy') !== -1 || type.indexOf('boy') !== -1 || tags.indexOf('boy') !== -1) {
+          cat += 'boys';
+        } else if (titleLower.indexOf('co-ord') !== -1 || titleLower.indexOf('coord') !== -1 || handle.indexOf('coord') !== -1 || type.indexOf('coord') !== -1 || tags.indexOf('coord') !== -1) {
+          cat += 'coords';
+        } else {
+          cat += 'ethnic';
+        }
 
         // Age mapping from tags + variants
         var allVariantTitles = (prod.variants || []).map(function(v){ return (v.title||'').toLowerCase(); }).join(' ');
