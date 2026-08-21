@@ -4030,6 +4030,27 @@ input[type="submit"],
   height: auto !important;
 }
 
+.meeeku-product-card {
+  border: 1.5px solid #F8BBD0 !important;
+  border-radius: 22px !important;
+  background: #FFFDF7 !important;
+  overflow: hidden !important;
+}
+
+.meeeku-product-card .meeeku-card-media-wrapper {
+  border: none !important;
+  border-radius: 20px 20px 0 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  aspect-ratio: 3 / 4 !important;
+}
+
+.meeeku-product-card .meeeku-card-img,
+.meeeku-product-card .meeeku-card-img-primary,
+.meeeku-product-card .meeeku-card-img-secondary {
+  border-radius: 20px 20px 0 0 !important;
+}
+
 .meeeku-card-link {
   position: relative !important;
   display: block !important;
@@ -4413,43 +4434,19 @@ button,
   .meeeku-card-media-wrapper {
     position: relative !important;
     overflow: hidden !important;
-    border-radius: 20px !important;
     z-index: 1 !important;
   }
 
-  /* Fix Mobile Card Quick Add Floating '+' Badge & Disable Hover Shift */
+  /* Completely remove quick add on mobile and tablet viewports */
   .meeeku-card-hover-quick-add,
   .meeeku-card-hover-quick-add:hover,
   .meeeku-card-hover-quick-add:focus,
-  .meeeku-card-media-wrapper:hover .meeeku-card-hover-quick-add {
-    position: absolute !important;
-    top: 10px !important;
-    right: 10px !important;
-    bottom: auto !important;
-    left: auto !important;
-    transform: none !important;
-    margin: 0 !important;
-    width: 38px !important;
-    height: 38px !important;
-    border-radius: 50% !important;
-    background: #FF6097 !important;
-    color: #FFF !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 0 !important;
-    box-shadow: 0 4px 14px rgba(255, 96, 151, 0.4) !important;
-    border: 2px solid #FFF !important;
-    opacity: 1 !important;
-    z-index: 2 !important;
-    font-size: 0 !important;
-  }
-  .meeeku-card-hover-quick-add::after {
-    content: '+' !important;
-    font-size: 2.2rem !important;
-    font-weight: 700 !important;
-    line-height: 1 !important;
-    color: #FFF !important;
+  .meeeku-card-media-wrapper:hover .meeeku-card-hover-quick-add,
+  .card-wrapper:hover .meeeku-card-hover-quick-add {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
   }
 
   /* Disable hover transforms on mobile viewports */
