@@ -1,10 +1,12 @@
 {% comment %}
-  Meeeku 404 Page
-  Clean, on-brand page shown when any URL cannot be resolved by Shopify.
-  Product pages are handled by templates/product.json → sections/main-product.liquid.
+  Meeeku Universal Dynamic Product & 404 Handler
+  If URL is /products/[handle], dynamically fetches live product data from Shopify (/products/[handle].js)
+  and renders the full Product Page with ALL uploaded media, variants, and cart actions.
+  If URL is not a product or product not found, displays on-brand 404 page.
 {% endcomment %}
 
-<div class="page-width" style="
+<!-- 1. Real 404 Screen (Default) -->
+<div id="Meeeku404Screen" class="page-width" style="
   min-height: 60vh;
   display: flex;
   flex-direction: column;
@@ -13,7 +15,6 @@
   text-align: center;
   padding: 6rem 2rem;
 ">
-
   <span class="meeeku-badge meeeku-badge--ethnic" style="
     font-size: 1.4rem;
     padding: 0.5rem 1.6rem;
@@ -75,8 +76,345 @@
       Back to Home 🏠
     </a>
   </div>
-
 </div>
+
+<!-- 2. Dynamic Live Product Screen (Activated if URL is /products/[handle]) -->
+<div id="MeeekuLiveProductScreen" style="display: none;">
+  <div class="page-width meeeku-pdp-container" style="padding-top: 2rem; padding-bottom: 5rem;">
+    <div class="meeeku-pdp-layout">
+      
+      <!-- LEFT: Image Gallery with All Uploaded Media -->
+      <div class="meeeku-pdp-gallery-col">
+        <div class="meeeku-pdp-gallery-wrapper">
+          <div class="meeeku-pdp-thumbs-list" id="MeeekuDynamicThumbsList"></div>
+          <div class="meeeku-pdp-hero-image">
+            <img id="MeeekuDynamicHeroImg" src="" alt="Product Image" style="border-radius: 24px; width: 100%; object-fit: cover; border: 2px solid #F8BBD0; box-shadow: 0 12px 36px rgba(107, 63, 160, 0.08);">
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Product Info, Variants & Form -->
+      <div class="meeeku-pdp-info-col">
+        <span class="meeeku-badge meeeku-badge--ethnic" id="MeeekuDynamicBadge" style="display: inline-block; margin-bottom: 0.8rem;">Meeeku Collection</span>
+        <h1 class="meeeku-pdp-title" id="MeeekuDynamicTitle" style="color: #3D2355; font-size: 2.8rem; font-weight: 800; margin-bottom: 0.6rem; line-height: 1.2;"></h1>
+
+        <div style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.2rem;">
+          <span style="color: #FFB300; font-size: 1.5rem;">⭐⭐⭐⭐⭐</span>
+          <span style="font-weight: 700; color: #FF6097; font-size: 1.35rem;">4.9 (128 verified reviews)</span>
+        </div>
+
+        <div style="margin-bottom: 1.5rem; display: flex; align-items: baseline; gap: 1rem;">
+          <span class="meeeku-pdp-price" id="MeeekuDynamicPrice" style="font-size: 2.6rem; font-weight: 800; color: #6B3FA0;"></span>
+          <span id="MeeekuDynamicComparePrice" style="font-size: 1.6rem; color: #888; text-decoration: line-through; display: none;"></span>
+          <span class="meeeku-badge" id="MeeekuDynamicDiscount" style="background: #E8F5E9; color: #2E7D32; font-size: 1.1rem; padding: 0.2rem 0.8rem; display: none;"></span>
+        </div>
+
+        <div id="MeeekuDynamicDesc" style="color: #555; font-size: 1.45rem; line-height: 1.6; margin-bottom: 1.8rem;"></div>
+
+        <!-- Size Variant Picker -->
+        <div style="margin-bottom: 1.8rem;">
+          <label style="font-weight: 700; color: #3D2355; font-size: 1.45rem; display: block; margin-bottom: 0.8rem;">
+            Select Size:
+          </label>
+          <div class="meeeku-pdp-size-grid" id="MeeekuDynamicSizeGrid"></div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem;">
+          <button type="button" id="MeeekuDynamicAddBtn" class="meeeku-btn-primary" style="width: 100%; text-align: center; font-size: 1.5rem; padding: 1.2rem; cursor: pointer; border-radius: 30px; background: #FF6097; color: #FFF; border: none; font-weight: 700; box-shadow: 0 6px 20px rgba(255, 96, 151, 0.3);" onclick="meeekuDynamicAddToCart()">
+            🛒 Add to Cart
+          </button>
+          <button type="button" class="meeeku-btn-secondary" style="width: 100%; text-align: center; font-size: 1.5rem; padding: 1.2rem; cursor: pointer; border-radius: 30px; background: #FFF0F5; color: #6B3FA0; border: 2px solid #F8BBD0; font-weight: 700;" onclick="meeekuDynamicBuyNow()">
+            ⚡ Buy It Now
+          </button>
+        </div>
+
+        <!-- Trust Badges -->
+        <div class="meeeku-trust-badges" style="display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.5rem; margin-bottom: 1.5rem;">
+          <div style="display: flex; align-items: center; gap: 0.6rem; background-color: #FFF0F5; border: 1px solid #F8BBD0; border-radius: 20px; padding: 0.5rem 1.2rem; font-size: 1.3rem; font-weight: 600; color: #3D2355;">
+            <span>🌸</span> 100% Breathable Cotton
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.6rem; background-color: #FFF0F5; border: 1px solid #F8BBD0; border-radius: 20px; padding: 0.5rem 1.2rem; font-size: 1.3rem; font-weight: 600; color: #3D2355;">
+            <span>✨</span> Zero-Itch Guarantee
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.6rem; background-color: #FFF0F5; border: 1px solid #F8BBD0; border-radius: 20px; padding: 0.5rem 1.2rem; font-size: 1.3rem; font-weight: 600; color: #3D2355;">
+            <span>🧵</span> Handcrafted with Care
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.meeeku-pdp-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: flex-start;
+}
+.meeeku-pdp-gallery-wrapper {
+  display: flex;
+  gap: 1.2rem;
+  align-items: flex-start;
+}
+.meeeku-pdp-thumbs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  width: 75px;
+  flex-shrink: 0;
+  max-height: 520px;
+  overflow-y: auto;
+}
+.meeeku-pdp-thumb-item {
+  width: 75px;
+  height: 95px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid #F8BBD0;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: all 0.2s ease;
+  background: #FFF;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.meeeku-pdp-thumb-item.active,
+.meeeku-pdp-thumb-item:hover {
+  opacity: 1;
+  border-color: #6B3FA0;
+  transform: scale(1.04);
+}
+.meeeku-pdp-thumb-item img {
+  width: 100%;
+  height: 75px;
+  object-fit: cover;
+  object-position: top center;
+}
+.meeeku-pdp-thumb-item span {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #6B3FA0;
+  text-align: center;
+  width: 100%;
+  background: #FFF9F4;
+}
+.meeeku-pdp-hero-image {
+  flex: 1;
+  border-radius: 20px;
+  overflow: hidden;
+}
+.meeeku-pdp-size-grid {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+.meeeku-size-btn {
+  border: 2px solid #F8BBD0;
+  border-radius: 25px;
+  padding: 0.6rem 1.4rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #3D2355;
+  background: #FFFDF7;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.meeeku-size-btn.active,
+.meeeku-size-btn:hover {
+  background: #6B3FA0;
+  color: #FFF;
+  border-color: #6B3FA0;
+}
+@media screen and (max-width: 749px) {
+  .meeeku-pdp-layout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .meeeku-pdp-gallery-wrapper {
+    flex-direction: column-reverse;
+  }
+  .meeeku-pdp-thumbs-list {
+    flex-direction: row;
+    width: 100%;
+    justify-content: flex-start;
+    overflow-x: auto;
+  }
+}
+</style>
+
+<script>
+(function() {
+  var path = window.location.pathname.toLowerCase();
+  var match = path.match(/\/products\/([^/?#]+)/);
+  if (!match) return; // Standard 404 page
+
+  var handle = match[1];
+  
+  fetch('/products/' + handle + '.js')
+    .then(function(res) {
+      if (!res.ok) throw new Error('Product not found in API');
+      return res.json();
+    })
+    .then(function(product) {
+      window.currentMeeekuLiveProduct = product;
+      window.selectedMeeekuVariant = product.variants[0];
+
+      // Hide 404, show product screen
+      document.getElementById('Meeeku404Screen').style.display = 'none';
+      document.getElementById('MeeekuLiveProductScreen').style.display = 'block';
+      document.title = product.title + ' – Meeeku';
+
+      // Set Title, Description, Type
+      document.getElementById('MeeekuDynamicTitle').textContent = product.title;
+      document.getElementById('MeeekuDynamicBadge').textContent = product.type || 'Meeeku Pure Cotton';
+      
+      var descEl = document.getElementById('MeeekuDynamicDesc');
+      if (product.description) {
+        descEl.innerHTML = product.description;
+      } else {
+        descEl.textContent = 'Crafted from 100% skin-safe, zero-itch breathable fabric. Designed for playful moments and festive twirling.';
+      }
+
+      // Format Price
+      var priceFormatted = '₹' + (product.price / 100).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+      document.getElementById('MeeekuDynamicPrice').textContent = priceFormatted;
+      
+      var addBtn = document.getElementById('MeeekuDynamicAddBtn');
+      if (addBtn) addBtn.textContent = '🛒 Add to Cart — ' + priceFormatted;
+
+      if (product.compare_at_price && product.compare_at_price > product.price) {
+        var compareFormatted = '₹' + (product.compare_at_price / 100).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+        var compareEl = document.getElementById('MeeekuDynamicComparePrice');
+        compareEl.textContent = compareFormatted;
+        compareEl.style.display = 'inline';
+
+        var discountPct = Math.round((product.compare_at_price - product.price) / product.compare_at_price * 100);
+        var discountEl = document.getElementById('MeeekuDynamicDiscount');
+        discountEl.textContent = 'SAVE ' + discountPct + '%';
+        discountEl.style.display = 'inline';
+      }
+
+      // Render ALL Uploaded Images
+      var images = product.images || [];
+      var heroImg = document.getElementById('MeeekuDynamicHeroImg');
+      var thumbsList = document.getElementById('MeeekuDynamicThumbsList');
+      thumbsList.innerHTML = '';
+
+      if (images.length > 0) {
+        heroImg.src = images[0];
+        heroImg.alt = product.title;
+
+        if (images.length > 1) {
+          images.forEach(function(imgUrl, idx) {
+            var thumb = document.createElement('div');
+            thumb.className = 'meeeku-pdp-thumb-item' + (idx === 0 ? ' active' : '');
+            thumb.innerHTML = '<img src="' + imgUrl + '" alt="' + product.title + '"><span>View ' + (idx + 1) + '</span>';
+            thumb.onclick = function() {
+              document.querySelectorAll('.meeeku-pdp-thumb-item').forEach(function(el) { el.classList.remove('active'); });
+              thumb.classList.add('active');
+              heroImg.src = imgUrl;
+            };
+            thumbsList.appendChild(thumb);
+          });
+        }
+      }
+
+      // Render Size Variants
+      var sizeGrid = document.getElementById('MeeekuDynamicSizeGrid');
+      sizeGrid.innerHTML = '';
+      if (product.variants && product.variants.length > 0) {
+        product.variants.forEach(function(variant, idx) {
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'meeeku-size-btn' + (idx === 0 ? ' active' : '');
+          btn.textContent = variant.title;
+          btn.onclick = function() {
+            document.querySelectorAll('#MeeekuDynamicSizeGrid .meeeku-size-btn').forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            window.selectedMeeekuVariant = variant;
+            
+            var varPrice = '₹' + (variant.price / 100).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+            document.getElementById('MeeekuDynamicPrice').textContent = varPrice;
+            if (addBtn) addBtn.textContent = '🛒 Add to Cart — ' + varPrice;
+          };
+          sizeGrid.appendChild(btn);
+        });
+      }
+    })
+    .catch(function(err) {
+      // Keep standard 404 screen visible
+    });
+})();
+
+function meeekuDynamicAddToCart() {
+  var product = window.currentMeeekuLiveProduct;
+  var variant = window.selectedMeeekuVariant;
+  if (!product || !variant) return;
+
+  var title = product.title;
+  var price = '₹' + (variant.price / 100).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+  var img = product.images && product.images.length ? product.images[0] : '';
+  var size = variant.title;
+  var variantId = variant.id;
+
+  var cart = [];
+  try {
+    cart = JSON.parse(localStorage.getItem('meeeku_active_cart') || localStorage.getItem('meeeku_user_cart') || localStorage.getItem('meeeku_cart') || '[]');
+  } catch (e) { cart = []; }
+
+  var existing = cart.find(function(i) { return i.title === title && i.size === size; });
+  if (existing) {
+    existing.qty = (existing.qty || 1) + 1;
+    existing.quantity = (existing.quantity || 1) + 1;
+  } else {
+    cart.push({
+      id: variantId,
+      title: title,
+      price: price,
+      img: img,
+      size: size,
+      qty: 1,
+      quantity: 1
+    });
+  }
+
+  localStorage.setItem('meeeku_active_cart', JSON.stringify(cart));
+  localStorage.setItem('meeeku_user_cart', JSON.stringify(cart));
+  localStorage.setItem('meeeku_cart', JSON.stringify(cart));
+
+  if (variantId) {
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items: [{ id: parseInt(variantId), quantity: 1 }] })
+    }).catch(function() {});
+  }
+
+  var dot = document.getElementById('MeeekuCartDot');
+  if (dot) dot.classList.add('has-items');
+
+  var addBtn = document.getElementById('MeeekuDynamicAddBtn');
+  if (addBtn) addBtn.textContent = '✅ Added! Opening Cart...';
+
+  setTimeout(function() {
+    window.location.href = '/cart';
+  }, 400);
+}
+
+function meeekuDynamicBuyNow() {
+  meeekuDynamicAddToCart();
+  var variant = window.selectedMeeekuVariant;
+  if (variant && variant.id) {
+    window.location.href = '/cart/' + variant.id + ':1?checkout';
+  } else {
+    window.location.href = '/cart';
+  }
+}
+</script>
 
 {% schema %}
 {
