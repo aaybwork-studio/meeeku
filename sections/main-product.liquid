@@ -67,8 +67,7 @@
                  alt="{{ product.title | escape }}" 
                  width="600" 
                  height="750" 
-                 loading="eager"
-                 style="border-radius: 24px; width: 100%; object-fit: cover; border: 2px solid #F8BBD0; box-shadow: 0 12px 36px rgba(107, 63, 160, 0.08);">
+                 loading="eager">
           {% else %}
             <!-- Fallback Image -->
             <img id="MeeekuMainPdpImage" 
@@ -76,8 +75,7 @@
                  alt="{{ product.title | escape }}" 
                  width="600" 
                  height="750" 
-                 loading="eager"
-                 style="border-radius: 24px; width: 100%; object-fit: cover; border: 2px solid #F8BBD0; box-shadow: 0 12px 36px rgba(107, 63, 160, 0.08);">
+                 loading="eager">
           {% endif %}
         </div>
       </div>
@@ -248,18 +246,25 @@
 }
 .meeeku-pdp-hero-image {
   flex: 1;
-  border-radius: 20px;
+  border-radius: 24px;
   overflow: hidden;
   border: 2px solid #F8BBD0;
   box-shadow: 0 8px 24px rgba(107, 63, 160, 0.08);
+  background: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .meeeku-pdp-hero-image img {
   width: 100%;
-  height: auto;
+  height: 100%;
   aspect-ratio: 4 / 5;
   object-fit: cover;
   object-position: top center;
   display: block;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
 }
 .meeeku-pdp-title {
   color: #3D2355;

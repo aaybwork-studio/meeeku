@@ -1,255 +1,302 @@
-{{ 'component-card.css' | asset_url | stylesheet_tag }}
-{{ 'component-price.css' | asset_url | stylesheet_tag }}
-{{ 'section-related-products.css' | asset_url | stylesheet_tag }}
+{% comment %}
+  Meeeku Curated Recommendations & "You May Also Like" Horizontal Scroll Row (Shopify OS 2.0 Connected)
+{% endcomment %}
 
-{% if section.settings.image_shape == 'blob' %}
-  {{ 'mask-blobs.css' | asset_url | stylesheet_tag }}
-{%- endif -%}
+{% liquid
+  assign title = section.settings.heading | default: 'You May Also Like'
+  assign subtitle = section.settings.subtitle | default: 'Pair with matching organic cotton tees, festive lehengas, and everyday co-ord sets.'
+  assign badge = section.settings.badge | default: 'Curated Recommendations'
+  assign limit = section.settings.products_to_show | default: 6
 
-{%- style -%}
-  .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
-  }
+  assign related_products_count = 0
+  assign current_prod_id = product.id
+%}
 
-  @media screen and (min-width: 750px) {
-    .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
-    }
-  }
-{%- endstyle -%}
-
-<div class="color-{{ section.settings.color_scheme }} gradient">
-  <product-recommendations
-    class="related-products page-width section-{{ section.id }}-padding isolate{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
-    data-url="{{ routes.product_recommendations_url }}?limit={{ section.settings.products_to_show }}"
-    data-section-id="{{ section.id }}"
-    data-product-id="{{ product.id }}"
-  >
-    {% if recommendations.performed and recommendations.products_count > 0 %}
-      <h2 class="related-products__heading inline-richtext {{ section.settings.heading_size }}">
-        {{ section.settings.heading }}
-      </h2>
-      <ul
-        class="grid product-grid grid--{{ section.settings.columns_desktop }}-col-desktop grid--{{ section.settings.columns_mobile }}-col-tablet-down"
-        role="list"
-      >
-        {% assign skip_card_product_styles = false %}
-        {% for recommendation in recommendations.products %}
-          <li class="grid__item">
-            {% render 'card-product',
-              card_product: recommendation,
-              media_aspect_ratio: section.settings.image_ratio,
-              image_shape: section.settings.image_shape,
-              show_secondary_image: section.settings.show_secondary_image,
-              show_vendor: section.settings.show_vendor,
-              show_rating: section.settings.show_rating,
-              skip_styles: skip_card_product_styles,
-              product_view_context: 'recommendation'
-            %}
-          </li>
-          {%- assign skip_card_product_styles = true -%}
-        {% endfor %}
-      </ul>
+<section class="meeeku-related-section page-width" id="MeeekuRelated-{{ section.id }}" style="padding-top: 4rem; padding-bottom: 5rem; border-top: 1px solid #FCE4EC;">
+  
+  <!-- Section Heading -->
+  <div style="text-align: center; margin-bottom: 2.5rem; width: 100%;">
+    {% if badge != blank %}
+      <span class="meeeku-badge meeeku-badge--popular" style="margin-bottom: 0.8rem; display: inline-block; font-size: 1.2rem; padding: 0.4rem 1.4rem;">
+        {{ badge }}
+      </span>
     {% endif %}
-  </product-recommendations>
-  {% if section.settings.image_shape == 'arch' %}
-    {{ 'mask-arch.svg' | inline_asset_content }}
-  {%- endif -%}
-</div>
+    <h2 style="color: #3D2355; font-size: 3.2rem; font-weight: 800; margin: 0.6rem 0 0.8rem; letter-spacing: -0.5px; text-align: center;">
+      {{ title }}
+    </h2>
+    {% if subtitle != blank %}
+      <p style="color: #666; font-size: 1.55rem; max-width: 580px; margin: 0 auto; line-height: 1.5; text-align: center;">
+        {{ subtitle }}
+      </p>
+    {% endif %}
+  </div>
+
+  <!-- Horizontal Scroll Container with Navigation Arrows -->
+  <div class="meeeku-related-scroll-wrapper" style="position: relative; width: 100%;">
+    <button type="button" 
+            class="meeeku-scroll-arrow meeeku-scroll-arrow--left" 
+            onclick="document.getElementById('MeeekuRelatedTrack-{{ section.id }}').scrollBy({ left: -320, behavior: 'smooth' })"
+            aria-label="Previous products">
+      ‹
+    </button>
+
+    <div class="meeeku-related-track" id="MeeekuRelatedTrack-{{ section.id }}">
+      {% if collections['all'] != blank and collections['all'].products.size > 1 %}
+        {% for prod in collections['all'].products %}
+          {% if prod.id != current_prod_id and related_products_count < limit %}
+            {% assign related_products_count = related_products_count | plus: 1 %}
+            <div class="meeeku-related-item">
+              {% render 'meeeku-featured-card', product: prod %}
+            </div>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+
+      {% if related_products_count == 0 %}
+        <!-- Fallback Curated Recommendation Cards -->
+        <div class="meeeku-related-item">
+          <!-- 1. Periwinkle Daisy Frill Tee -->
+          <div class="card-wrapper meeeku-product-card" style="background: #FFFDF7; border: 1.5px solid #F8BBD0; border-radius: 22px; overflow: hidden; transition: all 0.3s ease; box-shadow: 0 4px 14px rgba(107,63,160,0.06); display: flex; flex-direction: column; text-align: center; height: 100%;">
+            <div class="meeeku-card-media-wrapper" style="position: relative; overflow: hidden; aspect-ratio: 3/4; background: transparent; border: none; border-radius: 20px 20px 0 0; box-shadow: none;">
+              <a href="/products/daisy-frill-blue-tee" style="display: block; width: 100%; height: 100%;">
+                <img src="{{ 'meeeku_prod_daisy_frill_tee.jpg' | asset_url }}" alt="Periwinkle Daisy Frill Cotton Tee" class="meeeku-card-img-primary" style="width: 100%; height: 100%; object-fit: cover;" width="600" height="800" loading="lazy">
+              </a>
+              <div style="position: absolute; top: 1rem; left: 1rem; z-index: 5;">
+                <span style="background: rgba(232, 245, 233, 0.95); color: #2E7D32; font-size: 1.1rem; font-weight: 700; padding: 0.35rem 0.85rem; border-radius: 20px; border: 1px solid #A5D6A7; display: inline-block;">
+                  Zero-Itch Fabric
+                </span>
+              </div>
+            </div>
+            <div style="padding: 1.5rem 1.2rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; align-items: center; text-align: center;">
+              <div>
+                <span style="font-size: 1.15rem; font-weight: 700; color: #FF6097; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.3rem;">100% Combed Cotton</span>
+                <h3 style="margin: 0 0 0.5rem; font-size: 1.65rem; font-weight: 700; color: #3D2355; line-height: 1.3;">
+                  <a href="/products/daisy-frill-blue-tee" style="color: inherit; text-decoration: none;">Daisy Frill Cotton Tee</a>
+                </h3>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: center; gap: 0.8rem; width: 100%;">
+                <span style="font-size: 1.85rem; font-weight: 800; color: #6B3FA0;">₹599.00</span>
+                <span style="font-size: 1.35rem; color: #999; text-decoration: line-through;">₹899</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="meeeku-related-item">
+          <!-- 2. Sunshine Chanderi Lehenga -->
+          <div class="card-wrapper meeeku-product-card" style="background: #FFFDF7; border: 1.5px solid #F8BBD0; border-radius: 22px; overflow: hidden; transition: all 0.3s ease; box-shadow: 0 4px 14px rgba(107,63,160,0.06); display: flex; flex-direction: column; text-align: center; height: 100%;">
+            <div class="meeeku-card-media-wrapper" style="position: relative; overflow: hidden; aspect-ratio: 3/4; background: transparent; border: none; border-radius: 20px 20px 0 0; box-shadow: none;">
+              <a href="/products/sunshine-chanderi-lehenga" style="display: block; width: 100%; height: 100%;">
+                <img src="{{ 'meeeku_prod_yellow_lehenga.jpg' | asset_url }}" alt="Sunshine Chanderi Lehenga" class="meeeku-card-img-primary" style="width: 100%; height: 100%; object-fit: cover;" width="600" height="800" loading="lazy">
+              </a>
+              <div style="position: absolute; top: 1rem; left: 1rem; z-index: 5;">
+                <span style="background: rgba(255, 240, 245, 0.95); color: #6B3FA0; font-size: 1.1rem; font-weight: 700; padding: 0.35rem 0.85rem; border-radius: 20px; border: 1px solid #F8BBD0; display: inline-block;">
+                  Festive Collection
+                </span>
+              </div>
+            </div>
+            <div style="padding: 1.5rem 1.2rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; align-items: center; text-align: center;">
+              <div>
+                <span style="font-size: 1.15rem; font-weight: 700; color: #FF6097; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.3rem;">Royal Ethnic Lehenga</span>
+                <h3 style="margin: 0 0 0.5rem; font-size: 1.65rem; font-weight: 700; color: #3D2355; line-height: 1.3;">
+                  <a href="/products/sunshine-chanderi-lehenga" style="color: inherit; text-decoration: none;">Sunshine Chanderi Lehenga</a>
+                </h3>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: center; gap: 0.8rem; width: 100%;">
+                <span style="font-size: 1.85rem; font-weight: 800; color: #6B3FA0;">₹3,199.00</span>
+                <span style="font-size: 1.35rem; color: #999; text-decoration: line-through;">₹3,899</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="meeeku-related-item">
+          <!-- 3. Vanilla Cream Co-ord Set -->
+          <div class="card-wrapper meeeku-product-card" style="background: #FFFDF7; border: 1.5px solid #F8BBD0; border-radius: 22px; overflow: hidden; transition: all 0.3s ease; box-shadow: 0 4px 14px rgba(107,63,160,0.06); display: flex; flex-direction: column; text-align: center; height: 100%;">
+            <div class="meeeku-card-media-wrapper" style="position: relative; overflow: hidden; aspect-ratio: 3/4; background: transparent; border: none; border-radius: 20px 20px 0 0; box-shadow: none;">
+              <a href="/products/vanilla-cream-eyelet-coord" style="display: block; width: 100%; height: 100%;">
+                <img src="{{ 'meeeku_prod_vanilla_cream_coord.jpg' | asset_url }}" alt="Vanilla Cream Ruffled Eyelet Co-ord Set" class="meeeku-card-img-primary" style="width: 100%; height: 100%; object-fit: cover;" width="600" height="800" loading="lazy">
+              </a>
+              <div style="position: absolute; top: 1rem; left: 1rem; z-index: 5;">
+                <span style="background: rgba(224, 242, 241, 0.95); color: #00695C; font-size: 1.1rem; font-weight: 700; padding: 0.35rem 0.85rem; border-radius: 20px; border: 1px solid #80CBC4; display: inline-block;">
+                  Pure Cotton Lounge
+                </span>
+              </div>
+            </div>
+            <div style="padding: 1.5rem 1.2rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; align-items: center; text-align: center;">
+              <div>
+                <span style="font-size: 1.15rem; font-weight: 700; color: #FF6097; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.3rem;">2-Piece Co-ord Set</span>
+                <h3 style="margin: 0 0 0.5rem; font-size: 1.65rem; font-weight: 700; color: #3D2355; line-height: 1.3;">
+                  <a href="/products/vanilla-cream-eyelet-coord" style="color: inherit; text-decoration: none;">Vanilla Cream Eyelet Set</a>
+                </h3>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: center; gap: 0.8rem; width: 100%;">
+                <span style="font-size: 1.85rem; font-weight: 800; color: #6B3FA0;">₹1,299.00</span>
+                <span style="font-size: 1.35rem; color: #999; text-decoration: line-through;">₹1,699</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="meeeku-related-item">
+          <!-- 4. Forest Vrindavan Lehenga -->
+          <div class="card-wrapper meeeku-product-card" style="background: #FFFDF7; border: 1.5px solid #F8BBD0; border-radius: 22px; overflow: hidden; transition: all 0.3s ease; box-shadow: 0 4px 14px rgba(107,63,160,0.06); display: flex; flex-direction: column; text-align: center; height: 100%;">
+            <div class="meeeku-card-media-wrapper" style="position: relative; overflow: hidden; aspect-ratio: 3/4; background: transparent; border: none; border-radius: 20px 20px 0 0; box-shadow: none;">
+              <a href="/products/forest-vrindavan-green-lehenga" style="display: block; width: 100%; height: 100%;">
+                <img src="{{ 'meeeku_prod_green_lehenga.jpg' | asset_url }}" alt="Forest Vrindavan Lehenga" class="meeeku-card-img-primary" style="width: 100%; height: 100%; object-fit: cover;" width="600" height="800" loading="lazy">
+              </a>
+              <div style="position: absolute; top: 1rem; left: 1rem; z-index: 5;">
+                <span style="background: rgba(255, 240, 245, 0.95); color: #6B3FA0; font-size: 1.1rem; font-weight: 700; padding: 0.35rem 0.85rem; border-radius: 20px; border: 1px solid #F8BBD0; display: inline-block;">
+                  Festive Collection
+                </span>
+              </div>
+            </div>
+            <div style="padding: 1.5rem 1.2rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; align-items: center; text-align: center;">
+              <div>
+                <span style="font-size: 1.15rem; font-weight: 700; color: #FF6097; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.3rem;">Royal Ethnic Lehenga</span>
+                <h3 style="margin: 0 0 0.5rem; font-size: 1.65rem; font-weight: 700; color: #3D2355; line-height: 1.3;">
+                  <a href="/products/forest-vrindavan-green-lehenga" style="color: inherit; text-decoration: none;">Forest Vrindavan Lehenga</a>
+                </h3>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: center; gap: 0.8rem; width: 100%;">
+                <span style="font-size: 1.85rem; font-weight: 800; color: #6B3FA0;">₹3,199.00</span>
+                <span style="font-size: 1.35rem; color: #999; text-decoration: line-through;">₹3,899</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+
+    <button type="button" 
+            class="meeeku-scroll-arrow meeeku-scroll-arrow--right" 
+            onclick="document.getElementById('MeeekuRelatedTrack-{{ section.id }}').scrollBy({ left: 320, behavior: 'smooth' })"
+            aria-label="Next products">
+      ›
+    </button>
+  </div>
+</section>
+
+<style>
+.meeeku-related-track {
+  display: flex !important;
+  gap: 2rem !important;
+  overflow-x: auto !important;
+  scroll-snap-type: x mandatory !important;
+  -webkit-overflow-scrolling: touch !important;
+  scroll-behavior: smooth !important;
+  padding: 0.5rem 0.5rem 2rem !important;
+  scrollbar-width: thin;
+  scrollbar-color: #F8BBD0 #FFFDF7;
+}
+
+.meeeku-related-track::-webkit-scrollbar {
+  height: 6px;
+}
+.meeeku-related-track::-webkit-scrollbar-track {
+  background: #FFFDF7;
+  border-radius: 10px;
+}
+.meeeku-related-track::-webkit-scrollbar-thumb {
+  background: #F8BBD0;
+  border-radius: 10px;
+}
+
+.meeeku-related-item {
+  flex: 0 0 280px !important;
+  min-width: 260px !important;
+  max-width: 290px !important;
+  scroll-snap-align: start !important;
+}
+
+@media screen and (max-width: 749px) {
+  .meeeku-related-item {
+    flex: 0 0 240px !important;
+    min-width: 230px !important;
+    max-width: 250px !important;
+  }
+}
+
+.meeeku-scroll-arrow {
+  position: absolute;
+  top: 45%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 2px solid #F8BBD0;
+  color: #3D2355;
+  font-size: 2.4rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 6px 16px rgba(107, 63, 160, 0.12);
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+.meeeku-scroll-arrow:hover {
+  background: #6B3FA0;
+  color: #FFFFFF;
+  border-color: #6B3FA0;
+}
+
+.meeeku-scroll-arrow--left {
+  left: -20px;
+}
+
+.meeeku-scroll-arrow--right {
+  right: -20px;
+}
+
+@media screen and (max-width: 989px) {
+  .meeeku-scroll-arrow {
+    display: none !important;
+  }
+}
+</style>
 
 {% schema %}
 {
-  "name": "t:sections.related-products.name",
+  "name": "Related Products",
   "tag": "section",
-  "class": "section",
+  "class": "section-related-products",
   "settings": [
     {
-      "type": "paragraph",
-      "content": "t:sections.related-products.settings.paragraph__1.content"
+      "type": "text",
+      "id": "badge",
+      "label": "Badge Text",
+      "default": "Curated Recommendations"
     },
     {
-      "type": "inline_richtext",
+      "type": "text",
       "id": "heading",
-      "default": "t:sections.related-products.settings.paragraph__1.default",
-      "label": "t:sections.related-products.settings.heading.label"
+      "label": "Heading",
+      "default": "You May Also Like"
     },
     {
-      "type": "select",
-      "id": "heading_size",
-      "options": [
-        {
-          "value": "h2",
-          "label": "t:sections.all.heading_size.options__1.label"
-        },
-        {
-          "value": "h1",
-          "label": "t:sections.all.heading_size.options__2.label"
-        },
-        {
-          "value": "h0",
-          "label": "t:sections.all.heading_size.options__3.label"
-        },
-        {
-          "value": "hxl",
-          "label": "t:sections.all.heading_size.options__4.label"
-        },
-        {
-          "value": "hxxl",
-          "label": "t:sections.all.heading_size.options__5.label"
-        }
-      ],
-      "default": "h1",
-      "label": "t:sections.all.heading_size.label"
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Pair with matching organic cotton tees, festive lehengas, and everyday co-ord sets."
     },
     {
       "type": "range",
       "id": "products_to_show",
       "min": 2,
-      "max": 10,
+      "max": 12,
       "step": 1,
-      "default": 4,
-      "label": "t:sections.related-products.settings.products_to_show.label"
-    },
+      "default": 6,
+      "label": "Products to show"
+    }
+  ],
+  "presets": [
     {
-      "type": "range",
-      "id": "columns_desktop",
-      "min": 1,
-      "max": 6,
-      "step": 1,
-      "default": 4,
-      "label": "t:sections.related-products.settings.columns_desktop.label"
-    },
-    {
-      "type": "select",
-      "id": "columns_mobile",
-      "default": "2",
-      "label": "t:sections.related-products.settings.columns_mobile.label",
-      "options": [
-        {
-          "value": "1",
-          "label": "t:sections.related-products.settings.columns_mobile.options__1.label"
-        },
-        {
-          "value": "2",
-          "label": "t:sections.related-products.settings.columns_mobile.options__2.label"
-        }
-      ]    
-    },
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "t:sections.all.colors.label",
-      "info": "t:sections.all.colors.has_cards_info",
-      "default": "scheme-1"
-    },
-    {
-      "type": "header",
-      "content": "t:sections.related-products.settings.header__2.content"
-    },
-    {
-      "type": "select",
-      "id": "image_ratio",
-      "options": [
-        {
-          "value": "adapt",
-          "label": "t:sections.related-products.settings.image_ratio.options__1.label"
-        },
-        {
-          "value": "portrait",
-          "label": "t:sections.related-products.settings.image_ratio.options__2.label"
-        },
-        {
-          "value": "square",
-          "label": "t:sections.related-products.settings.image_ratio.options__3.label"
-        }
-      ],
-      "default": "adapt",
-      "label": "t:sections.related-products.settings.image_ratio.label"
-    },
-    {
-      "type": "select",
-      "id": "image_shape",
-      "options": [
-        {
-          "value": "default",
-          "label": "t:sections.all.image_shape.options__1.label"
-        },
-        {
-          "value": "arch",
-          "label": "t:sections.all.image_shape.options__2.label"
-        },
-        {
-          "value": "blob",
-          "label": "t:sections.all.image_shape.options__3.label"
-        },
-        {
-          "value": "chevronleft",
-          "label": "t:sections.all.image_shape.options__4.label"
-        },
-        {
-          "value": "chevronright",
-          "label": "t:sections.all.image_shape.options__5.label"
-        },
-        {
-          "value": "diamond",
-          "label": "t:sections.all.image_shape.options__6.label"
-        },
-        {
-          "value": "parallelogram",
-          "label": "t:sections.all.image_shape.options__7.label"
-        },
-        {
-          "value": "round",
-          "label": "t:sections.all.image_shape.options__8.label"
-        }
-      ],
-      "default": "default",
-      "label": "t:sections.all.image_shape.label"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_secondary_image",
-      "default": false,
-      "label": "t:sections.related-products.settings.show_secondary_image.label"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_vendor",
-      "default": false,
-      "label": "t:sections.related-products.settings.show_vendor.label"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_rating",
-      "default": false,
-      "label": "t:sections.related-products.settings.show_rating.label",
-      "info": "t:sections.related-products.settings.show_rating.info"
-    },
-    {
-      "type": "header",
-      "content": "t:sections.all.padding.section_padding_heading"
-    },
-    {
-      "type": "range",
-      "id": "padding_top",
-      "min": 0,
-      "max": 100,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.all.padding.padding_top",
-      "default": 36
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom",
-      "min": 0,
-      "max": 100,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.all.padding.padding_bottom",
-      "default": 36
+      "name": "Related Products"
     }
   ]
 }
