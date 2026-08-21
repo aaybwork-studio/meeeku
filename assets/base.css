@@ -4563,7 +4563,37 @@ quick-add-modal .meeeku-pdp-price {
   }
 }
 
+/* Meeeku Luxury Policy Page Styling */
+.shopify-policy__container {
+  max-width: 860px !important;
+  margin: 4.5rem auto 7rem !important;
+  padding: 0 2rem !important;
+}
 
+.shopify-policy__title h1 {
+  color: #3D2355 !important;
+  font-size: 3.4rem !important;
+  font-weight: 800 !important;
+  text-align: center !important;
+  margin-bottom: 2.5rem !important;
+}
 
+.shopify-policy__body {
+  background: #FFFDF7 !important;
+  border: 1.5px solid #F8BBD0 !important;
+  border-radius: 24px !important;
+  padding: 3.5rem 3rem !important;
+  box-shadow: 0 8px 24px rgba(107, 63, 160, 0.06) !important;
+  font-size: 1.55rem !important;
+  line-height: 1.8 !important;
+  color: #444 !important;
+}
 
-
+.shopify-policy__body h2,
+.shopify-policy__body h3,
+.shopify-policy__body h4 {
+  color: #3D2355 !important;
+  font-weight: 700 !important;
+  margin-top: 2.5rem !important;
+  margin-bottom: 1rem !important;
+}
