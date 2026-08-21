@@ -16,30 +16,39 @@
 
 <style>
   .template-search__header {
-    margin-bottom: 3rem;
+    margin-bottom: 2.5rem;
   }
 
   .template-search__search {
-    margin: 0 auto 3.5rem;
-    max-width: 74.1rem;
+    margin: 0 auto 2rem;
+    max-width: 64rem;
   }
 
-  .template-search__search .search {
-    margin-top: 3rem;
+  .meeeku-search-form:focus-within {
+    border-color: #6B3FA0 !important;
+    box-shadow: 0 6px 24px rgba(107, 63, 160, 0.15) !important;
+  }
+
+  .meeeku-search-btn:hover {
+    opacity: 0.88;
+    transform: scale(1.02);
+  }
+
+  .template-search .grid.product-grid {
+    column-gap: 2rem !important;
+    row-gap: 3rem !important;
+    margin-top: 2rem !important;
   }
 
   .template-search--empty {
-    padding-bottom: 18rem;
+    padding-bottom: 12rem;
   }
 
-  @media screen and (min-width: 750px) {
-    .template-search__header {
-      margin-bottom: 5rem;
+  @media screen and (max-width: 749px) {
+    .template-search .grid.product-grid {
+      column-gap: 1.2rem !important;
+      row-gap: 2rem !important;
     }
-  }
-
-  .search__button .icon {
-    height: 1.8rem;
   }
 </style>
 
@@ -65,83 +74,92 @@
 
 {% paginate search.results by 24 %}
   <div class="template-search{% unless search.performed and search.results_count > 0 %} template-search--empty{% endunless %} section-{{ section.id }}-padding">
-    <div class="template-search__header page-width{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
-      <h1 class="h2 center">
+    <div class="template-search__header page-width{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}" style="text-align: center; margin-bottom: 3.5rem;">
+      <span class="meeeku-badge meeeku-badge--popular" style="margin-bottom: 0.8rem; display: inline-block; font-size: 1.2rem; padding: 0.4rem 1.4rem;">
+        ✨ Meeeku Boutique Search
+      </span>
+      <h1 style="color: #3D2355; font-size: 3.2rem; font-weight: 800; margin: 0.6rem 0 0.8rem; letter-spacing: -0.5px; text-align: center;">
         {%- if search.performed -%}
-          {{- 'templates.search.title' | t -}}
+          Search Results
         {%- else -%}
-          {{- 'general.search.search' | t -}}
+          Search Our Collection
         {%- endif -%}
       </h1>
-      <div class="template-search__search">
+      
+      <!-- Custom Meeeku Search Bar -->
+      <div class="template-search__search" style="max-width: 640px; margin: 1.5rem auto 1.5rem;">
         {%- if settings.predictive_search_enabled -%}
           <predictive-search data-loading-text="{{ 'accessibility.loading' | t }}">
         {%- endif -%}
         <main-search>
-          <form action="{{ routes.search_url }}" method="get" role="search" class="search">
-            <div class="field">
-              <input
-                class="search__input field__input"
-                id="Search-In-Template"
-                type="search"
-                name="q"
-                value="{{ search.terms | escape }}"
-                placeholder="{{ 'general.search.search' | t }}"
-                {%- if settings.predictive_search_enabled -%}
-                  role="combobox"
-                  aria-expanded="false"
-                  aria-owns="predictive-search-results"
-                  aria-controls="predictive-search-results"
-                  aria-haspopup="listbox"
-                  aria-autocomplete="list"
-                  autocorrect="off"
-                  autocomplete="off"
-                  autocapitalize="off"
-                  spellcheck="false"
-                {%- endif -%}
-              >
-              <label class="field__label" for="Search-In-Template">{{ 'general.search.search' | t }}</label>
-              <input name="options[prefix]" type="hidden" value="last">
-
+          <form action="{{ routes.search_url }}" method="get" role="search" class="search meeeku-search-form" style="position: relative; display: flex; align-items: center; background: #FFFDF7; border: 2px solid #F8BBD0; border-radius: 35px; box-shadow: 0 4px 18px rgba(107,63,160,0.08); padding: 0.4rem 0.6rem 0.4rem 1.6rem;">
+            <input
+              class="search__input field__input meeeku-search-field"
+              id="Search-In-Template"
+              type="search"
+              name="q"
+              value="{{ search.terms | escape }}"
+              placeholder="Search for lehengas, cotton tees, co-ords..."
+              style="border: none; outline: none; background: transparent; font-size: 1.55rem; color: #3D2355; flex-grow: 1; padding: 0.6rem 0; width: 100%; box-shadow: none;"
               {%- if settings.predictive_search_enabled -%}
-                <div class="predictive-search predictive-search--search-template" tabindex="-1" data-predictive-search>
-                  {%- render 'loading-spinner', class: 'predictive-search__loading-state' -%}
-                </div>
-
-                <span class="predictive-search-status visually-hidden" role="status" aria-hidden="true"></span>
+                role="combobox"
+                aria-expanded="false"
+                aria-owns="predictive-search-results"
+                aria-controls="predictive-search-results"
+                aria-haspopup="listbox"
+                aria-autocomplete="list"
+                autocorrect="off"
+                autocomplete="off"
+                autocapitalize="off"
+                spellcheck="false"
               {%- endif -%}
+            >
+            <input name="options[prefix]" type="hidden" value="last">
 
-              <button
-                type="reset"
-                class="reset__button field__button{% if search.terms == blank %} hidden{% endif %}"
-                aria-label="{{ 'general.search.reset' | t }}"
-              >
-                <span class="svg-wrapper">
-                  {{- 'icon-reset.svg' | inline_asset_content -}}
-                </span>
-              </button>
-              <button type="submit" class="search__button field__button" aria-label="{{ 'general.search.search' | t }}">
-                <span class="svg-wrapper">
-                  {{- 'icon-search.svg' | inline_asset_content -}}
-                </span>
-              </button>
-            </div>
+            {%- if settings.predictive_search_enabled -%}
+              <div class="predictive-search predictive-search--search-template" tabindex="-1" data-predictive-search>
+                {%- render 'loading-spinner', class: 'predictive-search__loading-state' -%}
+              </div>
+              <span class="predictive-search-status visually-hidden" role="status" aria-hidden="true"></span>
+            {%- endif -%}
+
+            <button type="submit" class="meeeku-search-btn" aria-label="Search" style="background: #FF6097; color: #FFF; border: none; border-radius: 30px; padding: 0.8rem 1.8rem; font-weight: 700; font-size: 1.4rem; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: opacity 0.2s ease;">
+              Search 🔍
+            </button>
           </form>
         </main-search>
         {%- if settings.predictive_search_enabled -%}
           </predictive-search>
         {%- endif -%}
       </div>
+
+      <!-- Quick Search Category Pills -->
+      <div style="display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem;">
+        <a href="/search?q=lehenga" class="meeeku-pill-filter" style="text-decoration: none; font-size: 1.25rem;">
+          👑 Royal Lehengas
+        </a>
+        <a href="/search?q=tee" class="meeeku-pill-filter" style="text-decoration: none; font-size: 1.25rem; background-color: #E8F5E9; color: #2E7D32; border-color: #A5D6A7;">
+          👕 Cotton Tees
+        </a>
+        <a href="/search?q=coord" class="meeeku-pill-filter" style="text-decoration: none; font-size: 1.25rem; background-color: #E0F2F1; color: #00695C; border-color: #80CBC4;">
+          🌸 2-Piece Co-ords
+        </a>
+        <a href="/collections/all" class="meeeku-pill-filter" style="text-decoration: none; font-size: 1.25rem;">
+          ✨ All Outfits
+        </a>
+      </div>
+
       {%- if search.performed -%}
-        {%- unless section.settings.enable_filtering or section.settings.enable_sorting -%}
-          {%- if search.results_count > 0 -%}
-            <p role="status">
-              {{ 'templates.search.results_with_count_and_term' | t: terms: search.terms, count: search.results_count }}
-            </p>
-          {%- endif -%}
-        {%- endunless -%}
-        {%- if search.results_count == 0 and search.filters == empty -%}
-          <p role="status">{{ 'templates.search.no_results' | t: terms: search.terms }}</p>
+        {%- if search.results_count > 0 -%}
+          <p style="color: #6B3FA0; font-size: 1.55rem; font-weight: 700; margin: 1rem 0;">
+            Found {{ search.results_count }} handcrafted outfit{% if search.results_count > 1 %}s{% endif %} for "<span style="color: #FF6097;">{{ search.terms }}</span>"
+          </p>
+        {%- else -%}
+          <div style="background: #FFFDF7; border: 1.5px solid #F8BBD0; border-radius: 20px; padding: 3rem 2rem; max-width: 600px; margin: 2rem auto; text-align: center; box-shadow: 0 4px 14px rgba(107,63,160,0.06);">
+            <p style="color: #3D2355; font-size: 1.8rem; font-weight: 700; margin-bottom: 0.8rem;">No outfits found for "{{ search.terms }}"</p>
+            <p style="color: #666; font-size: 1.45rem; margin-bottom: 1.5rem;">Try searching for "lehenga", "cotton tee", or "co-ord set", or explore our full boutique catalog.</p>
+            <a href="/collections/all" style="display: inline-block; border-radius: 30px; background: #FF6097; color: #FFF; padding: 1.1rem 2.6rem; font-weight: 700; font-size: 1.45rem; text-decoration: none; box-shadow: 0 4px 14px rgba(255,96,151,0.3);">Explore All Outfits ✨</a>
+          </div>
         {%- endif -%}
       {%- endif -%}
     </div>
@@ -271,19 +289,7 @@
                   >
                     {%- case item.object_type -%}
                       {%- when 'product' -%}
-                        {%- capture product_settings -%}{%- if section.settings.product_show_vendor -%}vendor,{%- endif -%}title,price{%- endcapture -%}
-                        {% render 'card-product',
-                          card_product: item,
-                          media_aspect_ratio: section.settings.image_ratio,
-                          image_shape: section.settings.image_shape,
-                          show_secondary_image: section.settings.show_secondary_image,
-                          show_vendor: section.settings.show_vendor,
-                          show_rating: section.settings.show_rating,
-                          lazy_load: lazy_load,
-                          skip_styles: skip_card_product_styles,
-                          product_view_context: 'search'
-                        %}
-                        {%- assign skip_card_product_styles = true -%}
+                        {% render 'meeeku-featured-card', product: item %}
                       {%- when 'article' -%}
                         {% render 'article-card',
                           article: item,
