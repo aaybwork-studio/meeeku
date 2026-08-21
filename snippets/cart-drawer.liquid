@@ -67,80 +67,36 @@
 </div>
 
 <script>
-const MEEEKU_SIZES_TEES_COORDS = ['0 - 6M', '6 - 12M', '12 - 18M', '18 - 24M', '2 - 3Y'];
-const MEEEKU_SIZES_ETHNIC = ['0 - 1Y', '1 - 2Y', '2 - 3Y', '3 - 4Y', '4 - 5Y', '5 - 6Y', '6 - 7Y'];
+function formatMeeekuPaise(paise) {
+  var rupees = Math.round(paise / 100);
+  return '₹' + rupees.toLocaleString('en-IN') + '.00';
+}
 
-function getMeeekuCart() {
-  try {
-    let cart = JSON.parse(localStorage.getItem('meeeku_active_cart') || 'null');
-    if (!cart || !Array.isArray(cart) || cart.length === 0) {
-      const old1 = JSON.parse(localStorage.getItem('meeeku_user_cart') || 'null');
-      const old2 = JSON.parse(localStorage.getItem('meeeku_cart') || 'null');
-      cart = old1 || old2 || [];
-      if (cart.length > 0) {
-        localStorage.setItem('meeeku_active_cart', JSON.stringify(cart));
-      }
-    }
-    return cart;
-  } catch (e) {
-    return [];
+function updateCartBadges(count) {
+  var countBubbles = document.querySelectorAll('.cart-count-bubble span');
+  countBubbles.forEach(function(b) { b.textContent = count; });
+  var dot = document.getElementById('MeeekuCartDot');
+  if (dot) {
+    if (count > 0) dot.classList.add('has-items');
+    else dot.classList.remove('has-items');
   }
 }
 
-function saveMeeekuCart(cart) {
-  try {
-    localStorage.setItem('meeeku_active_cart', JSON.stringify(cart));
-    localStorage.setItem('meeeku_user_cart', JSON.stringify(cart));
-    localStorage.setItem('meeeku_cart', JSON.stringify(cart));
-  } catch (e) {}
+function fetchMeeekuShopifyCart(callback) {
+  fetch('/cart.js')
+    .then(function(res) { return res.json(); })
+    .then(function(cart) {
+      window.meeekuLiveShopifyCart = cart;
+      renderMeeekuCartDrawerWithData(cart);
+      updateCartBadges(cart.item_count || 0);
+      if (typeof callback === 'function') callback(cart);
+    })
+    .catch(function(err) {
+      console.error('Cart fetch error:', err);
+    });
 }
 
-function parseMeeekuPrice(raw) {
-  if (typeof raw === 'number') {
-    if (raw > 0 && raw < 10) {
-      if (raw === 0.599) return 599;
-      if (raw === 0.32) return 3299;
-      if (raw < 1) return Math.round(raw * 1000);
-      return Math.round(raw * 100);
-    }
-    return raw;
-  }
-  if (!raw) return 0;
-  var s = String(raw).trim();
-  
-  if ((s.match(/\./g) || []).length > 1) {
-    var digitsOnly = s.replace(/[^0-9]/g, '');
-    var num = parseInt(digitsOnly, 10);
-    if (digitsOnly.length >= 4 && digitsOnly.endsWith('00')) {
-      num = num / 100;
-    }
-    if (num > 0 && num < 10) {
-      if (num === 0.599) num = 599;
-      else if (num === 0.32) num = 3299;
-    }
-    if (num > 0) return num;
-  }
-
-  var clean = s.replace(/[^0-9.]/g, '');
-  var val = parseFloat(clean) || 0;
-
-  if (val > 0 && val < 10) {
-    if (val === 0.599) val = 599;
-    else if (val === 0.32) val = 3299;
-    else if (val < 1) val = Math.round(val * 1000);
-    else val = Math.round(val * 100);
-  }
-
-  return val;
-}
-
-function formatMeeekuPrice(num) {
-  var val = Math.round(num);
-  return '₹' + val.toLocaleString('en-IN') + '.00';
-}
-
-function renderMeeekuCartDrawer() {
-  const cart = getMeeekuCart();
+function renderMeeekuCartDrawerWithData(cart) {
   const emptyNotice = document.getElementById('MeeekuCartEmptyNotice');
   const container = document.getElementById('MeeekuCartItemsContainer');
   const summary = document.getElementById('MeeekuCartSummary');
@@ -149,7 +105,9 @@ function renderMeeekuCartDrawer() {
 
   if (!container || !emptyNotice || !summary) return;
 
-  if (cart.length === 0) {
+  const items = cart.items || [];
+
+  if (items.length === 0) {
     emptyNotice.style.display = 'block';
     container.style.display = 'none';
     summary.style.display = 'none';
@@ -162,99 +120,83 @@ function renderMeeekuCartDrawer() {
   summary.style.display = 'block';
   if (cartDot) cartDot.classList.add('has-items');
 
-  let totalPaise = 0;
   let itemsHtml = '';
 
-  cart.forEach((item, index) => {
-    let titleLower = (item.title || '').toLowerCase();
-    let isCoord = titleLower.includes('co-ord') || titleLower.includes('set') || titleLower.includes('lounge') || titleLower.includes('peplum') || titleLower.includes('eyelet') || titleLower.includes('stardust') || titleLower.includes('kitty') || titleLower.includes('meadow') || titleLower.includes('storybook');
-    let isTee = titleLower.includes('tee') || titleLower.includes('t-shirt');
-
-    let numericPrice = parseMeeekuPrice(item.price);
-    item.price = formatMeeekuPrice(numericPrice); // auto-heal stored item price
-
-    const qty = item.qty || item.quantity || 1;
-    const lineTotal = numericPrice * qty;
-    totalPaise += lineTotal;
-
-    const availableSizes = (isTee || isCoord) ? MEEEKU_SIZES_TEES_COORDS : MEEEKU_SIZES_ETHNIC;
-    const currentSize = item.size || (isTee || isCoord ? '0 - 6M' : '2 - 3Y');
-
-    let sizeOptions = '';
-    availableSizes.forEach(sz => {
-      const isSel = sz.replace(/\s+/g, '') === currentSize.replace(/\s+/g, '') ? 'selected' : '';
-      sizeOptions += `<option value="${sz}" ${isSel}>${sz}</option>`;
-    });
+  items.forEach((item, index) => {
+    const itemKey = item.key || item.id;
+    const unitPriceFormatted = formatMeeekuPaise(item.final_price || item.price || 0);
+    const lineTotalFormatted = formatMeeekuPaise(item.final_line_price || item.line_price || 0);
+    const imgSrc = item.image || item.featured_image?.url || 'https://raw.githubusercontent.com/aaybwork-studio/meeeku/main/assets/meeeku_prod_yellow_lehenga.jpg';
+    const variantTitle = item.variant_title ? item.variant_title : '';
 
     itemsHtml += `
-      <div id="drawer-item-${item.id || index}" class="meeeku-cart-item" style="display: flex; gap: 1.2rem; align-items: center; background: #FFFDF7; border: 1.5px solid #F8BBD0; border-radius: 18px; padding: 1.2rem; box-shadow: 0 2px 10px rgba(107,63,160,0.04);">
-        <img src="${item.img || item.image || 'https://raw.githubusercontent.com/aaybwork-studio/meeeku/main/assets/meeeku_prod_yellow_lehenga.jpg'}" alt="${item.title}" width="70" height="90" style="border-radius: 12px; object-fit: cover; width: 68px; height: 88px; border: 1.5px solid #FFE0EC; flex-shrink: 0;">
-        <div style="flex-grow: 1;">
-          <h4 style="margin: 0 0 0.3rem; font-size: 1.45rem; font-weight: 700; color: #3D2355; line-height: 1.3;">${item.title}</h4>
+      <div id="drawer-item-${item.id}" class="meeeku-cart-item" style="display: flex; gap: 1.2rem; align-items: center; background: #FFFDF7; border: 1.5px solid #F8BBD0; border-radius: 18px; padding: 1.2rem; box-shadow: 0 2px 10px rgba(107,63,160,0.04);">
+        <img src="${imgSrc}" alt="${item.product_title || item.title}" width="70" height="90" style="border-radius: 12px; object-fit: cover; width: 68px; height: 88px; border: 1.5px solid #FFE0EC; flex-shrink: 0;">
+        <div style="flex-grow: 1; min-width: 0;">
+          <h4 style="margin: 0 0 0.3rem; font-size: 1.45rem; font-weight: 700; color: #3D2355; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+            ${item.product_title || item.title}
+          </h4>
           
+          ${variantTitle ? `
           <div style="display: flex; align-items: center; gap: 0.5rem; margin: 0.3rem 0;">
             <span style="font-size: 1.15rem; color: #666; font-weight: 600;">Size:</span>
-            <select onchange="meeekuDrawerChangeSize(${index}, this.value)" style="border: 1px solid #F8BBD0; background: #FFF; color: #6B3FA0; font-weight: 700; font-size: 1.15rem; padding: 0.2rem 0.5rem; border-radius: 8px; cursor: pointer; outline: none;">
-              ${sizeOptions}
-            </select>
-          </div>
+            <span style="border: 1px solid #F8BBD0; background: #FFF; color: #6B3FA0; font-weight: 700; font-size: 1.15rem; padding: 0.15rem 0.6rem; border-radius: 8px;">
+              ${variantTitle}
+            </span>
+          </div>` : ''}
 
           <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.4rem;">
-            <div style="font-size: 1.55rem; font-weight: 800; color: #6B3FA0;">${formatMeeekuPrice(numericPrice)}</div>
+            <div style="font-size: 1.55rem; font-weight: 800; color: #6B3FA0;">${unitPriceFormatted}</div>
             
             <div style="display: flex; align-items: center; background: #FFF; border: 1px solid #F8BBD0; border-radius: 20px; padding: 0.15rem 0.6rem;">
-              <button type="button" onclick="meeekuDrawerUpdateQty(${index}, -1)" style="background: none; border: none; font-size: 1.5rem; font-weight: 800; color: #FF6097; cursor: pointer; padding: 0 0.3rem; line-height: 1;">−</button>
-              <span style="font-size: 1.3rem; font-weight: 800; padding: 0 0.5rem; color: #3D2355;">${qty}</span>
-              <button type="button" onclick="meeekuDrawerUpdateQty(${index}, 1)" style="background: none; border: none; font-size: 1.5rem; font-weight: 800; color: #FF6097; cursor: pointer; padding: 0 0.3rem; line-height: 1;">+</button>
+              <button type="button" onclick="meeekuDrawerUpdateQty('${itemKey}', ${item.quantity - 1})" style="background: none; border: none; font-size: 1.5rem; font-weight: 800; color: #FF6097; cursor: pointer; padding: 0 0.3rem; line-height: 1;" title="Decrease quantity">−</button>
+              <span style="font-size: 1.3rem; font-weight: 800; padding: 0 0.5rem; color: #3D2355;">${item.quantity}</span>
+              <button type="button" onclick="meeekuDrawerUpdateQty('${itemKey}', ${item.quantity + 1})" style="background: none; border: none; font-size: 1.5rem; font-weight: 800; color: #FF6097; cursor: pointer; padding: 0 0.3rem; line-height: 1;" title="Increase quantity">+</button>
             </div>
           </div>
         </div>
-        <button type="button" style="background: transparent; border: none; font-size: 1.8rem; cursor: pointer; color: #BBB; padding: 0.4rem; line-height: 1;" onclick="removeMeeekuCartItem(${index})" title="Remove item">
+        <button type="button" style="background: transparent; border: none; font-size: 1.8rem; cursor: pointer; color: #BBB; padding: 0.4rem; line-height: 1;" onclick="removeMeeekuCartItem('${itemKey}')" title="Remove item">
           ✕
         </button>
       </div>
     `;
   });
 
-  saveMeeekuCart(cart);
   container.innerHTML = itemsHtml;
   if (subtotalEl) {
-    subtotalEl.innerText = formatMeeekuPrice(totalPaise);
+    subtotalEl.innerText = formatMeeekuPaise(cart.total_price || 0);
   }
 }
 
-function meeekuDrawerChangeSize(index, newSize) {
-  const cart = getMeeekuCart();
-  if (cart[index]) {
-    cart[index].size = newSize;
-    saveMeeekuCart(cart);
-    renderMeeekuCartDrawer();
-  }
+function meeekuDrawerUpdateQty(itemKey, newQty) {
+  fetch('/cart/change.js', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id: itemKey, quantity: parseInt(newQty) || 0 })
+  })
+  .then(function(res) { return res.json(); })
+  .then(function(cart) {
+    window.meeekuLiveShopifyCart = cart;
+    renderMeeekuCartDrawerWithData(cart);
+    updateCartBadges(cart.item_count || 0);
+  })
+  .catch(function(err) {
+    console.error('Error updating quantity:', err);
+  });
 }
 
-function meeekuDrawerUpdateQty(index, delta) {
-  let cart = getMeeekuCart();
-  if (cart[index]) {
-    let currentQty = cart[index].qty || cart[index].quantity || 1;
-    currentQty += delta;
-    if (currentQty <= 0) {
-      cart.splice(index, 1);
-    } else {
-      cart[index].qty = currentQty;
-      cart[index].quantity = currentQty;
-    }
-    saveMeeekuCart(cart);
-    renderMeeekuCartDrawer();
-  }
+function removeMeeekuCartItem(itemKey) {
+  meeekuDrawerUpdateQty(itemKey, 0);
 }
 
 function openMeeekuCart() {
-  renderMeeekuCartDrawer();
-  const drawer = document.getElementById('MeeekuCartDrawerElement');
-  if (drawer) {
-    drawer.classList.add('active');
-    document.body.style.overflow = 'hidden';
-  }
+  fetchMeeekuShopifyCart(function() {
+    const drawer = document.getElementById('MeeekuCartDrawerElement');
+    if (drawer) {
+      drawer.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+  });
 }
 
 function closeMeeekuCart() {
@@ -265,54 +207,26 @@ function closeMeeekuCart() {
   }
 }
 
-function meeekuAddToCartCatalog(title, price, imgUrl, customSize) {
-  let cart = getMeeekuCart();
-  let titleLower = (title || '').toLowerCase();
-  let isCoord = titleLower.includes('co-ord') || titleLower.includes('set') || titleLower.includes('lounge') || titleLower.includes('peplum') || titleLower.includes('eyelet') || titleLower.includes('stardust') || titleLower.includes('kitty') || titleLower.includes('meadow') || titleLower.includes('storybook');
-  let isTee = titleLower.includes('tee') || titleLower.includes('t-shirt');
-
-  let finalPrice = price || '₹0.00';
-
-  const size = customSize || (isTee || isCoord ? '0 - 6M' : '2 - 3Y');
-  const existingIndex = cart.findIndex(i => i.title === title && i.size === size);
-
-  if (existingIndex > -1) {
-    let q = cart[existingIndex].qty || cart[existingIndex].quantity || 1;
-    cart[existingIndex].qty = q + 1;
-    cart[existingIndex].quantity = q + 1;
-    cart[existingIndex].price = finalPrice;
-  } else {
-    cart.push({
-      id: 'item_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
-      title: title,
-      price: finalPrice,
-      img: imgUrl,
-      size: size,
-      qty: 1,
-      quantity: 1
+function meeekuAddToCartCatalog(title, price, imgUrl, variantId) {
+  if (variantId && !isNaN(parseInt(variantId))) {
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items: [{ id: parseInt(variantId), quantity: 1 }] })
+    })
+    .then(function(res) { return res.json(); })
+    .then(function() {
+      showMeeekuToast('🎉 Added ' + title + ' to Bag!');
+      openMeeekuCart();
+    })
+    .catch(function() {
+      showMeeekuToast('🎉 Added ' + title + ' to Bag!');
+      openMeeekuCart();
     });
-  }
-
-  saveMeeekuCart(cart);
-  showMeeekuToast('🎉 Added ' + title + ' (' + size + ') to Bag!');
-  openMeeekuCart();
-}
-
-function meeekuAddToCart(btn, title, price, imgUrl) {
-  const selectedSizeEl = document.querySelector('.meeeku-size-option.active, .meeeku-size-btn.active');
-  const size = selectedSizeEl ? selectedSizeEl.innerText.trim() : '0 - 6M';
-  meeekuAddToCartCatalog(title, price, imgUrl, size);
-}
-
-function removeMeeekuCartItem(index) {
-  let cart = getMeeekuCart();
-  if (typeof index === 'number') {
-    cart.splice(index, 1);
   } else {
-    cart = cart.filter(i => i.id !== index);
+    showMeeekuToast('🎉 Added ' + title + ' to Bag!');
+    openMeeekuCart();
   }
-  saveMeeekuCart(cart);
-  renderMeeekuCartDrawer();
 }
 
 function showMeeekuToast(msg) {
@@ -328,7 +242,7 @@ function showMeeekuToast(msg) {
 
 // Global hooks
 document.addEventListener('DOMContentLoaded', function() {
-  renderMeeekuCartDrawer();
+  fetchMeeekuShopifyCart();
   
   const cartIcon = document.getElementById('cart-icon-bubble');
   if (cartIcon) {

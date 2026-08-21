@@ -351,66 +351,46 @@ function meeekuSelectVariantBtn(btn, variantId, priceFormatted, comparePriceForm
   }
 }
 
-function meeekuAddToCartNative(variantId, title, price, img, sizeTitle) {
-  let cart = [];
-  try {
-    cart = JSON.parse(localStorage.getItem('meeeku_active_cart') || localStorage.getItem('meeeku_user_cart') || localStorage.getItem('meeeku_cart') || '[]');
-  } catch (e) { cart = []; }
-
-  const size = sizeTitle || 'Standard';
-  const existing = cart.find(i => i.title === title && i.size === size);
-  if (existing) {
-    let q = existing.qty || existing.quantity || 1;
-    existing.qty = q + 1;
-    existing.quantity = q + 1;
-  } else {
-    cart.push({
-      id: variantId || ('item_' + Date.now()),
-      title: title,
-      price: price,
-      img: img,
-      size: size,
-      qty: 1,
-      quantity: 1
+function meeekuAddToCartNative(variantId, title, price, img, sizeTitle, callback) {
+  if (variantId && !isNaN(parseInt(variantId))) {
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items: [{ id: parseInt(variantId), quantity: 1 }] })
+    })
+    .then(function(res) { return res.json(); })
+    .then(function() {
+      if (typeof openMeeekuCart === 'function') {
+        openMeeekuCart();
+      }
+      if (typeof callback === 'function') callback();
+    })
+    .catch(function(err) {
+      console.error('Add to cart error:', err);
+      if (typeof openMeeekuCart === 'function') openMeeekuCart();
+      if (typeof callback === 'function') callback();
     });
   }
+}
 
-  localStorage.setItem('meeeku_active_cart', JSON.stringify(cart));
-  localStorage.setItem('meeeku_user_cart', JSON.stringify(cart));
-  localStorage.setItem('meeeku_cart', JSON.stringify(cart));
+function meeekuTriggerBuyNow() {
+  const hiddenInput = document.getElementById('MeeekuVariantIdInput');
+  const variantId = hiddenInput ? hiddenInput.value : '';
 
   if (variantId && !isNaN(parseInt(variantId))) {
     fetch('/cart/add.js', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ items: [{ id: parseInt(variantId), quantity: 1 }] })
-    }).catch(() => {});
-  }
-
-  const dot = document.getElementById('MeeekuCartDot');
-  if (dot) dot.classList.add('has-items');
-
-  const totalCount = cart.reduce((sum, i) => sum + i.quantity, 0);
-  const countBubbles = document.querySelectorAll('.cart-count-bubble span');
-  countBubbles.forEach(b => b.textContent = totalCount);
-}
-
-function meeekuTriggerBuyNow() {
-  const activeSizeBtn = document.querySelector('.meeeku-size-btn.active');
-  const sizeTitle = activeSizeBtn ? activeSizeBtn.innerText.trim() : 'Standard';
-  const hiddenInput = document.getElementById('MeeekuVariantIdInput');
-  const variantId = hiddenInput ? hiddenInput.value : '';
-  const title = {{ product.title | json }};
-  const price = document.getElementById('MeeekuDisplayPriceText') ? document.getElementById('MeeekuDisplayPriceText').innerText.trim() : '';
-  const heroImg = document.getElementById('MeeekuMainPdpImage');
-  const img = heroImg ? heroImg.src : '';
-
-  meeekuAddToCartNative(variantId, title, price, img, sizeTitle);
-
-  if (variantId && !isNaN(parseInt(variantId))) {
-    window.location.href = '/cart/' + variantId + ':1?checkout';
+    })
+    .then(function() {
+      window.location.href = '/checkout';
+    })
+    .catch(function() {
+      window.location.href = '/cart/' + variantId + ':1?checkout';
+    });
   } else {
-    window.location.href = '/cart';
+    window.location.href = '/checkout';
   }
 }
 
@@ -428,14 +408,12 @@ document.addEventListener('DOMContentLoaded', function() {
       const heroImg = document.getElementById('MeeekuMainPdpImage');
       const img = heroImg ? heroImg.src : '';
 
-      meeekuAddToCartNative(variantId, title, price, img, sizeTitle);
-
       const btn = form.querySelector('button[type="submit"]');
-      if (btn) btn.innerHTML = '✅ Added! Opening Cart...';
+      if (btn) btn.innerHTML = '✅ Added!';
 
-      setTimeout(function() {
-        window.location.href = '/cart';
-      }, 400);
+      meeekuAddToCartNative(variantId, title, price, img, sizeTitle, function() {
+        if (btn) btn.innerHTML = '🛒 Add to Cart — <span id="MeeekuBtnPriceLabel">' + price + '</span>';
+      });
     });
   }
 });

@@ -382,36 +382,46 @@ function meeekuDynamicAddToCart() {
     });
   }
 
-  localStorage.setItem('meeeku_active_cart', JSON.stringify(cart));
-  localStorage.setItem('meeeku_user_cart', JSON.stringify(cart));
-  localStorage.setItem('meeeku_cart', JSON.stringify(cart));
+  if (variantId) {
+    var addBtn = document.getElementById('MeeekuDynamicAddBtn');
+    if (addBtn) addBtn.textContent = '✅ Added!';
+    
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items: [{ id: parseInt(variantId), quantity: 1 }] })
+    })
+    .then(function() {
+      if (typeof openMeeekuCart === 'function') {
+        openMeeekuCart();
+      }
+      if (addBtn) addBtn.textContent = '🛒 Add to Cart';
+    })
+    .catch(function(err) {
+      console.error('Add to cart error:', err);
+      if (typeof openMeeekuCart === 'function') openMeeekuCart();
+      if (addBtn) addBtn.textContent = '🛒 Add to Cart';
+    });
+  }
+}
 
+function meeekuDynamicBuyNow() {
+  var variant = window.selectedMeeekuVariant;
+  var variantId = variant && variant.id ? variant.id : null;
   if (variantId) {
     fetch('/cart/add.js', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ items: [{ id: parseInt(variantId), quantity: 1 }] })
-    }).catch(function() {});
-  }
-
-  var dot = document.getElementById('MeeekuCartDot');
-  if (dot) dot.classList.add('has-items');
-
-  var addBtn = document.getElementById('MeeekuDynamicAddBtn');
-  if (addBtn) addBtn.textContent = '✅ Added! Opening Cart...';
-
-  setTimeout(function() {
-    window.location.href = '/cart';
-  }, 400);
-}
-
-function meeekuDynamicBuyNow() {
-  meeekuDynamicAddToCart();
-  var variant = window.selectedMeeekuVariant;
-  if (variant && variant.id) {
-    window.location.href = '/cart/' + variant.id + ':1?checkout';
+    })
+    .then(function() {
+      window.location.href = '/checkout';
+    })
+    .catch(function() {
+      window.location.href = '/checkout';
+    });
   } else {
-    window.location.href = '/cart';
+    window.location.href = '/checkout';
   }
 }
 </script>
