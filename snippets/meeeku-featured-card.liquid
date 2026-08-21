@@ -85,25 +85,25 @@
 
 <div class="card-wrapper meeeku-product-card" id="product-card-{{ product.id }}-{{ block_id }}" style="background: #FFFDF7; border: 1.5px solid #F8BBD0; border-radius: 22px; overflow: hidden; transition: all 0.3s ease; box-shadow: 0 4px 14px rgba(107,63,160,0.06); display: flex; flex-direction: column; text-align: center;">
   
-  <div class="meeeku-card-media-wrapper" style="position: relative; overflow: hidden; aspect-ratio: 3/4; background: transparent; border: none; border-radius: 20px 20px 0 0; box-shadow: none;">
-    <a href="{{ product.url }}" style="display: block; width: 100%; height: 100%;">
+  <div class="meeeku-card-media-wrapper" style="position: relative; overflow: hidden; aspect-ratio: 4/5; background: #FFFDF7; border: none; border-radius: 20px 20px 0 0; box-shadow: none;">
+    <a href="{{ product.url }}" class="meeeku-card-link" style="display: block; width: 100%; height: 100%; position: relative;">
       {% if primary_img %}
         <img src="{{ primary_img | image_url: width: 600 }}" 
              alt="{{ primary_img.alt | default: product.title | escape }}" 
-             class="meeeku-card-img-primary" 
+             class="meeeku-card-img meeeku-img-primary" 
              width="600" 
-             height="800" 
+             height="750" 
              loading="lazy" 
-             style="width: 100%; height: 100%; object-fit: cover;">
+             style="width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block;">
       {% endif %}
       {% if secondary_img and secondary_img != primary_img %}
         <img src="{{ secondary_img | image_url: width: 600 }}" 
              alt="{{ secondary_img.alt | default: product.title | escape }}" 
-             class="meeeku-card-img-secondary" 
+             class="meeeku-card-img meeeku-img-secondary" 
              width="600" 
-             height="800" 
+             height="750" 
              loading="lazy" 
-             style="width: 100%; height: 100%; object-fit: cover;">
+             style="width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block;">
       {% endif %}
     </a>
 

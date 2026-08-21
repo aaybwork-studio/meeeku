@@ -44,6 +44,111 @@
     padding-bottom: 12rem;
   }
 
+  /* Meeeku Luxury Facet & Filter Styling */
+  .facets-wrapper {
+    margin-bottom: 2rem !important;
+  }
+
+  .facets__form {
+    display: flex !important;
+    gap: 1.2rem !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+  }
+
+  .facets__summary {
+    background: #FFFDF7 !important;
+    border: 1.5px solid #F8BBD0 !important;
+    border-radius: 25px !important;
+    padding: 0.7rem 1.6rem !important;
+    font-size: 1.35rem !important;
+    font-weight: 700 !important;
+    color: #3D2355 !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    box-shadow: 0 2px 8px rgba(107, 63, 160, 0.04) !important;
+  }
+
+  .facets__summary:hover {
+    background: #FFF0F5 !important;
+    border-color: #FF6097 !important;
+  }
+
+  .facets__disclosure[open] .facets__summary {
+    background: #FFF0F5 !important;
+    border-color: #FF6097 !important;
+  }
+
+  .facets__display {
+    border: 2px solid #F8BBD0 !important;
+    border-radius: 20px !important;
+    background: #FFFDF7 !important;
+    box-shadow: 0 12px 36px rgba(107, 63, 160, 0.16) !important;
+    padding: 1.8rem !important;
+    z-index: 100 !important;
+    top: calc(100% + 0.8rem) !important;
+  }
+
+  .facets__header {
+    background: #FFFDF7 !important;
+    border-bottom: 1.5px solid #F8BBD0 !important;
+    padding-bottom: 1rem !important;
+    margin-bottom: 1rem !important;
+    color: #3D2355 !important;
+    font-weight: 700 !important;
+  }
+
+  .facets__header facet-remove a,
+  .facets__reset {
+    color: #FF6097 !important;
+    font-weight: 700 !important;
+    text-decoration: underline !important;
+  }
+
+  .facets__price {
+    display: flex !important;
+    gap: 1rem !important;
+    align-items: center !important;
+    padding: 0.5rem 0 !important;
+  }
+
+  .facets__price .field {
+    background: #FFFFFF !important;
+    border: 1.5px solid #F8BBD0 !important;
+    border-radius: 20px !important;
+    padding: 0.4rem 1rem !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  .facets__price .field__input {
+    border: none !important;
+    outline: none !important;
+    background: transparent !important;
+    font-size: 1.4rem !important;
+    font-weight: 600 !important;
+    color: #3D2355 !important;
+    box-shadow: none !important;
+  }
+
+  .facet-filters__label {
+    color: #3D2355 !important;
+    font-weight: 700 !important;
+    font-size: 1.4rem !important;
+  }
+
+  .facet-filters__sort {
+    background: #FFFDF7 !important;
+    border: 1.5px solid #F8BBD0 !important;
+    border-radius: 25px !important;
+    padding: 0.7rem 2.8rem 0.7rem 1.4rem !important;
+    font-size: 1.35rem !important;
+    font-weight: 700 !important;
+    color: #3D2355 !important;
+    box-shadow: 0 2px 8px rgba(107, 63, 160, 0.04) !important;
+    cursor: pointer !important;
+  }
+
   @media screen and (max-width: 749px) {
     .template-search .grid.product-grid {
       column-gap: 1.2rem !important;
