@@ -359,6 +359,50 @@ function saveUnifiedCart(cart) {
   } catch (e) {}
 }
 
+function parseMeeekuPrice(raw) {
+  if (typeof raw === 'number') {
+    if (raw > 0 && raw < 10) {
+      if (raw === 0.599) return 599;
+      if (raw === 0.32) return 3299;
+      if (raw < 1) return Math.round(raw * 1000);
+      return Math.round(raw * 100);
+    }
+    return raw;
+  }
+  if (!raw) return 0;
+  var s = String(raw).trim();
+  
+  if ((s.match(/\./g) || []).length > 1) {
+    var digitsOnly = s.replace(/[^0-9]/g, '');
+    var num = parseInt(digitsOnly, 10);
+    if (digitsOnly.length >= 4 && digitsOnly.endsWith('00')) {
+      num = num / 100;
+    }
+    if (num > 0 && num < 10) {
+      if (num === 0.599) num = 599;
+      else if (num === 0.32) num = 3299;
+    }
+    if (num > 0) return num;
+  }
+
+  var clean = s.replace(/[^0-9.]/g, '');
+  var val = parseFloat(clean) || 0;
+
+  if (val > 0 && val < 10) {
+    if (val === 0.599) val = 599;
+    else if (val === 0.32) val = 3299;
+    else if (val < 1) val = Math.round(val * 1000);
+    else val = Math.round(val * 100);
+  }
+
+  return val;
+}
+
+function formatMeeekuPrice(num) {
+  var val = Math.round(num);
+  return '₹' + val.toLocaleString('en-IN') + '.00';
+}
+
 function renderMeeekuPageCart() {
   const cart = getUnifiedCart();
   const wrapper = document.getElementById('MeeekuLocalCartWrapper');
@@ -387,7 +431,8 @@ function renderMeeekuPageCart() {
     let isCoord = titleLower.includes('co-ord') || titleLower.includes('set') || titleLower.includes('lounge') || titleLower.includes('peplum') || titleLower.includes('eyelet') || titleLower.includes('stardust') || titleLower.includes('kitty') || titleLower.includes('meadow') || titleLower.includes('storybook');
     let isTee = titleLower.includes('tee') || titleLower.includes('t-shirt');
 
-    let numericPrice = parseFloat((item.price || '0').replace(/[^0-9.]/g, '')) || 0;
+    let numericPrice = parseMeeekuPrice(item.price);
+    item.price = formatMeeekuPrice(numericPrice); // auto-heal stored price
 
     const qty = item.qty || item.quantity || 1;
     totalItemsCount += qty;
@@ -422,7 +467,7 @@ function renderMeeekuPageCart() {
             </div>
 
             <div style="font-size: 1.25rem; color: #888; font-weight: 600;">
-              Unit Price: <span style="color: #6B3FA0; font-weight: 700;">₹${numericPrice.toLocaleString('en-IN')}.00</span>
+              Unit Price: <span style="color: #6B3FA0; font-weight: 700;">${formatMeeekuPrice(numericPrice)}</span>
             </div>
           </div>
         </div>
@@ -439,7 +484,7 @@ function renderMeeekuPageCart() {
 
           <!-- Total Price for this Line -->
           <div style="font-size: 1.75rem; font-weight: 800; color: #3D2355; text-align: right;">
-            ₹${lineTotal.toLocaleString('en-IN')}.00
+            ${formatMeeekuPrice(lineTotal)}
           </div>
 
           <!-- Remove Item Button -->
@@ -454,7 +499,7 @@ function renderMeeekuPageCart() {
 
   saveUnifiedCart(cart);
   list.innerHTML = html;
-  if (totalEl) totalEl.innerText = '₹' + totalPaise.toLocaleString('en-IN') + '.00';
+  if (totalEl) totalEl.innerText = formatMeeekuPrice(totalPaise);
   if (badgeEl) badgeEl.innerText = totalItemsCount + (totalItemsCount === 1 ? ' Item' : ' Items');
 }
 

@@ -365,16 +365,21 @@ function meeekuAddToCartCatalog(title, price, imgUrl, variantId) {
 
   const itemKey = (variantId || title) + '_Standard';
   const existing = cart.find(i => i.title === title);
+  
+  let numPrice = typeof parseMeeekuPrice === 'function' ? parseMeeekuPrice(price) : (parseFloat((price || '0').replace(/[^0-9.]/g, '')) || 0);
+  let cleanPrice = typeof formatMeeekuPrice === 'function' ? formatMeeekuPrice(numPrice) : ('₹' + numPrice.toLocaleString('en-IN') + '.00');
+
   if (existing) {
     let q = existing.qty || existing.quantity || 1;
     existing.qty = q + 1;
     existing.quantity = q + 1;
+    existing.price = cleanPrice;
   } else {
     cart.push({
       key: itemKey,
       id: variantId || ('item_' + Date.now()),
       title: title,
-      price: price,
+      price: cleanPrice,
       img: imgUrl,
       size: '2 - 3Y',
       qty: 1,
@@ -401,7 +406,11 @@ function meeekuAddToCartCatalog(title, price, imgUrl, variantId) {
   const countBubbles = document.querySelectorAll('.cart-count-bubble span');
   countBubbles.forEach(b => b.textContent = totalCount);
 
-  showMeeekuToastCatalog(`🎉 ${title} added to your Cart!`);
+  if (typeof openMeeekuCart === 'function') {
+    openMeeekuCart();
+  } else {
+    showMeeekuToastCatalog(`🎉 ${title} added to your Cart!`);
+  }
 }
 
 function showMeeekuToastCatalog(msg) {
