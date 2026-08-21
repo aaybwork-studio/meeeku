@@ -127,11 +127,6 @@ function renderMeeekuCartDrawer() {
     let isTee = titleLower.includes('tee') || titleLower.includes('t-shirt');
 
     let numericPrice = parseFloat((item.price || '0').replace(/[^0-9.]/g, '')) || 0;
-    if (isCoord && (numericPrice === 799 || numericPrice === 849 || numericPrice === 899)) {
-      numericPrice = 1299;
-      item.price = '₹1,299.00';
-    }
-
     const qty = item.qty || item.quantity || 1;
     const lineTotal = numericPrice * qty;
     totalPaise += lineTotal;
@@ -230,10 +225,7 @@ function meeekuAddToCartCatalog(title, price, imgUrl, customSize) {
   let isCoord = titleLower.includes('co-ord') || titleLower.includes('set') || titleLower.includes('lounge') || titleLower.includes('peplum') || titleLower.includes('eyelet') || titleLower.includes('stardust') || titleLower.includes('kitty') || titleLower.includes('meadow') || titleLower.includes('storybook');
   let isTee = titleLower.includes('tee') || titleLower.includes('t-shirt');
 
-  let finalPrice = price;
-  if (isCoord) {
-    finalPrice = '₹1,299.00';
-  }
+  let finalPrice = price || '₹0.00';
 
   const size = customSize || (isTee || isCoord ? '0 - 6M' : '2 - 3Y');
   const existingIndex = cart.findIndex(i => i.title === title && i.size === size);

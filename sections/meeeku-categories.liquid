@@ -1,75 +1,176 @@
 {% comment %}
-  Meeeku Luxury Bento Category Grid (Hero In-Stock Collection + Coming Soon Teasers)
+  Meeeku Luxury Bento Category Grid (Shopify OS 2.0 CMS Connected)
+  Allows merchant to customize category titles, images, descriptions, button labels, and links or add new category cards in Shopify Theme Customizer.
 {% endcomment %}
 
-<div class="page-width meeeku-categories-section">
+{% liquid
+  assign badge = section.settings.badge | default: 'Explore Collections'
+  assign title = section.settings.title | default: 'Shop by Category'
+  assign subtitle = section.settings.subtitle | default: '100% Soft Cotton Muslin Lining • Zero-Itch Guarantee • Handcrafted for Little Princesses (0-6Y)'
+  assign block_count = section.blocks.size
+%}
+
+<div class="page-width meeeku-categories-section" id="MeeekuCategories-{{ section.id }}">
   <div style="text-align: center; margin-bottom: 3.5rem; width: 100%;">
-    <span class="meeeku-badge meeeku-badge--ethnic" style="font-size: 1.25rem; padding: 0.4rem 1.4rem; display: inline-block; margin-bottom: 0.5rem;">Explore Collections</span>
-    <h2 class="h1" style="color: #3D2355; margin: 0.6rem auto; font-size: 3.6rem; font-weight: 800; text-align: center;">Shop by Category</h2>
-    <p style="color: #6B3FA0; font-size: 1.65rem; max-width: 650px; margin: 0.5rem auto 0; text-align: center; line-height: 1.5;">100% Soft Cotton Muslin Lining • Zero-Itch Guarantee • Handcrafted for Little Princesses (0-6Y)</p>
+    {% if badge != blank %}
+      <span class="meeeku-badge meeeku-badge--ethnic" style="font-size: 1.25rem; padding: 0.4rem 1.4rem; display: inline-block; margin-bottom: 0.5rem;">
+        {{ badge }}
+      </span>
+    {% endif %}
+    {% if title != blank %}
+      <h2 class="h1" style="color: #3D2355; margin: 0.6rem auto; font-size: 3.6rem; font-weight: 800; text-align: center;">
+        {{ title }}
+      </h2>
+    {% endif %}
+    {% if subtitle != blank %}
+      <p style="color: #6B3FA0; font-size: 1.65rem; max-width: 650px; margin: 0.5rem auto 0; text-align: center; line-height: 1.5;">
+        {{ subtitle }}
+      </p>
+    {% endif %}
   </div>
 
   <div class="meeeku-bento-grid">
-    <!-- Bento Hero Card: Royal Ethnic Lehengas (IN STOCK - Full Width / 2 Column Span) -->
-    <a href="/collections/all?category=ethnic" class="meeeku-bento-card meeeku-bento-card--hero">
-      <div class="meeeku-bento-card__media">
-        <img src="{{ 'meeeku_prod_yellow_lehenga.jpg' | asset_url }}" alt="Royal Indian Ethnic Lehengas" class="meeeku-bento-img" width="800" height="900" loading="eager">
-        <span class="meeeku-badge meeeku-badge--overlay-hero">👑 IN STOCK • ETHNIC WEAR</span>
-      </div>
-      <div class="meeeku-bento-card__content">
-        <div class="meeeku-bento-tag">Featured Collection</div>
-        <h3>Royal Indian Ethnic Lehengas</h3>
-        <p>Vibrant Chanderi, Phulkari, Jacquard & Zardozi Lehengas crafted with 100% soft skin-safe muslin cotton linings for itch-free twirling all day.</p>
-        <span class="button button--primary meeeku-bento-btn">
-          Explore Royal Lehengas 👑
-        </span>
-      </div>
-    </a>
+    {% if block_count > 0 %}
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'hero_card' %}
+            {% liquid
+              assign col = block.settings.collection
+              assign card_link = block.settings.link | default: col.url | default: '/collections/all?category=ethnic'
+              assign card_img = block.settings.image | default: col.image
+              assign card_title = block.settings.title | default: col.title | default: 'Royal Indian Ethnic Lehengas'
+              assign card_desc = block.settings.description | default: col.description | default: 'Vibrant Chanderi, Phulkari, Jacquard & Zardozi Lehengas crafted with 100% soft skin-safe muslin cotton linings.'
+              assign card_badge = block.settings.badge_text | default: '👑 IN STOCK • ETHNIC WEAR'
+              assign card_tag = block.settings.tag | default: 'Featured Collection'
+              assign card_btn = block.settings.button_label | default: 'Explore Royal Lehengas 👑'
+            %}
+            <a href="{{ card_link }}" class="meeeku-bento-card meeeku-bento-card--hero" {{ block.shopify_attributes }}>
+              <div class="meeeku-bento-card__media">
+                {% if card_img != blank %}
+                  <img src="{{ card_img | image_url: width: 800 }}" alt="{{ card_title | escape }}" class="meeeku-bento-img" width="800" height="900" loading="eager">
+                {% else %}
+                  <img src="{{ 'meeeku_prod_yellow_lehenga.jpg' | asset_url }}" alt="{{ card_title | escape }}" class="meeeku-bento-img" width="800" height="900" loading="eager">
+                {% endif %}
+                {% if card_badge != blank %}
+                  <span class="meeeku-badge meeeku-badge--overlay-hero">{{ card_badge }}</span>
+                {% endif %}
+              </div>
+              <div class="meeeku-bento-card__content">
+                {% if card_tag != blank %}<div class="meeeku-bento-tag">{{ card_tag }}</div>{% endif %}
+                <h3>{{ card_title }}</h3>
+                <p>{{ card_desc }}</p>
+                <span class="button button--primary meeeku-bento-btn">
+                  {{ card_btn }}
+                </span>
+              </div>
+            </a>
 
-    <!-- Bento Card 2: Everyday Storybook T-Shirts (IN STOCK) -->
-    <a href="/collections/all?category=tees" class="meeeku-bento-card meeeku-bento-card--sub meeeku-bento-card--tees">
-      <div class="meeeku-bento-card__media">
-        <img src="{{ 'meeeku_prod_bunny_tee.jpg' | asset_url }}" alt="Everyday Organic Cotton T-Shirts" class="meeeku-bento-img" width="500" height="600" loading="lazy">
-        <span class="meeeku-badge meeeku-badge--overlay-sub" style="background: #E8F5E9; color: #2E7D32; border: 1.5px solid #A5D6A7;">👕 IN STOCK • EVERYDAY WEAR</span>
-      </div>
-      <div class="meeeku-bento-card__content">
-        <h3>Everyday Cotton T-Shirts</h3>
-        <p>Ultra-soft, skin-safe pure combed cotton tees with playful hand-drawn prints. Sizes 0-6M to 2-3Y.</p>
-        <span class="button button--primary meeeku-bento-btn-sub" style="background: #2E7D32; border-color: #2E7D32; color: #FFF;">
-          Shop Basic Tees 👕
-        </span>
-      </div>
-    </a>
+          {% when 'category_card' %}
+            {% liquid
+              assign col = block.settings.collection
+              assign card_link = block.settings.link | default: col.url | default: '/collections/all'
+              assign card_img = block.settings.image | default: col.image
+              assign card_title = block.settings.title | default: col.title | default: 'Everyday Cotton T-Shirts'
+              assign card_desc = block.settings.description | default: col.description | default: 'Ultra-soft, skin-safe pure combed cotton tees with playful hand-drawn prints.'
+              assign card_badge = block.settings.badge_text
+              assign card_btn = block.settings.button_label | default: 'Explore Collection'
+              assign card_type = block.settings.card_type | default: 'tees'
+              assign default_asset = 'meeeku_prod_bunny_tee.jpg'
+              if card_type == 'coords'
+                assign default_asset = 'meeeku_prod_vanilla_cream_coord.jpg'
+              elsif card_type == 'boys'
+                assign default_asset = 'placeholder_boys_teaser.jpg'
+              elsif card_type == 'dresses'
+                assign default_asset = 'placeholder_ethnic_1.jpg'
+              endif
+            %}
+            <a href="{{ card_link }}" class="meeeku-bento-card meeeku-bento-card--sub meeeku-bento-card--{{ card_type }}" {{ block.shopify_attributes }}>
+              <div class="meeeku-bento-card__media">
+                {% if card_img != blank %}
+                  <img src="{{ card_img | image_url: width: 600 }}" alt="{{ card_title | escape }}" class="meeeku-bento-img" width="500" height="600" loading="lazy">
+                {% else %}
+                  <img src="{{ default_asset | asset_url }}" alt="{{ card_title | escape }}" class="meeeku-bento-img" width="500" height="600" loading="lazy">
+                {% endif %}
+                {% if card_badge != blank %}
+                  <span class="meeeku-badge meeeku-badge--overlay-sub" style="background: {{ block.settings.badge_bg | default: '#E8F5E9' }}; color: {{ block.settings.badge_color | default: '#2E7D32' }};">
+                    {{ card_badge }}
+                  </span>
+                {% endif %}
+              </div>
+              <div class="meeeku-bento-card__content">
+                <h3>{{ card_title }}</h3>
+                <p>{{ card_desc }}</p>
+                <span class="button button--primary meeeku-bento-btn-sub" style="background: {{ block.settings.button_bg | default: '#2E7D32' }}; border-color: {{ block.settings.button_bg | default: '#2E7D32' }}; color: {{ block.settings.button_color | default: '#FFF' }};">
+                  {{ card_btn }}
+                </span>
+              </div>
+            </a>
+        {% endcase %}
+      {% endfor %}
 
-    <!-- Bento Card 3: Festive Co-ords (IN STOCK) -->
-    <a href="/collections/all?category=coords" class="meeeku-bento-card meeeku-bento-card--sub meeeku-bento-card--coords">
-      <div class="meeeku-bento-card__media">
-        <img src="{{ 'meeeku_prod_vanilla_cream_coord.jpg' | asset_url }}" alt="2-Piece Cotton Co-ord Sets" class="meeeku-bento-img" width="500" height="600" loading="lazy">
-        <span class="meeeku-badge meeeku-badge--overlay-sub" style="background: #E0F2F1; color: #00695C; border: 1.5px solid #80CBC4;">🌸 IN STOCK • 2-PIECE SETS</span>
-      </div>
-      <div class="meeeku-bento-card__content">
-        <h3>2-Piece Cotton Co-ord Sets</h3>
-        <p>Matching eyelet ruffle tops, storybook sets & ribbed peplum lounge sets in 100% organic cotton.</p>
-        <span class="button button--secondary meeeku-bento-btn-sub" style="background: #E0F2F1; color: #00695C; border-color: #80CBC4; font-weight: 700;">
-          Shop Co-ords 🌸
-        </span>
-      </div>
-    </a>
+    {% else %}
+      <!-- Fallback Default Brand Categories -->
+      <!-- Bento Hero Card: Royal Ethnic Lehengas -->
+      <a href="/collections/all?category=ethnic" class="meeeku-bento-card meeeku-bento-card--hero">
+        <div class="meeeku-bento-card__media">
+          <img src="{{ 'meeeku_prod_yellow_lehenga.jpg' | asset_url }}" alt="Royal Indian Ethnic Lehengas" class="meeeku-bento-img" width="800" height="900" loading="eager">
+          <span class="meeeku-badge meeeku-badge--overlay-hero">👑 IN STOCK • ETHNIC WEAR</span>
+        </div>
+        <div class="meeeku-bento-card__content">
+          <div class="meeeku-bento-tag">Featured Collection</div>
+          <h3>Royal Indian Ethnic Lehengas</h3>
+          <p>Vibrant Chanderi, Phulkari, Jacquard & Zardozi Lehengas crafted with 100% soft skin-safe muslin cotton linings for itch-free twirling all day.</p>
+          <span class="button button--primary meeeku-bento-btn">
+            Explore Royal Lehengas 👑
+          </span>
+        </div>
+      </a>
 
-    <!-- Bento Card 4: Boys Collection (COMING SOON) -->
-    <a href="/collections/all?category=boys" class="meeeku-bento-card meeeku-bento-card--sub meeeku-bento-card--boys">
-      <div class="meeeku-bento-card__media">
-        <img src="{{ 'placeholder_boys_teaser.jpg' | asset_url }}" alt="Boys Collection Coming Soon" class="meeeku-bento-img" width="500" height="600" loading="lazy">
-        <span class="meeeku-badge meeeku-badge--overlay-sub" style="background: #FFF8E1; color: #F57F17; border: 1.5px solid #FFE082;">⏳ COMING SOON</span>
-      </div>
-      <div class="meeeku-bento-card__content">
-        <h3>Boys Collection</h3>
-        <p>Handsome ethnic kurta sets and super-soft pyjamas for your little princes dropping soon.</p>
-        <span class="button button--primary meeeku-bento-btn-sub" style="background: #F57F17; border-color: #F57F17; color: #FFF;">
-          👦 Join Boys Waitlist
-        </span>
-      </div>
-    </a>
+      <!-- Bento Card 2: Everyday Storybook T-Shirts -->
+      <a href="/collections/all?category=tees" class="meeeku-bento-card meeeku-bento-card--sub meeeku-bento-card--tees">
+        <div class="meeeku-bento-card__media">
+          <img src="{{ 'meeeku_prod_bunny_tee.jpg' | asset_url }}" alt="Everyday Organic Cotton T-Shirts" class="meeeku-bento-img" width="500" height="600" loading="lazy">
+          <span class="meeeku-badge meeeku-badge--overlay-sub" style="background: #E8F5E9; color: #2E7D32; border: 1.5px solid #A5D6A7;">👕 IN STOCK • EVERYDAY WEAR</span>
+        </div>
+        <div class="meeeku-bento-card__content">
+          <h3>Everyday Cotton T-Shirts</h3>
+          <p>Ultra-soft, skin-safe pure combed cotton tees with playful hand-drawn prints. Sizes 0-6M to 2-3Y.</p>
+          <span class="button button--primary meeeku-bento-btn-sub" style="background: #2E7D32; border-color: #2E7D32; color: #FFF;">
+            Shop Basic Tees 👕
+          </span>
+        </div>
+      </a>
+
+      <!-- Bento Card 3: Festive Co-ords -->
+      <a href="/collections/all?category=coords" class="meeeku-bento-card meeeku-bento-card--sub meeeku-bento-card--coords">
+        <div class="meeeku-bento-card__media">
+          <img src="{{ 'meeeku_prod_vanilla_cream_coord.jpg' | asset_url }}" alt="2-Piece Cotton Co-ord Sets" class="meeeku-bento-img" width="500" height="600" loading="lazy">
+          <span class="meeeku-badge meeeku-badge--overlay-sub" style="background: #E0F2F1; color: #00695C; border: 1.5px solid #80CBC4;">🌸 IN STOCK • 2-PIECE SETS</span>
+        </div>
+        <div class="meeeku-bento-card__content">
+          <h3>2-Piece Cotton Co-ord Sets</h3>
+          <p>Matching eyelet ruffle tops, storybook sets & ribbed peplum lounge sets in 100% organic cotton.</p>
+          <span class="button button--secondary meeeku-bento-btn-sub" style="background: #E0F2F1; color: #00695C; border-color: #80CBC4; font-weight: 700;">
+            Shop Co-ords 🌸
+          </span>
+        </div>
+      </a>
+
+      <!-- Bento Card 4: Boys Collection -->
+      <a href="/collections/all?category=boys" class="meeeku-bento-card meeeku-bento-card--sub meeeku-bento-card--boys">
+        <div class="meeeku-bento-card__media">
+          <img src="{{ 'placeholder_boys_teaser.jpg' | asset_url }}" alt="Boys Collection Coming Soon" class="meeeku-bento-img" width="500" height="600" loading="lazy">
+          <span class="meeeku-badge meeeku-badge--overlay-sub" style="background: #FFF8E1; color: #F57F17; border: 1.5px solid #FFE082;">⏳ COMING SOON</span>
+        </div>
+        <div class="meeeku-bento-card__content">
+          <h3>Boys Collection</h3>
+          <p>Handsome ethnic kurta sets and super-soft pyjamas for your little princes dropping soon.</p>
+          <span class="button button--primary meeeku-bento-btn-sub" style="background: #F57F17; border-color: #F57F17; color: #FFF;">
+            👦 Join Boys Waitlist
+          </span>
+        </div>
+      </a>
+    {% endif %}
   </div>
 </div>
 
@@ -154,6 +255,7 @@
 .meeeku-bento-card--coords { border-color: #80CBC4; background: #F4FBFB; }
 .meeeku-bento-card--nightsuits { border-color: #CE93D8; background: #FAFAFE; }
 .meeeku-bento-card--boys { border-color: #FFE082; background: #FFFDF5; }
+.meeeku-bento-card--dresses { border-color: #80DEEA; background: #F0FDFE; }
 
 .meeeku-bento-card--sub .meeeku-bento-card__media {
   height: 280px;
@@ -247,10 +349,216 @@
   "name": "Meeeku Bento Categories",
   "tag": "section",
   "class": "section",
-  "settings": [],
+  "settings": [
+    {
+      "type": "text",
+      "id": "badge",
+      "label": "Section Badge",
+      "default": "Explore Collections"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Shop by Category"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subheading",
+      "default": "100% Soft Cotton Muslin Lining • Zero-Itch Guarantee • Handcrafted for Little Princesses (0-6Y)"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "hero_card",
+      "name": "Featured Hero Card",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Custom Card Image"
+        },
+        {
+          "type": "text",
+          "id": "badge_text",
+          "label": "Badge Text",
+          "default": "👑 IN STOCK • ETHNIC WEAR"
+        },
+        {
+          "type": "text",
+          "id": "tag",
+          "label": "Small Tag Text",
+          "default": "Featured Collection"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Card Heading",
+          "default": "Royal Indian Ethnic Lehengas"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Vibrant Chanderi, Phulkari, Jacquard & Zardozi Lehengas crafted with 100% soft skin-safe muslin cotton linings for itch-free twirling all day."
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button Label",
+          "default": "Explore Royal Lehengas 👑"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Custom Link"
+        }
+      ]
+    },
+    {
+      "type": "category_card",
+      "name": "Category Card",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Card Image"
+        },
+        {
+          "type": "select",
+          "id": "card_type",
+          "label": "Category Type Theme",
+          "options": [
+            { "value": "tees", "label": "T-Shirts (Green)" },
+            { "value": "coords", "label": "Co-ord Sets (Teal)" },
+            { "value": "boys", "label": "Boys Line (Amber)" },
+            { "value": "dresses", "label": "Western Dresses (Cyan)" },
+            { "value": "nightsuits", "label": "Nightsuits (Purple)" }
+          ],
+          "default": "tees"
+        },
+        {
+          "type": "text",
+          "id": "badge_text",
+          "label": "Badge Text",
+          "default": "👕 IN STOCK • EVERYDAY WEAR"
+        },
+        {
+          "type": "color",
+          "id": "badge_bg",
+          "label": "Badge Background Color",
+          "default": "#E8F5E9"
+        },
+        {
+          "type": "color",
+          "id": "badge_color",
+          "label": "Badge Text Color",
+          "default": "#2E7D32"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Category Title",
+          "default": "Everyday Cotton T-Shirts"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Category Description",
+          "default": "Ultra-soft, skin-safe pure combed cotton tees with playful hand-drawn prints. Sizes 0-6M to 2-3Y."
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button Label",
+          "default": "Shop Basic Tees 👕"
+        },
+        {
+          "type": "color",
+          "id": "button_bg",
+          "label": "Button Background Color",
+          "default": "#2E7D32"
+        },
+        {
+          "type": "color",
+          "id": "button_color",
+          "label": "Button Text Color",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Custom Link"
+        }
+      ]
+    }
+  ],
   "presets": [
     {
-      "name": "Meeeku Bento Categories"
+      "name": "Meeeku Bento Categories",
+      "blocks": [
+        {
+          "type": "hero_card",
+          "settings": {
+            "title": "Royal Indian Ethnic Lehengas",
+            "badge_text": "👑 IN STOCK • ETHNIC WEAR",
+            "tag": "Featured Collection",
+            "button_label": "Explore Royal Lehengas 👑",
+            "link": "/collections/all?category=ethnic"
+          }
+        },
+        {
+          "type": "category_card",
+          "settings": {
+            "card_type": "tees",
+            "title": "Everyday Cotton T-Shirts",
+            "badge_text": "👕 IN STOCK • EVERYDAY WEAR",
+            "badge_bg": "#E8F5E9",
+            "badge_color": "#2E7D32",
+            "button_label": "Shop Basic Tees 👕",
+            "button_bg": "#2E7D32",
+            "link": "/collections/all?category=tees"
+          }
+        },
+        {
+          "type": "category_card",
+          "settings": {
+            "card_type": "coords",
+            "title": "2-Piece Cotton Co-ord Sets",
+            "badge_text": "🌸 IN STOCK • 2-PIECE SETS",
+            "badge_bg": "#E0F2F1",
+            "badge_color": "#00695C",
+            "button_label": "Shop Co-ords 🌸",
+            "button_bg": "#00695C",
+            "link": "/collections/all?category=coords"
+          }
+        },
+        {
+          "type": "category_card",
+          "settings": {
+            "card_type": "boys",
+            "title": "Boys Collection",
+            "badge_text": "⏳ COMING SOON",
+            "badge_bg": "#FFF8E1",
+            "badge_color": "#F57F17",
+            "button_label": "👦 Join Boys Waitlist",
+            "button_bg": "#F57F17",
+            "link": "/collections/all?category=boys"
+          }
+        }
+      ]
     }
   ]
 }

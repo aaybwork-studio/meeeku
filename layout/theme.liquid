@@ -328,10 +328,179 @@
 
     {%- render 'cart-drawer' -%}
 
-    <!-- Meeeku Top Announcement Ticker Banner -->
-    <div class="meeeku-top-ticker" style="background: linear-gradient(90deg, #3D2355 0%, #6B3FA0 100%); color: #FFFFFF; padding: 0.75rem 1rem; font-size: 1.35rem; font-weight: 700; text-align: center; letter-spacing: 0.03em; border-bottom: 1.5px solid #F8BBD0; position: relative; z-index: 100;">
-      <span>✨ SPECIAL OFFER: Get <span style="color: #FFD54F; background: rgba(255, 255, 255, 0.15); padding: 0.2rem 0.7rem; border-radius: 12px; font-weight: 800;">15% OFF</span> your first purchase with code <strong style="color: #FFF; text-decoration: underline;">WELCOME15</strong> | Free Shipping Across India 🚚</span>
+    <!-- Meeeku Dynamic Rotating Promotion Ticker Banner -->
+    <div id="MeeekuPromoTicker" class="meeeku-promo-ticker" role="region" aria-label="Promotions Announcement">
+      <div class="meeeku-promo-ticker-container">
+        <div class="meeeku-promo-slides-wrapper" id="MeeekuPromoSlides">
+          
+          <!-- Slide 1: Welcome 20 -->
+          <div class="meeeku-promo-slide active">
+            <span>✨ SPECIAL OFFER: Get <span class="meeeku-promo-badge">20% OFF</span> your first purchase with code <strong class="meeeku-promo-code">WELCOME20</strong> | Free Shipping Across India 🚚</span>
+          </div>
+
+          <!-- Slide 2: Buy 2 Get 1 Free -->
+          <div class="meeeku-promo-slide">
+            <span>🎉 MEGA PROMOTION: <span class="meeeku-promo-badge" style="background: #FFE082; color: #E65100;">BUY 2 GET 1 FREE</span> on all Cotton Tees & Co-ords with code <strong class="meeeku-promo-code">B2G1</strong> 🎁</span>
+          </div>
+
+          <!-- Slide 3: Quality Guarantee -->
+          <div class="meeeku-promo-slide">
+            <span>🌸 ZERO-ITCH GUARANTEE: <span class="meeeku-promo-badge" style="background: #E1BEE7; color: #4A148C;">100% Pure Organic</span> Muslin Cotton Linings • Handcrafted with Love 💕</span>
+          </div>
+
+        </div>
+
+        <button type="button" class="meeeku-ticker-arrow meeeku-ticker-arrow--prev" onclick="meeekuRotatePromo(-1)" aria-label="Previous promo">‹</button>
+        <button type="button" class="meeeku-ticker-arrow meeeku-ticker-arrow--next" onclick="meeekuRotatePromo(1)" aria-label="Next promo">›</button>
+      </div>
     </div>
+
+    <style>
+    .meeeku-promo-ticker {
+      background: linear-gradient(90deg, #3D2355 0%, #6B3FA0 100%);
+      color: #FFFFFF;
+      font-size: 1.3rem;
+      font-weight: 700;
+      text-align: center;
+      letter-spacing: 0.02em;
+      border-bottom: 1.5px solid #F8BBD0;
+      position: relative;
+      z-index: 10;
+      overflow: hidden;
+      line-height: 1.35;
+    }
+    .meeeku-promo-ticker-container {
+      position: relative;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0.65rem 3rem;
+      min-height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .meeeku-promo-slides-wrapper {
+      position: relative;
+      width: 100%;
+      min-height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .meeeku-promo-slide {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.45s ease-in-out, transform 0.45s ease-in-out;
+      pointer-events: none;
+      white-space: normal;
+    }
+    .meeeku-promo-slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, -50%);
+      pointer-events: auto;
+    }
+    .meeeku-promo-badge {
+      color: #3D2355;
+      background: #FFD54F;
+      padding: 0.18rem 0.65rem;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 1.15rem;
+      display: inline-block;
+      margin: 0 0.2rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+    }
+    .meeeku-promo-code {
+      color: #FFF;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      letter-spacing: 0.05em;
+    }
+    .meeeku-ticker-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 2rem;
+      font-weight: 300;
+      cursor: pointer;
+      padding: 0.2rem 0.6rem;
+      line-height: 1;
+      transition: color 0.2s ease, transform 0.2s ease;
+      z-index: 2;
+    }
+    .meeeku-ticker-arrow:hover {
+      color: #FFF;
+      transform: translateY(-50%) scale(1.2);
+    }
+    .meeeku-ticker-arrow--prev {
+      left: 0.5rem;
+    }
+    .meeeku-ticker-arrow--next {
+      right: 0.5rem;
+    }
+    @media screen and (max-width: 749px) {
+      .meeeku-promo-ticker-container {
+        padding: 0.6rem 2.2rem;
+        min-height: 42px;
+      }
+      .meeeku-promo-ticker {
+        font-size: 1.18rem;
+      }
+      .meeeku-promo-badge {
+        font-size: 1.05rem;
+        padding: 0.12rem 0.5rem;
+      }
+    }
+    </style>
+
+    <script>
+    (function() {
+      var promoIndex = 0;
+      var promoTimer = null;
+
+      function getSlides() {
+        return document.querySelectorAll('#MeeekuPromoSlides .meeeku-promo-slide');
+      }
+
+      function showPromo(index) {
+        var slides = getSlides();
+        if (!slides || slides.length === 0) return;
+        slides.forEach(function(s) { s.classList.remove('active'); });
+        promoIndex = (index + slides.length) % slides.length;
+        slides[promoIndex].classList.add('active');
+      }
+
+      window.meeekuRotatePromo = function(delta) {
+        clearInterval(promoTimer);
+        showPromo(promoIndex + delta);
+        startTimer();
+      };
+
+      function startTimer() {
+        promoTimer = setInterval(function() {
+          showPromo(promoIndex + 1);
+        }, 4200);
+      }
+
+      document.addEventListener('DOMContentLoaded', function() {
+        startTimer();
+        var tickerEl = document.getElementById('MeeekuPromoTicker');
+        if (tickerEl) {
+          tickerEl.addEventListener('mouseenter', function() { clearInterval(promoTimer); });
+          tickerEl.addEventListener('mouseleave', function() { startTimer(); });
+        }
+      });
+    })();
+    </script>
 
     {% sections 'header-group' %}
 

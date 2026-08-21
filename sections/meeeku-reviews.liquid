@@ -1,41 +1,78 @@
 {% comment %}
-  Meeeku Customer Reviews & Instagram Carousel Section
+  Meeeku Customer Reviews Section (Shopify OS 2.0 CMS Connected)
+  Enables merchants to add, edit, and reorder verified parent testimonials, star ratings, and review details in Theme Customizer.
 {% endcomment %}
 
-<div class="page-width meeeku-reviews-section">
-  <div class="text-center" style="margin-bottom: 3rem;">
-    <span class="meeeku-badge meeeku-badge--ethnic">Loved by 500+ Moms</span>
-    <h2 class="h1" style="color: #3D2355; margin-top: 1rem;">Meeeku Little Stars ✨</h2>
-    <p style="color: #6B3FA0; font-size: 1.6rem;">Real smiles from real little princesses wearing Meeeku Ethnic & Nightsuits.</p>
+{% liquid
+  assign badge = section.settings.badge | default: 'Loved by 500+ Moms'
+  assign title = section.settings.title | default: 'Meeeku Little Stars ✨'
+  assign subtitle = section.settings.subtitle | default: 'Real smiles from real little princesses wearing Meeeku Ethnic & Nightsuits.'
+  assign block_count = section.blocks.size
+%}
+
+<div class="page-width meeeku-reviews-section" id="MeeekuReviews-{{ section.id }}">
+  <div class="text-center" style="margin-bottom: 3rem; text-align: center;">
+    {% if badge != blank %}
+      <span class="meeeku-badge meeeku-badge--ethnic" style="display: inline-block; margin-bottom: 0.8rem;">
+        {{ badge }}
+      </span>
+    {% endif %}
+    {% if title != blank %}
+      <h2 class="h1" style="color: #3D2355; margin-top: 0.5rem; font-size: 3.2rem; font-weight: 800;">
+        {{ title }}
+      </h2>
+    {% endif %}
+    {% if subtitle != blank %}
+      <p style="color: #6B3FA0; font-size: 1.6rem; max-width: 600px; margin: 0.6rem auto 0; line-height: 1.5;">
+        {{ subtitle }}
+      </p>
+    {% endif %}
   </div>
 
   <div class="meeeku-reviews-grid">
-    <!-- Review 1 -->
-    <div class="meeeku-review-card">
-      <div class="meeeku-review-stars">⭐⭐⭐⭐⭐</div>
-      <p class="meeeku-review-text">"The Lehenga fabric is so soft! My 3-year-old daughter wore it all day during Diwali without complaining about any itchiness!"</p>
-      <div class="meeeku-review-author">
-        <strong>Priya M.</strong> — <span>Verified Mom (Delhi)</span>
-      </div>
-    </div>
+    {% if block_count > 0 %}
+      {% for block in section.blocks %}
+        {% liquid
+          assign stars = block.settings.stars | default: '⭐⭐⭐⭐⭐'
+          assign text = block.settings.review_text
+          assign author = block.settings.author_name
+          assign loc = block.settings.author_location
+        %}
+        <div class="meeeku-review-card" {{ block.shopify_attributes }}>
+          <div class="meeeku-review-stars">{{ stars }}</div>
+          <p class="meeeku-review-text">"{{ text }}"</p>
+          <div class="meeeku-review-author">
+            <strong>{{ author }}</strong> {% if loc != blank %}— <span>{{ loc }}</span>{% endif %}
+          </div>
+        </div>
+      {% endfor %}
 
-    <!-- Review 2 -->
-    <div class="meeeku-review-card">
-      <div class="meeeku-review-stars">⭐⭐⭐⭐⭐</div>
-      <p class="meeeku-review-text">"The organic cotton nightsuit is insanely soft. Washed it 5 times already and the colors are still super bright. Highly recommend!"</p>
-      <div class="meeeku-review-author">
-        <strong>Ananya R.</strong> — <span>Verified Mom (Bangalore)</span>
+    {% else %}
+      <!-- Fallback Default Verified Parent Reviews -->
+      <div class="meeeku-review-card">
+        <div class="meeeku-review-stars">⭐⭐⭐⭐⭐</div>
+        <p class="meeeku-review-text">"The Lehenga fabric is so soft! My 3-year-old daughter wore it all day during Diwali without complaining about any itchiness!"</p>
+        <div class="meeeku-review-author">
+          <strong>Priya M.</strong> — <span>Verified Mom (Delhi)</span>
+        </div>
       </div>
-    </div>
 
-    <!-- Review 3 -->
-    <div class="meeeku-review-card">
-      <div class="meeeku-review-stars">⭐⭐⭐⭐⭐</div>
-      <p class="meeeku-review-text">"Super fast shipping and adorable packaging! The size guide was spot-on for my 4Y girl. Can't wait for the boys collection!"</p>
-      <div class="meeeku-review-author">
-        <strong>Sneha K.</strong> — <span>Verified Mom (Mumbai)</span>
+      <div class="meeeku-review-card">
+        <div class="meeeku-review-stars">⭐⭐⭐⭐⭐</div>
+        <p class="meeeku-review-text">"The organic cotton nightsuit is insanely soft. Washed it 5 times already and the colors are still super bright. Highly recommend!"</p>
+        <div class="meeeku-review-author">
+          <strong>Ananya R.</strong> — <span>Verified Mom (Bangalore)</span>
+        </div>
       </div>
-    </div>
+
+      <div class="meeeku-review-card">
+        <div class="meeeku-review-stars">⭐⭐⭐⭐⭐</div>
+        <p class="meeeku-review-text">"Super fast shipping and adorable packaging! The size guide was spot-on for my 4Y girl. Can't wait for the boys collection!"</p>
+        <div class="meeeku-review-author">
+          <strong>Sneha K.</strong> — <span>Verified Mom (Mumbai)</span>
+        </div>
+      </div>
+    {% endif %}
   </div>
 </div>
 
@@ -58,6 +95,11 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.meeeku-review-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 32px rgba(107, 63, 160, 0.14);
 }
 .meeeku-review-stars {
   font-size: 1.8rem;
@@ -69,6 +111,7 @@
   line-height: 1.6;
   font-style: italic;
   margin-bottom: 1.5rem;
+  flex-grow: 1;
 }
 .meeeku-review-author strong {
   color: #3D2355;
@@ -77,6 +120,21 @@
   color: #888;
   font-size: 1.3rem;
 }
+
+@media screen and (max-width: 749px) {
+  .meeeku-reviews-section {
+    padding-top: 2.5rem;
+    padding-bottom: 3rem;
+  }
+  .meeeku-reviews-grid {
+    grid-template-columns: 1fr;
+    gap: 1.4rem;
+  }
+  .meeeku-review-card {
+    padding: 1.8rem 1.4rem;
+    border-radius: 16px;
+  }
+}
 </style>
 
 {% schema %}
@@ -84,10 +142,90 @@
   "name": "Meeeku Reviews",
   "tag": "section",
   "class": "section",
-  "settings": [],
+  "settings": [
+    {
+      "type": "text",
+      "id": "badge",
+      "label": "Badge Text",
+      "default": "Loved by 500+ Moms"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Heading",
+      "default": "Meeeku Little Stars ✨"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subheading",
+      "default": "Real smiles from real little princesses wearing Meeeku Ethnic & Nightsuits."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Customer Review",
+      "settings": [
+        {
+          "type": "text",
+          "id": "stars",
+          "label": "Star Rating",
+          "default": "⭐⭐⭐⭐⭐"
+        },
+        {
+          "type": "textarea",
+          "id": "review_text",
+          "label": "Review Quote",
+          "default": "The Lehenga fabric is so soft! My 3-year-old daughter wore it all day during Diwali without complaining about any itchiness!"
+        },
+        {
+          "type": "text",
+          "id": "author_name",
+          "label": "Customer Name",
+          "default": "Priya M."
+        },
+        {
+          "type": "text",
+          "id": "author_location",
+          "label": "Location / Tag",
+          "default": "Verified Mom (Delhi)"
+        }
+      ]
+    }
+  ],
   "presets": [
     {
-      "name": "Meeeku Reviews"
+      "name": "Meeeku Reviews",
+      "blocks": [
+        {
+          "type": "review",
+          "settings": {
+            "stars": "⭐⭐⭐⭐⭐",
+            "review_text": "The Lehenga fabric is so soft! My 3-year-old daughter wore it all day during Diwali without complaining about any itchiness!",
+            "author_name": "Priya M.",
+            "author_location": "Verified Mom (Delhi)"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "stars": "⭐⭐⭐⭐⭐",
+            "review_text": "The organic cotton nightsuit is insanely soft. Washed it 5 times already and the colors are still super bright. Highly recommend!",
+            "author_name": "Ananya R.",
+            "author_location": "Verified Mom (Bangalore)"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "stars": "⭐⭐⭐⭐⭐",
+            "review_text": "Super fast shipping and adorable packaging! The size guide was spot-on for my 4Y girl. Can't wait for the boys collection!",
+            "author_name": "Sneha K.",
+            "author_location": "Verified Mom (Mumbai)"
+          }
+        }
+      ]
     }
   ]
 }

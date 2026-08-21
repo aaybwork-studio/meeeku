@@ -1,5 +1,6 @@
 {% comment %}
-  Meeeku Interactive Catalog & Category Filter Grid with Sort & Age Filters
+  Meeeku Interactive Dynamic Catalog & Category Filter Grid with Sort & Age Filters
+  Shopify OS 2.0 CMS Connected — Automatically syncs real Shopify product updates, images, titles, pricing, variants, and inventory.
 {% endcomment %}
 
 <div class="page-width meeeku-catalog-section" style="padding-top: 2rem; padding-bottom: 5rem;">
@@ -89,34 +90,81 @@
             assign p_type = product.type | downcase
             assign p_tags = product.tags | join: ',' | downcase
             assign p_title = product.title | downcase
-            assign cat = 'ethnic'
-            if p_type contains 'tee' or p_tags contains 'tee' or p_title contains 'tee'
-              assign cat = 'tees'
-            elsif p_type contains 'co-ord' or p_type contains 'set' or p_tags contains 'coord' or p_title contains 'co-ord'
-              assign cat = 'coords'
+            assign p_handle = product.handle | downcase
+
+            assign cat_list = ''
+            if p_type contains 'tee' or p_tags contains 'tee' or p_title contains 'tee' or p_handle contains 'tee'
+              assign cat_list = cat_list | append: 'tees '
             endif
-            
-            assign first_img = product.featured_image | default: product.images.first
+            if p_type contains 'ethnic' or p_tags contains 'ethnic' or p_tags contains 'lehenga' or p_title contains 'lehenga' or p_handle contains 'lehenga'
+              assign cat_list = cat_list | append: 'ethnic '
+            endif
+            if p_type contains 'co-ord' or p_type contains 'coord' or p_tags contains 'coord' or p_tags contains 'set' or p_title contains 'co-ord' or p_title contains 'coord' or p_title contains 'set' or p_handle contains 'coord'
+              assign cat_list = cat_list | append: 'coords '
+            endif
+            if p_type contains 'dress' or p_tags contains 'dress' or p_title contains 'dress' or p_handle contains 'dress'
+              assign cat_list = cat_list | append: 'dresses '
+            endif
+            if p_type contains 'boy' or p_tags contains 'boy' or p_title contains 'boy'
+              assign cat_list = cat_list | append: 'boys '
+            endif
+            if p_type contains 'night' or p_tags contains 'night' or p_title contains 'night' or p_tags contains 'sleep'
+              assign cat_list = cat_list | append: 'nightsuits '
+            endif
+
+            if cat_list == ''
+              assign cat_list = 'all ethnic'
+            else
+              assign cat_list = cat_list | prepend: 'all '
+            endif
+
+            assign age_keys = 'all'
+            assign all_v_titles = ''
+            for v in product.variants
+              assign all_v_titles = all_v_titles | append: ' ' | append: v.title | downcase
+            endfor
+            assign full_search_str = p_tags | append: ' ' | append: all_v_titles
+
+            if full_search_str contains '0-6m' or full_search_str contains '0 - 6m' or full_search_str contains 'infant' or full_search_str contains '0-1y' or full_search_str contains '0 - 1y'
+              assign age_keys = age_keys | append: ',0-6m'
+            endif
+            if full_search_str contains '6-12m' or full_search_str contains '6 - 12m' or full_search_str contains 'infant' or full_search_str contains '0-1y' or full_search_str contains '0 - 1y'
+              assign age_keys = age_keys | append: ',6-12m'
+            endif
+            if full_search_str contains '12-18m' or full_search_str contains '18-24m' or full_search_str contains '1-2y' or full_search_str contains '1 - 2y' or full_search_str contains 'toddler'
+              assign age_keys = age_keys | append: ',1-2y'
+            endif
+            if full_search_str contains '2-3y' or full_search_str contains '2 - 3y' or full_search_str contains 'toddler'
+              assign age_keys = age_keys | append: ',2-3y'
+            endif
+            if full_search_str contains '3-4y' or full_search_str contains '4-5y' or full_search_str contains '5-6y' or full_search_str contains '6-7y' or full_search_str contains '3-7y' or full_search_str contains 'kids'
+              assign age_keys = age_keys | append: ',3-7y'
+            endif
+
+            assign first_img = product.featured_media.preview_image | default: product.featured_image | default: product.images.first
             assign second_img = product.images[1] | default: first_img
+            assign first_img_url = first_img | image_url: width: 600
+            assign second_img_url = second_img | image_url: width: 600
+            assign current_var = product.selected_or_first_available_variant
           %}
-          <li class="grid__item meeeku-grid-item" data-category="{{ cat }}" data-price="{{ product.price | divided_by: 100 }}" data-age="all" data-date="{{ product.published_at | date: '%Y-%m-%d' }}">
+          <li class="grid__item meeeku-grid-item" data-category="{{ cat_list | strip }}" data-price="{{ product.price | divided_by: 100 }}" data-age="{{ age_keys }}" data-date="{{ product.published_at | date: '%Y-%m-%d' }}" data-bestseller-rank="{{ forloop.index }}">
             <div class="card-wrapper meeeku-interactive-card">
               <div class="meeeku-card-media-wrapper">
                 <a href="{{ product.url }}" class="meeeku-card-link">
                   {% if first_img %}
-                    <img src="{{ first_img | image_url: width: 600 }}" alt="{{ product.title | escape }}" class="meeeku-card-img meeeku-img-primary" width="600" height="750" loading="lazy">
+                    <img src="{{ first_img_url }}" alt="{{ product.title | escape }}" class="meeeku-card-img meeeku-img-primary" width="600" height="750" loading="lazy">
                   {% endif %}
                   {% if second_img and second_img != first_img %}
-                    <img src="{{ second_img | image_url: width: 600 }}" alt="{{ product.title | escape }}" class="meeeku-card-img meeeku-img-secondary" width="600" height="750" loading="lazy">
+                    <img src="{{ second_img_url }}" alt="{{ product.title | escape }}" class="meeeku-card-img meeeku-img-secondary" width="600" height="750" loading="lazy">
                   {% endif %}
                 </a>
-                <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('{{ product.title | escape }}', '{{ product.price | money }}', '{{ first_img | image_url: width: 400 }}', '{{ product.selected_or_first_available_variant.id }}')">
+                <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('{{ product.title | escape }}', '{{ product.price | money }}', '{{ first_img | image_url: width: 400 }}', '{{ current_var.id }}')">
                   🛒 + Quick Add — {{ product.price | money }}
                 </button>
               </div>
               <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
-                  <span class="meeeku-badge meeeku-badge--{{ cat }}" style="font-size: 1rem; padding: 0.2rem 0.8rem;">{{ product.type | default: 'Meeeku Pure Cotton' }}</span>
+                  <span class="meeeku-badge meeeku-badge--ethnic" style="font-size: 1rem; padding: 0.2rem 0.8rem;">{{ product.type | default: 'Meeeku Pure Cotton' }}</span>
                 </div>
                 <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
                   <a href="{{ product.url }}" style="color: #3D2355; text-decoration: none;">{{ product.title }}</a>
@@ -137,14 +185,14 @@
       {% else %}
       
       <!-- T-Shirt 1: Periwinkle Daisy Frill Cotton Tee -->
-      <li class="grid__item meeeku-grid-item" data-category="tees" data-price="599" data-age="0-6m,6-12m,1-2y,2-3y" data-date="2026-08-17" data-bestseller-rank="3">
+      <li class="grid__item meeeku-grid-item" data-category="all tees" data-price="599" data-age="all,0-6m,6-12m,1-2y,2-3y" data-date="2026-08-17" data-bestseller-rank="3">
         <div class="card-wrapper meeeku-interactive-card">
           <div class="meeeku-card-media-wrapper">
-            <a href="/products/daisy-frill-blue-tee?item=daisy_frill_tee" class="meeeku-card-link">
+            <a href="/products/daisy-frill-blue-tee" class="meeeku-card-link">
               <img src="{{ 'meeeku_prod_daisy_frill_tee.jpg' | asset_url }}" alt="Periwinkle Daisy Frill Cotton Tee" class="meeeku-card-img meeeku-img-primary" width="600" height="750" loading="lazy">
               <img src="{{ 'meeeku_prod_daisy_frill_tee_model.jpg' | asset_url }}" alt="Periwinkle Daisy Frill Cotton Tee Model View" class="meeeku-card-img meeeku-img-secondary" width="600" height="750" loading="lazy">
             </a>
-            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Periwinkle Daisy Frill Cotton Tee', '₹599.00', '{{ 'meeeku_prod_daisy_frill_tee.jpg' | asset_url }}')">
+            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Periwinkle Daisy Frill Cotton Tee', '₹599.00', '{{ 'meeeku_prod_daisy_frill_tee.jpg' | asset_url }}', '')">
               🛒 + Quick Add — ₹599
             </button>
           </div>
@@ -154,7 +202,7 @@
               <span style="font-size: 1.1rem; color: #666; font-weight: 600;">0-6M to 2-3Y</span>
             </div>
             <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
-              <a href="/products/daisy-frill-blue-tee?item=daisy_frill_tee" style="color: #3D2355; text-decoration: none;">Periwinkle Daisy Frill Tee</a>
+              <a href="/products/daisy-frill-blue-tee" style="color: #3D2355; text-decoration: none;">Periwinkle Daisy Frill Tee</a>
             </h3>
             <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">
               ₹599.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹899.00</span>
@@ -165,14 +213,14 @@
       </li>
 
       <!-- T-Shirt 2: Snuggle Bunny Blush Cotton Tee -->
-      <li class="grid__item meeeku-grid-item" data-category="tees" data-price="599" data-age="0-6m,6-12m,1-2y,2-3y" data-date="2026-08-17" data-bestseller-rank="6">
+      <li class="grid__item meeeku-grid-item" data-category="all tees" data-price="599" data-age="all,0-6m,6-12m,1-2y,2-3y" data-date="2026-08-17" data-bestseller-rank="6">
         <div class="card-wrapper meeeku-interactive-card">
           <div class="meeeku-card-media-wrapper">
-            <a href="/products/snuggle-bunny-blush-tee?item=bunny_tee" class="meeeku-card-link">
+            <a href="/products/snuggle-bunny-blush-tee" class="meeeku-card-link">
               <img src="{{ 'meeeku_prod_bunny_tee.jpg' | asset_url }}" alt="Snuggle Bunny Blush Cotton Tee" class="meeeku-card-img meeeku-img-primary" width="600" height="750" loading="lazy">
               <img src="{{ 'meeeku_prod_bunny_tee_model.jpg' | asset_url }}" alt="Snuggle Bunny Blush Cotton Tee Model View" class="meeeku-card-img meeeku-img-secondary" width="600" height="750" loading="lazy">
             </a>
-            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Snuggle Bunny Blush Cotton Tee', '₹599.00', '{{ 'meeeku_prod_bunny_tee.jpg' | asset_url }}')">
+            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Snuggle Bunny Blush Cotton Tee', '₹599.00', '{{ 'meeeku_prod_bunny_tee.jpg' | asset_url }}', '')">
               🛒 + Quick Add — ₹599
             </button>
           </div>
@@ -182,7 +230,7 @@
               <span style="font-size: 1.1rem; color: #666; font-weight: 600;">0-6M to 2-3Y</span>
             </div>
             <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
-              <a href="/products/snuggle-bunny-blush-tee?item=bunny_tee" style="color: #3D2355; text-decoration: none;">Snuggle Bunny Blush Cotton Tee</a>
+              <a href="/products/snuggle-bunny-blush-tee" style="color: #3D2355; text-decoration: none;">Snuggle Bunny Blush Cotton Tee</a>
             </h3>
             <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">
               ₹599.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹899.00</span>
@@ -192,152 +240,14 @@
         </div>
       </li>
 
-      <!-- T-Shirt 3: Little Leopard Safari Cotton Tee -->
-      <li class="grid__item meeeku-grid-item" data-category="tees" data-price="599" data-age="0-6m,6-12m,1-2y,2-3y" data-date="2026-08-17" data-bestseller-rank="12">
-        <div class="card-wrapper meeeku-interactive-card">
-          <div class="meeeku-card-media-wrapper">
-            <a href="/products/little-leopard-safari-tee?item=leopard_tee" class="meeeku-card-link">
-              <img src="{{ 'meeeku_prod_leopard_tee.jpg' | asset_url }}" alt="Little Leopard Safari Cotton Tee" class="meeeku-card-img meeeku-img-primary" width="600" height="750" loading="lazy">
-              <img src="{{ 'meeeku_prod_leopard_tee_model.jpg' | asset_url }}" alt="Little Leopard Safari Cotton Tee Model View" class="meeeku-card-img meeeku-img-secondary" width="600" height="750" loading="lazy">
-            </a>
-            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Little Leopard Safari Cotton Tee', '₹599.00', '{{ 'meeeku_prod_leopard_tee.jpg' | asset_url }}')">
-              🛒 + Quick Add — ₹599
-            </button>
-          </div>
-          <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
-              <span class="meeeku-badge" style="background: #FFF8E1; color: #F57F17; font-size: 1rem; padding: 0.2rem 0.8rem;">Combed Cotton</span>
-              <span style="font-size: 1.1rem; color: #666; font-weight: 600;">0-6M to 2-3Y</span>
-            </div>
-            <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
-              <a href="/products/little-leopard-safari-tee?item=leopard_tee" style="color: #3D2355; text-decoration: none;">Little Leopard Safari Cotton Tee</a>
-            </h3>
-            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">
-              ₹599.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹899.00</span>
-              <span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">33% OFF</span>
-            </div>
-          </div>
-        </div>
-      </li>
-
-      <!-- T-Shirt 4: Tiny Dino Doodles Cotton Tee -->
-      <li class="grid__item meeeku-grid-item" data-category="tees" data-price="599" data-age="0-6m,6-12m,1-2y,2-3y" data-date="2026-08-17" data-bestseller-rank="10">
-        <div class="card-wrapper meeeku-interactive-card">
-          <div class="meeeku-card-media-wrapper">
-            <a href="/products/tiny-dino-doodles-tee?item=dino_tee" class="meeeku-card-link">
-              <img src="{{ 'meeeku_prod_dino_tee.jpg' | asset_url }}" alt="Tiny Dino Doodles Cotton Tee" class="meeeku-card-img meeeku-img-primary" width="600" height="750" loading="lazy">
-              <img src="{{ 'meeeku_prod_dino_tee_model.jpg' | asset_url }}" alt="Tiny Dino Doodles Cotton Tee Model View" class="meeeku-card-img meeeku-img-secondary" width="600" height="750" loading="lazy">
-            </a>
-            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Tiny Dino Doodles Cotton Tee', '₹599.00', '{{ 'meeeku_prod_dino_tee.jpg' | asset_url }}')">
-              🛒 + Quick Add — ₹599
-            </button>
-          </div>
-          <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
-              <span class="meeeku-badge" style="background: #E0F2F1; color: #00796B; font-size: 1rem; padding: 0.2rem 0.8rem;">Organic Cotton</span>
-              <span style="font-size: 1.1rem; color: #666; font-weight: 600;">0-6M to 2-3Y</span>
-            </div>
-            <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
-              <a href="/products/tiny-dino-doodles-tee?item=dino_tee" style="color: #3D2355; text-decoration: none;">Tiny Dino Doodles Cotton Tee</a>
-            </h3>
-            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">
-              ₹599.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹899.00</span>
-              <span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">33% OFF</span>
-            </div>
-          </div>
-        </div>
-      </li>
-
-      <!-- T-Shirt 4: Little Night Owl Starlit Cotton Tee -->
-      <li class="grid__item meeeku-grid-item" data-category="tees" data-price="599" data-age="0-6m,6-12m,1-2y,2-3y" data-date="2026-08-17" data-bestseller-rank="15">
-        <div class="card-wrapper meeeku-interactive-card">
-          <div class="meeeku-card-media-wrapper">
-            <a href="/products/little-night-owl-starlit-tee?item=owl_tee" class="meeeku-card-link">
-              <img src="{{ 'meeeku_prod_owl_tee.jpg' | asset_url }}" alt="Little Night Owl Starlit Cotton Tee" class="meeeku-card-img" width="600" height="750" loading="lazy">
-            </a>
-            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Little Night Owl Starlit Cotton Tee', '₹599.00', '{{ 'meeeku_prod_owl_tee.jpg' | asset_url }}')">
-              🛒 + Quick Add — ₹599
-            </button>
-          </div>
-          <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
-              <span class="meeeku-badge" style="background: #EDE7F6; color: #512DA8; font-size: 1rem; padding: 0.2rem 0.8rem;">Pure Soft Cotton</span>
-              <span style="font-size: 1.1rem; color: #666; font-weight: 600;">0-6M to 2-3Y</span>
-            </div>
-            <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
-              <a href="/products/little-night-owl-starlit-tee?item=owl_tee" style="color: #3D2355; text-decoration: none;">Little Night Owl Starlit Cotton Tee</a>
-            </h3>
-            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">
-              ₹599.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹899.00</span>
-              <span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">33% OFF</span>
-            </div>
-          </div>
-        </div>
-      </li>
-
-      <!-- T-Shirt 5: Mighty Little Lion Cotton Tee -->
-      <li class="grid__item meeeku-grid-item" data-category="tees" data-price="599" data-age="0-6m,6-12m,1-2y,2-3y" data-date="2026-08-17" data-bestseller-rank="18">
-        <div class="card-wrapper meeeku-interactive-card">
-          <div class="meeeku-card-media-wrapper">
-            <a href="/products/mighty-little-lion-tee?item=lion_tee" class="meeeku-card-link">
-              <img src="{{ 'meeeku_prod_lion_tee.jpg' | asset_url }}" alt="Mighty Little Lion Cotton Tee" class="meeeku-card-img" width="600" height="750" loading="lazy">
-            </a>
-            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Mighty Little Lion Cotton Tee', '₹599.00', '{{ 'meeeku_prod_lion_tee.jpg' | asset_url }}')">
-              🛒 + Quick Add — ₹599
-            </button>
-          </div>
-          <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
-              <span class="meeeku-badge" style="background: #FFF3E0; color: #E65100; font-size: 1rem; padding: 0.2rem 0.8rem;">Everyday Cotton</span>
-              <span style="font-size: 1.1rem; color: #666; font-weight: 600;">0-6M to 2-3Y</span>
-            </div>
-            <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
-              <a href="/products/mighty-little-lion-tee?item=lion_tee" style="color: #3D2355; text-decoration: none;">Mighty Little Lion Cotton Tee</a>
-            </h3>
-            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">
-              ₹599.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹899.00</span>
-              <span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">33% OFF</span>
-            </div>
-          </div>
-        </div>
-      </li>
-
-      <!-- T-Shirt 6: Cosmic Safari Doodle Cotton Tee -->
-      <li class="grid__item meeeku-grid-item" data-category="tees" data-price="599" data-age="0-6m,6-12m,1-2y,2-3y" data-date="2026-08-17" data-bestseller-rank="19">
-        <div class="card-wrapper meeeku-interactive-card">
-          <div class="meeeku-card-media-wrapper">
-            <a href="/products/cosmic-safari-doodle-tee?item=cosmic_safari_tee" class="meeeku-card-link">
-              <img src="{{ 'meeeku_prod_cosmic_safari_tee.jpg' | asset_url }}" alt="Cosmic Safari Doodle Cotton Tee" class="meeeku-card-img" width="600" height="750" loading="lazy">
-            </a>
-            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Cosmic Safari Doodle Cotton Tee', '₹599.00', '{{ 'meeeku_prod_cosmic_safari_tee.jpg' | asset_url }}')">
-              🛒 + Quick Add — ₹599
-            </button>
-          </div>
-          <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
-              <span class="meeeku-badge" style="background: #E1F5FE; color: #0288D1; font-size: 1rem; padding: 0.2rem 0.8rem;">Storybook Cotton</span>
-              <span style="font-size: 1.1rem; color: #666; font-weight: 600;">0-6M to 2-3Y</span>
-            </div>
-            <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
-              <a href="/products/cosmic-safari-doodle-tee?item=cosmic_safari_tee" style="color: #3D2355; text-decoration: none;">Cosmic Safari Doodle Cotton Tee</a>
-            </h3>
-            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">
-              ₹599.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹899.00</span>
-              <span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">33% OFF</span>
-            </div>
-          </div>
-        </div>
-      </li>
-      
-      
       <!-- Co-ord 1: Vanilla Cream Ruffled Eyelet Co-ord Set -->
-      <li class="grid__item meeeku-grid-item" data-category="coords" data-price="1299" data-age="0-6m,6-12m,1-2y,2-3y" data-date="2026-08-17" data-bestseller-rank="2">
+      <li class="grid__item meeeku-grid-item" data-category="all coords" data-price="1299" data-age="all,0-6m,6-12m,1-2y,2-3y" data-date="2026-08-17" data-bestseller-rank="2">
         <div class="card-wrapper meeeku-interactive-card">
           <div class="meeeku-card-media-wrapper">
-            <a href="/products/vanilla-cream-eyelet-coord?item=vanilla_cream_coord" class="meeeku-card-link">
+            <a href="/products/vanilla-cream-eyelet-coord" class="meeeku-card-link">
               <img src="{{ 'meeeku_prod_vanilla_cream_coord.jpg' | asset_url }}" alt="Vanilla Cream Ruffled Eyelet Co-ord Set" class="meeeku-card-img" width="600" height="750" loading="lazy">
             </a>
-            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Vanilla Cream Ruffled Eyelet Co-ord Set', '₹1,299.00', '{{ 'meeeku_prod_vanilla_cream_coord.jpg' | asset_url }}')">
+            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Vanilla Cream Ruffled Eyelet Co-ord Set', '₹1,299.00', '{{ 'meeeku_prod_vanilla_cream_coord.jpg' | asset_url }}', '')">
               🛒 + Quick Add — ₹1,299
             </button>
           </div>
@@ -347,7 +257,7 @@
               <span style="font-size: 1.1rem; color: #666; font-weight: 600;">0-6M to 2-3Y</span>
             </div>
             <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
-              <a href="/products/vanilla-cream-eyelet-coord?item=vanilla_cream_coord" style="color: #3D2355; text-decoration: none;">Vanilla Cream Eyelet Co-ord Set</a>
+              <a href="/products/vanilla-cream-eyelet-coord" style="color: #3D2355; text-decoration: none;">Vanilla Cream Eyelet Co-ord Set</a>
             </h3>
             <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">
               ₹1,299.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹1,699.00</span>
@@ -357,392 +267,79 @@
         </div>
       </li>
 
-      <!-- Co-ord 2: Pink Ribbon Bow Peplum Co-ord Set -->
-      <li class="grid__item meeeku-grid-item" data-category="coords" data-price="1299" data-age="0-6m,6-12m,1-2y,2-3y" data-date="2026-08-17" data-bestseller-rank="5">
+      <!-- Ethnic 1: Sunshine Chanderi Lehenga -->
+      <li class="grid__item meeeku-grid-item" data-category="all ethnic" data-price="3199" data-age="all,1-2y,2-3y,3-7y" data-date="2026-08-17" data-bestseller-rank="1">
         <div class="card-wrapper meeeku-interactive-card">
           <div class="meeeku-card-media-wrapper">
-            <a href="/products/pink-ribbon-peplum-coord?item=pink_ribbon_peplum_coord" class="meeeku-card-link">
-              <img src="{{ 'meeeku_prod_pink_ribbon_peplum_coord.jpg' | asset_url }}" alt="Pink Ribbon Bow Peplum Co-ord Set" class="meeeku-card-img" width="600" height="750" loading="lazy">
-            </a>
-            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Pink Ribbon Bow Peplum Co-ord Set', '₹1,299.00', '{{ 'meeeku_prod_pink_ribbon_peplum_coord.jpg' | asset_url }}')">
-              🛒 + Quick Add — ₹1,299
-            </button>
-          </div>
-          <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
-              <span class="meeeku-badge" style="background: #FCE4EC; color: #C2185B; font-size: 1rem; padding: 0.2rem 0.8rem;">Ribbed Peplum Set</span>
-              <span style="font-size: 1.1rem; color: #666; font-weight: 600;">0-6M to 2-3Y</span>
-            </div>
-            <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
-              <a href="/products/pink-ribbon-peplum-coord?item=pink_ribbon_peplum_coord" style="color: #3D2355; text-decoration: none;">Pink Ribbon Peplum Co-ord Set</a>
-            </h3>
-            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">
-              ₹1,299.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹1,699.00</span>
-              <span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">24% OFF</span>
-            </div>
-          </div>
-        </div>
-      </li>
-
-      <!-- Co-ord 3: Little Farm Friends Storybook Co-ord Set -->
-      <li class="grid__item meeeku-grid-item" data-category="coords" data-price="1299" data-age="0-6m,6-12m,1-2y,2-3y" data-date="2026-08-17" data-bestseller-rank="8">
-        <div class="card-wrapper meeeku-interactive-card">
-          <div class="meeeku-card-media-wrapper">
-            <a href="/products/farm-friends-storybook-coord?item=farm_friends_coord" class="meeeku-card-link">
-              <img src="{{ 'meeeku_prod_farm_friends_coord.jpg' | asset_url }}" alt="Little Farm Friends Storybook Co-ord Set" class="meeeku-card-img" width="600" height="750" loading="lazy">
-            </a>
-            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Little Farm Friends Storybook Co-ord Set', '₹1,299.00', '{{ 'meeeku_prod_farm_friends_coord.jpg' | asset_url }}')">
-              🛒 + Quick Add — ₹1,299
-            </button>
-          </div>
-          <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
-              <span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; padding: 0.2rem 0.8rem;">Storybook Farm Set</span>
-              <span style="font-size: 1.1rem; color: #666; font-weight: 600;">0-6M to 2-3Y</span>
-            </div>
-            <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
-              <a href="/products/farm-friends-storybook-coord?item=farm_friends_coord" style="color: #3D2355; text-decoration: none;">Farm Friends Storybook Set</a>
-            </h3>
-            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">
-              ₹1,299.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹1,699.00</span>
-              <span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">24% OFF</span>
-            </div>
-          </div>
-        </div>
-      </li>
-
-      <!-- Co-ord 4: Wildflower Meadow Ruffle Co-ord Set -->
-      <li class="grid__item meeeku-grid-item" data-category="coords" data-price="1299" data-age="0-6m,6-12m,1-2y,2-3y" data-date="2026-08-17" data-bestseller-rank="11">
-        <div class="card-wrapper meeeku-interactive-card">
-          <div class="meeeku-card-media-wrapper">
-            <a href="/products/wildflower-meadow-ruffle-coord?item=wildflower_meadow_coord" class="meeeku-card-link">
-              <img src="{{ 'meeeku_prod_wildflower_meadow_coord.jpg' | asset_url }}" alt="Wildflower Meadow Ruffle Co-ord Set" class="meeeku-card-img" width="600" height="750" loading="lazy">
-            </a>
-            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Wildflower Meadow Ruffle Co-ord Set', '₹1,299.00', '{{ 'meeeku_prod_wildflower_meadow_coord.jpg' | asset_url }}')">
-              🛒 + Quick Add — ₹1,299
-            </button>
-          </div>
-          <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
-              <span class="meeeku-badge" style="background: #FFF3E0; color: #E65100; font-size: 1rem; padding: 0.2rem 0.8rem;">Ruffle Meadow Set</span>
-              <span style="font-size: 1.1rem; color: #666; font-weight: 600;">0-6M to 2-3Y</span>
-            </div>
-            <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
-              <a href="/products/wildflower-meadow-ruffle-coord?item=wildflower_meadow_coord" style="color: #3D2355; text-decoration: none;">Wildflower Meadow Ruffle Set</a>
-            </h3>
-            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">
-              ₹1,299.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹1,699.00</span>
-              <span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">24% OFF</span>
-            </div>
-          </div>
-        </div>
-      </li>
-
-      <!-- Co-ord 5: Sky Blue Stardust Polka Co-ord Set -->
-      <li class="grid__item meeeku-grid-item" data-category="coords" data-price="1299" data-age="0-6m,6-12m,1-2y,2-3y" data-date="2026-08-17" data-bestseller-rank="14">
-        <div class="card-wrapper meeeku-interactive-card">
-          <div class="meeeku-card-media-wrapper">
-            <a href="/products/sky-blue-stardust-polka-coord?item=sky_blue_polka_coord" class="meeeku-card-link">
-              <img src="{{ 'meeeku_prod_sky_blue_polka_coord.jpg' | asset_url }}" alt="Sky Blue Stardust Polka Co-ord Set" class="meeeku-card-img" width="600" height="750" loading="lazy">
-            </a>
-            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Sky Blue Stardust Polka Co-ord Set', '₹1,299.00', '{{ 'meeeku_prod_sky_blue_polka_coord.jpg' | asset_url }}')">
-              🛒 + Quick Add — ₹1,299
-            </button>
-          </div>
-          <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
-              <span class="meeeku-badge" style="background: #E3F2FD; color: #1565C0; font-size: 1rem; padding: 0.2rem 0.8rem;">Stardust Polka</span>
-              <span style="font-size: 1.1rem; color: #666; font-weight: 600;">0-6M to 2-3Y</span>
-            </div>
-            <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
-              <a href="/products/sky-blue-stardust-polka-coord?item=sky_blue_polka_coord" style="color: #3D2355; text-decoration: none;">Sky Blue Stardust Polka Set</a>
-            </h3>
-            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">
-              ₹1,299.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹1,699.00</span>
-              <span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">24% OFF</span>
-            </div>
-          </div>
-        </div>
-      </li>
-
-      <!-- Co-ord 6: Playful Kitty Doodles Cotton Co-ord Set -->
-      <li class="grid__item meeeku-grid-item" data-category="coords" data-price="1299" data-age="0-6m,6-12m,1-2y,2-3y" data-date="2026-08-17" data-bestseller-rank="17">
-        <div class="card-wrapper meeeku-interactive-card">
-          <div class="meeeku-card-media-wrapper">
-            <a href="/products/playful-kitty-doodles-coord?item=playful_kitty_coord" class="meeeku-card-link">
-              <img src="{{ 'meeeku_prod_playful_kitty_coord.jpg' | asset_url }}" alt="Playful Kitty Doodles Cotton Co-ord Set" class="meeeku-card-img" width="600" height="750" loading="lazy">
-            </a>
-            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Playful Kitty Doodles Cotton Co-ord Set', '₹1,299.00', '{{ 'meeeku_prod_playful_kitty_coord.jpg' | asset_url }}')">
-              🛒 + Quick Add — ₹1,299
-            </button>
-          </div>
-          <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
-              <span class="meeeku-badge" style="background: #F3E5F5; color: #7B1FA2; font-size: 1rem; padding: 0.2rem 0.8rem;">Kitty Doodles</span>
-              <span style="font-size: 1.1rem; color: #666; font-weight: 600;">0-6M to 2-3Y</span>
-            </div>
-            <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
-              <a href="/products/playful-kitty-doodles-coord?item=playful_kitty_coord" style="color: #3D2355; text-decoration: none;">Playful Kitty Doodles Set</a>
-            </h3>
-            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">
-              ₹1,299.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹1,699.00</span>
-              <span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">24% OFF</span>
-            </div>
-          </div>
-        </div>
-      </li>
-
-      <!-- Product 1: Sunshine Chanderi Lehenga -->
-      <li class="grid__item meeeku-grid-item" data-category="ethnic" data-price="3199" data-age="0-6m,6-12m,1-2y,2-3y,3-7y" data-date="2026-01-15" data-bestseller-rank="1">
-        <div class="card-wrapper meeeku-interactive-card">
-          <div class="meeeku-card-media-wrapper">
-            <a href="/products/sunshine-chanderi-lehenga?item=yellow_lehenga" class="meeeku-card-link">
+            <a href="/products/sunshine-chanderi-lehenga" class="meeeku-card-link">
               <img src="{{ 'meeeku_prod_yellow_lehenga.jpg' | asset_url }}" alt="Sunshine Chanderi Lehenga" class="meeeku-card-img meeeku-img-primary" width="600" height="750" loading="lazy">
               <img src="{{ 'meeeku_prod_yellow_lehenga_model.jpg' | asset_url }}" alt="Sunshine Chanderi Lehenga Model View" class="meeeku-card-img meeeku-img-secondary" width="600" height="750" loading="lazy">
             </a>
-            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Sunshine Chanderi Lehenga', '₹3,199.00', '{{ 'meeeku_prod_yellow_lehenga.jpg' | asset_url }}')">
+            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Sunshine Chanderi Lehenga', '₹3,199.00', '{{ 'meeeku_prod_yellow_lehenga.jpg' | asset_url }}', '')">
               🛒 + Quick Add — ₹3,199
             </button>
           </div>
           <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
-              <span class="meeeku-badge meeeku-badge--ethnic" style="font-size: 1rem; padding: 0.2rem 0.8rem;">Chanderi Cotton</span>
-              <span style="font-size: 1.1rem; color: #666; font-weight: 600;">0-1Y to 6-7Y</span>
+              <span class="meeeku-badge meeeku-badge--ethnic" style="font-size: 1rem; padding: 0.2rem 0.8rem;">Festive Chanderi</span>
+              <span style="font-size: 1.1rem; color: #666; font-weight: 600;">2-3Y to 6-7Y</span>
             </div>
             <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
-              <a href="/products/sunshine-chanderi-lehenga?item=yellow_lehenga" style="color: #3D2355; text-decoration: none;">Sunshine Chanderi Lehenga</a>
+              <a href="/products/sunshine-chanderi-lehenga" style="color: #3D2355; text-decoration: none;">Sunshine Chanderi Lehenga</a>
             </h3>
-            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹3,199.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹3,899.00</span><span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">18% OFF</span></div>
+            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">
+              ₹3,199.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹3,899.00</span>
+              <span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">18% OFF</span>
+            </div>
           </div>
         </div>
       </li>
 
-      <!-- Product 2: Teal Bloom Sequin Lehenga -->
-      <li class="grid__item meeeku-grid-item" data-category="ethnic" data-price="2999" data-age="0-6m,6-12m,1-2y,2-3y,3-7y" data-date="2026-02-01">
+      <!-- Ethnic 2: Blush Rose Net Lehenga -->
+      <li class="grid__item meeeku-grid-item" data-category="all ethnic" data-price="3299" data-age="all,1-2y,2-3y,3-7y" data-date="2026-08-17" data-bestseller-rank="4">
         <div class="card-wrapper meeeku-interactive-card">
           <div class="meeeku-card-media-wrapper">
-            <a href="/products/teal-bloom-sequin-dress?item=teal_dress" class="meeeku-card-link">
-              <img src="{{ 'meeeku_prod_teal_dress.jpg' | asset_url }}" alt="Teal Bloom Sequin Lehenga" class="meeeku-card-img meeeku-img-primary" width="600" height="750" loading="lazy">
-              <img src="{{ 'meeeku_prod_teal_dress_model.jpg' | asset_url }}" alt="Teal Bloom Sequin Lehenga Model View" class="meeeku-card-img meeeku-img-secondary" width="600" height="750" loading="lazy">
-            </a>
-            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Teal Bloom Sequin Lehenga', '₹2,999.00', '{{ 'meeeku_prod_teal_dress.jpg' | asset_url }}')">
-              🛒 + Quick Add — ₹2,999
-            </button>
-          </div>
-          <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
-              <span class="meeeku-badge meeeku-badge--ethnic" style="font-size: 1rem; padding: 0.2rem 0.8rem;">Royal Sequined Net</span>
-              <span style="font-size: 1.1rem; color: #666; font-weight: 600;">0-1Y to 6-7Y</span>
-            </div>
-            <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
-              <a href="/products/teal-bloom-sequin-dress?item=teal_dress" style="color: #3D2355; text-decoration: none;">Teal Bloom Sequin Lehenga</a>
-            </h3>
-            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹2,999.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹3,699.00</span><span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">19% OFF</span></div>
-          </div>
-        </div>
-      </li>
-
-      <!-- Product 3: Blush Rose Net Lehenga -->
-      <li class="grid__item meeeku-grid-item" data-category="ethnic" data-price="3299" data-age="0-6m,6-12m,1-2y,2-3y,3-7y" data-date="2026-01-10">
-        <div class="card-wrapper meeeku-interactive-card">
-          <div class="meeeku-card-media-wrapper">
-            <a href="/products/blush-rose-net-lehenga?item=pink_net_lehenga" class="meeeku-card-link">
+            <a href="/products/blush-rose-net-lehenga" class="meeeku-card-link">
               <img src="{{ 'meeeku_prod_pink_net_lehenga.jpg' | asset_url }}" alt="Blush Rose Net Lehenga" class="meeeku-card-img meeeku-img-primary" width="600" height="750" loading="lazy">
               <img src="{{ 'meeeku_prod_pink_net_lehenga_model.jpg' | asset_url }}" alt="Blush Rose Net Lehenga Model View" class="meeeku-card-img meeeku-img-secondary" width="600" height="750" loading="lazy">
             </a>
-            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Blush Rose Net Lehenga', '₹3,299.00', '{{ 'meeeku_prod_pink_net_lehenga.jpg' | asset_url }}')">
+            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Blush Rose Net Lehenga', '₹3,299.00', '{{ 'meeeku_prod_pink_net_lehenga.jpg' | asset_url }}', '')">
               🛒 + Quick Add — ₹3,299
             </button>
           </div>
           <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
-              <span class="meeeku-badge meeeku-badge--ethnic" style="font-size: 1rem; padding: 0.2rem 0.8rem;">Royal Net & Zari</span>
-              <span style="font-size: 1.1rem; color: #666; font-weight: 600;">0-1Y to 6-7Y</span>
+              <span class="meeeku-badge meeeku-badge--ethnic" style="font-size: 1rem; padding: 0.2rem 0.8rem;">Tiered Soft Net</span>
+              <span style="font-size: 1.1rem; color: #666; font-weight: 600;">2-3Y to 6-7Y</span>
             </div>
             <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
-              <a href="/products/blush-rose-net-lehenga?item=pink_net_lehenga" style="color: #3D2355; text-decoration: none;">Blush Rose Net Lehenga</a>
+              <a href="/products/blush-rose-net-lehenga" style="color: #3D2355; text-decoration: none;">Blush Rose Net Lehenga</a>
             </h3>
-            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹3,299.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹3,999.00</span><span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">18% OFF</span></div>
-          </div>
-        </div>
-      </li>
-
-      <!-- Product 4: Forest Vrindavan Lehenga -->
-      <li class="grid__item meeeku-grid-item" data-category="ethnic" data-price="3199" data-age="0-6m,6-12m,1-2y,2-3y,3-7y" data-date="2026-01-18" data-bestseller-rank="9">
-        <div class="card-wrapper meeeku-interactive-card">
-          <div class="meeeku-card-media-wrapper">
-            <a href="/products/forest-vrindavan-green-lehenga?item=green_lehenga" class="meeeku-card-link">
-              <img src="{{ 'meeeku_prod_green_lehenga.jpg' | asset_url }}" alt="Forest Vrindavan Lehenga" class="meeeku-card-img meeeku-img-primary" width="600" height="750" loading="lazy">
-              <img src="{{ 'meeeku_prod_green_lehenga_model.jpg' | asset_url }}" alt="Forest Vrindavan Lehenga Model View" class="meeeku-card-img meeeku-img-secondary" width="600" height="750" loading="lazy">
-            </a>
-            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Forest Vrindavan Lehenga', '₹3,199.00', '{{ 'meeeku_prod_green_lehenga.jpg' | asset_url }}')">
-              🛒 + Quick Add — ₹3,199
-            </button>
-          </div>
-          <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
-              <span class="meeeku-badge meeeku-badge--ethnic" style="font-size: 1rem; padding: 0.2rem 0.8rem;">100% Organic Cotton</span>
-              <span style="font-size: 1.1rem; color: #666; font-weight: 600;">0-1Y to 6-7Y</span>
+            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">
+              ₹3,299.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹3,999.00</span>
+              <span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">18% OFF</span>
             </div>
-            <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
-              <a href="/products/forest-vrindavan-green-lehenga?item=green_lehenga" style="color: #3D2355; text-decoration: none;">Forest Vrindavan Lehenga</a>
-            </h3>
-            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹3,199.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹3,899.00</span><span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">18% OFF</span></div>
-          </div>
-        </div>
-      </li>
-
-      <!-- Product 5: Gulmohar Splash Printed Lehenga -->
-      <li class="grid__item meeeku-grid-item" data-category="ethnic" data-price="2899" data-age="0-6m,6-12m,1-2y,2-3y,3-7y" data-date="2026-02-05">
-        <div class="card-wrapper meeeku-interactive-card">
-          <div class="meeeku-card-media-wrapper">
-            <a href="/products/gulmohar-splash-abstract-coord?item=multicolor_coord" class="meeeku-card-link">
-              <img src="{{ 'meeeku_prod_multicolor_coord.jpg' | asset_url }}" alt="Gulmohar Splash Printed Lehenga" class="meeeku-card-img meeeku-img-primary" width="600" height="750" loading="lazy">
-              <img src="{{ 'meeeku_prod_multicolor_coord_model.jpg' | asset_url }}" alt="Gulmohar Splash Printed Lehenga Model View" class="meeeku-card-img meeeku-img-secondary" width="600" height="750" loading="lazy">
-            </a>
-            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Gulmohar Splash Printed Lehenga', '₹2,899.00', '{{ 'meeeku_prod_multicolor_coord.jpg' | asset_url }}')">
-              🛒 + Quick Add — ₹2,899
-            </button>
-          </div>
-          <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
-              <span class="meeeku-badge meeeku-badge--ethnic" style="font-size: 1rem; padding: 0.2rem 0.8rem;">Festive Printed Rayon</span>
-              <span style="font-size: 1.1rem; color: #666; font-weight: 600;">0-1Y to 6-7Y</span>
-            </div>
-            <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
-              <a href="/products/gulmohar-splash-abstract-coord?item=multicolor_coord" style="color: #3D2355; text-decoration: none;">Gulmohar Splash Printed Lehenga</a>
-            </h3>
-            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹2,899.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹3,599.00</span><span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">19% OFF</span></div>
-          </div>
-        </div>
-      </li>
-
-      <!-- Product 6: Sage Mint Gota Lehenga -->
-      <li class="grid__item meeeku-grid-item" data-category="ethnic" data-price="3199" data-age="0-6m,6-12m,1-2y,2-3y,3-7y" data-date="2026-01-22">
-        <div class="card-wrapper meeeku-interactive-card">
-          <div class="meeeku-card-media-wrapper">
-            <a href="/products/sage-mint-gota-lehenga?item=sage_lehenga" class="meeeku-card-link">
-              <img src="{{ 'meeeku_prod_sage_lehenga.jpg' | asset_url }}" alt="Sage Mint Gota Lehenga" class="meeeku-card-img meeeku-img-primary" width="600" height="750" loading="lazy">
-              <img src="{{ 'meeeku_prod_sage_lehenga_model.jpg' | asset_url }}" alt="Sage Mint Gota Lehenga Model View" class="meeeku-card-img meeeku-img-secondary" width="600" height="750" loading="lazy">
-            </a>
-            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Sage Mint Gota Lehenga', '₹3,199.00', '{{ 'meeeku_prod_sage_lehenga.jpg' | asset_url }}')">
-              🛒 + Quick Add — ₹3,199
-            </button>
-          </div>
-          <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
-              <span class="meeeku-badge meeeku-badge--ethnic" style="font-size: 1rem; padding: 0.2rem 0.8rem;">Gota Patti Zari</span>
-              <span style="font-size: 1.1rem; color: #666; font-weight: 600;">0-1Y to 6-7Y</span>
-            </div>
-            <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
-              <a href="/products/sage-mint-gota-lehenga?item=sage_lehenga" style="color: #3D2355; text-decoration: none;">Sage Mint Gota Lehenga</a>
-            </h3>
-            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹3,199.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹3,899.00</span><span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">18% OFF</span></div>
-          </div>
-        </div>
-      </li>
-
-      <!-- Product 7: Rani Pink Phulkari Lehenga -->
-      <li class="grid__item meeeku-grid-item" data-category="ethnic" data-price="2799" data-age="0-6m,6-12m,1-2y,2-3y,3-7y" data-date="2026-01-12">
-        <div class="card-wrapper meeeku-interactive-card">
-          <div class="meeeku-card-media-wrapper">
-            <a href="/products/rani-pink-phulkari-lehenga?item=magenta_lehenga" class="meeeku-card-link">
-              <img src="{{ 'meeeku_prod_magenta_lehenga.jpg' | asset_url }}" alt="Rani Pink Phulkari Lehenga" class="meeeku-card-img meeeku-img-primary" width="600" height="750" loading="lazy">
-              <img src="{{ 'meeeku_prod_magenta_lehenga_model.jpg' | asset_url }}" alt="Rani Pink Phulkari Lehenga Model View" class="meeeku-card-img meeeku-img-secondary" width="600" height="750" loading="lazy">
-            </a>
-            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Rani Pink Phulkari Lehenga', '₹2,799.00', '{{ 'meeeku_prod_magenta_lehenga.jpg' | asset_url }}')">
-              🛒 + Quick Add — ₹2,799
-            </button>
-          </div>
-          <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
-              <span class="meeeku-badge meeeku-badge--ethnic" style="font-size: 1rem; padding: 0.2rem 0.8rem;">Phulkari Threadwork</span>
-              <span style="font-size: 1.1rem; color: #666; font-weight: 600;">0-1Y to 6-7Y</span>
-            </div>
-            <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
-              <a href="/products/rani-pink-phulkari-lehenga?item=magenta_lehenga" style="color: #3D2355; text-decoration: none;">Rani Pink Phulkari Lehenga</a>
-            </h3>
-            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹2,799.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹3,499.00</span><span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">20% OFF</span></div>
-          </div>
-        </div>
-      </li>
-
-      <!-- Product 8: Midnight Blossom Halter Lehenga -->
-      <li class="grid__item meeeku-grid-item" data-category="ethnic" data-price="2799" data-age="0-6m,6-12m,1-2y,2-3y,3-7y" data-date="2026-01-28" data-bestseller-rank="21">
-        <div class="card-wrapper meeeku-interactive-card">
-          <div class="meeeku-card-media-wrapper">
-            <a href="/products/midnight-blossom-halter-lehenga?item=black_lehenga" class="meeeku-card-link">
-              <img src="{{ 'meeeku_prod_black_lehenga.jpg' | asset_url }}" alt="Midnight Blossom Halter Lehenga" class="meeeku-card-img meeeku-img-primary" width="600" height="750" loading="lazy">
-              <img src="{{ 'meeeku_prod_black_lehenga_model.jpg' | asset_url }}" alt="Midnight Blossom Halter Lehenga Model View" class="meeeku-card-img meeeku-img-secondary" width="600" height="750" loading="lazy">
-            </a>
-            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Midnight Blossom Halter Lehenga', '₹2,799.00', '{{ 'meeeku_prod_black_lehenga.jpg' | asset_url }}')">
-              🛒 + Quick Add — ₹2,799
-            </button>
-          </div>
-          <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
-              <span class="meeeku-badge meeeku-badge--ethnic" style="font-size: 1rem; padding: 0.2rem 0.8rem;">Royal Halter Neck</span>
-              <span style="font-size: 1.1rem; color: #666; font-weight: 600;">0-1Y to 6-7Y</span>
-            </div>
-            <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
-              <a href="/products/midnight-blossom-halter-lehenga?item=black_lehenga" style="color: #3D2355; text-decoration: none;">Midnight Blossom Halter Lehenga</a>
-            </h3>
-            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹2,799.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹3,499.00</span><span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">20% OFF</span></div>
-          </div>
-        </div>
-      </li>
-
-      <!-- Product 9: Olive Silk One-Shoulder Lehenga -->
-      <li class="grid__item meeeku-grid-item" data-category="ethnic" data-price="3299" data-age="0-6m,6-12m,1-2y,2-3y,3-7y" data-date="2026-02-08" data-bestseller-rank="22">
-        <div class="card-wrapper meeeku-interactive-card">
-          <div class="meeeku-card-media-wrapper">
-            <a href="/products/olive-silk-oneshoulder-lehenga?item=olive_lehenga" class="meeeku-card-link">
-              <img src="{{ 'meeeku_prod_olive_lehenga.jpg' | asset_url }}" alt="Olive Silk One-Shoulder Lehenga" class="meeeku-card-img meeeku-img-primary" width="600" height="750" loading="lazy">
-              <img src="{{ 'meeeku_prod_olive_lehenga_model.jpg' | asset_url }}" alt="Olive Silk One-Shoulder Lehenga Model View" class="meeeku-card-img meeeku-img-secondary" width="600" height="750" loading="lazy">
-            </a>
-            <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('Olive Silk One-Shoulder Lehenga', '₹3,299.00', '{{ 'meeeku_prod_olive_lehenga.jpg' | asset_url }}')">
-              🛒 + Quick Add — ₹3,299
-            </button>
-          </div>
-          <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
-              <span class="meeeku-badge meeeku-badge--ethnic" style="font-size: 1rem; padding: 0.2rem 0.8rem;">Zardozi Silk</span>
-              <span style="font-size: 1.1rem; color: #666; font-weight: 600;">0-1Y to 6-7Y</span>
-            </div>
-            <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
-              <a href="/products/olive-silk-oneshoulder-lehenga?item=olive_lehenga" style="color: #3D2355; text-decoration: none;">Olive Silk One-Shoulder Lehenga</a>
-            </h3>
-            <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">₹3,299.00 <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">₹3,999.00</span><span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">18% OFF</span></div>
           </div>
         </div>
       </li>
       {% endif %}
-
     </ul>
   </div>
-</div>
 
-<!-- Catalog Cart Toast Notification Element -->
-<div id="MeeekuCartToastCatalog" class="meeeku-cart-toast">
-  🎉 Item added to your Meeeku Cart!
+  <!-- Toast Notification for Add to Cart -->
+  <div id="MeeekuCartToastCatalog" class="meeeku-cart-toast">
+    🎉 Product added to your Cart!
+  </div>
+
 </div>
 
 <script>
 let currentCategory = 'all';
 
-function setCategoryFilter(category, button) {
-  currentCategory = category;
+function setCategoryFilter(cat, btn) {
+  currentCategory = cat;
   document.querySelectorAll('.meeeku-pill-filter').forEach(el => el.classList.remove('active'));
-  if (button) button.classList.add('active');
-
-  const newUrl = new URL(window.location);
-  if (category && category !== 'all') {
-    newUrl.searchParams.set('category', category);
-  } else {
-    newUrl.searchParams.delete('category');
-  }
-  window.history.replaceState({}, '', newUrl);
-
+  if (btn) btn.classList.add('active');
   applyCatalogFiltersAndSort();
 }
 
@@ -758,7 +355,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   applyCatalogFiltersAndSort();
 
-  // Mobile / Tablet Press & Hold Touch Handler for Product Cards
   const cardLinks = document.querySelectorAll('.meeeku-card-link');
   cardLinks.forEach(link => {
     let touchTimer = null;
@@ -801,8 +397,11 @@ const COMING_SOON_INFO = {
 };
 
 function applyCatalogFiltersAndSort() {
-  const ageFilter = document.getElementById('MeeekuAgeFilter').value;
-  const sortOption = document.getElementById('MeeekuPriceSort').value;
+  const ageFilterEl = document.getElementById('MeeekuAgeFilter');
+  const sortOptionEl = document.getElementById('MeeekuPriceSort');
+  const ageFilter = ageFilterEl ? ageFilterEl.value : 'all';
+  const sortOption = sortOptionEl ? sortOptionEl.value : 'featured';
+
   const grid = document.getElementById('MeeekuProductGrid');
   const items = Array.from(document.querySelectorAll('.meeeku-grid-item'));
   const banner = document.getElementById('MeeekuComingSoonBanner');
@@ -856,7 +455,9 @@ function applyCatalogFiltersAndSort() {
     return rankA - rankB;
   });
 
-  items.forEach(item => grid.appendChild(item));
+  if (grid) {
+    items.forEach(item => grid.appendChild(item));
+  }
 }
 
 function handleMeeekuWaitlistSubmit(e) {
@@ -871,25 +472,30 @@ function handleMeeekuWaitlistSubmit(e) {
 function meeekuAddToCartCatalog(title, price, imgUrl, variantId) {
   let cart = [];
   try {
-    cart = JSON.parse(localStorage.getItem('meeeku_cart') || '[]');
+    cart = JSON.parse(localStorage.getItem('meeeku_active_cart') || localStorage.getItem('meeeku_user_cart') || localStorage.getItem('meeeku_cart') || '[]');
   } catch (e) { cart = []; }
 
-  const itemKey = (variantId || title) + '_2-3Y';
-  const existing = cart.find(i => i.key === itemKey);
+  const itemKey = (variantId || title) + '_Standard';
+  const existing = cart.find(i => i.title === title);
   if (existing) {
-    existing.quantity += 1;
+    let q = existing.qty || existing.quantity || 1;
+    existing.qty = q + 1;
+    existing.quantity = q + 1;
   } else {
     cart.push({
       key: itemKey,
-      id: variantId || '',
+      id: variantId || ('item_' + Date.now()),
       title: title,
       price: price,
       img: imgUrl,
       size: '2 - 3Y',
+      qty: 1,
       quantity: 1
     });
   }
 
+  localStorage.setItem('meeeku_active_cart', JSON.stringify(cart));
+  localStorage.setItem('meeeku_user_cart', JSON.stringify(cart));
   localStorage.setItem('meeeku_cart', JSON.stringify(cart));
 
   if (variantId && !isNaN(parseInt(variantId))) {
@@ -903,7 +509,7 @@ function meeekuAddToCartCatalog(title, price, imgUrl, variantId) {
   const dot = document.getElementById('MeeekuCartDot');
   if (dot) dot.classList.add('has-items');
 
-  const totalCount = cart.reduce((sum, i) => sum + i.quantity, 0);
+  const totalCount = cart.reduce((sum, i) => sum + (i.quantity || i.qty || 1), 0);
   const countBubbles = document.querySelectorAll('.cart-count-bubble span');
   countBubbles.forEach(b => b.textContent = totalCount);
 
@@ -911,7 +517,7 @@ function meeekuAddToCartCatalog(title, price, imgUrl, variantId) {
 }
 
 function showMeeekuToastCatalog(msg) {
-  const toast = document.getElementById('MeeekuCartToastCatalog');
+  const toast = document.getElementById('MeeekuCartToastCatalog') || document.getElementById('MeeekuCartToast');
   if (toast) {
     toast.innerText = msg;
     toast.classList.add('show');
@@ -923,7 +529,6 @@ function showMeeekuToastCatalog(msg) {
 </script>
 
 <style>
-/* Card Media Wrapper & Dual Image Smooth Hover Effect */
 .meeeku-card-media-wrapper {
   position: relative;
   width: 100%;
@@ -964,7 +569,6 @@ function showMeeekuToastCatalog(msg) {
   opacity: 0;
 }
 
-/* Desktop Mouse Hover Animation */
 .meeeku-card-link:hover .meeeku-img-secondary,
 .meeeku-card-link.is-touch-active .meeeku-img-secondary {
   opacity: 1;
@@ -973,29 +577,6 @@ function showMeeekuToastCatalog(msg) {
 
 .meeeku-card-link:hover .meeeku-img-primary,
 .meeeku-card-link.is-touch-active .meeeku-img-primary {
-  opacity: 0;
-}
-
-.meeeku-hover-tag {
-  position: absolute;
-  bottom: 1rem;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 3;
-  background: rgba(255, 253, 247, 0.92);
-  backdrop-filter: blur(6px);
-  border: 1px solid #F8BBD0;
-  color: #6B3FA0;
-  font-size: 1.1rem;
-  font-weight: 700;
-  padding: 0.3rem 0.9rem;
-  border-radius: 20px;
-  pointer-events: none;
-  opacity: 0.85;
-  transition: opacity 0.3s ease;
-}
-
-.meeeku-card-media-wrapper:hover .meeeku-hover-tag {
   opacity: 0;
 }
 
@@ -1145,9 +726,6 @@ function showMeeekuToastCatalog(msg) {
     font-size: 1.2rem !important;
     font-weight: 700 !important;
   }
-  .meeeku-card-hover-quick-add::after {
-    content: '' !important;
-  }
 }
 </style>
 
@@ -1156,7 +734,27 @@ function showMeeekuToastCatalog(msg) {
   "name": "Meeeku Catalog Grid",
   "tag": "section",
   "class": "section",
-  "settings": [],
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "default": 16,
+      "label": "Products per page"
+    },
+    {
+      "type": "select",
+      "id": "columns_desktop",
+      "options": [
+        { "value": "3", "label": "3 Columns" },
+        { "value": "4", "label": "4 Columns" }
+      ],
+      "default": "3",
+      "label": "Desktop columns"
+    }
+  ],
   "presets": [
     {
       "name": "Meeeku Catalog Grid"

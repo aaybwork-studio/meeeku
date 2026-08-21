@@ -1,0 +1,123 @@
+{% comment %}
+  Dynamic Meeeku Product Card Snippet
+  Renders a real Shopify product with dual-image hover, dynamic tags, pricing, and 1-click Quick Add.
+{% endcomment %}
+
+{% liquid
+  assign primary_img = product.featured_media.preview_image | default: product.featured_image | default: product.images.first
+  assign secondary_img = product.images[1] | default: primary_img
+  assign current_variant = product.selected_or_first_available_variant
+
+  assign has_discount = false
+  if product.compare_at_price > product.price
+    assign has_discount = true
+    assign savings = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price
+  endif
+
+  assign p_tags = product.tags | join: ',' | downcase
+  assign p_type = product.type | downcase
+  assign p_title = product.title | downcase
+
+  assign badge_text = custom_badge
+  if badge_text == blank
+    if p_tags contains 'bestseller' or p_tags contains 'best seller'
+      assign badge_text = '⭐ Best Seller'
+    elsif p_tags contains 'new' or p_tags contains 'new arrival'
+      assign badge_text = '🎀 New Arrival'
+    elsif p_tags contains 'festive' or p_tags contains 'lehenga' or p_type contains 'ethnic'
+      assign badge_text = '👑 Festive Edit'
+    elsif p_tags contains 'coord' or p_type contains 'set' or p_type contains 'coord'
+      assign badge_text = '✨ 2-Piece Set'
+    elsif has_discount
+      assign badge_text = '🔥 Special Price'
+    endif
+  endif
+
+  assign sizes_label = ''
+  if product.variants.size > 1
+    assign first_size = product.variants.first.title
+    assign last_size = product.variants.last.title
+    assign sizes_label = 'Sizes: ' | append: first_size | append: ' to ' | append: last_size
+  elsif product.variants.size == 1 and product.variants.first.title != 'Default Title'
+    assign sizes_label = 'Size: ' | append: product.variants.first.title
+  else
+    if p_type contains 'tee' or p_type contains 'coord' or p_tags contains 'tee'
+      assign sizes_label = 'Sizes: 0-6M to 2-3Y'
+    else
+      assign sizes_label = 'Sizes: 0-1Y to 6-7Y'
+    endif
+  endif
+%}
+
+<div class="card-wrapper meeeku-product-card" id="product-card-{{ product.id }}-{{ block_id }}" style="background: #FFFDF7; border: 1.5px solid #F8BBD0; border-radius: 22px; overflow: hidden; transition: all 0.3s ease; box-shadow: 0 4px 14px rgba(107,63,160,0.06); display: flex; flex-direction: column; text-align: center;">
+  
+  <div class="meeeku-card-media-wrapper" style="position: relative; overflow: hidden; aspect-ratio: 3/4; background: #FFF0F5;">
+    <a href="{{ product.url }}" style="display: block; width: 100%; height: 100%;">
+      {% if primary_img %}
+        <img src="{{ primary_img | image_url: width: 600 }}" 
+             alt="{{ primary_img.alt | default: product.title | escape }}" 
+             class="meeeku-card-img-primary" 
+             width="600" 
+             height="800" 
+             loading="lazy" 
+             style="width: 100%; height: 100%; object-fit: cover;">
+      {% endif %}
+      {% if secondary_img and secondary_img != primary_img %}
+        <img src="{{ secondary_img | image_url: width: 600 }}" 
+             alt="{{ secondary_img.alt | default: product.title | escape }}" 
+             class="meeeku-card-img-secondary" 
+             width="600" 
+             height="800" 
+             loading="lazy" 
+             style="width: 100%; height: 100%; object-fit: cover;">
+      {% endif %}
+    </a>
+
+    {% if badge_text != blank %}
+      <div style="position: absolute; top: 1rem; left: 1rem; z-index: 5;">
+        <span style="background: rgba(255, 255, 255, 0.96); color: #3D2355; font-size: 1.15rem; font-weight: 800; padding: 0.35rem 0.9rem; border-radius: 20px; border: 1.5px solid #F8BBD0; box-shadow: 0 4px 12px rgba(107,63,160,0.12); display: inline-flex; align-items: center; gap: 0.3rem;">
+          {{ badge_text }}
+        </span>
+      </div>
+    {% endif %}
+
+    <button type="button" 
+            class="meeeku-card-hover-quick-add" 
+            onclick="meeekuAddToCartCatalog('{{ product.title | escape }}', '{{ product.price | money }}', '{{ primary_img | image_url: width: 400 }}', '{{ current_variant.id }}')">
+      + Quick Add • {{ product.price | money }}
+    </button>
+  </div>
+
+  <div style="padding: 1.5rem 1.2rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; align-items: center; text-align: center;">
+    <div style="width: 100%;">
+      <span style="font-size: 1.15rem; font-weight: 700; color: #FF6097; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.3rem;">
+        {{ product.type | default: 'Meeeku Pure Cotton' }}
+      </span>
+      <h3 style="margin: 0 0 0.5rem; font-size: 1.65rem; font-weight: 700; color: #3D2355; line-height: 1.3; text-align: center;">
+        <a href="{{ product.url }}" style="color: inherit; text-decoration: none;">
+          {{ product.title }}
+        </a>
+      </h3>
+      {% if sizes_label != blank %}
+        <div style="font-size: 1.25rem; color: #777; margin-bottom: 0.8rem; text-align: center;">
+          {{ sizes_label }}
+        </div>
+      {% endif %}
+    </div>
+
+    <div style="display: flex; align-items: center; justify-content: center; gap: 0.8rem; width: 100%; flex-wrap: wrap;">
+      <span style="font-size: 1.85rem; font-weight: 800; color: #6B3FA0;">
+        {{ product.price | money }}
+      </span>
+      {% if has_discount %}
+        <span style="font-size: 1.35rem; color: #999; text-decoration: line-through;">
+          {{ product.compare_at_price | money }}
+        </span>
+        <span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1.05rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 12px;">
+          {{ savings }}% OFF
+        </span>
+      {% endif %}
+    </div>
+  </div>
+
+</div>

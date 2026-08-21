@@ -1,48 +1,122 @@
 {% comment %}
-  Meeeku Full-Width Scenery Hero Carousel with Lifestyle Model Banners & Overlay Cards
+  Meeeku Dynamic Hero Carousel & Scenery Slideshow (Shopify OS 2.0 CMS Connected)
+  Fully editable via Shopify Theme Customizer: add, remove, and reorder slide blocks, upload desktop/mobile images, customize headings, tags, button CTAs, and links.
 {% endcomment %}
 
-<div class="meeeku-slideshow-wrapper">
-  <div class="meeeku-slideshow-container" id="MeeekuSlideshow-{{ section.id }}">
+{% liquid
+  assign autoplay = section.settings.autoplay | default: true
+  assign interval = section.settings.autoplay_interval | default: 6 | times: 1000
+  assign slide_count = section.blocks.size
+%}
+
+<div class="meeeku-slideshow-wrapper" id="MeeekuSlideshowWrapper-{{ section.id }}">
+  <div class="meeeku-slideshow-container" id="MeeekuSlideshow-{{ section.id }}" data-autoplay="{{ autoplay }}" data-interval="{{ interval }}">
     
-    <!-- Slide 1: Indian Ethnic -->
-    <div class="meeeku-slide active" data-index="0">
-      <img src="{{ 'meeeku_hero_scenery_ethnic_wide.jpg' | asset_url }}" alt="Sunshine Chanderi Lehengas" class="meeeku-hero-bg-img" width="1920" height="1080" loading="eager">
-      <div class="page-width meeeku-slide__content-wrapper">
-        <div class="meeeku-hero-col-text">
-          <span class="meeeku-badge meeeku-badge--ethnic">Girls Indian Ethnic</span>
-          <h2 class="meeeku-slide__headline">Sunshine Chanderi Lehengas</h2>
-          <p class="meeeku-slide__tagline">Handcrafted with 100% soft muslin cotton lining for zero-itch festive twirling all day long.</p>
-          <a href="/collections/all?category=ethnic" class="button button--primary meeeku-btn-pill">Shop Ethnic Wear 👑</a>
-        </div>
-      </div>
-    </div>
+    {% if slide_count > 0 %}
+      {% for block in section.blocks %}
+        {% liquid
+          assign bg_img = block.settings.image
+          assign mob_img = block.settings.mobile_image | default: bg_img
+          assign badge = block.settings.badge_text
+          assign heading = block.settings.heading
+          assign tagline = block.settings.tagline
+          assign btn_label = block.settings.button_label
+          assign btn_link = block.settings.button_link | default: '/collections/all'
+          assign btn_style = block.settings.button_style | default: 'primary'
+        %}
+        <div class="meeeku-slide {% if forloop.first %}active{% endif %}" data-index="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
+          {% if bg_img != blank %}
+            <picture>
+              {% if mob_img != blank and mob_img != bg_img %}
+                <source media="(max-width: 749px)" srcset="{{ mob_img | image_url: width: 800 }}">
+              {% endif %}
+              <img src="{{ bg_img | image_url: width: 1920 }}" 
+                   alt="{{ heading | default: 'Meeeku Hero Banner' | escape }}" 
+                   class="meeeku-hero-bg-img" 
+                   width="1920" 
+                   height="1080" 
+                   {% if forloop.first %}loading="eager"{% else %}loading="lazy"{% endif %}>
+            </picture>
+          {% else %}
+            <!-- Default Fallback Image based on slide index -->
+            {% liquid
+              assign default_asset = 'meeeku_hero_scenery_ethnic_wide.jpg'
+              if forloop.index == 2
+                assign default_asset = 'meeeku_hero_scenery_dresses_wide.jpg'
+              elsif forloop.index == 3
+                assign default_asset = 'meeeku_hero_scenery_coords_wide.jpg'
+              endif
+            %}
+            <img src="{{ default_asset | asset_url }}" alt="{{ heading | escape }}" class="meeeku-hero-bg-img" width="1920" height="1080" {% if forloop.first %}loading="eager"{% else %}loading="lazy"{% endif %}>
+          {% endif %}
 
-    <!-- Slide 2: Festive Indo-Western Dresses (COMING SOON) -->
-    <div class="meeeku-slide" data-index="1">
-      <img src="{{ 'meeeku_hero_scenery_dresses_wide.jpg' | asset_url }}" alt="Teal Bloom Sequined Dresses" class="meeeku-hero-bg-img" width="1920" height="1080" loading="lazy">
-      <div class="page-width meeeku-slide__content-wrapper">
-        <div class="meeeku-hero-col-text">
-          <span class="meeeku-badge" style="background: #E0F7FA; color: #00838F; border-color: #4DD0E1;">Western Dresses • Coming Soon ⏳</span>
-          <h2 class="meeeku-slide__headline">Partywear & Tulle Dresses</h2>
-          <p class="meeeku-slide__tagline">Twirl-ready tulle net skirts with sparkling floral sequin embroidery dropping soon.</p>
-          <a href="/collections/all?category=dresses" class="button button--secondary meeeku-btn-pill" style="background-color: #E0F7FA; color: #00838F; border-color: #4DD0E1; font-weight: 700;">🔔 Join Waitlist (15% OFF)</a>
-        </div>
-      </div>
-    </div>
+          <div class="page-width meeeku-slide__content-wrapper">
+            <div class="meeeku-hero-col-text">
+              {% if badge != blank %}
+                <span class="meeeku-badge" style="background: {{ block.settings.badge_bg | default: '#EDE7F6' }}; color: {{ block.settings.badge_color | default: '#512DA8' }};">
+                  {{ badge }}
+                </span>
+              {% endif %}
+              
+              {% if heading != blank %}
+                <h2 class="meeeku-slide__headline">{{ heading }}</h2>
+              {% endif %}
 
-    <!-- Slide 3: 2-Piece Organic Cotton Co-ord Sets (IN STOCK) -->
-    <div class="meeeku-slide" data-index="2">
-      <img src="{{ 'meeeku_hero_scenery_coords_wide.jpg' | asset_url }}" alt="2-Piece Organic Cotton Co-ords" class="meeeku-hero-bg-img" width="1920" height="1080" loading="lazy">
-      <div class="page-width meeeku-slide__content-wrapper">
-        <div class="meeeku-hero-col-text">
-          <span class="meeeku-badge" style="background: #E0F2F1; color: #00695C; border-color: #80CBC4;">2-Piece Co-ords • Flat ₹1,299 ✨</span>
-          <h2 class="meeeku-slide__headline">Organic 2-Piece Co-ord Sets</h2>
-          <p class="meeeku-slide__tagline">Cloud-soft matching lounge sets with ruffled eyelet collars & storybook prints (0-6M to 3-4Y).</p>
-          <a href="/collections/all?category=coords" class="button button--primary meeeku-btn-pill" style="background-color: #00695C; border-color: #00695C; font-weight: 700;">Shop 2-Piece Co-ords 🌸</a>
+              {% if tagline != blank %}
+                <p class="meeeku-slide__tagline">{{ tagline }}</p>
+              {% endif %}
+
+              {% if btn_label != blank %}
+                <a href="{{ btn_link }}" class="button button--{{ btn_style }} meeeku-btn-pill">
+                  {{ btn_label }}
+                </a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+
+    {% else %}
+      <!-- Fallback Default Brand Slides (Active when 0 blocks are configured) -->
+      <!-- Slide 1: Indian Ethnic -->
+      <div class="meeeku-slide active" data-index="0">
+        <img src="{{ 'meeeku_hero_scenery_ethnic_wide.jpg' | asset_url }}" alt="Sunshine Chanderi Lehengas" class="meeeku-hero-bg-img" width="1920" height="1080" loading="eager">
+        <div class="page-width meeeku-slide__content-wrapper">
+          <div class="meeeku-hero-col-text">
+            <span class="meeeku-badge meeeku-badge--ethnic">Girls Indian Ethnic</span>
+            <h2 class="meeeku-slide__headline">Sunshine Chanderi Lehengas</h2>
+            <p class="meeeku-slide__tagline">Handcrafted with 100% soft muslin cotton lining for zero-itch festive twirling all day long.</p>
+            <a href="/collections/all?category=ethnic" class="button button--primary meeeku-btn-pill">Shop Ethnic Wear 👑</a>
+          </div>
         </div>
       </div>
-    </div>
+
+      <!-- Slide 2: Festive Indo-Western Dresses -->
+      <div class="meeeku-slide" data-index="1">
+        <img src="{{ 'meeeku_hero_scenery_dresses_wide.jpg' | asset_url }}" alt="Teal Bloom Sequined Dresses" class="meeeku-hero-bg-img" width="1920" height="1080" loading="lazy">
+        <div class="page-width meeeku-slide__content-wrapper">
+          <div class="meeeku-hero-col-text">
+            <span class="meeeku-badge" style="background: #E0F7FA; color: #00838F; border-color: #4DD0E1;">Western Dresses • Coming Soon ⏳</span>
+            <h2 class="meeeku-slide__headline">Partywear & Tulle Dresses</h2>
+            <p class="meeeku-slide__tagline">Twirl-ready tulle net skirts with sparkling floral sequin embroidery dropping soon.</p>
+            <a href="/collections/all?category=dresses" class="button button--secondary meeeku-btn-pill" style="background-color: #E0F7FA; color: #00838F; border-color: #4DD0E1; font-weight: 700;">🔔 Join Waitlist (15% OFF)</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 3: 2-Piece Organic Cotton Co-ords -->
+      <div class="meeeku-slide" data-index="2">
+        <img src="{{ 'meeeku_hero_scenery_coords_wide.jpg' | asset_url }}" alt="2-Piece Organic Cotton Co-ords" class="meeeku-hero-bg-img" width="1920" height="1080" loading="lazy">
+        <div class="page-width meeeku-slide__content-wrapper">
+          <div class="meeeku-hero-col-text">
+            <span class="meeeku-badge" style="background: #E0F2F1; color: #00695C; border-color: #80CBC4;">2-Piece Co-ords • Flat ₹1,299 ✨</span>
+            <h2 class="meeeku-slide__headline">Organic 2-Piece Co-ord Sets</h2>
+            <p class="meeeku-slide__tagline">Cloud-soft matching lounge sets with ruffled eyelet collars & storybook prints (0-6M to 3-4Y).</p>
+            <a href="/collections/all?category=coords" class="button button--primary meeeku-btn-pill" style="background-color: #00695C; border-color: #00695C; font-weight: 700;">Shop 2-Piece Co-ords 🌸</a>
+          </div>
+        </div>
+      </div>
+    {% endif %}
 
     <!-- Navigation Arrows -->
     <button type="button" class="meeeku-slideshow__nav meeeku-slideshow__nav--prev" onclick="moveMeeekuSlide('{{ section.id }}', -1)" aria-label="Previous slide">&#10094;</button>
@@ -50,9 +124,11 @@
 
     <!-- Dots Indicators -->
     <div class="meeeku-slideshow__dots">
-      <span class="meeeku-dot active" onclick="setMeeekuSlide('{{ section.id }}', 0)"></span>
-      <span class="meeeku-dot" onclick="setMeeekuSlide('{{ section.id }}', 1)"></span>
-      <span class="meeeku-dot" onclick="setMeeekuSlide('{{ section.id }}', 2)"></span>
+      {% assign dot_count = slide_count %}
+      {% if dot_count == 0 %}{% assign dot_count = 3 %}{% endif %}
+      {% for i in (1..dot_count) %}
+        <span class="meeeku-dot {% if forloop.first %}active{% endif %}" onclick="setMeeekuSlide('{{ section.id }}', {{ forloop.index0 }})"></span>
+      {% endfor %}
     </div>
 
   </div>
@@ -97,15 +173,6 @@
   object-fit: cover;
   object-position: center center;
   z-index: 1;
-}
-.meeeku-hero-bg--1 {
-  /* background-image set via inline style - Liquid not processed in CSS blocks */
-}
-.meeeku-hero-bg--2 {
-  /* background-image set via inline style - Liquid not processed in CSS blocks */
-}
-.meeeku-hero-bg--3 {
-  /* background-image set via inline style - Liquid not processed in CSS blocks */
 }
 .meeeku-slide__content-wrapper {
   position: relative;
@@ -217,53 +284,69 @@
 </style>
 
 <script>
-let currentMeeekuSlide = 0;
+window.MeeekuSlideshowState = window.MeeekuSlideshowState || {};
+
 function moveMeeekuSlide(sectionId, step) {
   const container = document.getElementById('MeeekuSlideshow-' + sectionId);
-  if(!container) return;
+  if (!container) return;
   const slides = container.querySelectorAll('.meeeku-slide');
   const dots = container.querySelectorAll('.meeeku-dot');
-  slides[currentMeeekuSlide].classList.remove('active');
-  dots[currentMeeekuSlide].classList.remove('active');
-  currentMeeekuSlide = (currentMeeekuSlide + step + slides.length) % slides.length;
-  slides[currentMeeekuSlide].classList.add('active');
-  dots[currentMeeekuSlide].classList.add('active');
+  if (slides.length <= 1) return;
+
+  let current = window.MeeekuSlideshowState[sectionId] || 0;
+  slides[current].classList.remove('active');
+  if (dots[current]) dots[current].classList.remove('active');
+
+  current = (current + step + slides.length) % slides.length;
+  window.MeeekuSlideshowState[sectionId] = current;
+
+  slides[current].classList.add('active');
+  if (dots[current]) dots[current].classList.add('active');
 }
+
 function setMeeekuSlide(sectionId, index) {
   const container = document.getElementById('MeeekuSlideshow-' + sectionId);
-  if(!container) return;
+  if (!container) return;
   const slides = container.querySelectorAll('.meeeku-slide');
   const dots = container.querySelectorAll('.meeeku-dot');
-  slides[currentMeeekuSlide].classList.remove('active');
-  dots[currentMeeekuSlide].classList.remove('active');
-  currentMeeekuSlide = index;
-  slides[currentMeeekuSlide].classList.add('active');
-  dots[currentMeeekuSlide].classList.add('active');
+  if (slides.length <= index) return;
+
+  let current = window.MeeekuSlideshowState[sectionId] || 0;
+  slides[current].classList.remove('active');
+  if (dots[current]) dots[current].classList.remove('active');
+
+  window.MeeekuSlideshowState[sectionId] = index;
+
+  slides[index].classList.add('active');
+  if (dots[index]) dots[index].classList.add('active');
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  const container = document.querySelector('.meeeku-slideshow-container');
-  if (!container) return;
-  let touchStartX = 0;
-  let touchEndX = 0;
-  container.addEventListener('touchstart', function(e) {
-    touchStartX = e.changedTouches[0].screenX;
-  }, { passive: true });
-  container.addEventListener('touchend', function(e) {
-    touchEndX = e.changedTouches[0].screenX;
+  const containers = document.querySelectorAll('.meeeku-slideshow-container');
+  containers.forEach(function(container) {
     const sectionId = container.id.replace('MeeekuSlideshow-', '');
-    if (touchStartX - touchEndX > 40) moveMeeekuSlide(sectionId, 1);
-    else if (touchEndX - touchStartX > 40) moveMeeekuSlide(sectionId, -1);
-  }, { passive: true });
-});
+    window.MeeekuSlideshowState[sectionId] = 0;
 
-setInterval(function() {
-  const container = document.querySelector('.meeeku-slideshow-container');
-  if (container) {
-    const sectionId = container.id.replace('MeeekuSlideshow-', '');
-    moveMeeekuSlide(sectionId, 1);
-  }
-}, 6000);
+    let touchStartX = 0;
+    let touchEndX = 0;
+    container.addEventListener('touchstart', function(e) {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    container.addEventListener('touchend', function(e) {
+      touchEndX = e.changedTouches[0].screenX;
+      if (touchStartX - touchEndX > 40) moveMeeekuSlide(sectionId, 1);
+      else if (touchEndX - touchStartX > 40) moveMeeekuSlide(sectionId, -1);
+    }, { passive: true });
+
+    const isAutoplay = container.getAttribute('data-autoplay') === 'true';
+    const intervalMs = parseInt(container.getAttribute('data-interval')) || 6000;
+    if (isAutoplay) {
+      setInterval(function() {
+        moveMeeekuSlide(sectionId, 1);
+      }, intervalMs);
+    }
+  });
+});
 </script>
 
 {% schema %}
@@ -271,10 +354,133 @@ setInterval(function() {
   "name": "Meeeku Product Slideshow",
   "tag": "section",
   "class": "section",
-  "settings": [],
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Auto-rotate slides",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_interval",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "unit": "s",
+      "label": "Change slide every",
+      "default": 6
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Hero Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Desktop Background Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Mobile Background Image (Optional)"
+        },
+        {
+          "type": "text",
+          "id": "badge_text",
+          "label": "Badge Text",
+          "default": "Girls Indian Ethnic"
+        },
+        {
+          "type": "color",
+          "id": "badge_bg",
+          "label": "Badge Background Color",
+          "default": "#EDE7F6"
+        },
+        {
+          "type": "color",
+          "id": "badge_color",
+          "label": "Badge Text Color",
+          "default": "#512DA8"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Headline",
+          "default": "Sunshine Chanderi Lehengas"
+        },
+        {
+          "type": "textarea",
+          "id": "tagline",
+          "label": "Tagline",
+          "default": "Handcrafted with 100% soft muslin cotton lining for zero-itch festive twirling all day long."
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button Label",
+          "default": "Shop Ethnic Wear 👑"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button Link"
+        },
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "Button Style",
+          "options": [
+            { "value": "primary", "label": "Primary Pink" },
+            { "value": "secondary", "label": "Secondary Pastel" }
+          ],
+          "default": "primary"
+        }
+      ]
+    }
+  ],
   "presets": [
     {
-      "name": "Meeeku Product Slideshow"
+      "name": "Meeeku Product Slideshow",
+      "blocks": [
+        {
+          "type": "slide",
+          "settings": {
+            "badge_text": "Girls Indian Ethnic",
+            "heading": "Sunshine Chanderi Lehengas",
+            "tagline": "Handcrafted with 100% soft muslin cotton lining for zero-itch festive twirling all day long.",
+            "button_label": "Shop Ethnic Wear 👑",
+            "button_link": "/collections/all?category=ethnic"
+          }
+        },
+        {
+          "type": "slide",
+          "settings": {
+            "badge_text": "Western Dresses • Coming Soon ⏳",
+            "badge_bg": "#E0F7FA",
+            "badge_color": "#00838F",
+            "heading": "Partywear & Tulle Dresses",
+            "tagline": "Twirl-ready tulle net skirts with sparkling floral sequin embroidery dropping soon.",
+            "button_label": "🔔 Join Waitlist (15% OFF)",
+            "button_link": "/collections/all?category=dresses",
+            "button_style": "secondary"
+          }
+        },
+        {
+          "type": "slide",
+          "settings": {
+            "badge_text": "2-Piece Co-ords • Flat ₹1,299 ✨",
+            "badge_bg": "#E0F2F1",
+            "badge_color": "#00695C",
+            "heading": "Organic 2-Piece Co-ord Sets",
+            "tagline": "Cloud-soft matching lounge sets with ruffled eyelet collars & storybook prints (0-6M to 3-4Y).",
+            "button_label": "Shop 2-Piece Co-ords 🌸",
+            "button_link": "/collections/all?category=coords"
+          }
+        }
+      ]
     }
   ]
 }

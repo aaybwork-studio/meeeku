@@ -2,19 +2,178 @@
   "sections": {
     "meeeku_slideshow": {
       "type": "meeeku-product-slideshow",
-      "settings": {}
+      "blocks": {
+        "slide_1": {
+          "type": "slide",
+          "settings": {
+            "badge_text": "Girls Indian Ethnic",
+            "heading": "Sunshine Chanderi Lehengas",
+            "tagline": "Handcrafted with 100% soft muslin cotton lining for zero-itch festive twirling all day long.",
+            "button_label": "Shop Ethnic Wear 👑",
+            "button_link": "/collections/all?category=ethnic",
+            "button_style": "primary"
+          }
+        },
+        "slide_2": {
+          "type": "slide",
+          "settings": {
+            "badge_text": "Western Dresses • Coming Soon ⏳",
+            "badge_bg": "#E0F7FA",
+            "badge_color": "#00838F",
+            "heading": "Partywear & Tulle Dresses",
+            "tagline": "Twirl-ready tulle net skirts with sparkling floral sequin embroidery dropping soon.",
+            "button_label": "🔔 Join Waitlist (15% OFF)",
+            "button_link": "/collections/all?category=dresses",
+            "button_style": "secondary"
+          }
+        },
+        "slide_3": {
+          "type": "slide",
+          "settings": {
+            "badge_text": "2-Piece Co-ords • Flat ₹1,299 ✨",
+            "badge_bg": "#E0F2F1",
+            "badge_color": "#00695C",
+            "heading": "Organic 2-Piece Co-ord Sets",
+            "tagline": "Cloud-soft matching lounge sets with ruffled eyelet collars & storybook prints (0-6M to 3-4Y).",
+            "button_label": "Shop 2-Piece Co-ords 🌸",
+            "button_link": "/collections/all?category=coords",
+            "button_style": "primary"
+          }
+        }
+      },
+      "block_order": [
+        "slide_1",
+        "slide_2",
+        "slide_3"
+      ],
+      "settings": {
+        "autoplay": true,
+        "autoplay_interval": 6
+      }
     },
     "meeeku_categories": {
       "type": "meeeku-categories",
-      "settings": {}
+      "blocks": {
+        "hero_card": {
+          "type": "hero_card",
+          "settings": {
+            "title": "Royal Indian Ethnic Lehengas",
+            "badge_text": "👑 IN STOCK • ETHNIC WEAR",
+            "tag": "Featured Collection",
+            "description": "Vibrant Chanderi, Phulkari, Jacquard & Zardozi Lehengas crafted with 100% soft skin-safe muslin cotton linings for itch-free twirling all day.",
+            "button_label": "Explore Royal Lehengas 👑",
+            "link": "/collections/all?category=ethnic"
+          }
+        },
+        "cat_tees": {
+          "type": "category_card",
+          "settings": {
+            "card_type": "tees",
+            "title": "Everyday Cotton T-Shirts",
+            "badge_text": "👕 IN STOCK • EVERYDAY WEAR",
+            "badge_bg": "#E8F5E9",
+            "badge_color": "#2E7D32",
+            "description": "Ultra-soft, skin-safe pure combed cotton tees with playful hand-drawn prints. Sizes 0-6M to 2-3Y.",
+            "button_label": "Shop Basic Tees 👕",
+            "button_bg": "#2E7D32",
+            "link": "/collections/all?category=tees"
+          }
+        },
+        "cat_coords": {
+          "type": "category_card",
+          "settings": {
+            "card_type": "coords",
+            "title": "2-Piece Cotton Co-ord Sets",
+            "badge_text": "🌸 IN STOCK • 2-PIECE SETS",
+            "badge_bg": "#E0F2F1",
+            "badge_color": "#00695C",
+            "description": "Matching eyelet ruffle tops, storybook sets & ribbed peplum lounge sets in 100% organic cotton.",
+            "button_label": "Shop Co-ords 🌸",
+            "button_bg": "#00695C",
+            "link": "/collections/all?category=coords"
+          }
+        },
+        "cat_boys": {
+          "type": "category_card",
+          "settings": {
+            "card_type": "boys",
+            "title": "Boys Collection",
+            "badge_text": "⏳ COMING SOON",
+            "badge_bg": "#FFF8E1",
+            "badge_color": "#F57F17",
+            "description": "Handsome ethnic kurta sets and super-soft pyjamas for your little princes dropping soon.",
+            "button_label": "👦 Join Boys Waitlist",
+            "button_bg": "#F57F17",
+            "link": "/collections/all?category=boys"
+          }
+        }
+      },
+      "block_order": [
+        "hero_card",
+        "cat_tees",
+        "cat_coords",
+        "cat_boys"
+      ],
+      "settings": {
+        "badge": "Explore Collections",
+        "title": "Shop by Category",
+        "subtitle": "100% Soft Cotton Muslin Lining • Zero-Itch Guarantee • Handcrafted for Little Princesses (0-6Y)"
+      }
     },
     "meeeku_featured_products": {
       "type": "meeeku-featured-products",
-      "settings": {}
+      "settings": {
+        "badge": "⭐ Parent Favourites",
+        "title": "Featured Bestsellers",
+        "subtitle": "Our most-loved 100% skin-safe cotton tees, 2-piece co-ord sets, and handcrafted festive lehengas.",
+        "products_to_show": 8,
+        "columns_desktop": "4",
+        "show_view_all": true,
+        "view_all_label": "View Full Catalog 👑",
+        "view_all_link": "/collections/all"
+      }
     },
     "meeeku_reviews": {
       "type": "meeeku-reviews",
-      "settings": {}
+      "blocks": {
+        "review_1": {
+          "type": "review",
+          "settings": {
+            "stars": "⭐⭐⭐⭐⭐",
+            "review_text": "The Lehenga fabric is so soft! My 3-year-old daughter wore it all day during Diwali without complaining about any itchiness!",
+            "author_name": "Priya M.",
+            "author_location": "Verified Mom (Delhi)"
+          }
+        },
+        "review_2": {
+          "type": "review",
+          "settings": {
+            "stars": "⭐⭐⭐⭐⭐",
+            "review_text": "The organic cotton nightsuit is insanely soft. Washed it 5 times already and the colors are still super bright. Highly recommend!",
+            "author_name": "Ananya R.",
+            "author_location": "Verified Mom (Bangalore)"
+          }
+        },
+        "review_3": {
+          "type": "review",
+          "settings": {
+            "stars": "⭐⭐⭐⭐⭐",
+            "review_text": "Super fast shipping and adorable packaging! The size guide was spot-on for my 4Y girl. Can't wait for the boys collection!",
+            "author_name": "Sneha K.",
+            "author_location": "Verified Mom (Mumbai)"
+          }
+        }
+      },
+      "block_order": [
+        "review_1",
+        "review_2",
+        "review_3"
+      ],
+      "settings": {
+        "badge": "Loved by 500+ Moms",
+        "title": "Meeeku Little Stars ✨",
+        "subtitle": "Real smiles from real little princesses wearing Meeeku Ethnic & Nightsuits."
+      }
     }
   },
   "order": [
