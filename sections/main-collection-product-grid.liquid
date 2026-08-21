@@ -310,7 +310,8 @@ function applyCatalogFiltersAndSort() {
     const itemCat = item.getAttribute('data-category') || '';
     const itemAge = item.getAttribute('data-age') || '';
 
-    const catMatch = (currentCategory === 'all' || itemCat.includes(currentCategory));
+    const catTokens = itemCat.trim().split(/\s+/);
+    const catMatch = (currentCategory === 'all' || catTokens.includes(currentCategory));
     const ageMatch = (ageFilter === 'all' || itemAge.includes(ageFilter));
 
     if (catMatch && ageMatch && !COMING_SOON_INFO[currentCategory]) {
