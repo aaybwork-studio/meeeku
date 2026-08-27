@@ -73,181 +73,183 @@
   <!-- Interactive Catalog Grid -->
   <div class="meeeku-catalog-grid">
     <ul class="grid product-grid grid--2-col-tablet-down grid--3-col-desktop" id="MeeekuProductGrid">
-      {% if collection.products.size > 0 %}
-        {% for product in collection.products %}
-          {% liquid
-            assign p_type = product.type | downcase
-            assign p_tags = product.tags | join: ',' | downcase
-            assign p_title = product.title | downcase
-            assign p_handle = product.handle | downcase
+      {%- paginate collection.products by 100 -%}
+        {% if collection.products.size > 0 %}
+          {% for product in collection.products %}
+            {% liquid
+              assign p_type = product.type | downcase
+              assign p_tags = product.tags | join: ',' | downcase
+              assign p_title = product.title | downcase
+              assign p_handle = product.handle | downcase
 
-            assign is_boy = false
-            assign is_girl = false
-            assign is_nightwear = false
-            assign is_winterwear = false
-            assign is_coord = false
-            assign is_tee = false
-            assign is_pajama = false
-            assign is_towel = false
-            assign is_ethnic = false
+              assign is_boy = false
+              assign is_girl = false
+              assign is_nightwear = false
+              assign is_winterwear = false
+              assign is_coord = false
+              assign is_tee = false
+              assign is_pajama = false
+              assign is_towel = false
+              assign is_ethnic = false
 
-            if p_tags contains 'boys' or p_type contains 'boys' or p_title contains 'boy' or p_handle contains 'boy'
-              assign is_boy = true
-            endif
-            if p_tags contains 'girls' or p_type contains 'girls' or p_title contains 'girl' or p_handle contains 'girl' or p_title contains 'lehenga' or p_type contains 'lehenga' or p_tags contains 'lehenga'
-              assign is_girl = true
-            endif
-            if p_tags contains 'nightwear' or p_tags contains 'nightsuit' or p_type contains 'nightwear' or p_title contains 'nightsuit' or p_title contains 'sleep' or p_handle contains 'nightsuit'
-              assign is_nightwear = true
-            endif
-            if p_tags contains 'winterwear' or p_type contains 'winterwear' or p_tags contains 'winter' or p_tags contains 'fleece' or p_title contains 'winter' or p_title contains 'tracksuit' or p_title contains 'fleece' or p_title contains 'hoodie'
-              assign is_winterwear = true
-            endif
-            if p_tags contains 'pajamas' or p_tags contains 'pajama' or p_type contains 'pajama' or p_title contains 'pajama' or p_handle contains 'pajama'
-              assign is_pajama = true
-            endif
-            if p_tags contains 'towels' or p_tags contains 'towel' or p_tags contains 'blanket' or p_tags contains 'swaddle' or p_type contains 'towel' or p_type contains 'blanket' or p_title contains 'towel' or p_title contains 'blanket'
-              assign is_towel = true
-            endif
-            if p_tags contains 'coord' or p_tags contains 'co-ord' or p_type contains 'coord' or p_type contains 'co-ord' or p_title contains 'coord' or p_title contains 'co-ord'
-              assign is_coord = true
-            endif
-            if p_tags contains 'tee' or p_type contains 'tee' or p_title contains 'tee' or p_title contains 'sweatshirt' or p_handle contains 'tee'
-              assign is_tee = true
-            endif
-            if p_tags contains 'ethnic' or p_type contains 'ethnic' or p_tags contains 'lehenga' or p_type contains 'lehenga' or p_title contains 'lehenga'
-              assign is_ethnic = true
-            endif
+              if p_tags contains 'boys' or p_type contains 'boys' or p_title contains 'boy' or p_handle contains 'boy'
+                assign is_boy = true
+              endif
+              if p_tags contains 'girls' or p_type contains 'girls' or p_title contains 'girl' or p_handle contains 'girl' or p_title contains 'lehenga' or p_type contains 'lehenga' or p_tags contains 'lehenga'
+                assign is_girl = true
+              endif
+              if p_tags contains 'nightwear' or p_tags contains 'nightsuit' or p_type contains 'nightwear' or p_title contains 'nightsuit' or p_title contains 'sleep' or p_handle contains 'nightsuit'
+                assign is_nightwear = true
+              endif
+              if p_tags contains 'winterwear' or p_type contains 'winterwear' or p_tags contains 'winter' or p_tags contains 'fleece' or p_title contains 'winter' or p_title contains 'tracksuit' or p_title contains 'fleece' or p_title contains 'hoodie'
+                assign is_winterwear = true
+              endif
+              if p_tags contains 'pajamas' or p_tags contains 'pajama' or p_type contains 'pajama' or p_title contains 'pajama' or p_handle contains 'pajama'
+                assign is_pajama = true
+              endif
+              if p_tags contains 'towel' or p_tags contains 'blanket' or p_tags contains 'swaddle' or p_type contains 'towel' or p_type contains 'blanket' or p_title contains 'towel' or p_title contains 'blanket' or p_handle contains 'towel' or p_handle contains 'blanket'
+                assign is_towel = true
+              endif
+              if p_tags contains 'coord' or p_tags contains 'co-ord' or p_type contains 'coord' or p_type contains 'co-ord' or p_title contains 'coord' or p_title contains 'co-ord'
+                assign is_coord = true
+              endif
+              if p_tags contains 'tee' or p_type contains 'tee' or p_title contains 'tee' or p_title contains 'sweatshirt' or p_handle contains 'tee'
+                assign is_tee = true
+              endif
+              if p_tags contains 'ethnic' or p_type contains 'ethnic' or p_tags contains 'lehenga' or p_type contains 'lehenga' or p_title contains 'lehenga'
+                assign is_ethnic = true
+              endif
 
-            assign cat_list = 'all '
-            if is_boy
-              assign cat_list = cat_list | append: 'boys '
-            endif
-            if is_girl
-              assign cat_list = cat_list | append: 'girls '
-            endif
-            if is_nightwear
-              assign cat_list = cat_list | append: 'nightwear '
-            endif
-            if is_winterwear
-              assign cat_list = cat_list | append: 'winterwear '
-            endif
-            if is_coord
-              assign cat_list = cat_list | append: 'coords '
-            endif
-            if is_tee
-              assign cat_list = cat_list | append: 'tees '
-            endif
-            if is_pajama
-              assign cat_list = cat_list | append: 'pajamas '
-            endif
-            if is_towel
-              assign cat_list = cat_list | append: 'towels '
-            endif
-            if is_ethnic
-              assign cat_list = cat_list | append: 'ethnic '
-            endif
+              assign cat_list = 'all '
+              if is_boy
+                assign cat_list = cat_list | append: 'boys '
+              endif
+              if is_girl
+                assign cat_list = cat_list | append: 'girls '
+              endif
+              if is_nightwear
+                assign cat_list = cat_list | append: 'nightwear '
+              endif
+              if is_winterwear
+                assign cat_list = cat_list | append: 'winterwear '
+              endif
+              if is_coord
+                assign cat_list = cat_list | append: 'coords '
+              endif
+              if is_tee
+                assign cat_list = cat_list | append: 'tees '
+              endif
+              if is_pajama
+                assign cat_list = cat_list | append: 'pajamas '
+              endif
+              if is_towel
+                assign cat_list = cat_list | append: 'towels '
+              endif
+              if is_ethnic
+                assign cat_list = cat_list | append: 'ethnic '
+              endif
 
-            if is_pajama
-              assign badge_label = '🧸 2-Pack Set (₹499)'
-              assign badge_style = 'background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;'
-            elsif is_towel
-              assign badge_label = '🛁 100% Organic Muslin/Terry'
-              assign badge_style = 'background: #E0F7FA; color: #00838F; border: 1px solid #80DEEA;'
-            elsif is_boy and is_winterwear
-              assign badge_label = '👦 Boys Winterwear'
-              assign badge_style = 'background: #FFF8E1; color: #F57F17; border: 1px solid #FFE082;'
-            elsif is_boy and is_coord
-              assign badge_label = '👦 Boys Co-ord Set'
-              assign badge_style = 'background: #FFF8E1; color: #F57F17; border: 1px solid #FFE082;'
-            elsif is_girl and is_nightwear
-              assign badge_label = '🌙 100% Cotton Nightsuit'
-              assign badge_style = 'background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;'
-            elsif is_girl and is_winterwear
-              assign badge_label = '❄️ Cozy Winterwear'
-              assign badge_style = 'background: #FCE4EC; color: #C2185B; border: 1px solid #F48FB1;'
-            elsif is_coord
-              assign badge_label = '🌸 2-Piece Co-ord Set'
-              assign badge_style = 'background: #E0F2F1; color: #00695C; border: 1px solid #80CBC4;'
-            elsif is_tee
-              assign badge_label = '👕 100% Combed Cotton'
-              assign badge_style = 'background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;'
-            elsif is_ethnic
-              assign badge_label = '👑 Royal Ethnic Lehenga'
-              assign badge_style = 'background: #FFF0F5; color: #6B3FA0; border: 1px solid #F8BBD0;'
-            else
-              assign badge_label = '✨ Meeeku Premium'
-              assign badge_style = 'background: #FFF0F5; color: #6B3FA0; border: 1px solid #F8BBD0;'
-            endif
+              if is_pajama
+                assign badge_label = '🧸 2-Pack Set (₹499)'
+                assign badge_style = 'background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;'
+              elsif is_towel
+                assign badge_label = '🛁 100% Organic Muslin/Terry'
+                assign badge_style = 'background: #E0F7FA; color: #00838F; border: 1px solid #80DEEA;'
+              elsif is_boy and is_winterwear
+                assign badge_label = '👦 Boys Winterwear'
+                assign badge_style = 'background: #FFF8E1; color: #F57F17; border: 1px solid #FFE082;'
+              elsif is_boy and is_coord
+                assign badge_label = '👦 Boys Co-ord Set'
+                assign badge_style = 'background: #FFF8E1; color: #F57F17; border: 1px solid #FFE082;'
+              elsif is_girl and is_nightwear
+                assign badge_label = '🌙 100% Cotton Nightsuit'
+                assign badge_style = 'background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;'
+              elsif is_girl and is_winterwear
+                assign badge_label = '❄️ Cozy Winterwear'
+                assign badge_style = 'background: #FCE4EC; color: #C2185B; border: 1px solid #F48FB1;'
+              elsif is_coord
+                assign badge_label = '🌸 2-Piece Co-ord Set'
+                assign badge_style = 'background: #E0F2F1; color: #00695C; border: 1px solid #80CBC4;'
+              elsif is_tee
+                assign badge_label = '👕 100% Combed Cotton'
+                assign badge_style = 'background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;'
+              elsif is_ethnic
+                assign badge_label = '👑 Royal Ethnic Lehenga'
+                assign badge_style = 'background: #FFF0F5; color: #6B3FA0; border: 1px solid #F8BBD0;'
+              else
+                assign badge_label = '✨ Meeeku Premium'
+                assign badge_style = 'background: #FFF0F5; color: #6B3FA0; border: 1px solid #F8BBD0;'
+              endif
 
-            assign age_keys = 'all'
-            assign all_v_titles = ''
-            for v in product.variants
-              assign all_v_titles = all_v_titles | append: ' ' | append: v.title | downcase
-            endfor
-            assign full_search_str = p_tags | append: ' ' | append: all_v_titles
+              assign age_keys = 'all'
+              assign all_v_titles = ''
+              for v in product.variants
+                assign all_v_titles = all_v_titles | append: ' ' | append: v.title | downcase
+              endfor
+              assign full_search_str = p_tags | append: ' ' | append: all_v_titles
 
-            if full_search_str contains '0-6m' or full_search_str contains '0 - 6m' or full_search_str contains 'infant' or full_search_str contains '0-1y' or full_search_str contains '0-3y'
-              assign age_keys = age_keys | append: ',0-6m'
-            endif
-            if full_search_str contains '6-12m' or full_search_str contains '6 - 12m' or full_search_str contains 'infant' or full_search_str contains '0-1y' or full_search_str contains '0-3y'
-              assign age_keys = age_keys | append: ',6-12m'
-            endif
-            if full_search_str contains '12-18m' or full_search_str contains '18-24m' or full_search_str contains '1-2y' or full_search_str contains '1 - 2y' or full_search_str contains 'toddler' or full_search_str contains '0-3y'
-              assign age_keys = age_keys | append: ',1-2y'
-            endif
-            if full_search_str contains '2-3y' or full_search_str contains '2 - 3y' or full_search_str contains 'toddler' or full_search_str contains '0-3y'
-              assign age_keys = age_keys | append: ',2-3y'
-            endif
-            if full_search_str contains '3-4y' or full_search_str contains '4-5y' or full_search_str contains '5-6y' or full_search_str contains '6-7y' or full_search_str contains '3-7y' or full_search_str contains 'kids'
-              assign age_keys = age_keys | append: ',3-7y'
-            endif
+              if full_search_str contains '0-6m' or full_search_str contains '0 - 6m' or full_search_str contains 'infant' or full_search_str contains '0-1y' or full_search_str contains '0-3y'
+                assign age_keys = age_keys | append: ',0-6m'
+              endif
+              if full_search_str contains '6-12m' or full_search_str contains '6 - 12m' or full_search_str contains 'infant' or full_search_str contains '0-1y' or full_search_str contains '0-3y'
+                assign age_keys = age_keys | append: ',6-12m'
+              endif
+              if full_search_str contains '12-18m' or full_search_str contains '18-24m' or full_search_str contains '1-2y' or full_search_str contains '1 - 2y' or full_search_str contains 'toddler' or full_search_str contains '0-3y'
+                assign age_keys = age_keys | append: ',1-2y'
+              endif
+              if full_search_str contains '2-3y' or full_search_str contains '2 - 3y' or full_search_str contains 'toddler' or full_search_str contains '0-3y'
+                assign age_keys = age_keys | append: ',2-3y'
+              endif
+              if full_search_str contains '3-4y' or full_search_str contains '4-5y' or full_search_str contains '5-6y' or full_search_str contains '6-7y' or full_search_str contains '3-7y' or full_search_str contains 'kids'
+                assign age_keys = age_keys | append: ',3-7y'
+              endif
 
-            assign first_img = product.featured_media.preview_image | default: product.featured_image | default: product.images.first
-            assign second_img = product.images[1] | default: first_img
-            assign first_img_url = first_img | image_url: width: 600
-            assign second_img_url = second_img | image_url: width: 600
-            assign current_var = product.selected_or_first_available_variant
-          %}
-          <li class="grid__item meeeku-grid-item" data-category="{{ cat_list | strip }}" data-price="{{ product.price | divided_by: 100 }}" data-age="{{ age_keys }}" data-date="{{ product.published_at | date: '%Y-%m-%d' }}" data-bestseller-rank="{{ forloop.index }}">
-            <div class="card-wrapper meeeku-interactive-card">
-              <div class="meeeku-card-media-wrapper">
-                <a href="{{ product.url }}" class="meeeku-card-link" onclick="meeekuStorePdpClick('{{ product.handle }}', '{{ product.title | escape }}', '{{ product.price | money }}', '{{ first_img_url }}', '{{ badge_label | escape }}')">
-                  {% if first_img %}
-                    <img src="{{ first_img_url }}" alt="{{ product.title | escape }}" class="meeeku-card-img meeeku-img-primary" width="600" height="750" loading="lazy">
-                  {% endif %}
-                  {% if second_img and second_img != first_img %}
-                    <img src="{{ second_img_url }}" alt="{{ product.title | escape }}" class="meeeku-card-img meeeku-img-secondary" width="600" height="750" loading="lazy">
-                  {% endif %}
-                </a>
-                <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('{{ product.title | escape }}', '{{ product.price | money }}', '{{ first_img | image_url: width: 400 }}', '{{ current_var.id }}')">
-                  🛒 + Quick Add — {{ product.price | money }}
-                </button>
-              </div>
-              <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
-                  <span class="meeeku-badge" style="font-size: 1rem; padding: 0.2rem 0.8rem; {{ badge_style }}">{{ badge_label }}</span>
+              assign first_img = product.featured_media.preview_image | default: product.featured_image | default: product.images.first
+              assign second_img = product.images[1] | default: first_img
+              assign first_img_url = first_img | image_url: width: 600
+              assign second_img_url = second_img | image_url: width: 600
+              assign current_var = product.selected_or_first_available_variant
+            %}
+            <li class="grid__item meeeku-grid-item" data-category="{{ cat_list | strip }}" data-price="{{ product.price | divided_by: 100 }}" data-age="{{ age_keys }}" data-date="{{ product.published_at | date: '%Y-%m-%d' }}" data-bestseller-rank="{{ forloop.index }}">
+              <div class="card-wrapper meeeku-interactive-card">
+                <div class="meeeku-card-media-wrapper">
+                  <a href="{{ product.url }}" class="meeeku-card-link" onclick="meeekuStorePdpClick('{{ product.handle }}', '{{ product.title | escape }}', '{{ product.price | money }}', '{{ first_img_url }}', '{{ badge_label | escape }}')">
+                    {% if first_img %}
+                      <img src="{{ first_img_url }}" alt="{{ product.title | escape }}" class="meeeku-card-img meeeku-img-primary" width="600" height="750" loading="lazy">
+                    {% endif %}
+                    {% if second_img and second_img != first_img %}
+                      <img src="{{ second_img_url }}" alt="{{ product.title | escape }}" class="meeeku-card-img meeeku-img-secondary" width="600" height="750" loading="lazy">
+                    {% endif %}
+                  </a>
+                  <button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog('{{ product.title | escape }}', '{{ product.price | money }}', '{{ first_img | image_url: width: 400 }}', '{{ current_var.id }}', '{{ current_var.title | escape }}', '{{ product.handle }}')">
+                    🛒 + Quick Add — {{ product.price | money }}
+                  </button>
                 </div>
-                <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
-                  <a href="{{ product.url }}" style="color: #3D2355; text-decoration: none;" onclick="meeekuStorePdpClick('{{ product.handle }}', '{{ product.title | escape }}', '{{ product.price | money }}', '{{ first_img_url }}', '{{ badge_label | escape }}')">{{ product.title }}</a>
-                </h3>
-                <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">
-                  {{ product.price | money }}
-                  {% if product.compare_at_price > product.price %}
-                    <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">{{ product.compare_at_price | money }}</span>
-                    <span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">
-                      {{ product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price }}% OFF
-                    </span>
-                  {% endif %}
+                <div class="card__content" style="padding: 1.2rem 0.5rem 0;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
+                    <span class="meeeku-badge" style="font-size: 1rem; padding: 0.2rem 0.8rem; {{ badge_style }}">{{ badge_label }}</span>
+                  </div>
+                  <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
+                    <a href="{{ product.url }}" style="color: #3D2355; text-decoration: none;" onclick="meeekuStorePdpClick('{{ product.handle }}', '{{ product.title | escape }}', '{{ product.price | money }}', '{{ first_img_url }}', '{{ badge_label | escape }}')">{{ product.title }}</a>
+                  </h3>
+                  <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">
+                    {{ product.price | money }}
+                    {% if product.compare_at_price > product.price %}
+                      <span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">{{ product.compare_at_price | money }}</span>
+                      <span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">
+                        {{ product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price }}% OFF
+                      </span>
+                    {% endif %}
+                  </div>
                 </div>
               </div>
-            </div>
-          </li>
-        {% endfor %}
-      {% else %}
-        <!-- Live & Static Universal Fallback Container -->
-        <li id="MeeekuCatalogFetchPlaceholder" class="grid__item" style="display:none;"></li>
-      {% endif %}
+            </li>
+          {% endfor %}
+        {% else %}
+          <!-- Live & Static Universal Fallback Container -->
+          <li id="MeeekuCatalogFetchPlaceholder" class="grid__item" style="display:none;"></li>
+        {% endif %}
+      {%- endpaginate -%}
     </ul>
   </div>
 
@@ -1555,7 +1557,7 @@ function renderFallbackCatalog() {
             '<img src="' + img1Url + '" alt="' + p.title.replace(/'/g, "\\'") + '" class="meeeku-card-img meeeku-img-primary" width="600" height="750" loading="lazy">',
             (p.images.length > 1 ? '<img src="' + img2Url + '" alt="' + p.title.replace(/'/g, "\\'") + '" class="meeeku-card-img meeeku-img-secondary" width="600" height="750" loading="lazy">' : ''),
           '</a>',
-          '<button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog(\'' + p.title.replace(/'/g, "\\'") + '\', \'' + priceFormatted + '\', \'' + img1Url + '\', \'\')">',
+          '<button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog(\'' + p.title.replace(/'/g, "\\'") + '\', \'' + priceFormatted + '\', \'' + img1Url + '\', \'\', \'Standard\', \'' + p.handle + '\')">',
             '🛒 + Quick Add — ' + priceFormatted,
           '</button>',
         '</div>',
@@ -1575,73 +1577,6 @@ function renderFallbackCatalog() {
 
     grid.appendChild(li);
   });
-}
-
-function meeekuAddToCartCatalog(title, price, imgUrl, variantId) {
-  let cart = [];
-  try {
-    cart = JSON.parse(localStorage.getItem('meeeku_active_cart') || localStorage.getItem('meeeku_user_cart') || localStorage.getItem('meeeku_cart') || '[]');
-  } catch (e) { cart = []; }
-
-  const itemKey = (variantId || title) + '_Standard';
-  const existing = cart.find(function(i) { return i.title === title; });
-  
-  let numPrice = typeof parseMeeekuPrice === 'function' ? parseMeeekuPrice(price) : (parseFloat((price || '0').replace(/[^0-9.]/g, '')) || 0);
-  let cleanPrice = typeof formatMeeekuPrice === 'function' ? formatMeeekuPrice(numPrice) : ('₹' + numPrice.toLocaleString('en-IN') + '.00');
-
-  if (existing) {
-    let q = existing.qty || existing.quantity || 1;
-    existing.qty = q + 1;
-    existing.quantity = q + 1;
-    existing.price = cleanPrice;
-  } else {
-    cart.push({
-      key: itemKey,
-      id: variantId || ('item_' + Date.now()),
-      title: title,
-      price: cleanPrice,
-      img: imgUrl,
-      size: 'Standard',
-      qty: 1,
-      quantity: 1
-    });
-  }
-
-  localStorage.setItem('meeeku_active_cart', JSON.stringify(cart));
-  localStorage.setItem('meeeku_user_cart', JSON.stringify(cart));
-  localStorage.setItem('meeeku_cart', JSON.stringify(cart));
-
-  if (variantId && !isNaN(parseInt(variantId))) {
-    fetch('/cart/add.js', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ items: [{ id: parseInt(variantId), quantity: 1 }] })
-    }).catch(function() {});
-  }
-
-  const dot = document.getElementById('MeeekuCartDot');
-  if (dot) dot.classList.add('has-items');
-
-  const totalCount = cart.reduce(function(sum, i) { return sum + (i.quantity || i.qty || 1); }, 0);
-  const countBubbles = document.querySelectorAll('.cart-count-bubble span');
-  countBubbles.forEach(function(b) { b.textContent = totalCount; });
-
-  if (typeof openMeeekuCart === 'function') {
-    openMeeekuCart();
-  } else {
-    showMeeekuToastCatalog('🎉 ' + title + ' added to your Cart!');
-  }
-}
-
-function showMeeekuToastCatalog(msg) {
-  const toast = document.getElementById('MeeekuCartToastCatalog') || document.getElementById('MeeekuCartToast');
-  if (toast) {
-    toast.innerText = msg;
-    toast.classList.add('show');
-    setTimeout(function() {
-      toast.classList.remove('show');
-    }, 2800);
-  }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -1874,9 +1809,9 @@ document.addEventListener('DOMContentLoaded', function() {
       "type": "range",
       "id": "products_per_page",
       "min": 8,
-      "max": 60,
+      "max": 100,
       "step": 4,
-      "default": 24,
+      "default": 100,
       "label": "Products per page"
     },
     {

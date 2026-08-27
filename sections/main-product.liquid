@@ -1671,9 +1671,9 @@ function meeekuSelectVariantBtn(btn, variantId, priceFormatted, comparePriceForm
   document.querySelectorAll('.meeeku-size-btn').forEach(function(el) { el.classList.remove('active'); });
   btn.classList.add('active');
   
-  if (variantId) {
-    const hiddenInput = document.getElementById('MeeekuVariantIdInput');
-    if (hiddenInput) hiddenInput.value = variantId;
+  const hiddenInput = document.getElementById('MeeekuVariantIdInput');
+  if (hiddenInput && variantId) {
+    hiddenInput.value = variantId;
   }
   if (priceFormatted) {
     const label = document.getElementById('MeeekuBtnPriceLabel');
@@ -1690,28 +1690,26 @@ function meeekuSelectVariantBtn(btn, variantId, priceFormatted, comparePriceForm
   }
 }
 
-function meeekuTriggerBuyNow() {
+async function meeekuTriggerBuyNow() {
   const hiddenInput = document.getElementById('MeeekuVariantIdInput');
-  const variantId = hiddenInput ? hiddenInput.value : '';
+  let variantId = hiddenInput ? hiddenInput.value : '';
+  const title = document.getElementById('MeeekuPdpTitle') ? document.getElementById('MeeekuPdpTitle').innerText.trim() : '';
+  const price = document.getElementById('MeeekuDisplayPriceText') ? document.getElementById('MeeekuDisplayPriceText').innerText.trim() : '';
+  const heroImg = document.getElementById('MeeekuMainPdpImage');
+  const img = heroImg ? heroImg.src : '';
+  const activeSizeBtn = document.querySelector('.meeeku-size-btn.active');
+  const sizeTitle = activeSizeBtn ? activeSizeBtn.innerText.trim() : 'Standard';
 
-  if (variantId && !isNaN(parseInt(variantId))) {
-    fetch('/cart/add.js', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ items: [{ id: parseInt(variantId), quantity: 1 }] })
-    })
-    .then(function() {
-      window.location.href = '/checkout';
-    })
-    .catch(function() {
-      window.location.href = '/checkout';
-    });
-  } else {
-    window.location.href = '/checkout';
+  const path = window.location.pathname;
+  let targetHandle = path.includes('/products/') ? path.split('/products/')[1].split('/')[0].split('?')[0] : '';
+
+  if (typeof meeekuAddToCartCatalog === 'function') {
+    await meeekuAddToCartCatalog(title, price, img, variantId, sizeTitle, targetHandle);
   }
+  window.location.href = '/checkout';
 }
 
-function hydrateMeeekuPdpFromObject(p) {
+async function hydrateMeeekuPdpFromObject(p) {
   if (!p) return;
 
   const titleEl = document.getElementById('MeeekuPdpTitle');
@@ -1778,20 +1776,56 @@ function hydrateMeeekuPdpFromObject(p) {
     }
   }
 
+  // Attempt to fetch real Shopify product JSON to extract real Shopify Variant IDs!
+  let liveVariants = null;
+  try {
+    const res = await fetch('/products/' + p.handle + '.js');
+    if (res.ok) {
+      const prodJson = await res.json();
+      if (prodJson && prodJson.variants && prodJson.variants.length > 0) {
+        liveVariants = prodJson.variants;
+      }
+    }
+  } catch(e) {}
+
   // Variant size buttons
   const sizeGrid = document.getElementById('MeeekuPdpSizeGrid');
-  if (sizeGrid && p.variants && p.variants.length > 0) {
-    sizeGrid.innerHTML = '';
-    p.variants.forEach(function(sizeName, idx) {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'meeeku-size-btn' + (idx === 0 ? ' active' : '');
-      btn.innerText = sizeName;
-      btn.onclick = function() {
-        meeekuSelectVariantBtn(btn, '', priceFormatted, p.compare_price > p.price ? ('₹' + p.compare_price.toLocaleString('en-IN', {minimumFractionDigits: 2})) : '');
-      };
-      sizeGrid.appendChild(btn);
-    });
+  const hiddenInput = document.getElementById('MeeekuVariantIdInput');
+
+  if (sizeGrid) {
+    if (liveVariants && liveVariants.length > 0) {
+      sizeGrid.innerHTML = '';
+      liveVariants.forEach(function(v, idx) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'meeeku-size-btn' + (idx === 0 ? ' active' : '');
+        btn.innerText = v.title;
+        btn.setAttribute('data-variant-id', v.id);
+        const vPriceFmt = '₹' + (v.price / 100).toLocaleString('en-IN', {minimumFractionDigits: 2});
+        const vCompareFmt = v.compare_at_price ? ('₹' + (v.compare_at_price / 100).toLocaleString('en-IN', {minimumFractionDigits: 2})) : '';
+
+        if (idx === 0 && hiddenInput) {
+          hiddenInput.value = v.id;
+        }
+
+        btn.onclick = function() {
+          meeekuSelectVariantBtn(btn, v.id, vPriceFmt, vCompareFmt);
+        };
+        sizeGrid.appendChild(btn);
+      });
+    } else if (p.variants && p.variants.length > 0) {
+      sizeGrid.innerHTML = '';
+      p.variants.forEach(function(sizeName, idx) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'meeeku-size-btn' + (idx === 0 ? ' active' : '');
+        btn.innerText = sizeName;
+        btn.onclick = function() {
+          meeekuSelectVariantBtn(btn, '', priceFormatted, p.compare_price > p.price ? ('₹' + p.compare_price.toLocaleString('en-IN', {minimumFractionDigits: 2})) : '');
+        };
+        sizeGrid.appendChild(btn);
+      });
+    }
   }
 
   // Sizing Guide Heading
@@ -1814,7 +1848,6 @@ function hydrateMeeekuPdpFromObject(p) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  // Check if handle is in URL or sessionStorage
   const path = window.location.pathname;
   let targetHandle = '';
   if (path.includes('/products/')) {
@@ -1841,12 +1874,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
   const form = document.getElementById('MeeekuPdpNativeForm');
   if (form) {
-    form.addEventListener('submit', function(e) {
+    form.addEventListener('submit', async function(e) {
       e.preventDefault();
       const activeSizeBtn = document.querySelector('.meeeku-size-btn.active');
       const sizeTitle = activeSizeBtn ? activeSizeBtn.innerText.trim() : 'Standard';
       const hiddenInput = document.getElementById('MeeekuVariantIdInput');
-      const variantId = hiddenInput ? hiddenInput.value : '';
+      let variantId = hiddenInput ? hiddenInput.value : '';
+      if (!variantId && activeSizeBtn && activeSizeBtn.getAttribute('data-variant-id')) {
+        variantId = activeSizeBtn.getAttribute('data-variant-id');
+      }
+
       const title = document.getElementById('MeeekuPdpTitle') ? document.getElementById('MeeekuPdpTitle').innerText.trim() : 'Meeeku Garment';
       const price = document.getElementById('MeeekuDisplayPriceText') ? document.getElementById('MeeekuDisplayPriceText').innerText.trim() : '₹999.00';
       const heroImg = document.getElementById('MeeekuMainPdpImage');
@@ -1855,61 +1892,13 @@ document.addEventListener('DOMContentLoaded', function() {
       const btn = form.querySelector('button[type="submit"]');
       if (btn) btn.innerHTML = '✅ Added!';
 
-      // Add to local cart
-      let cart = [];
-      try {
-        cart = JSON.parse(localStorage.getItem('meeeku_active_cart') || localStorage.getItem('meeeku_user_cart') || localStorage.getItem('meeeku_cart') || '[]');
-      } catch (err) { cart = []; }
-
-      const itemKey = (variantId || title) + '_' + sizeTitle;
-      const existing = cart.find(function(i) { return i.title === title && i.size === sizeTitle; });
-      let numPrice = typeof parseMeeekuPrice === 'function' ? parseMeeekuPrice(price) : (parseFloat((price || '0').replace(/[^0-9.]/g, '')) || 0);
-      let cleanPrice = typeof formatMeeekuPrice === 'function' ? formatMeeekuPrice(numPrice) : ('₹' + numPrice.toLocaleString('en-IN') + '.00');
-
-      if (existing) {
-        let q = existing.qty || existing.quantity || 1;
-        existing.qty = q + 1;
-        existing.quantity = q + 1;
-        existing.price = cleanPrice;
-      } else {
-        cart.push({
-          key: itemKey,
-          id: variantId || ('item_' + Date.now()),
-          title: title,
-          price: cleanPrice,
-          img: img,
-          size: sizeTitle,
-          qty: 1,
-          quantity: 1
-        });
+      if (typeof meeekuAddToCartCatalog === 'function') {
+        await meeekuAddToCartCatalog(title, price, img, variantId, sizeTitle, targetHandle);
       }
-
-      localStorage.setItem('meeeku_active_cart', JSON.stringify(cart));
-      localStorage.setItem('meeeku_user_cart', JSON.stringify(cart));
-      localStorage.setItem('meeeku_cart', JSON.stringify(cart));
-
-      if (variantId && !isNaN(parseInt(variantId))) {
-        fetch('/cart/add.js', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ items: [{ id: parseInt(variantId), quantity: 1 }] })
-        }).catch(function() {});
-      }
-
-      const dot = document.getElementById('MeeekuCartDot');
-      if (dot) dot.classList.add('has-items');
-
-      const totalCount = cart.reduce(function(sum, i) { return sum + (i.quantity || i.qty || 1); }, 0);
-      const countBubbles = document.querySelectorAll('.cart-count-bubble span');
-      countBubbles.forEach(function(b) { b.textContent = totalCount; });
 
       setTimeout(function() {
         if (btn) btn.innerHTML = '🛒 Add to Cart — <span id="MeeekuBtnPriceLabel">' + price + '</span>';
       }, 1400);
-
-      if (typeof openMeeekuCart === 'function') {
-        openMeeekuCart();
-      }
     });
   }
 });

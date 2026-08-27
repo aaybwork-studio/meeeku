@@ -72,6 +72,29 @@ function formatMeeekuPaise(paise) {
   return '₹' + rupees.toLocaleString('en-IN') + '.00';
 }
 
+function parseMeeekuPrice(priceStr) {
+  if (typeof priceStr === 'number') return priceStr;
+  var num = parseFloat(String(priceStr || '0').replace(/[^0-9.]/g, ''));
+  return isNaN(num) ? 0 : num;
+}
+
+function getMeeekuLocalCart() {
+  try {
+    return JSON.parse(localStorage.getItem('meeeku_active_cart') || localStorage.getItem('meeeku_user_cart') || localStorage.getItem('meeeku_cart') || '[]');
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveMeeekuLocalCart(cartArray) {
+  try {
+    var data = JSON.stringify(cartArray || []);
+    localStorage.setItem('meeeku_active_cart', data);
+    localStorage.setItem('meeeku_user_cart', data);
+    localStorage.setItem('meeeku_cart', data);
+  } catch (e) {}
+}
+
 function updateCartBadges(count) {
   var countBubbles = document.querySelectorAll('.cart-count-bubble span');
   countBubbles.forEach(function(b) { b.textContent = count; });
@@ -84,30 +107,35 @@ function updateCartBadges(count) {
 
 function fetchMeeekuShopifyCart(callback) {
   fetch('/cart.js')
-    .then(function(res) { return res.json(); })
+    .then(function(res) {
+      if (!res.ok) throw new Error('Cart fetch failed with status ' + res.status);
+      return res.json();
+    })
     .then(function(cart) {
       window.meeekuLiveShopifyCart = cart;
       renderMeeekuCartDrawerWithData(cart);
-      updateCartBadges(cart.item_count || 0);
       if (typeof callback === 'function') callback(cart);
     })
     .catch(function(err) {
-      console.error('Cart fetch error:', err);
+      renderMeeekuCartDrawerWithLocalFallback();
+      if (typeof callback === 'function') callback(null);
     });
 }
 
-function renderMeeekuCartDrawerWithData(cart) {
-  const emptyNotice = document.getElementById('MeeekuCartEmptyNotice');
-  const container = document.getElementById('MeeekuCartItemsContainer');
-  const summary = document.getElementById('MeeekuCartSummary');
-  const subtotalEl = document.getElementById('MeeekuCartSubtotal');
-  const cartDot = document.getElementById('MeeekuCartDot');
+function renderMeeekuCartDrawerWithLocalFallback() {
+  var localCart = getMeeekuLocalCart();
+  var totalCount = localCart.reduce(function(sum, i) { return sum + (i.quantity || i.qty || 1); }, 0);
+  updateCartBadges(totalCount);
+
+  var emptyNotice = document.getElementById('MeeekuCartEmptyNotice');
+  var container = document.getElementById('MeeekuCartItemsContainer');
+  var summary = document.getElementById('MeeekuCartSummary');
+  var subtotalEl = document.getElementById('MeeekuCartSubtotal');
+  var cartDot = document.getElementById('MeeekuCartDot');
 
   if (!container || !emptyNotice || !summary) return;
 
-  const items = cart.items || [];
-
-  if (items.length === 0) {
+  if (localCart.length === 0) {
     emptyNotice.style.display = 'block';
     container.style.display = 'none';
     summary.style.display = 'none';
@@ -120,46 +148,138 @@ function renderMeeekuCartDrawerWithData(cart) {
   summary.style.display = 'block';
   if (cartDot) cartDot.classList.add('has-items');
 
-  let itemsHtml = '';
+  var itemsHtml = '';
+  var subtotal = 0;
 
-  items.forEach((item, index) => {
-    const itemKey = item.key || item.id;
-    const unitPriceFormatted = formatMeeekuPaise(item.final_price || item.price || 0);
-    const lineTotalFormatted = formatMeeekuPaise(item.final_line_price || item.line_price || 0);
-    const imgSrc = item.image || item.featured_image?.url || 'https://raw.githubusercontent.com/aaybwork-studio/meeeku/main/assets/meeeku_prod_yellow_lehenga.jpg';
-    const variantTitle = item.variant_title ? item.variant_title : '';
+  localCart.forEach(function(item, idx) {
+    var key = item.key || item.id || ('local_' + idx);
+    var qty = parseInt(item.quantity || item.qty || 1);
+    var unitNum = parseMeeekuPrice(item.price);
+    var lineTotal = unitNum * qty;
+    subtotal += lineTotal;
 
-    itemsHtml += `
-      <div id="drawer-item-${item.id}" class="meeeku-cart-item" style="display: flex; gap: 1.2rem; align-items: center; background: #FFFDF7; border: 1.5px solid #F8BBD0; border-radius: 18px; padding: 1.2rem; box-shadow: 0 2px 10px rgba(107,63,160,0.04);">
-        <img src="${imgSrc}" alt="${item.product_title || item.title}" width="70" height="90" style="border-radius: 12px; object-fit: cover; width: 68px; height: 88px; border: 1.5px solid #FFE0EC; flex-shrink: 0;">
-        <div style="flex-grow: 1; min-width: 0;">
-          <h4 style="margin: 0 0 0.3rem; font-size: 1.45rem; font-weight: 700; color: #3D2355; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-            ${item.product_title || item.title}
-          </h4>
-          
-          ${variantTitle ? `
-          <div style="display: flex; align-items: center; gap: 0.5rem; margin: 0.3rem 0;">
-            <span style="font-size: 1.15rem; color: #666; font-weight: 600;">Size:</span>
-            <span style="border: 1px solid #F8BBD0; background: #FFF; color: #6B3FA0; font-weight: 700; font-size: 1.15rem; padding: 0.15rem 0.6rem; border-radius: 8px;">
-              ${variantTitle}
-            </span>
-          </div>` : ''}
+    var priceFmt = '₹' + unitNum.toLocaleString('en-IN', {minimumFractionDigits: 2});
+    var imgSrc = item.img || item.image || 'https://raw.githubusercontent.com/aaybwork-studio/meeeku/main/assets/meeeku_prod_yellow_lehenga.jpg';
+    var sizeLabel = item.size || 'Standard';
 
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.4rem;">
-            <div style="font-size: 1.55rem; font-weight: 800; color: #6B3FA0;">${unitPriceFormatted}</div>
-            
-            <div style="display: flex; align-items: center; background: #FFF; border: 1px solid #F8BBD0; border-radius: 20px; padding: 0.15rem 0.6rem;">
-              <button type="button" onclick="meeekuDrawerUpdateQty('${itemKey}', ${item.quantity - 1})" style="background: none; border: none; font-size: 1.5rem; font-weight: 800; color: #FF6097; cursor: pointer; padding: 0 0.3rem; line-height: 1;" title="Decrease quantity">−</button>
-              <span style="font-size: 1.3rem; font-weight: 800; padding: 0 0.5rem; color: #3D2355;">${item.quantity}</span>
-              <button type="button" onclick="meeekuDrawerUpdateQty('${itemKey}', ${item.quantity + 1})" style="background: none; border: none; font-size: 1.5rem; font-weight: 800; color: #FF6097; cursor: pointer; padding: 0 0.3rem; line-height: 1;" title="Increase quantity">+</button>
-            </div>
-          </div>
-        </div>
-        <button type="button" style="background: transparent; border: none; font-size: 1.8rem; cursor: pointer; color: #BBB; padding: 0.4rem; line-height: 1;" onclick="removeMeeekuCartItem('${itemKey}')" title="Remove item">
-          ✕
-        </button>
-      </div>
-    `;
+    itemsHtml += [
+      '<div id="drawer-item-' + key + '" class="meeeku-cart-item" style="display: flex; gap: 1.2rem; align-items: center; background: #FFFDF7; border: 1.5px solid #F8BBD0; border-radius: 18px; padding: 1.2rem; box-shadow: 0 2px 10px rgba(107,63,160,0.04);">',
+        '<img src="' + imgSrc + '" alt="' + (item.title || 'Meeeku Garment') + '" width="70" height="90" style="border-radius: 12px; object-fit: cover; width: 68px; height: 88px; border: 1.5px solid #FFE0EC; flex-shrink: 0;">',
+        '<div style="flex-grow: 1; min-width: 0;">',
+          '<h4 style="margin: 0 0 0.3rem; font-size: 1.45rem; font-weight: 700; color: #3D2355; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">',
+            (item.title || 'Meeeku Garment'),
+          '</h4>',
+          '<div style="display: flex; align-items: center; gap: 0.5rem; margin: 0.3rem 0;">',
+            '<span style="font-size: 1.15rem; color: #666; font-weight: 600;">Size:</span>',
+            '<span style="border: 1px solid #F8BBD0; background: #FFF; color: #6B3FA0; font-weight: 700; font-size: 1.15rem; padding: 0.15rem 0.6rem; border-radius: 8px;">',
+              sizeLabel,
+            '</span>',
+          '</div>',
+          '<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.4rem;">',
+            '<div style="font-size: 1.55rem; font-weight: 800; color: #6B3FA0;">' + priceFmt + '</div>',
+            '<div style="display: flex; align-items: center; background: #FFF; border: 1px solid #F8BBD0; border-radius: 20px; padding: 0.15rem 0.6rem;">',
+              '<button type="button" onclick="meeekuDrawerUpdateQty(\'' + key + '\', ' + (qty - 1) + ')" style="background: none; border: none; font-size: 1.5rem; font-weight: 800; color: #FF6097; cursor: pointer; padding: 0 0.3rem; line-height: 1;" title="Decrease quantity">−</button>',
+              '<span style="font-size: 1.3rem; font-weight: 800; padding: 0 0.5rem; color: #3D2355;">' + qty + '</span>',
+              '<button type="button" onclick="meeekuDrawerUpdateQty(\'' + key + '\', ' + (qty + 1) + ')" style="background: none; border: none; font-size: 1.5rem; font-weight: 800; color: #FF6097; cursor: pointer; padding: 0 0.3rem; line-height: 1;" title="Increase quantity">+</button>',
+            '</div>',
+          '</div>',
+        '</div>',
+        '<button type="button" style="background: transparent; border: none; font-size: 1.8rem; cursor: pointer; color: #BBB; padding: 0.4rem; line-height: 1;" onclick="removeMeeekuCartItem(\'' + key + '\')" title="Remove item">✕</button>',
+      '</div>'
+    ].join('');
+  });
+
+  container.innerHTML = itemsHtml;
+  if (subtotalEl) {
+    subtotalEl.innerText = '₹' + subtotal.toLocaleString('en-IN', {minimumFractionDigits: 2});
+  }
+}
+
+function renderMeeekuCartDrawerWithData(cart) {
+  var items = (cart && cart.items) ? cart.items : [];
+  
+  if (items.length === 0) {
+    var local = getMeeekuLocalCart();
+    if (local && local.length > 0) {
+      renderMeeekuCartDrawerWithLocalFallback();
+      return;
+    }
+  }
+
+  var emptyNotice = document.getElementById('MeeekuCartEmptyNotice');
+  var container = document.getElementById('MeeekuCartItemsContainer');
+  var summary = document.getElementById('MeeekuCartSummary');
+  var subtotalEl = document.getElementById('MeeekuCartSubtotal');
+  var cartDot = document.getElementById('MeeekuCartDot');
+
+  if (!container || !emptyNotice || !summary) return;
+
+  if (items.length === 0) {
+    emptyNotice.style.display = 'block';
+    container.style.display = 'none';
+    summary.style.display = 'none';
+    if (cartDot) cartDot.classList.remove('has-items');
+    updateCartBadges(0);
+    return;
+  }
+
+  updateCartBadges(cart.item_count || 0);
+
+  // Sync server items to local storage
+  var mirroredLocal = items.map(function(item) {
+    return {
+      key: item.key || item.id,
+      id: item.variant_id || item.id,
+      title: item.product_title || item.title,
+      price: formatMeeekuPaise(item.final_price || item.price || 0),
+      img: item.image || (item.featured_image ? item.featured_image.url : ''),
+      size: item.variant_title || 'Standard',
+      qty: item.quantity,
+      quantity: item.quantity
+    };
+  });
+  saveMeeekuLocalCart(mirroredLocal);
+
+  emptyNotice.style.display = 'none';
+  container.style.display = 'flex';
+  summary.style.display = 'block';
+  if (cartDot) cartDot.classList.add('has-items');
+
+  var itemsHtml = '';
+
+  items.forEach(function(item) {
+    var itemKey = item.key || item.id;
+    var unitPriceFormatted = formatMeeekuPaise(item.final_price || item.price || 0);
+    var imgSrc = item.image || (item.featured_image ? item.featured_image.url : 'https://raw.githubusercontent.com/aaybwork-studio/meeeku/main/assets/meeeku_prod_yellow_lehenga.jpg');
+    var variantTitle = item.variant_title ? item.variant_title : '';
+
+    itemsHtml += [
+      '<div id="drawer-item-' + item.id + '" class="meeeku-cart-item" style="display: flex; gap: 1.2rem; align-items: center; background: #FFFDF7; border: 1.5px solid #F8BBD0; border-radius: 18px; padding: 1.2rem; box-shadow: 0 2px 10px rgba(107,63,160,0.04);">',
+        '<img src="' + imgSrc + '" alt="' + (item.product_title || item.title) + '" width="70" height="90" style="border-radius: 12px; object-fit: cover; width: 68px; height: 88px; border: 1.5px solid #FFE0EC; flex-shrink: 0;">',
+        '<div style="flex-grow: 1; min-width: 0;">',
+          '<h4 style="margin: 0 0 0.3rem; font-size: 1.45rem; font-weight: 700; color: #3D2355; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">',
+            (item.product_title || item.title),
+          '</h4>',
+          (variantTitle ? [
+            '<div style="display: flex; align-items: center; gap: 0.5rem; margin: 0.3rem 0;">',
+              '<span style="font-size: 1.15rem; color: #666; font-weight: 600;">Size:</span>',
+              '<span style="border: 1px solid #F8BBD0; background: #FFF; color: #6B3FA0; font-weight: 700; font-size: 1.15rem; padding: 0.15rem 0.6rem; border-radius: 8px;">',
+                variantTitle,
+              '</span>',
+            '</div>'
+          ].join('') : ''),
+          '<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.4rem;">',
+            '<div style="font-size: 1.55rem; font-weight: 800; color: #6B3FA0;">' + unitPriceFormatted + '</div>',
+            '<div style="display: flex; align-items: center; background: #FFF; border: 1px solid #F8BBD0; border-radius: 20px; padding: 0.15rem 0.6rem;">',
+              '<button type="button" onclick="meeekuDrawerUpdateQty(\'' + itemKey + '\', ' + (item.quantity - 1) + ')" style="background: none; border: none; font-size: 1.5rem; font-weight: 800; color: #FF6097; cursor: pointer; padding: 0 0.3rem; line-height: 1;" title="Decrease quantity">−</button>',
+              '<span style="font-size: 1.3rem; font-weight: 800; padding: 0 0.5rem; color: #3D2355;">' + item.quantity + '</span>',
+              '<button type="button" onclick="meeekuDrawerUpdateQty(\'' + itemKey + '\', ' + (item.quantity + 1) + ')" style="background: none; border: none; font-size: 1.5rem; font-weight: 800; color: #FF6097; cursor: pointer; padding: 0 0.3rem; line-height: 1;" title="Increase quantity">+</button>',
+            '</div>',
+          '</div>',
+        '</div>',
+        '<button type="button" style="background: transparent; border: none; font-size: 1.8rem; cursor: pointer; color: #BBB; padding: 0.4rem; line-height: 1;" onclick="removeMeeekuCartItem(\'' + itemKey + '\')" title="Remove item">✕</button>',
+      '</div>'
+    ].join('');
   });
 
   container.innerHTML = itemsHtml;
@@ -169,19 +289,41 @@ function renderMeeekuCartDrawerWithData(cart) {
 }
 
 function meeekuDrawerUpdateQty(itemKey, newQty) {
+  var q = parseInt(newQty) || 0;
+  
+  // Update local cart first
+  var localCart = getMeeekuLocalCart();
+  var updatedLocal = [];
+  localCart.forEach(function(item) {
+    var key = item.key || item.id;
+    if (String(key) === String(itemKey)) {
+      if (q > 0) {
+        item.qty = q;
+        item.quantity = q;
+        updatedLocal.push(item);
+      }
+    } else {
+      updatedLocal.push(item);
+    }
+  });
+  saveMeeekuLocalCart(updatedLocal);
+
+  // Send to server
   fetch('/cart/change.js', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ id: itemKey, quantity: parseInt(newQty) || 0 })
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify({ id: itemKey, quantity: q })
   })
-  .then(function(res) { return res.json(); })
+  .then(function(res) {
+    if (!res.ok) throw new Error('Change cart request failed');
+    return res.json();
+  })
   .then(function(cart) {
     window.meeekuLiveShopifyCart = cart;
     renderMeeekuCartDrawerWithData(cart);
-    updateCartBadges(cart.item_count || 0);
   })
-  .catch(function(err) {
-    console.error('Error updating quantity:', err);
+  .catch(function() {
+    renderMeeekuCartDrawerWithLocalFallback();
   });
 }
 
@@ -191,7 +333,7 @@ function removeMeeekuCartItem(itemKey) {
 
 function openMeeekuCart() {
   fetchMeeekuShopifyCart(function() {
-    const drawer = document.getElementById('MeeekuCartDrawerElement');
+    var drawer = document.getElementById('MeeekuCartDrawerElement');
     if (drawer) {
       drawer.classList.add('active');
       document.body.style.overflow = 'hidden';
@@ -200,41 +342,83 @@ function openMeeekuCart() {
 }
 
 function closeMeeekuCart() {
-  const drawer = document.getElementById('MeeekuCartDrawerElement');
+  var drawer = document.getElementById('MeeekuCartDrawerElement');
   if (drawer) {
     drawer.classList.remove('active');
     document.body.style.overflow = '';
   }
 }
 
-function meeekuAddToCartCatalog(title, price, imgUrl, variantId) {
-  if (variantId && !isNaN(parseInt(variantId))) {
-    fetch('/cart/add.js', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ items: [{ id: parseInt(variantId), quantity: 1 }] })
-    })
-    .then(function(res) { return res.json(); })
-    .then(function() {
-      showMeeekuToast('🎉 Added ' + title + ' to Bag!');
-      openMeeekuCart();
-    })
-    .catch(function() {
-      showMeeekuToast('🎉 Added ' + title + ' to Bag!');
-      openMeeekuCart();
-    });
+async function meeekuAddToCartCatalog(title, price, imgUrl, variantId, size, handle) {
+  var cleanSize = size || 'Standard';
+  var numPrice = parseMeeekuPrice(price);
+  var cleanPrice = '₹' + numPrice.toLocaleString('en-IN', {minimumFractionDigits: 2});
+  var itemKey = (variantId || handle || title) + '_' + cleanSize;
+
+  // 1. Add to local storage
+  var cart = getMeeekuLocalCart();
+  var existing = cart.find(function(i) { 
+    return (i.title === title && i.size === cleanSize) || (i.key === itemKey); 
+  });
+  if (existing) {
+    existing.qty = (existing.qty || existing.quantity || 1) + 1;
+    existing.quantity = existing.qty;
+    existing.price = cleanPrice;
   } else {
-    showMeeekuToast('🎉 Added ' + title + ' to Bag!');
-    openMeeekuCart();
+    cart.push({
+      key: itemKey,
+      id: variantId || ('item_' + Date.now()),
+      title: title,
+      price: cleanPrice,
+      img: imgUrl,
+      size: cleanSize,
+      qty: 1,
+      quantity: 1
+    });
   }
+  saveMeeekuLocalCart(cart);
+
+  var totalCount = cart.reduce(function(sum, i) { return sum + (i.quantity || i.qty || 1); }, 0);
+  updateCartBadges(totalCount);
+
+  // 2. Resolve variant ID if needed and post to Shopify /cart/add.js
+  var numericVariantId = (variantId && !isNaN(parseInt(variantId))) ? parseInt(variantId) : null;
+  
+  if (!numericVariantId && handle) {
+    try {
+      var prodRes = await fetch('/products/' + handle + '.js');
+      if (prodRes.ok) {
+        var prodJson = await prodRes.json();
+        if (prodJson && prodJson.variants && prodJson.variants.length > 0) {
+          var matched = prodJson.variants.find(function(v) {
+            return v.title.toLowerCase() === cleanSize.toLowerCase();
+          });
+          numericVariantId = matched ? matched.id : prodJson.variants[0].id;
+        }
+      }
+    } catch(e) {}
+  }
+
+  if (numericVariantId) {
+    try {
+      await fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ id: numericVariantId, quantity: 1 })
+      });
+    } catch(e) {}
+  }
+
+  showMeeekuToast('🎉 Added ' + title + ' to Bag!');
+  openMeeekuCart();
 }
 
 function showMeeekuToast(msg) {
-  const toast = document.getElementById('MeeekuCartToast');
+  var toast = document.getElementById('MeeekuCartToast') || document.getElementById('MeeekuCartToastCatalog');
   if (toast) {
     toast.innerText = msg;
     toast.classList.add('show');
-    setTimeout(() => {
+    setTimeout(function() {
       toast.classList.remove('show');
     }, 2800);
   }
@@ -244,7 +428,7 @@ function showMeeekuToast(msg) {
 document.addEventListener('DOMContentLoaded', function() {
   fetchMeeekuShopifyCart();
   
-  const cartIcon = document.getElementById('cart-icon-bubble');
+  var cartIcon = document.getElementById('cart-icon-bubble');
   if (cartIcon) {
     cartIcon.addEventListener('click', function(e) {
       e.preventDefault();
@@ -301,35 +485,33 @@ document.addEventListener('DOMContentLoaded', function() {
   transform: translateX(100%);
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 2;
-  overflow: hidden;
 }
 
 .meeeku-cart-drawer.active .meeeku-drawer-inner {
-  transform: translateX(0) !important;
+  transform: translateX(0);
 }
 
 .meeeku-drawer-header {
+  padding: 1.8rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 2rem;
-  border-bottom: 2px solid #F8BBD0;
-  background: #FFFDF7;
-  flex-shrink: 0;
+  border-bottom: 1.5px solid #F8BBD0;
+  background: #FFF;
 }
 
 .meeeku-drawer-close {
-  background: #FFF;
-  border: 1.5px solid #F8BBD0;
+  background: #FFF0F5;
+  border: 1px solid #F8BBD0;
+  color: #6B3FA0;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  width: 36px;
-  height: 36px;
+  font-size: 1.6rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.8rem;
   cursor: pointer;
-  color: #3D2355;
   transition: all 0.2s ease;
 }
 
@@ -341,57 +523,49 @@ document.addEventListener('DOMContentLoaded', function() {
 
 .meeeku-drawer-body {
   padding: 1.8rem;
-  flex-grow: 1;
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.meeeku-cart-item {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.meeeku-cart-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(107, 63, 160, 0.08);
 }
 
 .meeeku-cart-toast {
   position: fixed;
-  bottom: 25px;
-  right: 25px;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
   background: #3D2355;
-  color: #FFFFFF;
-  padding: 1.2rem 2.2rem;
-  border-radius: 30px;
+  color: #FFF;
   font-size: 1.45rem;
   font-weight: 700;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-  z-index: 1000000;
-  transform: translateY(100px);
+  padding: 1.2rem 2.5rem;
+  border-radius: 35px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  border: 2px solid #FF6097;
+  z-index: 9999999;
   opacity: 0;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   pointer-events: none;
-  border: 1.5px solid #F8BBD0;
+  transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .meeeku-cart-toast.show {
-  transform: translateY(0);
+  transform: translateX(-50%) translateY(0);
   opacity: 1;
 }
 
-@media screen and (max-width: 749px) {
+@media screen and (max-width: 480px) {
   .meeeku-drawer-inner {
-    width: 100% !important;
-    max-width: 100vw !important;
-  }
-  .meeeku-drawer-header {
-    padding: 1.2rem 1.5rem !important;
-  }
-  .meeeku-drawer-body {
-    padding: 1.2rem !important;
-  }
-  .meeeku-cart-item {
-    gap: 1rem !important;
-    padding: 1rem !important;
-    border-radius: 16px !important;
-  }
-  .meeeku-cart-toast {
-    bottom: 20px;
-    right: 20px;
-    left: 20px;
-    text-align: center;
-    font-size: 1.35rem;
+    width: 100vw;
   }
 }
 </style>

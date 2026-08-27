@@ -117,7 +117,7 @@
 
     <button type="button" 
             class="meeeku-card-hover-quick-add" 
-            onclick="meeekuAddToCartCatalog('{{ product.title | escape }}', '{{ product.price | money }}', '{{ primary_img | image_url: width: 400 }}', '{{ current_variant.id }}')">
+            onclick="meeekuAddToCartCatalog('{{ product.title | escape }}', '{{ product.price | money }}', '{{ primary_img | image_url: width: 400 }}', '{{ current_variant.id }}', '{{ current_variant.title | escape }}', '{{ product.handle }}')">
       + Quick Add • {{ product.price | money }}
     </button>
   </div>
