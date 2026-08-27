@@ -1,32 +1,41 @@
 {% comment %}
   Meeeku Interactive Dynamic Catalog & Category Filter Grid with Sort & Age Filters
-  Shopify OS 2.0 CMS Connected — Automatically syncs real Shopify product updates, images, titles, pricing, variants, and inventory.
+  Shopify OS 2.0 CMS Connected — Automatically syncs real Shopify products, variants, pricing, and images.
 {% endcomment %}
 
 <div class="page-width meeeku-catalog-section" style="padding-top: 2rem; padding-bottom: 5rem;">
   
   <!-- Category Filter Pills Bar -->
-  <div class="meeeku-catalog-pills" style="display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem;">
+  <div class="meeeku-catalog-pills">
     <button type="button" class="meeeku-pill-filter active" data-filter="all" onclick="setCategoryFilter('all', this)">
       ✨ All Products
     </button>
-    <button type="button" class="meeeku-pill-filter" data-filter="tees" onclick="setCategoryFilter('tees', this)" style="background-color: #E8F5E9; color: #2E7D32; border-color: #A5D6A7; font-weight: 700;">
-      👕 Everyday T-Shirts
+    <button type="button" class="meeeku-pill-filter" data-filter="boys" onclick="setCategoryFilter('boys', this)" style="background-color: #FFF8E1; color: #F57F17; border-color: #FFE082; font-weight: 700;">
+      👦 Boys Collection
     </button>
-    <button type="button" class="meeeku-pill-filter" data-filter="ethnic" onclick="setCategoryFilter('ethnic', this)">
-      👑 Royal Ethnic Lehengas
+    <button type="button" class="meeeku-pill-filter" data-filter="girls" onclick="setCategoryFilter('girls', this)" style="background-color: #FCE4EC; color: #C2185B; border-color: #F48FB1; font-weight: 700;">
+      👧 Girls Collection
+    </button>
+    <button type="button" class="meeeku-pill-filter" data-filter="nightwear" onclick="setCategoryFilter('nightwear', this)" style="background-color: #F3E5F5; color: #4A148C; border-color: #CE93D8; font-weight: 700;">
+      🌙 Sleepwear & Nightsuits
+    </button>
+    <button type="button" class="meeeku-pill-filter" data-filter="winterwear" onclick="setCategoryFilter('winterwear', this)" style="background-color: #E8EAF6; color: #283593; border-color: #9FA8DA; font-weight: 700;">
+      ❄️ Cozy Winterwear
     </button>
     <button type="button" class="meeeku-pill-filter" data-filter="coords" onclick="setCategoryFilter('coords', this)" style="background-color: #E0F2F1; color: #00695C; border-color: #80CBC4; font-weight: 700;">
       🌸 2-Piece Co-ords
     </button>
-    <button type="button" class="meeeku-pill-filter" data-filter="nightsuits" onclick="setCategoryFilter('nightsuits', this)" style="background-color: #F3E5F5; color: #4A148C; border-color: #CE93D8;">
-      🌙 Organic Nightsuits <span style="font-size: 0.95rem; background: #9C27B0; color: #FFF; padding: 0.15rem 0.6rem; border-radius: 12px; margin-left: 0.4rem;">Coming Soon ⏳</span>
+    <button type="button" class="meeeku-pill-filter" data-filter="tees" onclick="setCategoryFilter('tees', this)" style="background-color: #E8F5E9; color: #2E7D32; border-color: #A5D6A7; font-weight: 700;">
+      👕 Everyday T-Shirts
     </button>
-    <button type="button" class="meeeku-pill-filter" data-filter="boys" onclick="setCategoryFilter('boys', this)" style="background-color: #FFF8E1; color: #F57F17; border-color: #FFE082;">
-      👦 Boys Line <span style="font-size: 0.95rem; background: #F57F17; color: #FFF; padding: 0.15rem 0.6rem; border-radius: 12px; margin-left: 0.4rem;">Coming Soon ⏳</span>
+    <button type="button" class="meeeku-pill-filter" data-filter="ethnic" onclick="setCategoryFilter('ethnic', this)" style="background-color: #FFF0F5; color: #6B3FA0; border-color: #F8BBD0; font-weight: 700;">
+      👑 Royal Ethnic Lehengas
     </button>
-    <button type="button" class="meeeku-pill-filter" data-filter="dresses" onclick="setCategoryFilter('dresses', this)" style="background-color: #E0F7FA; color: #00838F; border-color: #80DEEA;">
-      👗 Western Dresses <span style="font-size: 0.95rem; background: #00838F; color: #FFF; padding: 0.15rem 0.6rem; border-radius: 12px; margin-left: 0.4rem;">Coming Soon ⏳</span>
+    <button type="button" class="meeeku-pill-filter" data-filter="pajamas" onclick="setCategoryFilter('pajamas', this)" style="background-color: #EDE7F6; color: #512DA8; border-color: #D1C4E9; font-weight: 700;">
+      🧸 2-Pack Pajamas (₹499)
+    </button>
+    <button type="button" class="meeeku-pill-filter" data-filter="towels" onclick="setCategoryFilter('towels', this)" style="background-color: #E0F7FA; color: #00838F; border-color: #80DEEA; font-weight: 700;">
+      🛁 Towels & Blankets
     </button>
   </div>
 
@@ -61,26 +70,6 @@
     </div>
   </div>
 
-  <!-- Dynamic Coming Soon & VIP Waitlist Teaser Banner -->
-  <div id="MeeekuComingSoonBanner" style="display: none; background: #FFFDF7; border: 2.5px dashed #CE93D8; border-radius: 24px; padding: 3rem 2rem; text-align: center; margin-bottom: 3rem; box-shadow: 0 10px 30px rgba(107, 63, 160, 0.06);">
-    <span class="meeeku-badge" style="background: #EDE7F6; color: #512DA8; border: 1.5px solid #D1C4E9; font-weight: 800; font-size: 1.2rem; padding: 0.4rem 1.2rem; border-radius: 30px;">⏳ LAUNCHING SOON</span>
-    
-    <div id="MeeekuComingSoonImgWrap" style="margin: 1.5rem auto 1rem; max-width: 320px; max-height: 240px; border-radius: 20px; overflow: hidden; border: 2px solid #F8BBD0; box-shadow: 0 8px 20px rgba(0,0,0,0.06);">
-      <img id="MeeekuComingSoonImg" src="{{ 'placeholder_coords_1.jpg' | asset_url }}" alt="Category Sneak Peek Teaser" style="width: 100%; height: 220px; object-fit: cover;">
-    </div>
-
-    <h3 id="MeeekuComingSoonTitle" style="color: #3D2355; font-size: 2.6rem; font-weight: 800; margin: 0.8rem 0 0.5rem;">Category Launching Soon</h3>
-    <p id="MeeekuComingSoonDesc" style="color: #6B3FA0; font-size: 1.5rem; max-width: 600px; margin: 0 auto 1.8rem; line-height: 1.6;">
-      We are currently crafting zero-itch, pure cotton sleepwear and festive outfits for this collection. Join our VIP waitlist to get early access & 15% OFF at launch!
-    </p>
-    <form onsubmit="handleMeeekuWaitlistSubmit(event)" style="display: flex; gap: 1rem; justify-content: center; max-width: 520px; margin: 0 auto; flex-wrap: wrap;">
-      <input type="email" placeholder="Enter your email address" required style="border: 2px solid #CE93D8; border-radius: 30px; padding: 1rem 1.6rem; font-size: 1.35rem; flex: 1; min-width: 240px; outline: none; background: #FFF;">
-      <button type="submit" class="button button--primary" style="border-radius: 30px; background: #7B1FA2; border-color: #7B1FA2; font-weight: 700; padding: 1rem 2rem; cursor: pointer; font-size: 1.35rem;">
-        🔔 Join Launch Waitlist (15% OFF)
-      </button>
-    </form>
-  </div>
-
   <!-- Interactive Catalog Grid -->
   <div class="meeeku-catalog-grid">
     <ul class="grid product-grid grid--2-col-tablet-down grid--3-col-desktop" id="MeeekuProductGrid">
@@ -92,54 +81,103 @@
             assign p_title = product.title | downcase
             assign p_handle = product.handle | downcase
 
-            assign is_ethnic = false
-            assign is_tee = false
-            assign is_dress = false
-            assign is_nightsuit = false
             assign is_boy = false
+            assign is_girl = false
+            assign is_nightwear = false
+            assign is_winterwear = false
             assign is_coord = false
+            assign is_tee = false
+            assign is_pajama = false
+            assign is_towel = false
+            assign is_ethnic = false
 
-            if p_title contains 'lehenga' or p_handle contains 'lehenga' or p_type contains 'lehenga' or p_type contains 'ethnic' or p_tags contains 'lehenga' or p_tags contains 'royal ethnic' or p_tags contains 'indian ethnic'
-              assign is_ethnic = true
-            elsif p_title contains 'tee' or p_title contains 't-shirt' or p_handle contains 'tee' or p_type contains 'tee' or p_type contains 't-shirt' or p_tags contains 'basic tee'
-              assign is_tee = true
-            elsif p_title contains 'dress' or p_handle contains 'dress' or p_type contains 'dress' or p_tags contains 'dresses'
-              assign is_dress = true
-            elsif p_title contains 'night' or p_title contains 'sleep' or p_type contains 'night' or p_tags contains 'nightsuit'
-              assign is_nightsuit = true
-            elsif p_title contains 'boy' or p_type contains 'boy' or p_tags contains 'boys'
+            if p_tags contains 'boys' or p_type contains 'boys' or p_title contains 'boy' or p_handle contains 'boy'
               assign is_boy = true
-            elsif p_title contains 'co-ord' or p_title contains 'coord' or p_handle contains 'coord' or p_type contains 'co-ord' or p_type contains 'coord' or p_tags contains 'co-ord' or p_tags contains 'coord'
+            endif
+            if p_tags contains 'girls' or p_type contains 'girls' or p_title contains 'girl' or p_handle contains 'girl' or p_title contains 'lehenga' or p_type contains 'lehenga' or p_tags contains 'lehenga'
+              assign is_girl = true
+            endif
+            if p_tags contains 'nightwear' or p_tags contains 'nightsuit' or p_type contains 'nightwear' or p_title contains 'nightsuit' or p_title contains 'sleep' or p_handle contains 'nightsuit'
+              assign is_nightwear = true
+            endif
+            if p_tags contains 'winterwear' or p_type contains 'winterwear' or p_tags contains 'winter' or p_tags contains 'fleece' or p_title contains 'winter' or p_title contains 'tracksuit' or p_title contains 'fleece' or p_title contains 'hoodie'
+              assign is_winterwear = true
+            endif
+            if p_tags contains 'pajamas' or p_tags contains 'pajama' or p_type contains 'pajama' or p_title contains 'pajama' or p_handle contains 'pajama'
+              assign is_pajama = true
+            endif
+            if p_tags contains 'towels' or p_tags contains 'towel' or p_tags contains 'blanket' or p_tags contains 'swaddle' or p_type contains 'towel' or p_type contains 'blanket' or p_title contains 'towel' or p_title contains 'blanket'
+              assign is_towel = true
+            endif
+            if p_tags contains 'coord' or p_tags contains 'co-ord' or p_type contains 'coord' or p_type contains 'co-ord' or p_title contains 'coord' or p_title contains 'co-ord'
               assign is_coord = true
-            else
+            endif
+            if p_tags contains 'tee' or p_type contains 'tee' or p_title contains 'tee' or p_title contains 'sweatshirt' or p_handle contains 'tee'
+              assign is_tee = true
+            endif
+            if p_tags contains 'ethnic' or p_type contains 'ethnic' or p_tags contains 'lehenga' or p_type contains 'lehenga' or p_title contains 'lehenga'
               assign is_ethnic = true
             endif
 
             assign cat_list = 'all '
+            if is_boy
+              assign cat_list = cat_list | append: 'boys '
+            endif
+            if is_girl
+              assign cat_list = cat_list | append: 'girls '
+            endif
+            if is_nightwear
+              assign cat_list = cat_list | append: 'nightwear '
+            endif
+            if is_winterwear
+              assign cat_list = cat_list | append: 'winterwear '
+            endif
+            if is_coord
+              assign cat_list = cat_list | append: 'coords '
+            endif
+            if is_tee
+              assign cat_list = cat_list | append: 'tees '
+            endif
+            if is_pajama
+              assign cat_list = cat_list | append: 'pajamas '
+            endif
+            if is_towel
+              assign cat_list = cat_list | append: 'towels '
+            endif
             if is_ethnic
-              assign cat_list = cat_list | append: 'ethnic'
-              assign badge_label = 'Royal Ethnic Lehenga'
-              assign badge_style = 'background: #FFF0F5; color: #6B3FA0; border: 1px solid #F8BBD0;'
-            elsif is_tee
-              assign cat_list = cat_list | append: 'tees'
-              assign badge_label = '100% Combed Cotton'
-              assign badge_style = 'background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;'
-            elsif is_coord
-              assign cat_list = cat_list | append: 'coords'
-              assign badge_label = '2-Piece Co-ord Set'
-              assign badge_style = 'background: #E0F2F1; color: #00695C; border: 1px solid #80CBC4;'
-            elsif is_dress
-              assign cat_list = cat_list | append: 'dresses'
-              assign badge_label = 'Indo-Western Dress'
-              assign badge_style = 'background: #E0F7FA; color: #00838F; border: 1px solid #80DEEA;'
-            elsif is_nightsuit
-              assign cat_list = cat_list | append: 'nightsuits'
-              assign badge_label = 'Organic Nightsuit'
+              assign cat_list = cat_list | append: 'ethnic '
+            endif
+
+            if is_pajama
+              assign badge_label = '🧸 2-Pack Set (₹499)'
               assign badge_style = 'background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;'
-            elsif is_boy
-              assign cat_list = cat_list | append: 'boys'
-              assign badge_label = 'Boys Line'
+            elsif is_towel
+              assign badge_label = '🛁 100% Organic Muslin/Terry'
+              assign badge_style = 'background: #E0F7FA; color: #00838F; border: 1px solid #80DEEA;'
+            elsif is_boy and is_winterwear
+              assign badge_label = '👦 Boys Winterwear'
               assign badge_style = 'background: #FFF8E1; color: #F57F17; border: 1px solid #FFE082;'
+            elsif is_boy and is_coord
+              assign badge_label = '👦 Boys Co-ord Set'
+              assign badge_style = 'background: #FFF8E1; color: #F57F17; border: 1px solid #FFE082;'
+            elsif is_girl and is_nightwear
+              assign badge_label = '🌙 100% Cotton Nightsuit'
+              assign badge_style = 'background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;'
+            elsif is_girl and is_winterwear
+              assign badge_label = '❄️ Cozy Winterwear'
+              assign badge_style = 'background: #FCE4EC; color: #C2185B; border: 1px solid #F48FB1;'
+            elsif is_coord
+              assign badge_label = '🌸 2-Piece Co-ord Set'
+              assign badge_style = 'background: #E0F2F1; color: #00695C; border: 1px solid #80CBC4;'
+            elsif is_tee
+              assign badge_label = '👕 100% Combed Cotton'
+              assign badge_style = 'background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;'
+            elsif is_ethnic
+              assign badge_label = '👑 Royal Ethnic Lehenga'
+              assign badge_style = 'background: #FFF0F5; color: #6B3FA0; border: 1px solid #F8BBD0;'
+            else
+              assign badge_label = '✨ Meeeku Premium'
+              assign badge_style = 'background: #FFF0F5; color: #6B3FA0; border: 1px solid #F8BBD0;'
             endif
 
             assign age_keys = 'all'
@@ -149,16 +187,16 @@
             endfor
             assign full_search_str = p_tags | append: ' ' | append: all_v_titles
 
-            if full_search_str contains '0-6m' or full_search_str contains '0 - 6m' or full_search_str contains 'infant' or full_search_str contains '0-1y' or full_search_str contains '0 - 1y'
+            if full_search_str contains '0-6m' or full_search_str contains '0 - 6m' or full_search_str contains 'infant' or full_search_str contains '0-1y' or full_search_str contains '0-3y'
               assign age_keys = age_keys | append: ',0-6m'
             endif
-            if full_search_str contains '6-12m' or full_search_str contains '6 - 12m' or full_search_str contains 'infant' or full_search_str contains '0-1y' or full_search_str contains '0 - 1y'
+            if full_search_str contains '6-12m' or full_search_str contains '6 - 12m' or full_search_str contains 'infant' or full_search_str contains '0-1y' or full_search_str contains '0-3y'
               assign age_keys = age_keys | append: ',6-12m'
             endif
-            if full_search_str contains '12-18m' or full_search_str contains '18-24m' or full_search_str contains '1-2y' or full_search_str contains '1 - 2y' or full_search_str contains 'toddler'
+            if full_search_str contains '12-18m' or full_search_str contains '18-24m' or full_search_str contains '1-2y' or full_search_str contains '1 - 2y' or full_search_str contains 'toddler' or full_search_str contains '0-3y'
               assign age_keys = age_keys | append: ',1-2y'
             endif
-            if full_search_str contains '2-3y' or full_search_str contains '2 - 3y' or full_search_str contains 'toddler'
+            if full_search_str contains '2-3y' or full_search_str contains '2 - 3y' or full_search_str contains 'toddler' or full_search_str contains '0-3y'
               assign age_keys = age_keys | append: ',2-3y'
             endif
             if full_search_str contains '3-4y' or full_search_str contains '4-5y' or full_search_str contains '5-6y' or full_search_str contains '6-7y' or full_search_str contains '3-7y' or full_search_str contains 'kids'
@@ -174,7 +212,7 @@
           <li class="grid__item meeeku-grid-item" data-category="{{ cat_list | strip }}" data-price="{{ product.price | divided_by: 100 }}" data-age="{{ age_keys }}" data-date="{{ product.published_at | date: '%Y-%m-%d' }}" data-bestseller-rank="{{ forloop.index }}">
             <div class="card-wrapper meeeku-interactive-card">
               <div class="meeeku-card-media-wrapper">
-                <a href="{{ product.url }}" class="meeeku-card-link">
+                <a href="{{ product.url }}" class="meeeku-card-link" onclick="meeekuStorePdpClick('{{ product.handle }}', '{{ product.title | escape }}', '{{ product.price | money }}', '{{ first_img_url }}', '{{ badge_label | escape }}')">
                   {% if first_img %}
                     <img src="{{ first_img_url }}" alt="{{ product.title | escape }}" class="meeeku-card-img meeeku-img-primary" width="600" height="750" loading="lazy">
                   {% endif %}
@@ -191,7 +229,7 @@
                   <span class="meeeku-badge" style="font-size: 1rem; padding: 0.2rem 0.8rem; {{ badge_style }}">{{ badge_label }}</span>
                 </div>
                 <h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">
-                  <a href="{{ product.url }}" style="color: #3D2355; text-decoration: none;">{{ product.title }}</a>
+                  <a href="{{ product.url }}" style="color: #3D2355; text-decoration: none;" onclick="meeekuStorePdpClick('{{ product.handle }}', '{{ product.title | escape }}', '{{ product.price | money }}', '{{ first_img_url }}', '{{ badge_label | escape }}')">{{ product.title }}</a>
                 </h3>
                 <div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">
                   {{ product.price | money }}
@@ -207,8 +245,8 @@
           </li>
         {% endfor %}
       {% else %}
-      <!-- JS will populate this from Shopify live API — see script below -->
-      <li id="MeeekuCatalogFetchPlaceholder" class="grid__item" style="display:none;"></li>
+        <!-- Live & Static Universal Fallback Container -->
+        <li id="MeeekuCatalogFetchPlaceholder" class="grid__item" style="display:none;"></li>
       {% endif %}
     </ul>
   </div>
@@ -221,67 +259,1218 @@
 </div>
 
 <script>
+const MEEKU_CATALOG_FALLBACK = [
+  {
+    "handle": "sunshine-chanderi-lehenga",
+    "title": "Sunshine Chanderi Lehenga",
+    "type": "Indian Ethnic Lehengas",
+    "price": 3199.0,
+    "compare_price": 3899.0,
+    "categories": "all girls ethnic",
+    "ages": "all,2-3y,3-7y",
+    "badge": "\ud83d\udc51 Royal Ethnic Lehenga",
+    "badge_style": "background: #FFF0F5; color: #6B3FA0; border: 1px solid #F8BBD0;",
+    "images": [
+      "meeeku_prod_yellow_lehenga.jpg",
+      "meeeku_prod_yellow_lehenga_model.jpg",
+      "meeeku_prod_yellow_lehenga_swirl.jpg"
+    ],
+    "variants": [
+      "2-3Y",
+      "4-5Y",
+      "6-7Y"
+    ]
+  },
+  {
+    "handle": "teal-bloom-sequin-dress",
+    "title": "Teal Bloom Dress",
+    "type": "Indo-Western Dresses",
+    "price": 2999.0,
+    "compare_price": 3699.0,
+    "categories": "all",
+    "ages": "all,2-3y,3-7y",
+    "badge": "\u2728 Meeeku Premium",
+    "badge_style": "background: #FFF0F5; color: #6B3FA0; border: 1px solid #F8BBD0;",
+    "images": [
+      "meeeku_prod_teal_dress.jpg",
+      "meeeku_prod_teal_dress_model.jpg",
+      "meeeku_prod_teal_dress_swirl.jpg"
+    ],
+    "variants": [
+      "2-3Y",
+      "4-5Y",
+      "6-7Y"
+    ]
+  },
+  {
+    "handle": "blush-rose-net-lehenga",
+    "title": "Blush Rose Net Lehenga",
+    "type": "Indian Ethnic Lehengas",
+    "price": 3299.0,
+    "compare_price": 3999.0,
+    "categories": "all girls ethnic",
+    "ages": "all,2-3y,3-7y",
+    "badge": "\ud83d\udc51 Royal Ethnic Lehenga",
+    "badge_style": "background: #FFF0F5; color: #6B3FA0; border: 1px solid #F8BBD0;",
+    "images": [
+      "meeeku_prod_pink_net_lehenga.jpg",
+      "meeeku_prod_pink_net_lehenga_model.jpg",
+      "meeeku_prod_pink_net_lehenga_swirl.jpg"
+    ],
+    "variants": [
+      "2-3Y",
+      "4-5Y",
+      "6-7Y"
+    ]
+  },
+  {
+    "handle": "forest-vrindavan-green-lehenga",
+    "title": "Forest Vrindavan Lehenga",
+    "type": "Indian Ethnic Lehengas",
+    "price": 3199.0,
+    "compare_price": 3899.0,
+    "categories": "all girls ethnic",
+    "ages": "all,2-3y,3-7y",
+    "badge": "\ud83d\udc51 Royal Ethnic Lehenga",
+    "badge_style": "background: #FFF0F5; color: #6B3FA0; border: 1px solid #F8BBD0;",
+    "images": [
+      "meeeku_prod_green_lehenga.jpg",
+      "meeeku_prod_green_lehenga_model.jpg",
+      "meeeku_prod_green_lehenga_swirl.jpg"
+    ],
+    "variants": [
+      "2-3Y",
+      "4-5Y",
+      "6-7Y"
+    ]
+  },
+  {
+    "handle": "gulmohar-splash-abstract-coord",
+    "title": "Gulmohar Splash Co-ord",
+    "type": "Festive Co-ords",
+    "price": 2899.0,
+    "compare_price": 3599.0,
+    "categories": "all coords",
+    "ages": "all,2-3y,3-7y",
+    "badge": "\ud83c\udf38 2-Piece Co-ord Set",
+    "badge_style": "background: #E0F2F1; color: #00695C; border: 1px solid #80CBC4;",
+    "images": [
+      "meeeku_prod_multicolor_coord.jpg",
+      "meeeku_prod_multicolor_coord_model.jpg",
+      "meeeku_prod_multicolor_coord_swirl.jpg"
+    ],
+    "variants": [
+      "2-3Y",
+      "4-5Y",
+      "6-7Y"
+    ]
+  },
+  {
+    "handle": "sage-mint-gota-lehenga",
+    "title": "Sage Mint Gota Lehenga",
+    "type": "Indian Ethnic Lehengas",
+    "price": 3199.0,
+    "compare_price": 3899.0,
+    "categories": "all girls ethnic",
+    "ages": "all,2-3y,3-7y",
+    "badge": "\ud83d\udc51 Royal Ethnic Lehenga",
+    "badge_style": "background: #FFF0F5; color: #6B3FA0; border: 1px solid #F8BBD0;",
+    "images": [
+      "meeeku_prod_sage_lehenga.jpg",
+      "meeeku_prod_sage_lehenga_model.jpg",
+      "meeeku_prod_sage_lehenga_swirl.jpg"
+    ],
+    "variants": [
+      "2-3Y",
+      "4-5Y",
+      "6-7Y"
+    ]
+  },
+  {
+    "handle": "rani-pink-phulkari-lehenga",
+    "title": "Rani Pink Phulkari Lehenga",
+    "type": "Indian Ethnic Lehengas",
+    "price": 2799.0,
+    "compare_price": 3499.0,
+    "categories": "all girls ethnic",
+    "ages": "all,2-3y,3-7y",
+    "badge": "\ud83d\udc51 Royal Ethnic Lehenga",
+    "badge_style": "background: #FFF0F5; color: #6B3FA0; border: 1px solid #F8BBD0;",
+    "images": [
+      "meeeku_prod_magenta_lehenga.jpg",
+      "meeeku_prod_magenta_lehenga_model.jpg",
+      "meeeku_prod_magenta_lehenga_swirl.jpg"
+    ],
+    "variants": [
+      "2-3Y",
+      "4-5Y",
+      "6-7Y"
+    ]
+  },
+  {
+    "handle": "midnight-blossom-halter-lehenga",
+    "title": "Midnight Blossom Halter Lehenga",
+    "type": "Indian Ethnic Lehengas",
+    "price": 2799.0,
+    "compare_price": 3499.0,
+    "categories": "all girls nightwear ethnic",
+    "ages": "all,2-3y,3-7y",
+    "badge": "\ud83c\udf19 100% Cotton Nightsuit",
+    "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
+    "images": [
+      "meeeku_prod_black_lehenga.jpg",
+      "meeeku_prod_black_lehenga_model.jpg",
+      "meeeku_prod_black_lehenga_swirl.jpg"
+    ],
+    "variants": [
+      "2-3Y",
+      "4-5Y",
+      "6-7Y"
+    ]
+  },
+  {
+    "handle": "olive-silk-oneshoulder-lehenga",
+    "title": "Olive Silk One-Shoulder Lehenga",
+    "type": "Indian Ethnic Lehengas",
+    "price": 3299.0,
+    "compare_price": 3999.0,
+    "categories": "all girls coords ethnic",
+    "ages": "all,2-3y,3-7y",
+    "badge": "\ud83c\udf38 2-Piece Co-ord Set",
+    "badge_style": "background: #E0F2F1; color: #00695C; border: 1px solid #80CBC4;",
+    "images": [
+      "meeeku_prod_olive_lehenga.jpg",
+      "meeeku_prod_olive_lehenga_model.jpg",
+      "meeeku_prod_olive_lehenga_swirl.jpg"
+    ],
+    "variants": [
+      "2-3Y",
+      "4-5Y",
+      "6-7Y"
+    ]
+  },
+  {
+    "handle": "snuggle-bunny-blush-tee",
+    "title": "Snuggle Bunny Blush Cotton Tee",
+    "type": "Basic T-Shirts",
+    "price": 599.0,
+    "compare_price": 899.0,
+    "categories": "all tees",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "badge": "\ud83d\udc55 100% Combed Cotton",
+    "badge_style": "background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;",
+    "images": [
+      "meeeku_prod_bunny_tee.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ]
+  },
+  {
+    "handle": "little-leopard-safari-tee",
+    "title": "Little Leopard Safari Cotton Tee",
+    "type": "Basic T-Shirts",
+    "price": 599.0,
+    "compare_price": 899.0,
+    "categories": "all tees",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "badge": "\ud83d\udc55 100% Combed Cotton",
+    "badge_style": "background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;",
+    "images": [
+      "meeeku_prod_leopard_tee.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ]
+  },
+  {
+    "handle": "tiny-dino-doodles-tee",
+    "title": "Tiny Dino Doodles Cotton Tee",
+    "type": "Basic T-Shirts",
+    "price": 599.0,
+    "compare_price": 899.0,
+    "categories": "all tees",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "badge": "\ud83d\udc55 100% Combed Cotton",
+    "badge_style": "background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;",
+    "images": [
+      "meeeku_prod_dino_tee.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ]
+  },
+  {
+    "handle": "little-night-owl-starlit-tee",
+    "title": "Little Night Owl Starlit Cotton Tee",
+    "type": "Basic T-Shirts",
+    "price": 599.0,
+    "compare_price": 899.0,
+    "categories": "all nightwear tees",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "badge": "\ud83d\udc55 100% Combed Cotton",
+    "badge_style": "background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;",
+    "images": [
+      "meeeku_prod_owl_tee.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ]
+  },
+  {
+    "handle": "mighty-little-lion-tee",
+    "title": "Mighty Little Lion Cotton Tee",
+    "type": "Basic T-Shirts",
+    "price": 599.0,
+    "compare_price": 899.0,
+    "categories": "all tees",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "badge": "\ud83d\udc55 100% Combed Cotton",
+    "badge_style": "background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;",
+    "images": [
+      "meeeku_prod_lion_tee.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ]
+  },
+  {
+    "handle": "cosmic-safari-doodle-tee",
+    "title": "Cosmic Safari Doodle Cotton Tee",
+    "type": "Basic T-Shirts",
+    "price": 599.0,
+    "compare_price": 899.0,
+    "categories": "all tees",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "badge": "\ud83d\udc55 100% Combed Cotton",
+    "badge_style": "background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;",
+    "images": [
+      "meeeku_prod_cosmic_safari_tee.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ]
+  },
+  {
+    "handle": "daisy-frill-blue-tee",
+    "title": "Periwinkle Daisy Frill Cotton Tee",
+    "type": "Basic T-Shirts",
+    "price": 599.0,
+    "compare_price": 899.0,
+    "categories": "all tees",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "badge": "\ud83d\udc55 100% Combed Cotton",
+    "badge_style": "background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;",
+    "images": [
+      "meeeku_prod_daisy_frill_tee.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ]
+  },
+  {
+    "handle": "vanilla-cream-eyelet-coord",
+    "title": "Vanilla Cream Ruffled Eyelet Co-ord Set",
+    "type": "Co-ord Sets",
+    "price": 1299.0,
+    "compare_price": 1699.0,
+    "categories": "all coords",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "badge": "\ud83c\udf38 2-Piece Co-ord Set",
+    "badge_style": "background: #E0F2F1; color: #00695C; border: 1px solid #80CBC4;",
+    "images": [
+      "meeeku_prod_vanilla_cream_coord.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ]
+  },
+  {
+    "handle": "pink-ribbon-peplum-coord",
+    "title": "Pink Ribbon Bow Peplum Co-ord Set",
+    "type": "Co-ord Sets",
+    "price": 1299.0,
+    "compare_price": 1699.0,
+    "categories": "all coords",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "badge": "\ud83c\udf38 2-Piece Co-ord Set",
+    "badge_style": "background: #E0F2F1; color: #00695C; border: 1px solid #80CBC4;",
+    "images": [
+      "meeeku_prod_pink_ribbon_peplum_coord.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ]
+  },
+  {
+    "handle": "farm-friends-storybook-coord",
+    "title": "Little Farm Friends Storybook Co-ord Set",
+    "type": "Co-ord Sets",
+    "price": 1299.0,
+    "compare_price": 1699.0,
+    "categories": "all coords",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "badge": "\ud83c\udf38 2-Piece Co-ord Set",
+    "badge_style": "background: #E0F2F1; color: #00695C; border: 1px solid #80CBC4;",
+    "images": [
+      "meeeku_prod_farm_friends_coord.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ]
+  },
+  {
+    "handle": "wildflower-meadow-ruffle-coord",
+    "title": "Wildflower Meadow Ruffle Co-ord Set",
+    "type": "Co-ord Sets",
+    "price": 1299.0,
+    "compare_price": 1699.0,
+    "categories": "all coords",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "badge": "\ud83c\udf38 2-Piece Co-ord Set",
+    "badge_style": "background: #E0F2F1; color: #00695C; border: 1px solid #80CBC4;",
+    "images": [
+      "meeeku_prod_wildflower_meadow_coord.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ]
+  },
+  {
+    "handle": "sky-blue-stardust-polka-coord",
+    "title": "Sky Blue Stardust Polka Co-ord Set",
+    "type": "Co-ord Sets",
+    "price": 1299.0,
+    "compare_price": 1699.0,
+    "categories": "all coords",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "badge": "\ud83c\udf38 2-Piece Co-ord Set",
+    "badge_style": "background: #E0F2F1; color: #00695C; border: 1px solid #80CBC4;",
+    "images": [
+      "meeeku_prod_sky_blue_polka_coord.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ]
+  },
+  {
+    "handle": "playful-kitty-doodles-coord",
+    "title": "Playful Kitty Doodles Cotton Co-ord Set",
+    "type": "Co-ord Sets",
+    "price": 1299.0,
+    "compare_price": 1699.0,
+    "categories": "all coords",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "badge": "\ud83c\udf38 2-Piece Co-ord Set",
+    "badge_style": "background: #E0F2F1; color: #00695C; border: 1px solid #80CBC4;",
+    "images": [
+      "meeeku_prod_playful_kitty_coord.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ]
+  },
+  {
+    "handle": "boy-rustic-red-pinstripe-coord",
+    "title": "Rustic Red Pinstripe Co-ord Set",
+    "type": "Boys Co-ords",
+    "price": 1299.0,
+    "compare_price": 1699.0,
+    "categories": "all boys coords",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y,3-7y",
+    "badge": "\ud83d\udc66 Boys Co-ord Set",
+    "badge_style": "background: #FFF8E1; color: #F57F17; border: 1px solid #FFE082;",
+    "images": [
+      "meeeku_prod_boy_pinstripe_linen_coord.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ]
+  },
+  {
+    "handle": "boy-sunset-stripe-coord",
+    "title": "Sunset Multi-Stripe Co-ord Set",
+    "type": "Boys Co-ords",
+    "price": 1299.0,
+    "compare_price": 1699.0,
+    "categories": "all boys coords",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y,3-7y",
+    "badge": "\ud83d\udc66 Boys Co-ord Set",
+    "badge_style": "background: #FFF8E1; color: #F57F17; border: 1px solid #FFE082;",
+    "images": [
+      "meeeku_prod_boy_sunset_stripe_coord.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ]
+  },
+  {
+    "handle": "boy-toffee-plaid-coord",
+    "title": "Toffee Plaid Check Co-ord Set",
+    "type": "Boys Co-ords",
+    "price": 1299.0,
+    "compare_price": 1699.0,
+    "categories": "all boys coords",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y,3-7y",
+    "badge": "\ud83d\udc66 Boys Co-ord Set",
+    "badge_style": "background: #FFF8E1; color: #F57F17; border: 1px solid #FFE082;",
+    "images": [
+      "meeeku_prod_boy_toffee_plaid_coord.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ]
+  },
+  {
+    "handle": "boy-road-rebels-winter-tracksuit",
+    "title": "Road Rebels Winter Tracksuit Set",
+    "type": "Boys Winterwear",
+    "price": 1499.0,
+    "compare_price": 1899.0,
+    "categories": "all boys winterwear",
+    "ages": "all,1-2y,2-3y,3-7y",
+    "badge": "\ud83d\udc66 Boys Winterwear",
+    "badge_style": "background: #FFF8E1; color: #F57F17; border: 1px solid #FFE082;",
+    "images": [
+      "meeeku_prod_boy_road_rebels_winter_set.jpg",
+      "meeeku_prod_boy_road_rebels_winter_set_alt.jpg"
+    ],
+    "variants": [
+      "1-2Y",
+      "2-3Y",
+      "3-4Y",
+      "4-5Y",
+      "5-6Y"
+    ]
+  },
+  {
+    "handle": "boy-little-dino-winter-tracksuit",
+    "title": "Little Dino Winter Tracksuit Set",
+    "type": "Boys Winterwear",
+    "price": 1499.0,
+    "compare_price": 1899.0,
+    "categories": "all boys winterwear",
+    "ages": "all,1-2y,2-3y,3-7y",
+    "badge": "\ud83d\udc66 Boys Winterwear",
+    "badge_style": "background: #FFF8E1; color: #F57F17; border: 1px solid #FFE082;",
+    "images": [
+      "meeeku_prod_boy_little_dino_winter_set.jpg",
+      "meeeku_prod_boy_little_dino_winter_set_alt.jpg"
+    ],
+    "variants": [
+      "1-2Y",
+      "2-3Y",
+      "3-4Y",
+      "4-5Y",
+      "5-6Y"
+    ]
+  },
+  {
+    "handle": "boy-storybook-friends-winter-tracksuit",
+    "title": "Storybook Friends Winter Tracksuit Set",
+    "type": "Boys Winterwear",
+    "price": 1499.0,
+    "compare_price": 1899.0,
+    "categories": "all boys winterwear",
+    "ages": "all,1-2y,2-3y,3-7y",
+    "badge": "\ud83d\udc66 Boys Winterwear",
+    "badge_style": "background: #FFF8E1; color: #F57F17; border: 1px solid #FFE082;",
+    "images": [
+      "meeeku_prod_boy_storybook_friends_winter_set.jpg"
+    ],
+    "variants": [
+      "1-2Y",
+      "2-3Y",
+      "3-4Y",
+      "4-5Y",
+      "5-6Y"
+    ]
+  },
+  {
+    "handle": "girl-blush-bunny-cotton-nightsuit",
+    "title": "Blush Bunny Cotton Nightsuit",
+    "type": "Girls Nightwear",
+    "price": 999.0,
+    "compare_price": 1399.0,
+    "categories": "all girls nightwear",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y,3-7y",
+    "badge": "\ud83c\udf19 100% Cotton Nightsuit",
+    "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
+    "images": [
+      "meeeku_prod_girl_blush_bunny_nightsuit.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ]
+  },
+  {
+    "handle": "girl-space-explorer-cotton-nightsuit",
+    "title": "Space Explorer Cotton Nightsuit",
+    "type": "Girls Nightwear",
+    "price": 999.0,
+    "compare_price": 1399.0,
+    "categories": "all girls nightwear",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y,3-7y",
+    "badge": "\ud83c\udf19 100% Cotton Nightsuit",
+    "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
+    "images": [
+      "meeeku_prod_girl_space_explorer_nightsuit.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ]
+  },
+  {
+    "handle": "girl-rose-floral-ruffle-nightsuit",
+    "title": "Rose Floral Ruffle Nightsuit",
+    "type": "Girls Nightwear",
+    "price": 1099.0,
+    "compare_price": 1499.0,
+    "categories": "all girls nightwear",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y,3-7y",
+    "badge": "\ud83c\udf19 100% Cotton Nightsuit",
+    "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
+    "images": [
+      "meeeku_prod_girl_rose_floral_ruffle_nightsuit.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ]
+  },
+  {
+    "handle": "girl-buttercup-floral-ruffle-nightsuit",
+    "title": "Buttercup Floral Ruffle Nightsuit",
+    "type": "Girls Nightwear",
+    "price": 1099.0,
+    "compare_price": 1499.0,
+    "categories": "all girls nightwear",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y,3-7y",
+    "badge": "\ud83c\udf19 100% Cotton Nightsuit",
+    "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
+    "images": [
+      "meeeku_prod_girl_buttercup_floral_ruffle_nightsuit.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ]
+  },
+  {
+    "handle": "girl-enchanted-deer-floral-nightsuit",
+    "title": "Enchanted Deer Floral Nightsuit",
+    "type": "Girls Nightwear",
+    "price": 999.0,
+    "compare_price": 1399.0,
+    "categories": "all girls nightwear",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y,3-7y",
+    "badge": "\ud83c\udf19 100% Cotton Nightsuit",
+    "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
+    "images": [
+      "meeeku_prod_girl_enchanted_deer_nightsuit.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ]
+  },
+  {
+    "handle": "girl-cozy-bear-oat-nightsuit",
+    "title": "Cozy Bear Oat Nightsuit",
+    "type": "Girls Nightwear",
+    "price": 999.0,
+    "compare_price": 1399.0,
+    "categories": "all girls nightwear",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y,3-7y",
+    "badge": "\ud83c\udf19 100% Cotton Nightsuit",
+    "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
+    "images": [
+      "meeeku_prod_girl_cozy_bear_nightsuit.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ]
+  },
+  {
+    "handle": "girl-teddy-bear-muslin-coord",
+    "title": "Teddy Bear Muslin Co-ord Set",
+    "type": "Girls Co-ords",
+    "price": 1299.0,
+    "compare_price": 1699.0,
+    "categories": "all girls coords",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y,3-7y",
+    "badge": "\ud83c\udf38 2-Piece Co-ord Set",
+    "badge_style": "background: #E0F2F1; color: #00695C; border: 1px solid #80CBC4;",
+    "images": [
+      "meeeku_prod_girl_teddy_bear_muslin_coord.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ]
+  },
+  {
+    "handle": "girl-royal-blue-lace-coord",
+    "title": "Royal Blue Lace Co-ord Set",
+    "type": "Girls Co-ords",
+    "price": 1299.0,
+    "compare_price": 1699.0,
+    "categories": "all girls coords",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y,3-7y",
+    "badge": "\ud83c\udf38 2-Piece Co-ord Set",
+    "badge_style": "background: #E0F2F1; color: #00695C; border: 1px solid #80CBC4;",
+    "images": [
+      "meeeku_prod_girl_blue_floral_lace_coord.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ]
+  },
+  {
+    "handle": "girl-sky-blue-polka-fluffy-winter-set",
+    "title": "Sky Blue Polka Fluffy Winter Set",
+    "type": "Girls Winterwear",
+    "price": 1399.0,
+    "compare_price": 1799.0,
+    "categories": "all girls winterwear",
+    "ages": "all,1-2y,2-3y,3-7y",
+    "badge": "\u2744\ufe0f Cozy Winterwear",
+    "badge_style": "background: #FCE4EC; color: #C2185B; border: 1px solid #F48FB1;",
+    "images": [
+      "meeeku_prod_girl_sky_blue_polka_fleece_set.jpg"
+    ],
+    "variants": [
+      "1-2Y",
+      "2-3Y",
+      "3-4Y",
+      "4-5Y",
+      "5-6Y"
+    ]
+  },
+  {
+    "handle": "girl-candy-pink-polka-fluffy-winter-set",
+    "title": "Candy Pink Polka Fluffy Winter Set",
+    "type": "Girls Winterwear",
+    "price": 1399.0,
+    "compare_price": 1799.0,
+    "categories": "all girls winterwear",
+    "ages": "all,1-2y,2-3y,3-7y",
+    "badge": "\u2744\ufe0f Cozy Winterwear",
+    "badge_style": "background: #FCE4EC; color: #C2185B; border: 1px solid #F48FB1;",
+    "images": [
+      "meeeku_prod_girl_candy_pink_polka_fleece_set.jpg"
+    ],
+    "variants": [
+      "1-2Y",
+      "2-3Y",
+      "3-4Y",
+      "4-5Y",
+      "5-6Y"
+    ]
+  },
+  {
+    "handle": "girl-minnie-hearts-fleece-tracksuit",
+    "title": "Minnie Hearts Fleece Tracksuit Set",
+    "type": "Girls Winterwear",
+    "price": 1499.0,
+    "compare_price": 1899.0,
+    "categories": "all girls winterwear",
+    "ages": "all,1-2y,2-3y,3-7y",
+    "badge": "\u2744\ufe0f Cozy Winterwear",
+    "badge_style": "background: #FCE4EC; color: #C2185B; border: 1px solid #F48FB1;",
+    "images": [
+      "meeeku_prod_girl_minnie_hearts_winter_set.jpg",
+      "meeeku_prod_girl_minnie_hearts_winter_set_alt.jpg"
+    ],
+    "variants": [
+      "1-2Y",
+      "2-3Y",
+      "3-4Y",
+      "4-5Y",
+      "5-6Y"
+    ]
+  },
+  {
+    "handle": "girl-minnie-vanilla-fleece-hoodie",
+    "title": "Minnie Vanilla Fleece Hoodie",
+    "type": "Girls Winterwear",
+    "price": 999.0,
+    "compare_price": 1399.0,
+    "categories": "all girls winterwear",
+    "ages": "all,1-2y,2-3y,3-7y",
+    "badge": "\u2744\ufe0f Cozy Winterwear",
+    "badge_style": "background: #FCE4EC; color: #C2185B; border: 1px solid #F48FB1;",
+    "images": [
+      "meeeku_prod_girl_minnie_cream_fleece_hoodie.jpg"
+    ],
+    "variants": [
+      "1-2Y",
+      "2-3Y",
+      "3-4Y",
+      "4-5Y",
+      "5-6Y"
+    ]
+  },
+  {
+    "handle": "dapper-bear-longsleeve-tee",
+    "title": "Dapper Bear Long Sleeve Cotton Tee",
+    "type": "Basic T-Shirts",
+    "price": 649.0,
+    "compare_price": 949.0,
+    "categories": "all tees",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "badge": "\ud83d\udc55 100% Combed Cotton",
+    "badge_style": "background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;",
+    "images": [
+      "meeeku_prod_extra_dapper_bear_longsleeve_tee.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ]
+  },
+  {
+    "handle": "galaxy-cadet-longsleeve-tee",
+    "title": "Galaxy Cadet Long Sleeve Cotton Tee",
+    "type": "Basic T-Shirts",
+    "price": 649.0,
+    "compare_price": 949.0,
+    "categories": "all tees",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "badge": "\ud83d\udc55 100% Combed Cotton",
+    "badge_style": "background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;",
+    "images": [
+      "meeeku_prod_extra_galaxy_cadet_longsleeve_tee.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ]
+  },
+  {
+    "handle": "breton-multi-stripe-longsleeve-tee",
+    "title": "Breton Multi-Stripe Long Sleeve Tee",
+    "type": "Basic T-Shirts",
+    "price": 649.0,
+    "compare_price": 949.0,
+    "categories": "all tees",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "badge": "\ud83d\udc55 100% Combed Cotton",
+    "badge_style": "background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;",
+    "images": [
+      "meeeku_prod_extra_breton_stripe_longsleeve_tee.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ]
+  },
+  {
+    "handle": "mint-meadow-floral-longsleeve-tee",
+    "title": "Mint Meadow Floral Long Sleeve Tee",
+    "type": "Basic T-Shirts",
+    "price": 649.0,
+    "compare_price": 949.0,
+    "categories": "all tees",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "badge": "\ud83d\udc55 100% Combed Cotton",
+    "badge_style": "background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;",
+    "images": [
+      "meeeku_prod_extra_mint_meadow_longsleeve_tee.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ]
+  },
+  {
+    "handle": "retro-bows-character-sweatshirt",
+    "title": "Retro Bows Character Sweatshirt",
+    "type": "Basic T-Shirts",
+    "price": 799.0,
+    "compare_price": 1099.0,
+    "categories": "all tees",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "badge": "\ud83d\udc55 100% Combed Cotton",
+    "badge_style": "background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;",
+    "images": [
+      "meeeku_prod_extra_retro_bows_sweatshirt.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ]
+  },
+  {
+    "handle": "kitty-confetti-dots-pajamas-pack-of-2",
+    "title": "Tiny Kitty & Confetti Dots 2-Pack Pajamas",
+    "type": "2-Pack Pajama Sets",
+    "price": 499.0,
+    "compare_price": 799.0,
+    "categories": "all pajamas",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "badge": "\ud83e\uddf8 2-Pack Set (\u20b9499)",
+    "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
+    "images": [
+      "meeeku_prod_pajama_kitty_confetti_2pack.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ]
+  },
+  {
+    "handle": "hello-kitty-ribbed-bear-pajamas-pack-of-2",
+    "title": "Hello Kitty & Ribbed Bear 2-Pack Pajamas",
+    "type": "2-Pack Pajama Sets",
+    "price": 499.0,
+    "compare_price": 799.0,
+    "categories": "all pajamas",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "badge": "\ud83e\uddf8 2-Pack Set (\u20b9499)",
+    "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
+    "images": [
+      "meeeku_prod_pajama_kitty_ribbed_bear_2pack.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ]
+  },
+  {
+    "handle": "woodland-friends-berry-pajamas-pack-of-2",
+    "title": "Woodland Friends & Berry 2-Pack Pajamas",
+    "type": "2-Pack Pajama Sets",
+    "price": 499.0,
+    "compare_price": 799.0,
+    "categories": "all pajamas",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "badge": "\ud83e\uddf8 2-Pack Set (\u20b9499)",
+    "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
+    "images": [
+      "meeeku_prod_pajama_woodland_berries_2pack.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ]
+  },
+  {
+    "handle": "ocean-shells-lilac-birds-pajamas-pack-of-2",
+    "title": "Ocean Shells & Lilac Birds 2-Pack Pajamas",
+    "type": "2-Pack Pajama Sets",
+    "price": 499.0,
+    "compare_price": 799.0,
+    "categories": "all pajamas",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "badge": "\ud83e\uddf8 2-Pack Set (\u20b9499)",
+    "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
+    "images": [
+      "meeeku_prod_pajama_ocean_lilac_birds_2pack.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ]
+  },
+  {
+    "handle": "vintage-rosebud-acorn-pajamas-pack-of-2",
+    "title": "Vintage Rosebud & Acorn 2-Pack Pajamas",
+    "type": "2-Pack Pajama Sets",
+    "price": 499.0,
+    "compare_price": 799.0,
+    "categories": "all pajamas",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "badge": "\ud83e\uddf8 2-Pack Set (\u20b9499)",
+    "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
+    "images": [
+      "meeeku_prod_pajama_vintage_rosebud_acorn_2pack.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ]
+  },
+  {
+    "handle": "fairies-midnight-flora-pajamas-pack-of-2",
+    "title": "Fairies & Midnight Flora 2-Pack Pajamas",
+    "type": "2-Pack Pajama Sets",
+    "price": 499.0,
+    "compare_price": 799.0,
+    "categories": "all nightwear pajamas",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "badge": "\ud83e\uddf8 2-Pack Set (\u20b9499)",
+    "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
+    "images": [
+      "meeeku_prod_pajama_fairies_midnight_flora_2pack.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ]
+  },
+  {
+    "handle": "arctic-animals-breton-pajamas-pack-of-2",
+    "title": "Arctic Animals & Breton Stripe 2-Pack Pajamas",
+    "type": "2-Pack Pajama Sets",
+    "price": 499.0,
+    "compare_price": 799.0,
+    "categories": "all pajamas",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "badge": "\ud83e\uddf8 2-Pack Set (\u20b9499)",
+    "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
+    "images": [
+      "meeeku_prod_pajama_arctic_animals_stripe_2pack.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ]
+  },
+  {
+    "handle": "honey-teddy-pointelle-pajamas-pack-of-2",
+    "title": "Honey Teddy & Pointelle Knit 2-Pack Pajamas",
+    "type": "2-Pack Pajama Sets",
+    "price": 499.0,
+    "compare_price": 799.0,
+    "categories": "all pajamas",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "badge": "\ud83e\uddf8 2-Pack Set (\u20b9499)",
+    "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
+    "images": [
+      "meeeku_prod_pajama_honey_teddy_pointelle_2pack.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ]
+  },
+  {
+    "handle": "watercolor-blossom-joggers-pajamas-pack-of-2",
+    "title": "Watercolor Blossom 2-Pack Pajamas",
+    "type": "2-Pack Pajama Sets",
+    "price": 499.0,
+    "compare_price": 799.0,
+    "categories": "all pajamas",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "badge": "\ud83e\uddf8 2-Pack Set (\u20b9499)",
+    "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
+    "images": [
+      "meeeku_prod_pajama_watercolor_blossom_joggers_2pack.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ]
+  },
+  {
+    "handle": "mint-aqua-dino-hooded-towel",
+    "title": "Mint Aqua Dino Hooded Bath Towel",
+    "type": "Baby Towels & Blankets",
+    "price": 699.0,
+    "compare_price": 999.0,
+    "categories": "all towels",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "badge": "\ud83d\udec1 100% Organic Muslin/Terry",
+    "badge_style": "background: #E0F7FA; color: #00838F; border: 1px solid #80DEEA;",
+    "images": [
+      "meeeku_prod_towel_mint_dino_hooded.jpg",
+      "meeeku_prod_towel_mint_dino_hooded_alt.jpg"
+    ],
+    "variants": [
+      "One Size (0-3Y)"
+    ]
+  },
+  {
+    "handle": "born-in-2026-teddy-baby-blanket",
+    "title": "Born in 2026 Teddy Baby Blanket",
+    "type": "Baby Towels & Blankets",
+    "price": 799.0,
+    "compare_price": 1199.0,
+    "categories": "all towels",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "badge": "\ud83d\udec1 100% Organic Muslin/Terry",
+    "badge_style": "background: #E0F7FA; color: #00838F; border: 1px solid #80DEEA;",
+    "images": [
+      "meeeku_prod_towel_born_2026_teddy_blanket.jpg",
+      "meeeku_prod_towel_born_2026_teddy_blanket_alt.jpg"
+    ],
+    "variants": [
+      "One Size (0-3Y)"
+    ]
+  },
+  {
+    "handle": "little-elephants-muslin-bath-towel",
+    "title": "Little Elephants Muslin Bath Towel",
+    "type": "Baby Towels & Blankets",
+    "price": 699.0,
+    "compare_price": 999.0,
+    "categories": "all towels",
+    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "badge": "\ud83d\udec1 100% Organic Muslin/Terry",
+    "badge_style": "background: #E0F7FA; color: #00838F; border: 1px solid #80DEEA;",
+    "images": [
+      "meeeku_prod_towel_teal_elephants_muslin.jpg",
+      "meeeku_prod_towel_teal_elephants_muslin_alt.jpg"
+    ],
+    "variants": [
+      "One Size (0-3Y)"
+    ]
+  }
+];
+
 let currentCategory = 'all';
 
 function setCategoryFilter(cat, btn) {
   currentCategory = cat;
-  document.querySelectorAll('.meeeku-pill-filter').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.meeeku-pill-filter').forEach(function(el) {
+    el.classList.remove('active');
+  });
   if (btn) btn.classList.add('active');
   applyCatalogFiltersAndSort();
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const catParam = urlParams.get('category');
-  if (catParam) {
-    const targetButton = document.querySelector(`.meeeku-pill-filter[data-filter="${catParam}"]`);
-    if (targetButton) {
-      setCategoryFilter(catParam, targetButton);
-      return;
-    }
-  }
-  applyCatalogFiltersAndSort();
-
-  const cardLinks = document.querySelectorAll('.meeeku-card-link');
-  cardLinks.forEach(link => {
-    let touchTimer = null;
-    link.addEventListener('touchstart', function(e) {
-      touchTimer = setTimeout(() => {
-        link.classList.add('is-touch-active');
-      }, 180);
-    }, { passive: true });
-
-    link.addEventListener('touchend', function() {
-      clearTimeout(touchTimer);
-      setTimeout(() => {
-        link.classList.remove('is-touch-active');
-      }, 1500);
-    }, { passive: true });
-
-    link.addEventListener('touchcancel', function() {
-      clearTimeout(touchTimer);
-      link.classList.remove('is-touch-active');
-    }, { passive: true });
-  });
-});
-
-const COMING_SOON_INFO = {
-  'nightsuits': {
-    title: '🌙 Organic Cotton Nightsuits — Launching Soon ⏳',
-    desc: 'Our cloud-soft 100% organic cotton sleepwear sets with whimsical prints are currently in final production. Join our VIP waitlist to claim 15% OFF + early access at launch!',
-    img: "{{ 'placeholder_nightsuit_1.jpg' | asset_url }}"
-  },
-  'boys': {
-    title: '👦 Boys Line Collection — Launching Soon ⏳',
-    desc: 'We are crafting handsome ethnic kurta sets and comfy pyjamas for your little princes. Enter your email to receive launch notifications & 15% OFF!',
-    img: "{{ 'placeholder_boys_teaser.jpg' | asset_url }}"
-  },
-  'dresses': {
-    title: '👗 Western & Tulle Partywear — Launching Soon ⏳',
-    desc: 'New twirl-ready tulle net dresses and casual partywear silhouettes drop next month. Subscribe now for first access & 15% discount!',
-    img: "{{ 'placeholder_ethnic_1.jpg' | asset_url }}"
-  }
-};
+function meeekuStorePdpClick(handle, title, price, img, badge) {
+  try {
+    const pdata = { handle: handle, title: title, price: price, img: img, badge: badge };
+    sessionStorage.setItem('meeeku_current_pdp_product', JSON.stringify(pdata));
+    localStorage.setItem('meeeku_last_viewed_product', JSON.stringify(pdata));
+  } catch(e) {}
+}
 
 function applyCatalogFiltersAndSort() {
   const ageFilterEl = document.getElementById('MeeekuAgeFilter');
@@ -291,22 +1480,8 @@ function applyCatalogFiltersAndSort() {
 
   const grid = document.getElementById('MeeekuProductGrid');
   const items = Array.from(document.querySelectorAll('.meeeku-grid-item'));
-  const banner = document.getElementById('MeeekuComingSoonBanner');
-  const bannerTitle = document.getElementById('MeeekuComingSoonTitle');
-  const bannerDesc = document.getElementById('MeeekuComingSoonDesc');
-  const bannerImg = document.getElementById('MeeekuComingSoonImg');
 
-  if (COMING_SOON_INFO[currentCategory]) {
-    const info = COMING_SOON_INFO[currentCategory];
-    if (bannerTitle) bannerTitle.innerText = info.title;
-    if (bannerDesc) bannerDesc.innerText = info.desc;
-    if (bannerImg && info.img) bannerImg.src = info.img;
-    if (banner) banner.style.display = 'block';
-  } else {
-    if (banner) banner.style.display = 'none';
-  }
-
-  items.forEach(item => {
+  items.forEach(function(item) {
     const itemCat = item.getAttribute('data-category') || '';
     const itemAge = item.getAttribute('data-age') || '';
 
@@ -314,7 +1489,7 @@ function applyCatalogFiltersAndSort() {
     const catMatch = (currentCategory === 'all' || catTokens.includes(currentCategory));
     const ageMatch = (ageFilter === 'all' || itemAge.includes(ageFilter));
 
-    if (catMatch && ageMatch && !COMING_SOON_INFO[currentCategory]) {
+    if (catMatch && ageMatch) {
       item.style.display = 'block';
       item.style.opacity = '1';
     } else {
@@ -323,7 +1498,7 @@ function applyCatalogFiltersAndSort() {
     }
   });
 
-  items.sort((a, b) => {
+  items.sort(function(a, b) {
     const rankA = parseInt(a.getAttribute('data-bestseller-rank')) || 99;
     const rankB = parseInt(b.getAttribute('data-bestseller-rank')) || 99;
     const priceA = parseFloat(a.getAttribute('data-price')) || 0;
@@ -344,17 +1519,62 @@ function applyCatalogFiltersAndSort() {
   });
 
   if (grid) {
-    items.forEach(item => grid.appendChild(item));
+    items.forEach(function(item) { grid.appendChild(item); });
   }
 }
 
-function handleMeeekuWaitlistSubmit(e) {
-  e.preventDefault();
-  const input = e.target.querySelector('input[type="email"]');
-  if (input && input.value) {
-    showMeeekuToastCatalog('🎉 You are on the VIP Waitlist! 15% OFF code saved for launch.');
-    input.value = '';
-  }
+function renderFallbackCatalog() {
+  const grid = document.getElementById('MeeekuProductGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+
+  MEEKU_CATALOG_FALLBACK.forEach(function(p, idx) {
+    const li = document.createElement('li');
+    li.className = 'grid__item meeeku-grid-item';
+    li.setAttribute('data-category', p.categories);
+    li.setAttribute('data-price', p.price);
+    li.setAttribute('data-age', p.ages);
+    li.setAttribute('data-date', '2026-08-27');
+    li.setAttribute('data-bestseller-rank', idx + 1);
+
+    const priceFormatted = '₹' + p.price.toLocaleString('en-IN', {minimumFractionDigits: 2});
+    const compareFormatted = p.compare_price > 0 ? ('₹' + p.compare_price.toLocaleString('en-IN', {minimumFractionDigits: 2})) : '';
+    const discountPct = p.compare_price > p.price ? Math.round((p.compare_price - p.price) / p.compare_price * 100) : 0;
+    const discountHtml = discountPct > 0 
+      ? '<span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">' + compareFormatted + '</span><span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">' + discountPct + '% OFF</span>'
+      : '';
+
+    const img1Url = 'https://raw.githubusercontent.com/aaybwork-studio/meeeku/main/assets/' + p.images[0];
+    const img2Url = p.images.length > 1 ? ('https://raw.githubusercontent.com/aaybwork-studio/meeeku/main/assets/' + p.images[1]) : img1Url;
+    const productUrl = '/products/' + p.handle;
+
+    li.innerHTML = [
+      '<div class="card-wrapper meeeku-interactive-card">',
+        '<div class="meeeku-card-media-wrapper">',
+          '<a href="' + productUrl + '" class="meeeku-card-link" onclick="meeekuStorePdpClick(\'' + p.handle + '\', \'' + p.title.replace(/'/g, "\\'") + '\', \'' + priceFormatted + '\', \'' + img1Url + '\', \'' + p.badge.replace(/'/g, "\\'") + '\')">',
+            '<img src="' + img1Url + '" alt="' + p.title.replace(/'/g, "\\'") + '" class="meeeku-card-img meeeku-img-primary" width="600" height="750" loading="lazy">',
+            (p.images.length > 1 ? '<img src="' + img2Url + '" alt="' + p.title.replace(/'/g, "\\'") + '" class="meeeku-card-img meeeku-img-secondary" width="600" height="750" loading="lazy">' : ''),
+          '</a>',
+          '<button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog(\'' + p.title.replace(/'/g, "\\'") + '\', \'' + priceFormatted + '\', \'' + img1Url + '\', \'\')">',
+            '🛒 + Quick Add — ' + priceFormatted,
+          '</button>',
+        '</div>',
+        '<div class="card__content" style="padding: 1.2rem 0.5rem 0;">',
+          '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">',
+            '<span class="meeeku-badge" style="font-size: 1rem; padding: 0.2rem 0.8rem; ' + p.badge_style + '">' + p.badge + '</span>',
+          '</div>',
+          '<h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">',
+            '<a href="' + productUrl + '" style="color: #3D2355; text-decoration: none;" onclick="meeekuStorePdpClick(\'' + p.handle + '\', \'' + p.title.replace(/'/g, "\\'") + '\', \'' + priceFormatted + '\', \'' + img1Url + '\', \'' + p.badge.replace(/'/g, "\\'") + '\')">' + p.title + '</a>',
+          '</h3>',
+          '<div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">',
+            priceFormatted + discountHtml,
+          '</div>',
+        '</div>',
+      '</div>'
+    ].join('');
+
+    grid.appendChild(li);
+  });
 }
 
 function meeekuAddToCartCatalog(title, price, imgUrl, variantId) {
@@ -364,7 +1584,7 @@ function meeekuAddToCartCatalog(title, price, imgUrl, variantId) {
   } catch (e) { cart = []; }
 
   const itemKey = (variantId || title) + '_Standard';
-  const existing = cart.find(i => i.title === title);
+  const existing = cart.find(function(i) { return i.title === title; });
   
   let numPrice = typeof parseMeeekuPrice === 'function' ? parseMeeekuPrice(price) : (parseFloat((price || '0').replace(/[^0-9.]/g, '')) || 0);
   let cleanPrice = typeof formatMeeekuPrice === 'function' ? formatMeeekuPrice(numPrice) : ('₹' + numPrice.toLocaleString('en-IN') + '.00');
@@ -381,7 +1601,7 @@ function meeekuAddToCartCatalog(title, price, imgUrl, variantId) {
       title: title,
       price: cleanPrice,
       img: imgUrl,
-      size: '2 - 3Y',
+      size: 'Standard',
       qty: 1,
       quantity: 1
     });
@@ -396,20 +1616,20 @@ function meeekuAddToCartCatalog(title, price, imgUrl, variantId) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ items: [{ id: parseInt(variantId), quantity: 1 }] })
-    }).catch(() => {});
+    }).catch(function() {});
   }
 
   const dot = document.getElementById('MeeekuCartDot');
   if (dot) dot.classList.add('has-items');
 
-  const totalCount = cart.reduce((sum, i) => sum + (i.quantity || i.qty || 1), 0);
+  const totalCount = cart.reduce(function(sum, i) { return sum + (i.quantity || i.qty || 1); }, 0);
   const countBubbles = document.querySelectorAll('.cart-count-bubble span');
-  countBubbles.forEach(b => b.textContent = totalCount);
+  countBubbles.forEach(function(b) { b.textContent = totalCount; });
 
   if (typeof openMeeekuCart === 'function') {
     openMeeekuCart();
   } else {
-    showMeeekuToastCatalog(`🎉 ${title} added to your Cart!`);
+    showMeeekuToastCatalog('🎉 ' + title + ' added to your Cart!');
   }
 }
 
@@ -424,117 +1644,23 @@ function showMeeekuToastCatalog(msg) {
   }
 }
 
-// ─── Live Shopify fallback: fires when Liquid collection is empty ─────────────
-(function() {
-  var placeholder = document.getElementById('MeeekuCatalogFetchPlaceholder');
-  if (!placeholder) return; // Liquid loop already rendered products — done
+document.addEventListener('DOMContentLoaded', function() {
+  const placeholder = document.getElementById('MeeekuCatalogFetchPlaceholder');
+  if (placeholder) {
+    renderFallbackCatalog();
+  }
 
-  var grid = document.getElementById('MeeekuProductGrid');
-  if (!grid) return;
-
-  fetch('/collections/all/products.json?limit=250&fields=handle,title,type,tags,images,variants,published_at,compare_at_price')
-    .then(function(res) { return res.ok ? res.json() : Promise.reject(); })
-    .then(function(data) {
-      var products = (data.products || []);
-      if (!products.length) return;
-
-      placeholder.remove();
-
-      products.forEach(function(prod, idx) {
-        var title = prod.title || '';
-        var handle = prod.handle || '';
-        var url = '/products/' + handle;
-        var type = (prod.type || '').toLowerCase();
-        var tags = (prod.tags || []).join(',').toLowerCase();
-        var titleLower = title.toLowerCase();
-
-        // Category mapping
-        var cat = 'all ';
-        if (titleLower.indexOf('lehenga') !== -1 || handle.indexOf('lehenga') !== -1 || type.indexOf('lehenga') !== -1 || type.indexOf('ethnic') !== -1 || tags.indexOf('lehenga') !== -1 || tags.indexOf('ethnic') !== -1) {
-          cat += 'ethnic';
-        } else if (titleLower.indexOf('tee') !== -1 || handle.indexOf('tee') !== -1 || type.indexOf('tee') !== -1 || tags.indexOf('tee') !== -1) {
-          cat += 'tees';
-        } else if (titleLower.indexOf('dress') !== -1 || handle.indexOf('dress') !== -1 || type.indexOf('dress') !== -1 || tags.indexOf('dress') !== -1) {
-          cat += 'dresses';
-        } else if (titleLower.indexOf('night') !== -1 || titleLower.indexOf('sleep') !== -1 || type.indexOf('night') !== -1 || tags.indexOf('night') !== -1) {
-          cat += 'nightsuits';
-        } else if (titleLower.indexOf('boy') !== -1 || type.indexOf('boy') !== -1 || tags.indexOf('boy') !== -1) {
-          cat += 'boys';
-        } else if (titleLower.indexOf('co-ord') !== -1 || titleLower.indexOf('coord') !== -1 || handle.indexOf('coord') !== -1 || type.indexOf('coord') !== -1 || tags.indexOf('coord') !== -1) {
-          cat += 'coords';
-        } else {
-          cat += 'ethnic';
-        }
-
-        // Age mapping from tags + variants
-        var allVariantTitles = (prod.variants || []).map(function(v){ return (v.title||'').toLowerCase(); }).join(' ');
-        var ageSearch = tags + ' ' + allVariantTitles;
-        var ageKeys = 'all';
-        if (ageSearch.indexOf('0-6m') !== -1 || ageSearch.indexOf('0 - 6m') !== -1 || ageSearch.indexOf('infant') !== -1) ageKeys += ',0-6m';
-        if (ageSearch.indexOf('6-12m') !== -1 || ageSearch.indexOf('6 - 12m') !== -1) ageKeys += ',6-12m';
-        if (ageSearch.indexOf('1-2y') !== -1 || ageSearch.indexOf('12-18m') !== -1 || ageSearch.indexOf('18-24m') !== -1) ageKeys += ',1-2y';
-        if (ageSearch.indexOf('2-3y') !== -1 || ageSearch.indexOf('2 - 3y') !== -1) ageKeys += ',2-3y';
-        if (ageSearch.indexOf('3-') !== -1 || ageSearch.indexOf('4-') !== -1 || ageSearch.indexOf('5-') !== -1 || ageSearch.indexOf('6-7') !== -1) ageKeys += ',3-7y';
-
-        // Images — use Shopify CDN URLs directly
-        var imgs = prod.images || [];
-        var img1 = imgs[0] ? imgs[0].src : '';
-        var img2 = imgs[1] ? imgs[1].src : img1;
-
-        // Price
-        var firstVar = (prod.variants || [])[0] || {};
-        var price = firstVar.price ? '₹' + (parseFloat(firstVar.price)).toLocaleString('en-IN', {minimumFractionDigits: 2}) : '';
-        var comparePrice = firstVar.compare_at_price ? parseFloat(firstVar.compare_at_price) : 0;
-        var currPrice = firstVar.price ? parseFloat(firstVar.price) : 0;
-        var discountPct = (comparePrice > currPrice) ? Math.round((comparePrice - currPrice) / comparePrice * 100) : 0;
-        var priceNum = currPrice;
-        var publishedAt = prod.published_at ? prod.published_at.substring(0, 10) : '2026-01-01';
-
-        var li = document.createElement('li');
-        li.className = 'grid__item meeeku-grid-item';
-        li.setAttribute('data-category', cat.trim());
-        li.setAttribute('data-price', priceNum);
-        li.setAttribute('data-age', ageKeys);
-        li.setAttribute('data-date', publishedAt);
-        li.setAttribute('data-bestseller-rank', idx + 1);
-
-        var discountHtml = discountPct > 0
-          ? '<span class="meeeku-badge" style="background:#E8F5E9;color:#2E7D32;font-size:1rem;margin-left:0.4rem;padding:0.15rem 0.6rem;">' + discountPct + '% OFF</span>'
-          : '';
-
-        li.innerHTML = [
-          '<div class="card-wrapper meeeku-interactive-card">',
-            '<div class="meeeku-card-media-wrapper">',
-              '<a href="' + url + '" class="meeeku-card-link">',
-                img1 ? '<img src="' + img1 + '" alt="' + title + '" class="meeeku-card-img meeeku-img-primary" width="600" height="750" loading="lazy">' : '',
-                (img2 && img2 !== img1) ? '<img src="' + img2 + '" alt="' + title + '" class="meeeku-card-img meeeku-img-secondary" width="600" height="750" loading="lazy">' : '',
-              '</a>',
-              '<button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog(\'' + title.replace(/'/g,"\'") + '\',\'' + price + '\',\'' + img1 + '\',\'' + (firstVar.id||'') + '\')">',
-                '🛒 + Quick Add — ' + price,
-              '</button>',
-            '</div>',
-            '<div class="card__content" style="padding:1.2rem 0.5rem 0;">',
-              '<h3 style="margin:0.4rem 0 0.3rem;font-size:1.7rem;font-weight:700;">',
-                '<a href="' + url + '" style="color:#3D2355;text-decoration:none;">' + title + '</a>',
-              '</h3>',
-              '<div style="font-size:1.7rem;font-weight:800;color:#6B3FA0;">' + price + discountHtml + '</div>',
-            '</div>',
-          '</div>',
-        ].join('');
-
-        grid.appendChild(li);
-      });
-
-      applyCatalogFiltersAndSort();
-    })
-    .catch(function() {
-      // API unavailable — show a helpful fallback message
-      if (placeholder) {
-        placeholder.style.display = 'block';
-        placeholder.innerHTML = '<div style="text-align:center;padding:3rem;color:#888;font-size:1.4rem;">Products loading... <a href="/collections/all" style="color:#6B3FA0;font-weight:700;">Browse all products</a></div>';
-      }
-    });
-})();
+  const urlParams = new URLSearchParams(window.location.search);
+  const catParam = urlParams.get('category');
+  if (catParam) {
+    const targetButton = document.querySelector('.meeeku-pill-filter[data-filter="' + catParam + '"]');
+    if (targetButton) {
+      setCategoryFilter(catParam, targetButton);
+      return;
+    }
+  }
+  applyCatalogFiltersAndSort();
+});
 </script>
 
 <style>
@@ -612,9 +1738,9 @@ function showMeeekuToastCatalog(msg) {
 
 .meeeku-pill-filter:hover,
 .meeeku-pill-filter.active {
-  background: #FF6097;
-  color: #FFF;
-  border-color: #FF6097;
+  background: #FF6097 !important;
+  color: #FFF !important;
+  border-color: #FF6097 !important;
 }
 
 .meeeku-filter-toolbar {
@@ -748,9 +1874,9 @@ function showMeeekuToastCatalog(msg) {
       "type": "range",
       "id": "products_per_page",
       "min": 8,
-      "max": 48,
+      "max": 60,
       "step": 4,
-      "default": 16,
+      "default": 24,
       "label": "Products per page"
     },
     {

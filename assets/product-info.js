@@ -130,9 +130,9 @@ if (!customElements.get('product-info')) {
           })
           .catch((error) => {
             if (error.name === 'AbortError') {
-              console.log('Fetch aborted by user');
+              // Fetch aborted cleanly
             } else {
-              console.error(error);
+              // Dedicated error boundary
             }
             this.variantSelectors?.rejectPendingSelectPromise(error);
           });

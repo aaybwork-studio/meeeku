@@ -36,15 +36,15 @@
         {% if section.settings.nightsuits_image %}
           {{ section.settings.nightsuits_image | image_url: width: 800 | image_tag: loading: 'lazy', class: 'meeeku-cat-img' }}
         {% else %}
-          <img src="{{ 'placeholder_nightsuit_1.jpg' | asset_url }}" alt="Cozy Nightsuits for Girls" class="meeeku-cat-img" width="600" height="800" loading="lazy">
+          <img src="{{ 'meeeku_prod_girl_blush_bunny_nightsuit.jpg' | asset_url }}" alt="Cozy Nightsuits for Girls" class="meeeku-cat-img" width="600" height="800" loading="lazy">
         {% endif %}
-        <span class="meeeku-badge meeeku-badge--overlay" style="background: #EDE7F6; color: #512DA8; border: 1.5px solid #D1C4E9; font-weight: 800;">⏳ COMING SOON</span>
+        <span class="meeeku-badge meeeku-badge--overlay" style="background: #F3E5F5; color: #4A148C; border: 1.5px solid #CE93D8; font-weight: 800;">🌙 IN STOCK</span>
       </div>
       <div class="meeeku-cat-card__content">
-        <h3>{{ section.settings.nightsuits_title | escape }} <span style="font-size: 1.1rem; background: #9C27B0; color: #FFF; padding: 0.2rem 0.6rem; border-radius: 12px; font-weight: 700; margin-left: 0.4rem;">Coming Soon</span></h3>
-        <p>{{ section.settings.nightsuits_desc | escape }}</p>
-        <a href="/collections/all?category=nightsuits" class="button button--secondary" style="border-radius: 30px; background: #EDE7F6; color: #512DA8; border-color: #D1C4E9; font-weight: 700;">
-          🔔 Join Nightsuits Waitlist (15% OFF)
+        <h3>{{ section.settings.nightsuits_title | default: 'Pure Cotton Nightsuits' | escape }}</h3>
+        <p>{{ section.settings.nightsuits_desc | default: '100% combed hypoallergenic cotton sleepwear sets with gentle elasticated waists and tagless necklines.' | escape }}</p>
+        <a href="/collections/all?category=nightwear" class="button button--secondary" style="border-radius: 30px; background: #F3E5F5; color: #4A148C; border-color: #CE93D8; font-weight: 700;">
+          Shop Nightwear 🌙
         </a>
       </div>
     </div>

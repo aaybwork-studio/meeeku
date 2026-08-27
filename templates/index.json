@@ -17,14 +17,14 @@
         "slide_2": {
           "type": "slide",
           "settings": {
-            "badge_text": "Western Dresses • Coming Soon ⏳",
-            "badge_bg": "#E0F7FA",
-            "badge_color": "#00838F",
-            "heading": "Partywear & Tulle Dresses",
-            "tagline": "Twirl-ready tulle net skirts with sparkling floral sequin embroidery dropping soon.",
-            "button_label": "🔔 Join Waitlist (15% OFF)",
-            "button_link": "/collections/all?category=dresses",
-            "button_style": "secondary"
+            "badge_text": "Boys Collection • In Stock 👦",
+            "badge_bg": "#FFF8E1",
+            "badge_color": "#F57F17",
+            "heading": "Boys Co-ords & Winterwear",
+            "tagline": "Linen-cotton button-downs, cozy fleece tracksuits & comfy play sets for active little princes.",
+            "button_label": "Shop Boys Line 👦",
+            "button_link": "/collections/all?category=boys",
+            "button_style": "primary"
           }
         },
         "slide_3": {
@@ -98,11 +98,11 @@
           "settings": {
             "card_type": "boys",
             "title": "Boys Collection",
-            "badge_text": "⏳ COMING SOON",
+            "badge_text": "👦 IN STOCK • BOYS WEAR",
             "badge_bg": "#FFF8E1",
             "badge_color": "#F57F17",
-            "description": "Handsome ethnic kurta sets and super-soft pyjamas for your little princes dropping soon.",
-            "button_label": "👦 Join Boys Waitlist",
+            "description": "Handsome linen co-ords, warm fleece tracksuits & playful outfits crafted with pure breathable cotton.",
+            "button_label": "Shop Boys Line 👦",
             "button_bg": "#F57F17",
             "link": "/collections/all?category=boys"
           }

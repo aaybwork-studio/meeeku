@@ -1,6 +1,7 @@
 {% comment %}
   Meeeku Universal Dynamic Product Template OS 2.0
   Natively renders ANY Shopify product object, with multi-image gallery, size variant pills, and rich sizing guides.
+  Includes client-side instant hydration for previewing all newly added products seamlessly.
 {% endcomment %}
 
 {% liquid
@@ -12,26 +13,73 @@
   assign p_handle = product.handle | downcase
   assign p_tags = product.tags | join: ',' | downcase
 
-  assign is_tee = false
+  assign is_boy = false
+  assign is_girl = false
+  assign is_nightwear = false
+  assign is_winterwear = false
   assign is_coord = false
+  assign is_tee = false
+  assign is_pajama = false
+  assign is_towel = false
   assign is_ethnic = false
 
-  if p_type contains 'tee' or p_tags contains 'tee' or p_tags contains 'basic' or p_title contains 'tee' or p_handle contains 'tee'
-    assign is_tee = true
-  elsif p_type contains 'co-ord' or p_type contains 'outfit set' or p_tags contains 'coord' or p_tags contains 'co-ord' or p_title contains 'co-ord' or p_title contains 'set' or p_handle contains 'coord'
+  if p_tags contains 'boys' or p_type contains 'boys' or p_title contains 'boy' or p_handle contains 'boy'
+    assign is_boy = true
+  endif
+  if p_tags contains 'girls' or p_type contains 'girls' or p_title contains 'girl' or p_handle contains 'girl' or p_title contains 'lehenga' or p_type contains 'lehenga' or p_tags contains 'lehenga'
+    assign is_girl = true
+  endif
+  if p_tags contains 'nightwear' or p_tags contains 'nightsuit' or p_type contains 'nightwear' or p_title contains 'nightsuit' or p_title contains 'sleep' or p_handle contains 'nightsuit'
+    assign is_nightwear = true
+  endif
+  if p_tags contains 'winterwear' or p_type contains 'winterwear' or p_tags contains 'winter' or p_tags contains 'fleece' or p_title contains 'winter' or p_title contains 'tracksuit' or p_title contains 'fleece' or p_title contains 'hoodie'
+    assign is_winterwear = true
+  endif
+  if p_tags contains 'pajamas' or p_tags contains 'pajama' or p_type contains 'pajama' or p_title contains 'pajama' or p_handle contains 'pajama'
+    assign is_pajama = true
+  endif
+  if p_tags contains 'towels' or p_tags contains 'towel' or p_tags contains 'blanket' or p_tags contains 'swaddle' or p_type contains 'towel' or p_type contains 'blanket' or p_title contains 'towel' or p_title contains 'blanket'
+    assign is_towel = true
+  endif
+  if p_tags contains 'coord' or p_tags contains 'co-ord' or p_type contains 'coord' or p_type contains 'co-ord' or p_title contains 'coord' or p_title contains 'co-ord'
     assign is_coord = true
-  else
+  endif
+  if p_tags contains 'tee' or p_type contains 'tee' or p_title contains 'tee' or p_title contains 'sweatshirt' or p_handle contains 'tee'
+    assign is_tee = true
+  endif
+  if p_tags contains 'ethnic' or p_type contains 'ethnic' or p_tags contains 'lehenga' or p_type contains 'lehenga' or p_title contains 'lehenga'
     assign is_ethnic = true
   endif
 
-  if is_tee
-    assign category_badge = '100% Combed Organic Cotton'
-    assign badge_class = 'meeeku-badge--tee'
+  if is_pajama
+    assign category_badge = '🧸 2-Pack Pajama Set (₹499)'
+    assign badge_class = 'meeeku-badge--pajama'
+  elsif is_towel
+    assign category_badge = '🛁 100% Organic Muslin & Terry'
+    assign badge_class = 'meeeku-badge--towel'
+  elsif is_boy and is_winterwear
+    assign category_badge = '👦 Boys Winterwear Tracksuit'
+    assign badge_class = 'meeeku-badge--boy'
+  elsif is_boy and is_coord
+    assign category_badge = '👦 Boys Linen Co-ord Set'
+    assign badge_class = 'meeeku-badge--boy'
+  elsif is_girl and is_nightwear
+    assign category_badge = '🌙 Pure Cotton Nightsuit'
+    assign badge_class = 'meeeku-badge--night'
+  elsif is_girl and is_winterwear
+    assign category_badge = '❄️ Cozy Winterwear'
+    assign badge_class = 'meeeku-badge--winter'
   elsif is_coord
-    assign category_badge = 'Pure Breathable Cotton'
+    assign category_badge = '🌸 2-Piece Cotton Co-ord'
     assign badge_class = 'meeeku-badge--coord'
+  elsif is_tee
+    assign category_badge = '👕 100% Combed Cotton'
+    assign badge_class = 'meeeku-badge--tee'
+  elsif is_ethnic
+    assign category_badge = '👑 Handcrafted Royal Ethnic'
+    assign badge_class = 'meeeku-badge--ethnic'
   else
-    assign category_badge = 'Royal Festive Ethnic'
+    assign category_badge = '✨ Meeeku Premium Quality'
     assign badge_class = 'meeeku-badge--ethnic'
   endif
 
@@ -48,8 +96,8 @@
     <!-- LEFT COLUMN: Image Gallery -->
     <div class="meeeku-pdp-gallery-col">
       <div class="meeeku-pdp-gallery-wrapper">
-        {% if product.images.size > 1 %}
-          <div class="meeeku-pdp-thumbs-list" id="MeeekuPdpThumbsList">
+        <div class="meeeku-pdp-thumbs-list" id="MeeekuPdpThumbsList" style="{% if product.images.size <= 1 %}display: none;{% endif %}">
+          {% if product.images.size > 1 %}
             {% for img in product.images %}
               <div class="meeeku-pdp-thumb-item {% if forloop.first %}active{% endif %}" 
                    onclick="meeekuSwitchMainPdpImg(this, '{{ img | image_url: width: 900 }}')">
@@ -57,8 +105,8 @@
                 <span>View {{ forloop.index }}</span>
               </div>
             {% endfor %}
-          </div>
-        {% endif %}
+          {% endif %}
+        </div>
 
         <div class="meeeku-pdp-hero-image">
           {% if featured_img %}
@@ -105,7 +153,13 @@
         {% if product.description != blank %}
           {{ product.description }}
         {% else %}
-          Crafted from 100% skin-safe, zero-itch breathable fabric. Designed for playful moments and royal festive celebrations.
+          <p>Crafted from 100% skin-safe, zero-itch breathable fabric. Designed for cozy everyday play, gentle bedtime sleep, and festive family celebrations.</p>
+          <ul>
+            <li>100% Pure Combed Organic Cotton / Linen blend</li>
+            <li>Zero-itch tagless collar & flatlock seams</li>
+            <li>Elasticated comfort waistbands for easy movement</li>
+            <li>Gentle Machine Wash Cold</li>
+          </ul>
         {% endif %}
       </div>
 
@@ -115,7 +169,7 @@
         <!-- Size Selector -->
         <div style="margin-bottom: 1.8rem;">
           <label id="MeeekuPdpSizeLabel" style="font-weight: 700; color: #3D2355; font-size: 1.45rem; display: block; margin-bottom: 0.8rem;">
-            Select Size ({% if is_tee or is_coord %}0 – 3 Years{% else %}0 – 7 Years{% endif %}):
+            Select Size ({% if is_towel %}One Size 0-3Y{% elsif is_pajama or is_tee or is_coord %}0 – 3 Years{% elsif is_winterwear %}1 – 6 Years{% else %}0 – 7 Years{% endif %}):
           </label>
           <div class="meeeku-pdp-size-grid" id="MeeekuPdpSizeGrid">
             {% if product.variants.size > 0 %}
@@ -153,25 +207,51 @@
       <!-- Sizing Guide Inline -->
       <div class="meeeku-size-guide-inline" style="margin-top: 2rem; background: #FFFDF7; border: 1.5px solid #F8BBD0; border-radius: 20px; padding: 1.8rem;">
         <h3 id="MeeekuSizeGuideHeading" style="color: #3D2355; font-size: 1.5rem; font-weight: 800; margin-bottom: 1rem;">
-          {% if is_tee %}📏 T-Shirt Size & Fit Guide (0 – 3 Years){% elsif is_coord %}📏 2-Piece Co-ord Size Guide (0 – 3 Years){% else %}📏 Size & Fit Guide (0 – 7 Years){% endif %}
+          {% if is_towel %}
+            🛁 Bath Towel & Blanket Dimensions (0 – 3 Years)
+          {% elsif is_pajama %}
+            🧸 2-Pack Pajamas Size & Fit Guide (0 – 3 Years)
+          {% elsif is_winterwear %}
+            ❄️ Winterwear & Tracksuit Size Guide (1 – 6 Years)
+          {% elsif is_tee %}
+            📏 T-Shirt Size & Fit Guide (0 – 3 Years)
+          {% elsif is_coord %}
+            📏 2-Piece Co-ord Size Guide (0 – 3 Years)
+          {% else %}
+            📏 Size & Fit Guide (0 – 7 Years)
+          {% endif %}
         </h3>
         <div id="MeeekuSizeGuideTableWrap" style="overflow-x: auto;">
           <table style="width: 100%; border-collapse: collapse; font-size: 1.25rem;">
             <thead>
-              <tr style="background: #F8BBD0; color: #3D2355;">
+              <tr style="background: #F8BBD0; color: #3D2355;" id="MeeekuSizeGuideTheadRow">
                 <th style="padding: 0.6rem 0.8rem; text-align: left;">Age</th>
                 <th style="padding: 0.6rem 0.8rem; text-align: center;">Height (cm)</th>
                 <th style="padding: 0.6rem 0.8rem; text-align: center;">Chest (cm)</th>
-                <th style="padding: 0.6rem 0.8rem; text-align: center;">{% if is_tee or is_coord %}Length (cm){% else %}Waist (cm){% endif %}</th>
+                <th style="padding: 0.6rem 0.8rem; text-align: center;">Length / Waist</th>
               </tr>
             </thead>
             <tbody id="MeeekuSizeGuideTbody">
-              {% if is_tee or is_coord %}
-                <tr><td style="padding: 0.5rem 0.8rem;">0 – 6M</td><td style="text-align:center;">60–68</td><td style="text-align:center;">44–46</td><td style="text-align:center;">31</td></tr>
-                <tr style="background: #FFF9F4;"><td style="padding: 0.5rem 0.8rem;">6 – 12M</td><td style="text-align:center;">68–76</td><td style="text-align:center;">46–48</td><td style="text-align:center;">33</td></tr>
-                <tr><td style="padding: 0.5rem 0.8rem;">12 – 18M</td><td style="text-align:center;">76–84</td><td style="text-align:center;">48–50</td><td style="text-align:center;">35</td></tr>
-                <tr style="background: #FFF9F4;"><td style="padding: 0.5rem 0.8rem;">18 – 24M</td><td style="text-align:center;">84–90</td><td style="text-align:center;">50–52</td><td style="text-align:center;">37</td></tr>
-                <tr><td style="padding: 0.5rem 0.8rem;">2 – 3Y</td><td style="text-align:center;">90–98</td><td style="text-align:center;">52–54</td><td style="text-align:center;">40</td></tr>
+              {% if is_towel %}
+                <tr><td style="padding: 0.5rem 0.8rem; font-weight: 700;">One Size (0-3Y)</td><td style="text-align:center;">80 - 90 cm</td><td style="text-align:center;">Generous Wrap</td><td style="text-align:center;">85cm x 85cm</td></tr>
+              {% elsif is_pajama %}
+                <tr><td style="padding: 0.5rem 0.8rem;">0 – 6M</td><td style="text-align:center;">60–68</td><td style="text-align:center;">44–46</td><td style="text-align:center;">Waist: 18" | Inseam: 9"</td></tr>
+                <tr style="background: #FFF9F4;"><td style="padding: 0.5rem 0.8rem;">6 – 12M</td><td style="text-align:center;">68–76</td><td style="text-align:center;">46–48</td><td style="text-align:center;">Waist: 19" | Inseam: 11"</td></tr>
+                <tr><td style="padding: 0.5rem 0.8rem;">12 – 18M</td><td style="text-align:center;">76–84</td><td style="text-align:center;">48–50</td><td style="text-align:center;">Waist: 19.5" | Inseam: 13"</td></tr>
+                <tr style="background: #FFF9F4;"><td style="padding: 0.5rem 0.8rem;">18 – 24M</td><td style="text-align:center;">84–90</td><td style="text-align:center;">50–52</td><td style="text-align:center;">Waist: 20" | Inseam: 14.5"</td></tr>
+                <tr><td style="padding: 0.5rem 0.8rem;">2 – 3Y</td><td style="text-align:center;">90–98</td><td style="text-align:center;">52–54</td><td style="text-align:center;">Waist: 21" | Inseam: 16"</td></tr>
+              {% elsif is_winterwear %}
+                <tr><td style="padding: 0.5rem 0.8rem;">1 – 2Y</td><td style="text-align:center;">80–90</td><td style="text-align:center;">48–51</td><td style="text-align:center;">Top: 36cm | Pant: 46cm</td></tr>
+                <tr style="background: #FFF9F4;"><td style="padding: 0.5rem 0.8rem;">2 – 3Y</td><td style="text-align:center;">90–98</td><td style="text-align:center;">50–53</td><td style="text-align:center;">Top: 39cm | Pant: 51cm</td></tr>
+                <tr><td style="padding: 0.5rem 0.8rem;">3 – 4Y</td><td style="text-align:center;">98–104</td><td style="text-align:center;">53–56</td><td style="text-align:center;">Top: 42cm | Pant: 56cm</td></tr>
+                <tr style="background: #FFF9F4;"><td style="padding: 0.5rem 0.8rem;">4 – 5Y</td><td style="text-align:center;">104–110</td><td style="text-align:center;">56–59</td><td style="text-align:center;">Top: 45cm | Pant: 61cm</td></tr>
+                <tr><td style="padding: 0.5rem 0.8rem;">5 – 6Y</td><td style="text-align:center;">110–116</td><td style="text-align:center;">59–62</td><td style="text-align:center;">Top: 48cm | Pant: 66cm</td></tr>
+              {% elsif is_tee or is_coord %}
+                <tr><td style="padding: 0.5rem 0.8rem;">0 – 6M</td><td style="text-align:center;">60–68</td><td style="text-align:center;">44–46</td><td style="text-align:center;">31 cm</td></tr>
+                <tr style="background: #FFF9F4;"><td style="padding: 0.5rem 0.8rem;">6 – 12M</td><td style="text-align:center;">68–76</td><td style="text-align:center;">46–48</td><td style="text-align:center;">33 cm</td></tr>
+                <tr><td style="padding: 0.5rem 0.8rem;">12 – 18M</td><td style="text-align:center;">76–84</td><td style="text-align:center;">48–50</td><td style="text-align:center;">35 cm</td></tr>
+                <tr style="background: #FFF9F4;"><td style="padding: 0.5rem 0.8rem;">18 – 24M</td><td style="text-align:center;">84–90</td><td style="text-align:center;">50–52</td><td style="text-align:center;">37 cm</td></tr>
+                <tr><td style="padding: 0.5rem 0.8rem;">2 – 3Y</td><td style="text-align:center;">90–98</td><td style="text-align:center;">52–54</td><td style="text-align:center;">40 cm</td></tr>
               {% else %}
                 <tr><td style="padding: 0.5rem 0.8rem;">0 – 1Y</td><td style="text-align:center;">70–80</td><td style="text-align:center;">46–49</td><td style="text-align:center;">45–48</td></tr>
                 <tr style="background: #FFF9F4;"><td style="padding: 0.5rem 0.8rem;">1 – 2Y</td><td style="text-align:center;">80–90</td><td style="text-align:center;">48–51</td><td style="text-align:center;">47–50</td></tr>
@@ -249,32 +329,26 @@
   border-radius: 24px;
   overflow: hidden;
   border: 2px solid #F8BBD0;
-  box-shadow: 0 8px 24px rgba(107, 63, 160, 0.08);
-  background: #FFFFFF;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: #FFFDF7;
+  box-shadow: 0 10px 30px rgba(107, 63, 160, 0.08);
 }
 .meeeku-pdp-hero-image img {
   width: 100%;
-  height: 100%;
+  height: auto;
   aspect-ratio: 4 / 5;
   object-fit: cover;
   object-position: top center;
   display: block;
-  border: none !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
 }
 .meeeku-pdp-title {
   color: #3D2355;
   font-size: 2.8rem;
   font-weight: 800;
-  margin-bottom: 0.6rem;
-  line-height: 1.2;
+  margin: 0 0 0.8rem;
+  line-height: 1.25;
 }
 .meeeku-pdp-price {
-  font-size: 2.6rem;
+  font-size: 2.4rem;
   font-weight: 800;
   color: #6B3FA0;
 }
@@ -285,26 +359,34 @@
 }
 .meeeku-size-btn {
   border: 2px solid #F8BBD0;
-  border-radius: 25px;
-  padding: 0.6rem 1.4rem;
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: #3D2355;
   background: #FFFDF7;
+  color: #3D2355;
+  padding: 0.6rem 1.4rem;
+  border-radius: 25px;
+  font-size: 1.35rem;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
 }
-.meeeku-size-btn.active,
-.meeeku-size-btn:hover {
-  background: #6B3FA0;
+.meeeku-size-btn:hover,
+.meeeku-size-btn.active {
+  background: #FF6097;
   color: #FFF;
-  border-color: #6B3FA0;
+  border-color: #FF6097;
 }
 .meeeku-size-btn.sold-out {
-  opacity: 0.5;
+  opacity: 0.4;
   text-decoration: line-through;
   cursor: not-allowed;
 }
+.meeeku-badge--tee { background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7; }
+.meeeku-badge--coord { background: #E0F2F1; color: #00695C; border: 1px solid #80CBC4; }
+.meeeku-badge--ethnic { background: #FFF0F5; color: #6B3FA0; border: 1px solid #F8BBD0; }
+.meeeku-badge--boy { background: #FFF8E1; color: #F57F17; border: 1px solid #FFE082; }
+.meeeku-badge--night { background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8; }
+.meeeku-badge--winter { background: #FCE4EC; color: #C2185B; border: 1px solid #F48FB1; }
+.meeeku-badge--pajama { background: #EDE7F6; color: #512DA8; border: 1px solid #D1C4E9; }
+.meeeku-badge--towel { background: #E0F7FA; color: #00838F; border: 1px solid #80DEEA; }
 
 @media screen and (max-width: 749px) {
   .meeeku-pdp-layout {
@@ -317,6 +399,7 @@
   .meeeku-pdp-thumbs-list {
     flex-direction: row;
     width: 100%;
+    overflow-x: auto;
     justify-content: center;
   }
   .meeeku-pdp-title {
@@ -326,15 +409,1266 @@
 </style>
 
 <script>
+const MEEKU_ALL_PRODUCTS = {
+  "sunshine-chanderi-lehenga": {
+    "handle": "sunshine-chanderi-lehenga",
+    "title": "Sunshine Chanderi Lehenga",
+    "body": "<p>Bring radiant sunshine to festive occasions with this lightweight Chanderi cotton lehenga. Detailed with delicate tone-on-tone floral embroidery and finished with a comfortable elasticated waistband. Fully lined with 100% soft skin-safe muslin cotton for zero-itch twirling all day long.</p><ul><li>Fabric: Pure Chanderi Cotton</li><li>Lining: 100% Breathable Muslin Cotton</li><li>Set Includes: Crop Top &amp; Flared Ankle-Length Skirt</li><li>Care: Dry Clean Only</li></ul>",
+    "type": "Indian Ethnic Lehengas",
+    "tags": "Ethnic, Lehenga, Yellow, Chanderi Cotton, Festive, 2-3Y, 4-5Y, 6-7Y",
+    "price": 3199.0,
+    "compare_price": 3899.0,
+    "variants": [
+      "2-3Y",
+      "4-5Y",
+      "6-7Y"
+    ],
+    "images": [
+      "meeeku_prod_yellow_lehenga.jpg",
+      "meeeku_prod_yellow_lehenga_model.jpg",
+      "meeeku_prod_yellow_lehenga_swirl.jpg"
+    ],
+    "badge": "\ud83d\udc51 Handcrafted Royal Ethnic",
+    "badge_class": "meeeku-badge--ethnic",
+    "size_guide_type": "ethnic"
+  },
+  "teal-bloom-sequin-dress": {
+    "handle": "teal-bloom-sequin-dress",
+    "title": "Teal Bloom Dress",
+    "body": "<p>Crafted for magical celebrations, this teal dress features hand-embroidered gold floral sequin motifs paired with a light, layered tulle net skirt. Fully lined with 100% soft breathable cotton to ensure zero-itch comfort all day long.</p><ul><li>Fabric: Tulle Net &amp; Silk Blend with Gold Sequins</li><li>Lining: 100% Pure Soft Cotton</li><li>Includes: Dress + Matching Headband &amp; Bows</li><li>Care: Gentle Handwash / Dry Clean</li></ul>",
+    "type": "Indo-Western Dresses",
+    "tags": "Dresses, Indo-Western, Teal, Tulle Net, Sequins, Festive, 2-3Y, 4-5Y, 6-7Y",
+    "price": 2999.0,
+    "compare_price": 3699.0,
+    "variants": [
+      "2-3Y",
+      "4-5Y",
+      "6-7Y"
+    ],
+    "images": [
+      "meeeku_prod_teal_dress.jpg",
+      "meeeku_prod_teal_dress_model.jpg",
+      "meeeku_prod_teal_dress_swirl.jpg"
+    ],
+    "badge": "\u2728 Meeeku Premium",
+    "badge_class": "meeeku-badge--ethnic",
+    "size_guide_type": "coord"
+  },
+  "blush-rose-net-lehenga": {
+    "handle": "blush-rose-net-lehenga",
+    "title": "Blush Rose Net Lehenga",
+    "body": "<p>A dream in pink, this ensemble pairs a high-neck jacquard top with a cloud-like tiered net lehenga skirt. Features scalloped gold lace trimming and skin-safe cotton inner lining.</p><ul><li>Fabric: Woven Jacquard Top &amp; Tiered Soft Net Skirt</li><li>Lining: 100% Breathable Cotton</li><li>Detail: Scalloped Gold Lace Border</li><li>Care: Dry Clean Only</li></ul>",
+    "type": "Indian Ethnic Lehengas",
+    "tags": "Ethnic, Lehenga, Pink, Jacquard, Tulle Net, Gold Lace, 2-3Y, 4-5Y, 6-7Y",
+    "price": 3299.0,
+    "compare_price": 3999.0,
+    "variants": [
+      "2-3Y",
+      "4-5Y",
+      "6-7Y"
+    ],
+    "images": [
+      "meeeku_prod_pink_net_lehenga.jpg",
+      "meeeku_prod_pink_net_lehenga_model.jpg",
+      "meeeku_prod_pink_net_lehenga_swirl.jpg"
+    ],
+    "badge": "\ud83d\udc51 Handcrafted Royal Ethnic",
+    "badge_class": "meeeku-badge--ethnic",
+    "size_guide_type": "ethnic"
+  },
+  "forest-vrindavan-green-lehenga": {
+    "handle": "forest-vrindavan-green-lehenga",
+    "title": "Forest Vrindavan Lehenga",
+    "body": "<p>Inspired by nature, this deep emerald green lehenga is adorned with crisp white floral embroidery and dainty silver gota patti accents. Made from breathable 100% organic cotton for effortless play.</p><ul><li>Fabric: 100% Pure Organic Cotton</li><li>Embroidery: White Threadwork &amp; Silver Gota Patti</li><li>Set Includes: Strappy Top &amp; Voluminous Skirt</li><li>Care: Gentle Hand Wash</li></ul>",
+    "type": "Indian Ethnic Lehengas",
+    "tags": "Ethnic, Lehenga, Green, Organic Cotton, Floral Embroidery, Gota Patti, 2-3Y, 4-5Y, 6-7Y",
+    "price": 3199.0,
+    "compare_price": 3899.0,
+    "variants": [
+      "2-3Y",
+      "4-5Y",
+      "6-7Y"
+    ],
+    "images": [
+      "meeeku_prod_green_lehenga.jpg",
+      "meeeku_prod_green_lehenga_model.jpg",
+      "meeeku_prod_green_lehenga_swirl.jpg"
+    ],
+    "badge": "\ud83d\udc51 Handcrafted Royal Ethnic",
+    "badge_class": "meeeku-badge--ethnic",
+    "size_guide_type": "ethnic"
+  },
+  "gulmohar-splash-abstract-coord": {
+    "handle": "gulmohar-splash-abstract-coord",
+    "title": "Gulmohar Splash Co-ord",
+    "body": "<p>Bright, bold, and delightfully artistic. This vibrant abstract printed co-ord set brings festive joy with rich hues of magenta, marigold yellow, and ocean blue.</p><ul><li>Fabric: Premium Soft Cotton Rayon Blend</li><li>Set Includes: V-Neck Crop Top &amp; Flared Mid-Calf Skirt</li><li>Care: Machine Washable Gentle Cycle</li></ul>",
+    "type": "Festive Co-ords",
+    "tags": "Co-ords, Abstract Print, Multicolor, Magenta, Yellow, Cotton Blend, 2-3Y, 4-5Y, 6-7Y",
+    "price": 2899.0,
+    "compare_price": 3599.0,
+    "variants": [
+      "2-3Y",
+      "4-5Y",
+      "6-7Y"
+    ],
+    "images": [
+      "meeeku_prod_multicolor_coord.jpg",
+      "meeeku_prod_multicolor_coord_model.jpg",
+      "meeeku_prod_multicolor_coord_swirl.jpg"
+    ],
+    "badge": "\ud83c\udf38 2-Piece Cotton Co-ord",
+    "badge_class": "meeeku-badge--coord",
+    "size_guide_type": "coord"
+  },
+  "sage-mint-gota-lehenga": {
+    "handle": "sage-mint-gota-lehenga",
+    "title": "Sage Mint Gota Lehenga",
+    "body": "<p>Elegance meets playfulness in soft sage mint. Decorated with intricate red flower embroidery and silver zigzag gota patti detailing, lined with skin-safe cotton.</p><ul><li>Fabric: Textured Cotton Linen</li><li>Detailing: Silver Zigzag Gota Patti &amp; Red Floral Threadwork</li><li>Care: Dry Clean Only</li></ul>",
+    "type": "Indian Ethnic Lehengas",
+    "tags": "Ethnic, Lehenga, Sage Mint, Gota Patti, Red Floral, Zari, 2-3Y, 4-5Y, 6-7Y",
+    "price": 3199.0,
+    "compare_price": 3899.0,
+    "variants": [
+      "2-3Y",
+      "4-5Y",
+      "6-7Y"
+    ],
+    "images": [
+      "meeeku_prod_sage_lehenga.jpg",
+      "meeeku_prod_sage_lehenga_model.jpg",
+      "meeeku_prod_sage_lehenga_swirl.jpg"
+    ],
+    "badge": "\ud83d\udc51 Handcrafted Royal Ethnic",
+    "badge_class": "meeeku-badge--ethnic",
+    "size_guide_type": "ethnic"
+  },
+  "rani-pink-phulkari-lehenga": {
+    "handle": "rani-pink-phulkari-lehenga",
+    "title": "Rani Pink Phulkari Lehenga",
+    "body": "<p>Vibrant Rani magenta lehenga featuring multi-colored floral boti embroidery and a scalloped embroidered hem. Ideal for weddings, festive occasions, and family celebrations.</p><ul><li>Fabric: 100% Pure Premium Cotton</li><li>Work: Phulkari Multi-Color Embroidery</li><li>Care: Dry Clean Recommended</li></ul>",
+    "type": "Indian Ethnic Lehengas",
+    "tags": "Ethnic, Lehenga, Rani Pink, Magenta, Phulkari, Threadwork, 2-3Y, 4-5Y, 6-7Y",
+    "price": 2799.0,
+    "compare_price": 3499.0,
+    "variants": [
+      "2-3Y",
+      "4-5Y",
+      "6-7Y"
+    ],
+    "images": [
+      "meeeku_prod_magenta_lehenga.jpg",
+      "meeeku_prod_magenta_lehenga_model.jpg",
+      "meeeku_prod_magenta_lehenga_swirl.jpg"
+    ],
+    "badge": "\ud83d\udc51 Handcrafted Royal Ethnic",
+    "badge_class": "meeeku-badge--ethnic",
+    "size_guide_type": "ethnic"
+  },
+  "midnight-blossom-halter-lehenga": {
+    "handle": "midnight-blossom-halter-lehenga",
+    "title": "Midnight Blossom Halter Lehenga",
+    "body": "<p>Striking midnight black paired with rich crimson floral motifs. High-neck halter silhouette designed for modern little princesses who love to twirl.</p><ul><li>Fabric: 100% Breathable Printed Cotton</li><li>Top Silhouette: High-Neck Halter Top</li><li>Care: Gentle Wash / Dry Clean</li></ul>",
+    "type": "Indian Ethnic Lehengas",
+    "tags": "Ethnic, Lehenga, Black, Crimson Red, Halter Neck, Floral Print, 2-3Y, 4-5Y, 6-7Y",
+    "price": 2799.0,
+    "compare_price": 3499.0,
+    "variants": [
+      "2-3Y",
+      "4-5Y",
+      "6-7Y"
+    ],
+    "images": [
+      "meeeku_prod_black_lehenga.jpg",
+      "meeeku_prod_black_lehenga_model.jpg",
+      "meeeku_prod_black_lehenga_swirl.jpg"
+    ],
+    "badge": "\ud83c\udf19 Pure Cotton Nightsuit",
+    "badge_class": "meeeku-badge--night",
+    "size_guide_type": "coord"
+  },
+  "olive-silk-oneshoulder-lehenga": {
+    "handle": "olive-silk-oneshoulder-lehenga",
+    "title": "Olive Silk One-Shoulder Lehenga",
+    "body": "<p>Exquisite chartreuse olive green silk ensemble. Features an asymmetrical one-shoulder crop top with intricate silver zardozi embroidery vines and a shoulder fabric floral accent, paired with a rich flared satin silk skirt.</p><ul><li>Fabric: Pure Satin Silk & Zardozi Threadwork</li><li>Set Includes: One-Shoulder Crop Top &amp; Flared Ankle-Length Skirt</li><li>Care: Dry Clean Only</li></ul>",
+    "type": "Indian Ethnic Lehengas",
+    "tags": "Ethnic, Lehenga, Olive Green, Chartreuse, Zardozi Silk, One Shoulder, coords, 2-3Y, 4-5Y, 6-7Y",
+    "price": 3299.0,
+    "compare_price": 3999.0,
+    "variants": [
+      "2-3Y",
+      "4-5Y",
+      "6-7Y"
+    ],
+    "images": [
+      "meeeku_prod_olive_lehenga.jpg",
+      "meeeku_prod_olive_lehenga_model.jpg",
+      "meeeku_prod_olive_lehenga_swirl.jpg"
+    ],
+    "badge": "\ud83c\udf38 2-Piece Cotton Co-ord",
+    "badge_class": "meeeku-badge--coord",
+    "size_guide_type": "coord"
+  },
+  "snuggle-bunny-blush-tee": {
+    "handle": "snuggle-bunny-blush-tee",
+    "title": "Snuggle Bunny Blush Cotton Tee",
+    "body": "<p>An everyday wardrobe essential for your little one. Crafted from ultra-soft, 100% breathable combed cotton with an adorable sleepy bunny graphic, soft ribbed neckline, and zero-itch tagless collar. Gentle on sensitive baby skin for all-day comfort and play.</p><ul><li>Fabric: 100% Pure Combed Cotton</li><li>Fit: Relaxed & Breathable Everyday Fit</li><li>Features: Zero-Itch Neckband & Soft Stretch Hem</li><li>Care: Machine Wash Gentle Cycle</li></ul>",
+    "type": "Basic T-Shirts",
+    "tags": "Basic Tee, Everyday Cotton, Blush Pink, Bunny, 0-6M, 6-12M, 12-18M, 18-24M, 2-3Y",
+    "price": 599.0,
+    "compare_price": 899.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ],
+    "images": [
+      "meeeku_prod_bunny_tee.jpg"
+    ],
+    "badge": "\ud83d\udc55 100% Combed Cotton",
+    "badge_class": "meeeku-badge--tee",
+    "size_guide_type": "tee"
+  },
+  "little-leopard-safari-tee": {
+    "handle": "little-leopard-safari-tee",
+    "title": "Little Leopard Safari Cotton Tee",
+    "body": "<p>Sweet safari adventures start here! Designed in a warm ivory cream base with playful yellow leopard prints and soft pink neckline detailing. Made from 100% hypoallergenic cotton that stays breezy and cozy through naptime and playtime.</p><ul><li>Fabric: 100% Hypoallergenic Soft Cotton</li><li>Neckline: Contrast Ribbed Crew Neck</li><li>Features: Non-toxic baby-safe inks & tagless back</li><li>Care: Machine Wash Gentle Cycle</li></ul>",
+    "type": "Basic T-Shirts",
+    "tags": "Basic Tee, Everyday Cotton, Cream, Leopard, Safari, 0-6M, 6-12M, 12-18M, 18-24M, 2-3Y",
+    "price": 599.0,
+    "compare_price": 899.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ],
+    "images": [
+      "meeeku_prod_leopard_tee.jpg"
+    ],
+    "badge": "\ud83d\udc55 100% Combed Cotton",
+    "badge_class": "meeeku-badge--tee",
+    "size_guide_type": "tee"
+  },
+  "tiny-dino-doodles-tee": {
+    "handle": "tiny-dino-doodles-tee",
+    "title": "Tiny Dino Doodles Cotton Tee",
+    "body": "<p>Bright, cheerful, and full of prehistoric fun! This crisp white long-sleeve tee features hand-drawn watercolor dinosaur illustrations. Lightweight, 100% breathable organic cotton prevents rashes and keeps toddlers cool and happy.</p><ul><li>Fabric: 100% Breathable Organic Cotton</li><li>Print: Multi-Color Storybook Dinosaur Art</li><li>Features: Shoulder snap ease & flatlock seams</li><li>Care: Machine Wash Cold</li></ul>",
+    "type": "Basic T-Shirts",
+    "tags": "Basic Tee, Everyday Cotton, White, Dinosaur, Dino, 0-6M, 6-12M, 12-18M, 18-24M, 2-3Y",
+    "price": 599.0,
+    "compare_price": 899.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ],
+    "images": [
+      "meeeku_prod_dino_tee.jpg"
+    ],
+    "badge": "\ud83d\udc55 100% Combed Cotton",
+    "badge_class": "meeeku-badge--tee",
+    "size_guide_type": "tee"
+  },
+  "little-night-owl-starlit-tee": {
+    "handle": "little-night-owl-starlit-tee",
+    "title": "Little Night Owl Starlit Cotton Tee",
+    "body": "<p>Cozy bedtime stories come alive in this pure white cotton tee featuring two sleepy watercolor owls perched under a crescent moon and starlit sky. Butter-soft pure cotton ensures snuggly comfort for naps and daycare adventures.</p><ul><li>Fabric: 100% Premium Pure Cotton</li><li>Graphic: Watercolor Night Owl & Crescent Moon</li><li>Features: Extra-soft baby ribbing & smooth cuffs</li><li>Care: Machine Wash Cold</li></ul>",
+    "type": "Basic T-Shirts",
+    "tags": "Basic Tee, Everyday Cotton, White, Owl, Starlit, 0-6M, 6-12M, 12-18M, 18-24M, 2-3Y",
+    "price": 599.0,
+    "compare_price": 899.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ],
+    "images": [
+      "meeeku_prod_owl_tee.jpg"
+    ],
+    "badge": "\ud83d\udc55 100% Combed Cotton",
+    "badge_class": "meeeku-badge--tee",
+    "size_guide_type": "tee"
+  },
+  "mighty-little-lion-tee": {
+    "handle": "mighty-little-lion-tee",
+    "title": "Mighty Little Lion Cotton Tee",
+    "body": "<p>Roar with joy in this sunny, cheerful baby tee! Featuring friendly golden-maned lions and 'L is for Lion' graphics on super-soft combed white cotton. Designed for maximum flexibility during crawls, steps, and tummy time.</p><ul><li>Fabric: 100% Combed Breathable Cotton</li><li>Detail: Joyful Lion Character Art</li><li>Features: Tagless comfort and shape-retaining stretch</li><li>Care: Machine Wash Gentle</li></ul>",
+    "type": "Basic T-Shirts",
+    "tags": "Basic Tee, Everyday Cotton, White, Lion, Safari, 0-6M, 6-12M, 12-18M, 18-24M, 2-3Y",
+    "price": 599.0,
+    "compare_price": 899.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ],
+    "images": [
+      "meeeku_prod_lion_tee.jpg"
+    ],
+    "badge": "\ud83d\udc55 100% Combed Cotton",
+    "badge_class": "meeeku-badge--tee",
+    "size_guide_type": "tee"
+  },
+  "cosmic-safari-doodle-tee": {
+    "handle": "cosmic-safari-doodle-tee",
+    "title": "Cosmic Safari Doodle Cotton Tee",
+    "body": "<p>A whimsical fusion of jungle safari and space exploration! Giraffes, elephants, planets, and moons dance across this ultra-breathable pure cotton tee. Perfect for curious minds and active toddlers on the go.</p><ul><li>Fabric: 100% Pure Lightweight Cotton</li><li>Print: All-Over Galaxy Safari Animal Doodles</li><li>Features: Zero-itch neckline & reinforced stitching</li><li>Care: Machine Wash Gentle Cycle</li></ul>",
+    "type": "Basic T-Shirts",
+    "tags": "Basic Tee, Everyday Cotton, White, Cosmic Safari, Galaxy, Animals, 0-6M, 6-12M, 12-18M, 18-24M, 2-3Y",
+    "price": 599.0,
+    "compare_price": 899.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ],
+    "images": [
+      "meeeku_prod_cosmic_safari_tee.jpg"
+    ],
+    "badge": "\ud83d\udc55 100% Combed Cotton",
+    "badge_class": "meeeku-badge--tee",
+    "size_guide_type": "tee"
+  },
+  "daisy-frill-blue-tee": {
+    "handle": "daisy-frill-blue-tee",
+    "title": "Periwinkle Daisy Frill Cotton Tee",
+    "body": "<p>An adorable periwinkle lavender-blue baby tee crafted from 100% breathable organic combed cotton. Features an elegant ruffled Peter Pan collar, gentle ruffled sleeve cuffs, snap-button neckline ease, and dainty white daisy floral sprigs. Zero-itch and ultra soft for sensitive baby skin.</p><ul><li>Fabric: 100% Combed Organic Cotton</li><li>Neckline: Ruffled Peter Pan Frill Collar with Snap Back</li><li>Sleeves: Elasticated Ruffled Cuffs</li><li>Care: Machine Wash Gentle Cold</li></ul>",
+    "type": "Basic T-Shirts",
+    "tags": "Basic Tee, Everyday Cotton, Periwinkle Blue, Daisy, Floral, Ruffle Collar, 0-6M, 6-12M, 12-18M, 18-24M, 2-3Y",
+    "price": 599.0,
+    "compare_price": 899.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ],
+    "images": [
+      "meeeku_prod_daisy_frill_tee.jpg"
+    ],
+    "badge": "\ud83d\udc55 100% Combed Cotton",
+    "badge_class": "meeeku-badge--tee",
+    "size_guide_type": "tee"
+  },
+  "vanilla-cream-eyelet-coord": {
+    "handle": "vanilla-cream-eyelet-coord",
+    "title": "Vanilla Cream Ruffled Eyelet Co-ord Set",
+    "body": "<p>A luxurious 2-piece lounge set crafted from heavyweight, butter-soft combed cotton in a warm vanilla cream hue. Features an oversized statement eyelet-embroidered Peter Pan collar with delicate scalloped ruffles, balloon sleeves, and matching elasticated jogger pants.</p><ul><li>Fabric: 100% Combed Organic Cotton</li><li>Collar: Embroidered Scalloped Eyelet Peter Pan Collar</li><li>Set Includes: Long Sleeve Ruffle Sweatshirt + Jogger Pyjamas</li><li>Care: Machine Wash Gentle Cold</li></ul>",
+    "type": "Co-ord Sets",
+    "tags": "Co-ord Set, 2-Piece, Vanilla Cream, Eyelet Collar, Organic Cotton, 0-6M, 6-12M, 12-18M, 18-24M, 2-3Y",
+    "price": 1299.0,
+    "compare_price": 1699.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ],
+    "images": [
+      "meeeku_prod_vanilla_cream_coord.jpg"
+    ],
+    "badge": "\ud83c\udf38 2-Piece Cotton Co-ord",
+    "badge_class": "meeeku-badge--coord",
+    "size_guide_type": "coord"
+  },
+  "pink-ribbon-peplum-coord": {
+    "handle": "pink-ribbon-peplum-coord",
+    "title": "Pink Ribbon Bow Peplum Co-ord Set",
+    "body": "<p>Sweet ballet charm! This 2-piece set features a baby pink ribbed cotton peplum tunic top with all-over bright pink ribbon bow prints, snap shoulder buttons for easy dressing, and matching ribbed trousers with an adorable bow drawstring.</p><ul><li>Fabric: 100% Breathable Ribbed Cotton</li><li>Top Style: Flared Peplum Tunic with Shoulder Snaps</li><li>Pants: Elasticated Ribbed Trousers with Drawstring</li><li>Care: Machine Wash Gentle</li></ul>",
+    "type": "Co-ord Sets",
+    "tags": "Co-ord Set, 2-Piece, Pink Ribbon, Peplum, Ribbed Cotton, 0-6M, 6-12M, 12-18M, 18-24M, 2-3Y",
+    "price": 1299.0,
+    "compare_price": 1699.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ],
+    "images": [
+      "meeeku_prod_pink_ribbon_peplum_coord.jpg"
+    ],
+    "badge": "\ud83c\udf38 2-Piece Cotton Co-ord",
+    "badge_class": "meeeku-badge--coord",
+    "size_guide_type": "coord"
+  },
+  "farm-friends-storybook-coord": {
+    "handle": "farm-friends-storybook-coord",
+    "title": "Little Farm Friends Storybook Co-ord Set",
+    "body": "<p>Storytime comfort for little explorers! Crafted from pure white hypoallergenic cotton, featuring a cozy envelope-neck long-sleeve tee with storybook sheep, bunny, hen, and sun illustrations, paired with all-over matching farm animals cuffed pyjamas.</p><ul><li>Fabric: 100% Hypoallergenic Soft Cotton</li><li>Neckline: Easy Dressing Envelope Neck</li><li>Print: Storybook Farm Animals & Sun Graphic</li><li>Care: Machine Wash Cold</li></ul>",
+    "type": "Co-ord Sets",
+    "tags": "Co-ord Set, 2-Piece, Farm Animals, Storybook, Pure Cotton, 0-6M, 6-12M, 12-18M, 18-24M, 2-3Y",
+    "price": 1299.0,
+    "compare_price": 1699.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ],
+    "images": [
+      "meeeku_prod_farm_friends_coord.jpg"
+    ],
+    "badge": "\ud83c\udf38 2-Piece Cotton Co-ord",
+    "badge_class": "meeeku-badge--coord",
+    "size_guide_type": "coord"
+  },
+  "wildflower-meadow-ruffle-coord": {
+    "handle": "wildflower-meadow-ruffle-coord",
+    "title": "Wildflower Meadow Ruffle Co-ord Set",
+    "body": "<p>A dreamy garden in bloom! Designed in crisp white pure organic cotton with hand-painted wildflower sprigs in pastel coral, marigold, and lavender. Features a sweet ruffled lettuce-edge Peter Pan collar, back snap buttons, and matching lettuce-hem leggings.</p><ul><li>Fabric: 100% Pure Organic Cotton</li><li>Collar: Ruffled Lettuce-Edge Peter Pan Collar</li><li>Set Includes: Floral Top + Ruffled Leggings</li><li>Care: Machine Wash Cold</li></ul>",
+    "type": "Co-ord Sets",
+    "tags": "Co-ord Set, 2-Piece, Wildflower Meadow, Floral, Ruffle Collar, 0-6M, 6-12M, 12-18M, 18-24M, 2-3Y",
+    "price": 1299.0,
+    "compare_price": 1699.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ],
+    "images": [
+      "meeeku_prod_wildflower_meadow_coord.jpg"
+    ],
+    "badge": "\ud83c\udf38 2-Piece Cotton Co-ord",
+    "badge_class": "meeeku-badge--coord",
+    "size_guide_type": "coord"
+  },
+  "sky-blue-stardust-polka-coord": {
+    "handle": "sky-blue-stardust-polka-coord",
+    "title": "Sky Blue Stardust Polka Co-ord Set",
+    "body": "<p>Calm, cozy, and cloud-soft. Made from rich cornflower sky blue combed cotton covered with delicate white micro-polka stardust speckles. Finished with soft ribbed cuffs and an elasticated waistband that never leaves marks on baby skin.</p><ul><li>Fabric: 100% Combed Breathable Cotton</li><li>Pattern: Micro Stardust Polka Dots</li><li>Waistband: Gentle Zero-Pinch Elastic</li><li>Care: Machine Wash Cold</li></ul>",
+    "type": "Co-ord Sets",
+    "tags": "Co-ord Set, 2-Piece, Sky Blue, Polka Dots, Stardust, 0-6M, 6-12M, 12-18M, 18-24M, 2-3Y",
+    "price": 1299.0,
+    "compare_price": 1699.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ],
+    "images": [
+      "meeeku_prod_sky_blue_polka_coord.jpg"
+    ],
+    "badge": "\ud83c\udf38 2-Piece Cotton Co-ord",
+    "badge_class": "meeeku-badge--coord",
+    "size_guide_type": "coord"
+  },
+  "playful-kitty-doodles-coord": {
+    "handle": "playful-kitty-doodles-coord",
+    "title": "Playful Kitty Doodles Cotton Co-ord Set",
+    "body": "<p>Purr-fectly snuggly! Crafted from butter-soft combed cotton with all-over playful hand-drawn kitten doodles in soft rose and chocolate tones. Features a soft ribbed neckline, smooth flatlock seams, and matching cuffed lounge pyjamas.</p><ul><li>Fabric: 100% Pure Organic Cotton</li><li>Print: All-Over Sleeping Kitty Doodles</li><li>Seams: Flatlock Zero-Itch Seams</li><li>Care: Machine Wash Gentle</li></ul>",
+    "type": "Co-ord Sets",
+    "tags": "Co-ord Set, 2-Piece, Kitty Doodles, Cat Print, Organic Cotton, 0-6M, 6-12M, 12-18M, 18-24M, 2-3Y",
+    "price": 1299.0,
+    "compare_price": 1699.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ],
+    "images": [
+      "meeeku_prod_playful_kitty_coord.jpg"
+    ],
+    "badge": "\ud83c\udf38 2-Piece Cotton Co-ord",
+    "badge_class": "meeeku-badge--coord",
+    "size_guide_type": "coord"
+  },
+  "boy-rustic-red-pinstripe-coord": {
+    "handle": "boy-rustic-red-pinstripe-coord",
+    "title": "Rustic Red Pinstripe Co-ord Set",
+    "body": "<p>A handsome 2-piece lounge and play set crafted from premium breathable linen-cotton blend. Features a button-down collared shirt with red contrast buttons and matching relaxed-fit trousers with an adjustable drawstring waistband.</p><ul><li>Fabric: 100% Breathable Linen-Cotton Blend</li><li>Set Includes: Long Sleeve Button-Up Shirt + Elasticated Drawstring Trousers</li><li>Features: Zero-itch tagless collar & deep side pockets</li><li>Care: Machine Wash Gentle Cold</li></ul>",
+    "type": "Boys Co-ords",
+    "tags": "Boys, Co-ords, 2-Piece, Red Pinstripe, Linen Cotton, Lounge Set, 0-6M, 6-12M, 1-2Y, 2-3Y, 3-4Y",
+    "price": 1299.0,
+    "compare_price": 1699.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ],
+    "images": [
+      "meeeku_prod_boy_pinstripe_linen_coord.jpg"
+    ],
+    "badge": "\ud83d\udc66 Boys Linen Co-ord Set",
+    "badge_class": "meeeku-badge--boy",
+    "size_guide_type": "coord"
+  },
+  "boy-sunset-stripe-coord": {
+    "handle": "boy-sunset-stripe-coord",
+    "title": "Sunset Multi-Stripe Co-ord Set",
+    "body": "<p>Vibrant sunset candy stripes bring joyful energy to this ultra-soft 2-piece outfit set. Tailored with a Cuban collar, gentle lilac buttons, and soft cuffed trousers designed for playtime freedom.</p><ul><li>Fabric: 100% Pure Combed Cotton</li><li>Set Includes: Cuban Collar Shirt + Matching Pyjama Trousers</li><li>Features: Elasticated waistband with contrast drawcord</li><li>Care: Machine Wash Cold</li></ul>",
+    "type": "Boys Co-ords",
+    "tags": "Boys, Co-ords, 2-Piece, Sunset Stripe, Multi Stripe, Pure Cotton, 0-6M, 6-12M, 1-2Y, 2-3Y, 3-4Y",
+    "price": 1299.0,
+    "compare_price": 1699.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ],
+    "images": [
+      "meeeku_prod_boy_sunset_stripe_coord.jpg"
+    ],
+    "badge": "\ud83d\udc66 Boys Linen Co-ord Set",
+    "badge_class": "meeeku-badge--boy",
+    "size_guide_type": "coord"
+  },
+  "boy-toffee-plaid-coord": {
+    "handle": "boy-toffee-plaid-coord",
+    "title": "Toffee Plaid Check Co-ord Set",
+    "body": "<p>Classic vintage charm meets modern loungewear. Crafted in a rich warm toffee brown tartan plaid pattern from breathable pure cotton, complete with faux tortoiseshell buttons and flexible cuffed pants.</p><ul><li>Fabric: 100% Premium Pure Cotton</li><li>Set Includes: Collared Plaid Shirt + Matching Trousers</li><li>Features: Gentle elastic waist with natural drawstring</li><li>Care: Machine Wash Gentle</li></ul>",
+    "type": "Boys Co-ords",
+    "tags": "Boys, Co-ords, 2-Piece, Toffee Brown, Plaid Check, Tartan, Pure Cotton, 0-6M, 6-12M, 1-2Y, 2-3Y, 3-4Y",
+    "price": 1299.0,
+    "compare_price": 1699.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ],
+    "images": [
+      "meeeku_prod_boy_toffee_plaid_coord.jpg"
+    ],
+    "badge": "\ud83d\udc66 Boys Linen Co-ord Set",
+    "badge_class": "meeeku-badge--boy",
+    "size_guide_type": "coord"
+  },
+  "boy-road-rebels-winter-tracksuit": {
+    "handle": "boy-road-rebels-winter-tracksuit",
+    "title": "Road Rebels Winter Tracksuit Set",
+    "body": "<p>Keep your little explorer toasty and warm during chilly mornings! Features an embroidered chenille 'Road Rebels' motif with colorful trucks, cars, and vehicles across soft fleece lining.</p><ul><li>Fabric: Heavyweight 100% Cotton Fleece</li><li>Set Includes: Crewneck Sweatshirt + Ribbed Jogger Pants</li><li>Features: Cozy thermal fleece lining & ribbed cuffs</li><li>Care: Machine Wash Cold Inside Out</li></ul>",
+    "type": "Boys Winterwear",
+    "tags": "Boys, Winterwear, Tracksuit, Sweatshirt, Joggers, Road Rebels, Cars, Fleece, 1-2Y, 2-3Y, 3-4Y, 4-5Y, 5-6Y",
+    "price": 1499.0,
+    "compare_price": 1899.0,
+    "variants": [
+      "1-2Y",
+      "2-3Y",
+      "3-4Y",
+      "4-5Y",
+      "5-6Y"
+    ],
+    "images": [
+      "meeeku_prod_boy_road_rebels_winter_set.jpg",
+      "meeeku_prod_boy_road_rebels_winter_set_alt.jpg"
+    ],
+    "badge": "\ud83d\udc66 Boys Winterwear Tracksuit",
+    "badge_class": "meeeku-badge--boy",
+    "size_guide_type": "winter"
+  },
+  "boy-little-dino-winter-tracksuit": {
+    "handle": "boy-little-dino-winter-tracksuit",
+    "title": "Little Dino Winter Tracksuit Set",
+    "body": "<p>Roaring prehistoric fun in a plush warm winter suit! Features playful lime and olive green hand-drawn dinosaur illustrations with a plush chenille textured 'DINO' chest patch.</p><ul><li>Fabric: Super-Soft Brushed Cotton Fleece</li><li>Set Includes: Long Sleeve Dino Sweatshirt + Cuffed Joggers</li><li>Features: Elastic drawstring waist & snug storm cuffs</li><li>Care: Machine Wash Cold</li></ul>",
+    "type": "Boys Winterwear",
+    "tags": "Boys, Winterwear, Tracksuit, Dinosaur, Dino, Fleece, Green, 1-2Y, 2-3Y, 3-4Y, 4-5Y, 5-6Y",
+    "price": 1499.0,
+    "compare_price": 1899.0,
+    "variants": [
+      "1-2Y",
+      "2-3Y",
+      "3-4Y",
+      "4-5Y",
+      "5-6Y"
+    ],
+    "images": [
+      "meeeku_prod_boy_little_dino_winter_set.jpg",
+      "meeeku_prod_boy_little_dino_winter_set_alt.jpg"
+    ],
+    "badge": "\ud83d\udc66 Boys Winterwear Tracksuit",
+    "badge_class": "meeeku-badge--boy",
+    "size_guide_type": "winter"
+  },
+  "boy-storybook-friends-winter-tracksuit": {
+    "handle": "boy-storybook-friends-winter-tracksuit",
+    "title": "Storybook Friends Winter Tracksuit Set",
+    "body": "<p>A magical winter essential! Features beloved animated character illustrations in vivid outline sketches with a bold textured fuzzy chest appliqu\u00e9, paired with all-over printed cozy fleece bottoms.</p><ul><li>Fabric: 100% Breathable Winter Fleece Cotton</li><li>Set Includes: Character Crewneck + Matching Jogger Pyjamas</li><li>Features: Ribbed neckband, stretch waistband & ankles</li><li>Care: Machine Wash Cold</li></ul>",
+    "type": "Boys Winterwear",
+    "tags": "Boys, Winterwear, Tracksuit, Storybook Friends, Character, Fleece, 1-2Y, 2-3Y, 3-4Y, 4-5Y, 5-6Y",
+    "price": 1499.0,
+    "compare_price": 1899.0,
+    "variants": [
+      "1-2Y",
+      "2-3Y",
+      "3-4Y",
+      "4-5Y",
+      "5-6Y"
+    ],
+    "images": [
+      "meeeku_prod_boy_storybook_friends_winter_set.jpg"
+    ],
+    "badge": "\ud83d\udc66 Boys Winterwear Tracksuit",
+    "badge_class": "meeeku-badge--boy",
+    "size_guide_type": "winter"
+  },
+  "girl-blush-bunny-cotton-nightsuit": {
+    "handle": "girl-blush-bunny-cotton-nightsuit",
+    "title": "Blush Bunny Cotton Nightsuit",
+    "body": "<p>Sweet dreams await in this pastel pink sleepwear set. Covered in adorable sleepy bunny portraits, crafted from hypoallergenic pure cotton jersey that breathes naturally through bedtime.</p><ul><li>Fabric: 100% Hypoallergenic Combed Cotton</li><li>Set Includes: Long Sleeve Sleep Tee + Cuffed Pyjama Pants</li><li>Features: Tagless neckline & non-pinch elastic waist</li><li>Care: Machine Wash Gentle</li></ul>",
+    "type": "Girls Nightwear",
+    "tags": "Girls, Nightwear, Nightsuit, Sleepwear, Blush Pink, Bunny, Cotton, 0-6M, 6-12M, 1-2Y, 2-3Y, 3-4Y",
+    "price": 999.0,
+    "compare_price": 1399.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ],
+    "images": [
+      "meeeku_prod_girl_blush_bunny_nightsuit.jpg"
+    ],
+    "badge": "\ud83c\udf19 Pure Cotton Nightsuit",
+    "badge_class": "meeeku-badge--night",
+    "size_guide_type": "coord"
+  },
+  "girl-space-explorer-cotton-nightsuit": {
+    "handle": "girl-space-explorer-cotton-nightsuit",
+    "title": "Space Explorer Cotton Nightsuit",
+    "body": "<p>Blast off to dreamy galaxy adventures! Features watercolor illustrations of twinkling stars, planets, rockets, and tiny astronauts on a cloud-soft ivory cotton base.</p><ul><li>Fabric: 100% Pure Organic Cotton</li><li>Set Includes: Galaxy Sleep Top + Matching Sleep Trousers</li><li>Features: Flatlock seams for zero-itch sleep</li><li>Care: Machine Wash Cold</li></ul>",
+    "type": "Girls Nightwear",
+    "tags": "Girls, Nightwear, Nightsuit, Sleepwear, Space, Galaxy, Ivory, Organic Cotton, 0-6M, 6-12M, 1-2Y, 2-3Y, 3-4Y",
+    "price": 999.0,
+    "compare_price": 1399.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ],
+    "images": [
+      "meeeku_prod_girl_space_explorer_nightsuit.jpg"
+    ],
+    "badge": "\ud83c\udf19 Pure Cotton Nightsuit",
+    "badge_class": "meeeku-badge--night",
+    "size_guide_type": "coord"
+  },
+  "girl-rose-floral-ruffle-nightsuit": {
+    "handle": "girl-rose-floral-ruffle-nightsuit",
+    "title": "Rose Floral Ruffle Nightsuit",
+    "body": "<p>Charming cottagecore bedtime vibes! Designed in a sweet dusty rose pink hue with vintage floral blossoms, sweet ruffled shoulder wings, and matching cuffed lounge pants with a contrast drawstring.</p><ul><li>Fabric: 100% Soft Cotton French Terry</li><li>Set Includes: Ruffle Shoulder Sweatshirt Top + Jogger Pyjamas</li><li>Features: Delicate flutter shoulder accents & ribbed hem</li><li>Care: Machine Wash Cold</li></ul>",
+    "type": "Girls Nightwear",
+    "tags": "Girls, Nightwear, Nightsuit, Lounge Set, Rose Pink, Floral, Ruffles, 0-6M, 6-12M, 1-2Y, 2-3Y, 3-4Y",
+    "price": 1099.0,
+    "compare_price": 1499.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ],
+    "images": [
+      "meeeku_prod_girl_rose_floral_ruffle_nightsuit.jpg"
+    ],
+    "badge": "\ud83c\udf19 Pure Cotton Nightsuit",
+    "badge_class": "meeeku-badge--night",
+    "size_guide_type": "coord"
+  },
+  "girl-buttercup-floral-ruffle-nightsuit": {
+    "handle": "girl-buttercup-floral-ruffle-nightsuit",
+    "title": "Buttercup Floral Ruffle Nightsuit",
+    "body": "<p>A sunny, cheerful sleepwear set in soft buttercup yellow with dainty periwinkle floral sprigs. Accented with ruffled shoulder wings and comfortable drawstring jogger pants.</p><ul><li>Fabric: 100% Pure Combed Cotton</li><li>Set Includes: Shoulder Ruffle Sweatshirt + Jogger Trousers</li><li>Features: Elasticated waistband with contrast navy tie</li><li>Care: Machine Wash Gentle</li></ul>",
+    "type": "Girls Nightwear",
+    "tags": "Girls, Nightwear, Nightsuit, Buttercup Yellow, Floral, Ruffles, 0-6M, 6-12M, 1-2Y, 2-3Y, 3-4Y",
+    "price": 1099.0,
+    "compare_price": 1499.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ],
+    "images": [
+      "meeeku_prod_girl_buttercup_floral_ruffle_nightsuit.jpg"
+    ],
+    "badge": "\ud83c\udf19 Pure Cotton Nightsuit",
+    "badge_class": "meeeku-badge--night",
+    "size_guide_type": "coord"
+  },
+  "girl-enchanted-deer-floral-nightsuit": {
+    "handle": "girl-enchanted-deer-floral-nightsuit",
+    "title": "Enchanted Deer Floral Nightsuit",
+    "body": "<p>Step into a storybook woodland glade! Featuring sweet baby deer frolicking amidst pink tulip and wildflower blossoms on an ultra-soft breathable white cotton knit.</p><ul><li>Fabric: 100% Breathable Hypoallergenic Cotton</li><li>Set Includes: Long Sleeve Top + Cuffed Sleeping Pants</li><li>Features: Tag-free neck & gentle ankle cuffs</li><li>Care: Machine Wash Cold</li></ul>",
+    "type": "Girls Nightwear",
+    "tags": "Girls, Nightwear, Nightsuit, Deer, Wildflower, Garden, 0-6M, 6-12M, 1-2Y, 2-3Y, 3-4Y",
+    "price": 999.0,
+    "compare_price": 1399.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ],
+    "images": [
+      "meeeku_prod_girl_enchanted_deer_nightsuit.jpg"
+    ],
+    "badge": "\ud83c\udf19 Pure Cotton Nightsuit",
+    "badge_class": "meeeku-badge--night",
+    "size_guide_type": "coord"
+  },
+  "girl-cozy-bear-oat-nightsuit": {
+    "handle": "girl-cozy-bear-oat-nightsuit",
+    "title": "Cozy Bear Oat Nightsuit",
+    "body": "<p>Warm, comforting, and snuggly soft! Decorated with friendly brown and grey teddy bear faces on a warm oat-beige background. Crafted from breathable cotton with brushed inner softness.</p><ul><li>Fabric: 100% Pure Combed Cotton</li><li>Set Includes: Round Neck Sleep Top + Elasticated Pyjamas</li><li>Features: Ribbed neck and cuffs to lock in gentle warmth</li><li>Care: Machine Wash Cold</li></ul>",
+    "type": "Girls Nightwear",
+    "tags": "Girls, Nightwear, Nightsuit, Teddy Bear, Oat Beige, Cozy, 0-6M, 6-12M, 1-2Y, 2-3Y, 3-4Y",
+    "price": 999.0,
+    "compare_price": 1399.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ],
+    "images": [
+      "meeeku_prod_girl_cozy_bear_nightsuit.jpg"
+    ],
+    "badge": "\ud83c\udf19 Pure Cotton Nightsuit",
+    "badge_class": "meeeku-badge--night",
+    "size_guide_type": "coord"
+  },
+  "girl-teddy-bear-muslin-coord": {
+    "handle": "girl-teddy-bear-muslin-coord",
+    "title": "Teddy Bear Muslin Co-ord Set",
+    "body": "<p>Exquisite lightweight crinkle muslin cotton set in ivory cream with all-over teddy bear illustrations. Features a ruffled neckline, delicate crochet lace yoke trimming, balloon sleeves, and smocked trousers.</p><ul><li>Fabric: 100% Breathable Crinkle Muslin Cotton</li><li>Set Includes: Ruffled Lace Blouse + Smocked Muslin Trousers</li><li>Features: Intricate crochet lace insert & smocked elastic waist</li><li>Care: Gentle Handwash / Machine Wash Delicate</li></ul>",
+    "type": "Girls Co-ords",
+    "tags": "Girls, Co-ords, 2-Piece, Muslin Cotton, Teddy Bear, Lace Yoke, Ruffles, 0-6M, 6-12M, 1-2Y, 2-3Y, 3-4Y",
+    "price": 1299.0,
+    "compare_price": 1699.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ],
+    "images": [
+      "meeeku_prod_girl_teddy_bear_muslin_coord.jpg"
+    ],
+    "badge": "\ud83c\udf38 2-Piece Cotton Co-ord",
+    "badge_class": "meeeku-badge--coord",
+    "size_guide_type": "coord"
+  },
+  "girl-royal-blue-lace-coord": {
+    "handle": "girl-royal-blue-lace-coord",
+    "title": "Royal Blue Lace Co-ord Set",
+    "body": "<p>Pure elegance in breathable white self-striped cotton, featuring vertical royal blue floral embroidery motifs, crochet lace bodice inserts, a ruffled mandarin neck, and matching straight-leg trousers.</p><ul><li>Fabric: 100% Pure Textured Cotton</li><li>Set Includes: Embroidered Lace Top + Matching Pants</li><li>Features: Self-striped textured weave & delicate lace inserts</li><li>Care: Machine Wash Delicate</li></ul>",
+    "type": "Girls Co-ords",
+    "tags": "Girls, Co-ords, 2-Piece, Royal Blue, Floral Embroidery, Lace, White Cotton, 0-6M, 6-12M, 1-2Y, 2-3Y, 3-4Y",
+    "price": 1299.0,
+    "compare_price": 1699.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ],
+    "images": [
+      "meeeku_prod_girl_blue_floral_lace_coord.jpg"
+    ],
+    "badge": "\ud83c\udf38 2-Piece Cotton Co-ord",
+    "badge_class": "meeeku-badge--coord",
+    "size_guide_type": "coord"
+  },
+  "girl-sky-blue-polka-fluffy-winter-set": {
+    "handle": "girl-sky-blue-polka-fluffy-winter-set",
+    "title": "Sky Blue Polka Fluffy Winter Set",
+    "body": "<p>Like a warm hug on a cold winter day! Crafted from cloud-soft fluffy plush sherpa fleece in powder sky blue with white polka dots, shoulder button snaps for easy dressing, and cozy drawstring joggers.</p><ul><li>Fabric: Ultra-Plush Thermal Sherpa Fleece</li><li>Set Includes: Long Sleeve Fluffy Sweatshirt + Joggers</li><li>Features: Shoulder snap buttons & adjustable drawstring</li><li>Care: Machine Wash Cold Gentle</li></ul>",
+    "type": "Girls Winterwear",
+    "tags": "Girls, Winterwear, Fluffy Fleece, Sherpa, Sky Blue, Polka Dots, 1-2Y, 2-3Y, 3-4Y, 4-5Y, 5-6Y",
+    "price": 1399.0,
+    "compare_price": 1799.0,
+    "variants": [
+      "1-2Y",
+      "2-3Y",
+      "3-4Y",
+      "4-5Y",
+      "5-6Y"
+    ],
+    "images": [
+      "meeeku_prod_girl_sky_blue_polka_fleece_set.jpg"
+    ],
+    "badge": "\u2744\ufe0f Cozy Winterwear",
+    "badge_class": "meeeku-badge--winter",
+    "size_guide_type": "winter"
+  },
+  "girl-candy-pink-polka-fluffy-winter-set": {
+    "handle": "girl-candy-pink-polka-fluffy-winter-set",
+    "title": "Candy Pink Polka Fluffy Winter Set",
+    "body": "<p>Ultra-cozy plush winter fleece in vibrant candy bubblegum pink with oversized white polka dots. Keeps your little princess super snug during freezing winter nights.</p><ul><li>Fabric: Cloud-Soft High-Pile Fluffy Fleece</li><li>Set Includes: Fluffy Fleece Top + Matching Fleece Bottoms</li><li>Features: Shoulder snap fastening & soft elastic waistband</li><li>Care: Machine Wash Cold</li></ul>",
+    "type": "Girls Winterwear",
+    "tags": "Girls, Winterwear, Fluffy Fleece, Sherpa, Candy Pink, Polka Dots, 1-2Y, 2-3Y, 3-4Y, 4-5Y, 5-6Y",
+    "price": 1399.0,
+    "compare_price": 1799.0,
+    "variants": [
+      "1-2Y",
+      "2-3Y",
+      "3-4Y",
+      "4-5Y",
+      "5-6Y"
+    ],
+    "images": [
+      "meeeku_prod_girl_candy_pink_polka_fleece_set.jpg"
+    ],
+    "badge": "\u2744\ufe0f Cozy Winterwear",
+    "badge_class": "meeeku-badge--winter",
+    "size_guide_type": "winter"
+  },
+  "girl-minnie-hearts-fleece-tracksuit": {
+    "handle": "girl-minnie-hearts-fleece-tracksuit",
+    "title": "Minnie Hearts Fleece Tracksuit Set",
+    "body": "<p>Adorable Disney charm! Designed in heathered oatmeal pink with all-over pink Minnie icon and heart prints, featuring a bright fuchsia textured chenille appliqu\u00e9 and matching cozy joggers.</p><ul><li>Fabric: 100% Brushed Cotton Winter Fleece</li><li>Set Includes: Minnie Crewneck Sweatshirt + Jogger Trousers</li><li>Features: Textured 3D chenille typography & pink drawcord</li><li>Care: Machine Wash Cold Inside Out</li></ul>",
+    "type": "Girls Winterwear",
+    "tags": "Girls, Winterwear, Tracksuit, Minnie, Disney, Hearts, Pink, Fleece, 1-2Y, 2-3Y, 3-4Y, 4-5Y, 5-6Y",
+    "price": 1499.0,
+    "compare_price": 1899.0,
+    "variants": [
+      "1-2Y",
+      "2-3Y",
+      "3-4Y",
+      "4-5Y",
+      "5-6Y"
+    ],
+    "images": [
+      "meeeku_prod_girl_minnie_hearts_winter_set.jpg",
+      "meeeku_prod_girl_minnie_hearts_winter_set_alt.jpg"
+    ],
+    "badge": "\u2744\ufe0f Cozy Winterwear",
+    "badge_class": "meeeku-badge--winter",
+    "size_guide_type": "winter"
+  },
+  "girl-minnie-vanilla-fleece-hoodie": {
+    "handle": "girl-minnie-vanilla-fleece-hoodie",
+    "title": "Minnie Vanilla Fleece Hoodie",
+    "body": "<p>Stay cute and warm all winter long in this warm vanilla cream fleece pullover hoodie featuring sweet Minnie Mouse artwork in pastel pink bow and yellow shoes.</p><ul><li>Fabric: Heavyweight 100% Combed Cotton Fleece</li><li>Style: Snug Over-The-Head Hooded Sweatshirt</li><li>Features: Kangaroo warmth & ribbed cuffs</li><li>Care: Machine Wash Cold</li></ul>",
+    "type": "Girls Winterwear",
+    "tags": "Girls, Winterwear, Hoodie, Minnie Mouse, Vanilla Cream, Fleece, 1-2Y, 2-3Y, 3-4Y, 4-5Y, 5-6Y",
+    "price": 999.0,
+    "compare_price": 1399.0,
+    "variants": [
+      "1-2Y",
+      "2-3Y",
+      "3-4Y",
+      "4-5Y",
+      "5-6Y"
+    ],
+    "images": [
+      "meeeku_prod_girl_minnie_cream_fleece_hoodie.jpg"
+    ],
+    "badge": "\u2744\ufe0f Cozy Winterwear",
+    "badge_class": "meeeku-badge--winter",
+    "size_guide_type": "winter"
+  },
+  "dapper-bear-longsleeve-tee": {
+    "handle": "dapper-bear-longsleeve-tee",
+    "title": "Dapper Bear Long Sleeve Cotton Tee",
+    "body": "<p>A storybook classic! Features charming illustrated bears wearing blue coats and red hats sipping tea with marmalade jars across a crisp white 100% pure combed cotton tee.</p><ul><li>Fabric: 100% Pure Combed Cotton</li><li>Fit: Relaxed Everyday Play Fit</li><li>Features: Zero-itch tagless collar</li><li>Care: Machine Wash Gentle</li></ul>",
+    "type": "Basic T-Shirts",
+    "tags": "Extras, Basic Tee, Everyday Cotton, Long Sleeve, Bear, Paddington, White, 0-6M, 6-12M, 12-18M, 18-24M, 2-3Y",
+    "price": 649.0,
+    "compare_price": 949.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ],
+    "images": [
+      "meeeku_prod_extra_dapper_bear_longsleeve_tee.jpg"
+    ],
+    "badge": "\ud83d\udc55 100% Combed Cotton",
+    "badge_class": "meeeku-badge--tee",
+    "size_guide_type": "tee"
+  },
+  "galaxy-cadet-longsleeve-tee": {
+    "handle": "galaxy-cadet-longsleeve-tee",
+    "title": "Galaxy Cadet Long Sleeve Cotton Tee",
+    "body": "<p>Embark on cosmic adventures in midnight navy! Features space rangers, friendly aliens, rockets, and moons on super-soft breathable combed cotton jersey.</p><ul><li>Fabric: 100% Combed Breathable Cotton</li><li>Print: All-Over Galaxy Space Mission Art</li><li>Features: Reinforced neckline and stretch cuffs</li><li>Care: Machine Wash Cold</li></ul>",
+    "type": "Basic T-Shirts",
+    "tags": "Extras, Basic Tee, Everyday Cotton, Long Sleeve, Space, Galaxy, Navy Blue, 0-6M, 6-12M, 12-18M, 18-24M, 2-3Y",
+    "price": 649.0,
+    "compare_price": 949.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ],
+    "images": [
+      "meeeku_prod_extra_galaxy_cadet_longsleeve_tee.jpg"
+    ],
+    "badge": "\ud83d\udc55 100% Combed Cotton",
+    "badge_class": "meeeku-badge--tee",
+    "size_guide_type": "tee"
+  },
+  "breton-multi-stripe-longsleeve-tee": {
+    "handle": "breton-multi-stripe-longsleeve-tee",
+    "title": "Breton Multi-Stripe Long Sleeve Tee",
+    "body": "<p>Timeless French Breton nautical stripes in earthy olive, navy, and rust across the sleeves and upper chest on crisp white pure cotton with a contrast charcoal neckband.</p><ul><li>Fabric: 100% Pure Organic Cotton</li><li>Neckline: Contrast Ribbed Crew Neck</li><li>Features: Shape-retaining ribbed trims & tagless comfort</li><li>Care: Machine Wash Cold</li></ul>",
+    "type": "Basic T-Shirts",
+    "tags": "Extras, Basic Tee, Everyday Cotton, Long Sleeve, Breton Stripe, Nautical, White, 0-6M, 6-12M, 12-18M, 18-24M, 2-3Y",
+    "price": 649.0,
+    "compare_price": 949.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ],
+    "images": [
+      "meeeku_prod_extra_breton_stripe_longsleeve_tee.jpg"
+    ],
+    "badge": "\ud83d\udc55 100% Combed Cotton",
+    "badge_class": "meeeku-badge--tee",
+    "size_guide_type": "tee"
+  },
+  "mint-meadow-floral-longsleeve-tee": {
+    "handle": "mint-meadow-floral-longsleeve-tee",
+    "title": "Mint Meadow Floral Long Sleeve Tee",
+    "body": "<p>Delicate wildflower blossoms and pastel coral floral sprigs cascade across soft mint green organic cotton. Designed with flatlock seams for sensitive skin.</p><ul><li>Fabric: 100% Organic Breathable Cotton</li><li>Detail: Dainty Botanical Meadow Floral Print</li><li>Features: Elasticated soft wrist cuffs</li><li>Care: Machine Wash Gentle</li></ul>",
+    "type": "Basic T-Shirts",
+    "tags": "Extras, Basic Tee, Everyday Cotton, Long Sleeve, Mint Green, Floral, Wildflower, 0-6M, 6-12M, 12-18M, 18-24M, 2-3Y",
+    "price": 649.0,
+    "compare_price": 949.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ],
+    "images": [
+      "meeeku_prod_extra_mint_meadow_longsleeve_tee.jpg"
+    ],
+    "badge": "\ud83d\udc55 100% Combed Cotton",
+    "badge_class": "meeeku-badge--tee",
+    "size_guide_type": "tee"
+  },
+  "retro-bows-character-sweatshirt": {
+    "handle": "retro-bows-character-sweatshirt",
+    "title": "Retro Bows Character Sweatshirt",
+    "body": "<p>Retro pop-art delight! Features colorful sketches of Minnie and Daisy with vibrant purple, magenta, and teal bow ties on an ultra-soft cream combed cotton sweatshirt.</p><ul><li>Fabric: 100% Pure Combed Cotton French Terry</li><li>Style: Classic Relaxed Crewneck Sweatshirt</li><li>Features: Ribbed neck, cuffs, and hem</li><li>Care: Machine Wash Cold</li></ul>",
+    "type": "Basic T-Shirts",
+    "tags": "Extras, Sweatshirt, Character, Minnie, Daisy, Retro Bows, Cream, 0-6M, 6-12M, 12-18M, 18-24M, 2-3Y",
+    "price": 799.0,
+    "compare_price": 1099.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ],
+    "images": [
+      "meeeku_prod_extra_retro_bows_sweatshirt.jpg"
+    ],
+    "badge": "\ud83d\udc55 100% Combed Cotton",
+    "badge_class": "meeeku-badge--tee",
+    "size_guide_type": "tee"
+  },
+  "kitty-confetti-dots-pajamas-pack-of-2": {
+    "handle": "kitty-confetti-dots-pajamas-pack-of-2",
+    "title": "Tiny Kitty & Confetti Dots 2-Pack Pajamas",
+    "body": "<p>Value 2-Pack! Includes two cloud-soft pure cotton sleeping pyjamas: one with mini kitty prints and one with cheerful colorful polka confetti dots.</p><ul><li>Fabric: 100% Breathable Combed Cotton</li><li>Set Includes: 2 Matching Cotton Pajama Bottoms</li><li>Features: Elasticated gentle waistbands & zero-itch ankle cuffs</li><li>Care: Machine Wash Cold</li></ul>",
+    "type": "2-Pack Pajama Sets",
+    "tags": "Extras, Pajamas, 2-Pack, Kitty, Confetti Dots, Pure Cotton, \u20b9499, 0-6M, 6-12M, 12-18M, 18-24M, 2-3Y",
+    "price": 499.0,
+    "compare_price": 799.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ],
+    "images": [
+      "meeeku_prod_pajama_kitty_confetti_2pack.jpg"
+    ],
+    "badge": "\ud83e\uddf8 2-Pack Pajama Set (\u20b9499)",
+    "badge_class": "meeeku-badge--pajama",
+    "size_guide_type": "pajama"
+  },
+  "hello-kitty-ribbed-bear-pajamas-pack-of-2": {
+    "handle": "hello-kitty-ribbed-bear-pajamas-pack-of-2",
+    "title": "Hello Kitty & Ribbed Bear 2-Pack Pajamas",
+    "body": "<p>Value 2-Pack! Features one floral Hello Kitty printed cotton pyjama paired with one textured ribbed caramel honey bear lounge pant.</p><ul><li>Fabric: 100% Pure Combed Cotton & Ribbed Knit</li><li>Set Includes: 2 Multi-Style Sleep & Lounge Pants</li><li>Features: Ultra-stretch elastic waistband</li><li>Care: Machine Wash Cold</li></ul>",
+    "type": "2-Pack Pajama Sets",
+    "tags": "Extras, Pajamas, 2-Pack, Hello Kitty, Ribbed Bear, Caramel, \u20b9499, 0-6M, 6-12M, 12-18M, 18-24M, 2-3Y",
+    "price": 499.0,
+    "compare_price": 799.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ],
+    "images": [
+      "meeeku_prod_pajama_kitty_ribbed_bear_2pack.jpg"
+    ],
+    "badge": "\ud83e\uddf8 2-Pack Pajama Set (\u20b9499)",
+    "badge_class": "meeeku-badge--pajama",
+    "size_guide_type": "pajama"
+  },
+  "woodland-friends-berry-pajamas-pack-of-2": {
+    "handle": "woodland-friends-berry-pajamas-pack-of-2",
+    "title": "Woodland Friends & Berry 2-Pack Pajamas",
+    "body": "<p>Value 2-Pack! Contains one storybook woodland creatures printed pyjama (bunnies, foxes, hedgehogs) and one solid dusty pink berry print pyjama.</p><ul><li>Fabric: 100% Hypoallergenic Soft Cotton</li><li>Set Includes: 2 Cozy Pyjama Pants</li><li>Features: Snug ankle cuffs & non-slip stretch waist</li><li>Care: Machine Wash Cold</li></ul>",
+    "type": "2-Pack Pajama Sets",
+    "tags": "Extras, Pajamas, 2-Pack, Woodland Friends, Dusty Pink, Berries, \u20b9499, 0-6M, 6-12M, 12-18M, 18-24M, 2-3Y",
+    "price": 499.0,
+    "compare_price": 799.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ],
+    "images": [
+      "meeeku_prod_pajama_woodland_berries_2pack.jpg"
+    ],
+    "badge": "\ud83e\uddf8 2-Pack Pajama Set (\u20b9499)",
+    "badge_class": "meeeku-badge--pajama",
+    "size_guide_type": "pajama"
+  },
+  "ocean-shells-lilac-birds-pajamas-pack-of-2": {
+    "handle": "ocean-shells-lilac-birds-pajamas-pack-of-2",
+    "title": "Ocean Shells & Lilac Birds 2-Pack Pajamas",
+    "body": "<p>Value 2-Pack! Includes one whimsical sea shells and friendly crabs printed pyjama plus one soft pastel lilac flying birds pyjama.</p><ul><li>Fabric: 100% Breathable Pure Cotton</li><li>Set Includes: 2 Summer & All-Season Sleep Pants</li><li>Features: Skin-friendly dyes & soft waistband</li><li>Care: Machine Wash Gentle</li></ul>",
+    "type": "2-Pack Pajama Sets",
+    "tags": "Extras, Pajamas, 2-Pack, Ocean Shells, Lilac Birds, Pastel, \u20b9499, 0-6M, 6-12M, 12-18M, 18-24M, 2-3Y",
+    "price": 499.0,
+    "compare_price": 799.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ],
+    "images": [
+      "meeeku_prod_pajama_ocean_lilac_birds_2pack.jpg"
+    ],
+    "badge": "\ud83e\uddf8 2-Pack Pajama Set (\u20b9499)",
+    "badge_class": "meeeku-badge--pajama",
+    "size_guide_type": "pajama"
+  },
+  "vintage-rosebud-acorn-pajamas-pack-of-2": {
+    "handle": "vintage-rosebud-acorn-pajamas-pack-of-2",
+    "title": "Vintage Rosebud & Acorn 2-Pack Pajamas",
+    "body": "<p>Value 2-Pack! Features one romantic vintage rosebud sprig pyjama and one warm oat acorn jogger with a drawstring cord.</p><ul><li>Fabric: 100% Organic Combed Cotton</li><li>Set Includes: 2 Earth-Tone Pajama Pants</li><li>Features: Deep drop-crotch comfort & drawstring waist</li><li>Care: Machine Wash Cold</li></ul>",
+    "type": "2-Pack Pajama Sets",
+    "tags": "Extras, Pajamas, 2-Pack, Rosebud Floral, Autumn Acorn, Vintage, \u20b9499, 0-6M, 6-12M, 12-18M, 18-24M, 2-3Y",
+    "price": 499.0,
+    "compare_price": 799.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ],
+    "images": [
+      "meeeku_prod_pajama_vintage_rosebud_acorn_2pack.jpg"
+    ],
+    "badge": "\ud83e\uddf8 2-Pack Pajama Set (\u20b9499)",
+    "badge_class": "meeeku-badge--pajama",
+    "size_guide_type": "pajama"
+  },
+  "fairies-midnight-flora-pajamas-pack-of-2": {
+    "handle": "fairies-midnight-flora-pajamas-pack-of-2",
+    "title": "Fairies & Midnight Flora 2-Pack Pajamas",
+    "body": "<p>Value 2-Pack! Includes one white pyjama with dainty little winged fairies and one midnight black pyjama with glowing golden floral starbursts.</p><ul><li>Fabric: 100% Pure Soft Cotton</li><li>Set Includes: 2 Dreamy Midnight Sleeping Trousers</li><li>Features: Non-restricting leg openings & elastic waist</li><li>Care: Machine Wash Cold</li></ul>",
+    "type": "2-Pack Pajama Sets",
+    "tags": "Extras, Pajamas, 2-Pack, Fairies, Midnight Black, Starburst, \u20b9499, 0-6M, 6-12M, 12-18M, 18-24M, 2-3Y",
+    "price": 499.0,
+    "compare_price": 799.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ],
+    "images": [
+      "meeeku_prod_pajama_fairies_midnight_flora_2pack.jpg"
+    ],
+    "badge": "\ud83e\uddf8 2-Pack Pajama Set (\u20b9499)",
+    "badge_class": "meeeku-badge--pajama",
+    "size_guide_type": "pajama"
+  },
+  "arctic-animals-breton-pajamas-pack-of-2": {
+    "handle": "arctic-animals-breton-pajamas-pack-of-2",
+    "title": "Arctic Animals & Breton Stripe 2-Pack Pajamas",
+    "body": "<p>Value 2-Pack! Contains one high-waist grey breton stripe tummy-warmer pyjama and one illustrated arctic animals (foxes, bears, owls) pyjama.</p><ul><li>Fabric: 100% Hypoallergenic Combed Cotton</li><li>Set Includes: 2 Neutral Minimalist Pyjama Pants</li><li>Features: Extended high belly band on stripe pant</li><li>Care: Machine Wash Gentle</li></ul>",
+    "type": "2-Pack Pajama Sets",
+    "tags": "Extras, Pajamas, 2-Pack, Arctic Animals, Grey Stripe, High Waist, \u20b9499, 0-6M, 6-12M, 12-18M, 18-24M, 2-3Y",
+    "price": 499.0,
+    "compare_price": 799.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ],
+    "images": [
+      "meeeku_prod_pajama_arctic_animals_stripe_2pack.jpg"
+    ],
+    "badge": "\ud83e\uddf8 2-Pack Pajama Set (\u20b9499)",
+    "badge_class": "meeeku-badge--pajama",
+    "size_guide_type": "pajama"
+  },
+  "honey-teddy-pointelle-pajamas-pack-of-2": {
+    "handle": "honey-teddy-pointelle-pajamas-pack-of-2",
+    "title": "Honey Teddy & Pointelle Knit 2-Pack Pajamas",
+    "body": "<p>Value 2-Pack! Features one honey teddy bear pattern pyjama on soft ivory base and one pure white pointelle textured cotton pyjama.</p><ul><li>Fabric: 100% Breathable Pointelle & Combed Cotton</li><li>Set Includes: 2 Ultra-Cozy Night Pants</li><li>Features: Elasticated waistband & breathable weave</li><li>Care: Machine Wash Cold</li></ul>",
+    "type": "2-Pack Pajama Sets",
+    "tags": "Extras, Pajamas, 2-Pack, Honey Teddy, Pointelle Knit, White, \u20b9499, 0-6M, 6-12M, 12-18M, 18-24M, 2-3Y",
+    "price": 499.0,
+    "compare_price": 799.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ],
+    "images": [
+      "meeeku_prod_pajama_honey_teddy_pointelle_2pack.jpg"
+    ],
+    "badge": "\ud83e\uddf8 2-Pack Pajama Set (\u20b9499)",
+    "badge_class": "meeeku-badge--pajama",
+    "size_guide_type": "pajama"
+  },
+  "watercolor-blossom-joggers-pajamas-pack-of-2": {
+    "handle": "watercolor-blossom-joggers-pajamas-pack-of-2",
+    "title": "Watercolor Blossom 2-Pack Pajamas",
+    "body": "<p>Value 2-Pack! Hand-painted watercolor blush pink flowers across crisp white organic cotton with comfortable stretch ribbed cuffs.</p><ul><li>Fabric: 100% Pure Organic Cotton</li><li>Set Includes: 2 Watercolor Floral Pyjama Bottoms</li><li>Features: Skin-safe botanical inks & stretch waistband</li><li>Care: Machine Wash Cold</li></ul>",
+    "type": "2-Pack Pajama Sets",
+    "tags": "Extras, Pajamas, 2-Pack, Watercolor Floral, Blossom, Pink, \u20b9499, 0-6M, 6-12M, 12-18M, 18-24M, 2-3Y",
+    "price": 499.0,
+    "compare_price": 799.0,
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "12-18M",
+      "18-24M",
+      "2-3Y"
+    ],
+    "images": [
+      "meeeku_prod_pajama_watercolor_blossom_joggers_2pack.jpg"
+    ],
+    "badge": "\ud83e\uddf8 2-Pack Pajama Set (\u20b9499)",
+    "badge_class": "meeeku-badge--pajama",
+    "size_guide_type": "pajama"
+  },
+  "mint-aqua-dino-hooded-towel": {
+    "handle": "mint-aqua-dino-hooded-towel",
+    "title": "Mint Aqua Dino Hooded Bath Towel",
+    "body": "<p>Make bath time roaring fun! Crafted from 100% thick, ultra-absorbent organic cotton terry in refreshing mint aqua with cute dinosaur eyes, beak, and 3D back crests.</p><ul><li>Fabric: 100% Pure Organic Cotton Terry (500 GSM)</li><li>Features: Built-in Dinosaur character hood with 3D crests</li><li>Size: Generous 80cm x 80cm for newborns to toddlers (0-3Y)</li><li>Care: Machine Wash Warm, Tumble Dry Low</li></ul>",
+    "type": "Baby Towels & Blankets",
+    "tags": "Towels, Bath Towel, Hooded Towel, Dinosaur, Mint Aqua, Organic Cotton, 0-3Y",
+    "price": 699.0,
+    "compare_price": 999.0,
+    "variants": [
+      "One Size (0-3Y)"
+    ],
+    "images": [
+      "meeeku_prod_towel_mint_dino_hooded.jpg",
+      "meeeku_prod_towel_mint_dino_hooded_alt.jpg"
+    ],
+    "badge": "\ud83d\udec1 100% Organic Muslin & Terry",
+    "badge_class": "meeeku-badge--towel",
+    "size_guide_type": "towel"
+  },
+  "born-in-2026-teddy-baby-blanket": {
+    "handle": "born-in-2026-teddy-baby-blanket",
+    "title": "Born in 2026 Teddy Baby Blanket",
+    "body": "<p>A cherished keepsake for 2026 newborns! Crafted from luxurious pointelle quilted cotton in pure white, featuring colorful applique embroidery 'Born in 2026' with a sweet little balloon-holding teddy bear.</p><ul><li>Fabric: 100% Hypoallergenic Quilted Pointelle Cotton</li><li>Embroidery: Multi-color 'Born in 2026' + Embroidered Teddy Bear</li><li>Size: 90cm x 90cm Newborn Swaddle & Receiving Blanket</li><li>Care: Machine Wash Delicate Cold</li></ul>",
+    "type": "Baby Towels & Blankets",
+    "tags": "Towels, Baby Blanket, Swaddle, Born in 2026, Keepsake, Teddy Bear, White, 0-3Y",
+    "price": 799.0,
+    "compare_price": 1199.0,
+    "variants": [
+      "One Size (0-3Y)"
+    ],
+    "images": [
+      "meeeku_prod_towel_born_2026_teddy_blanket.jpg",
+      "meeeku_prod_towel_born_2026_teddy_blanket_alt.jpg"
+    ],
+    "badge": "\ud83d\udec1 100% Organic Muslin & Terry",
+    "badge_class": "meeeku-badge--towel",
+    "size_guide_type": "towel"
+  },
+  "little-elephants-muslin-bath-towel": {
+    "handle": "little-elephants-muslin-bath-towel",
+    "title": "Little Elephants Muslin Bath Towel",
+    "body": "<p>6-layer pure cotton muslin gauze bath towel and swaddle wrap in crisp white with teal and grey elephant doodles and soft teal piped border trimming. Gets softer with every single wash.</p><ul><li>Fabric: 6-Layer Pure Organic Muslin Gauze</li><li>Print: Teal & Grey Playful Baby Elephants</li><li>Size: 85cm x 85cm Fast-Drying Breathable Towel</li><li>Care: Machine Wash Cold</li></ul>",
+    "type": "Baby Towels & Blankets",
+    "tags": "Towels, Muslin Towel, Bath Towel, Swaddle, Elephants, Teal, Organic Cotton, 0-3Y",
+    "price": 699.0,
+    "compare_price": 999.0,
+    "variants": [
+      "One Size (0-3Y)"
+    ],
+    "images": [
+      "meeeku_prod_towel_teal_elephants_muslin.jpg",
+      "meeeku_prod_towel_teal_elephants_muslin_alt.jpg"
+    ],
+    "badge": "\ud83d\udec1 100% Organic Muslin & Terry",
+    "badge_class": "meeeku-badge--towel",
+    "size_guide_type": "towel"
+  }
+};
+
 function meeekuSwitchMainPdpImg(thumb, imgUrl) {
-  document.querySelectorAll('.meeeku-pdp-thumb-item').forEach(el => el.classList.remove('active'));
-  thumb.classList.add('active');
+  document.querySelectorAll('.meeeku-pdp-thumb-item').forEach(function(el) { el.classList.remove('active'); });
+  if (thumb) thumb.classList.add('active');
   const mainImg = document.getElementById('MeeekuMainPdpImage');
   if (mainImg) mainImg.src = imgUrl;
 }
 
 function meeekuSelectVariantBtn(btn, variantId, priceFormatted, comparePriceFormatted) {
-  document.querySelectorAll('.meeeku-size-btn').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.meeeku-size-btn').forEach(function(el) { el.classList.remove('active'); });
   btn.classList.add('active');
   
   if (variantId) {
@@ -356,28 +1690,6 @@ function meeekuSelectVariantBtn(btn, variantId, priceFormatted, comparePriceForm
   }
 }
 
-function meeekuAddToCartNative(variantId, title, price, img, sizeTitle, callback) {
-  if (variantId && !isNaN(parseInt(variantId))) {
-    fetch('/cart/add.js', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ items: [{ id: parseInt(variantId), quantity: 1 }] })
-    })
-    .then(function(res) { return res.json(); })
-    .then(function() {
-      if (typeof openMeeekuCart === 'function') {
-        openMeeekuCart();
-      }
-      if (typeof callback === 'function') callback();
-    })
-    .catch(function(err) {
-      console.error('Add to cart error:', err);
-      if (typeof openMeeekuCart === 'function') openMeeekuCart();
-      if (typeof callback === 'function') callback();
-    });
-  }
-}
-
 function meeekuTriggerBuyNow() {
   const hiddenInput = document.getElementById('MeeekuVariantIdInput');
   const variantId = hiddenInput ? hiddenInput.value : '';
@@ -392,14 +1704,141 @@ function meeekuTriggerBuyNow() {
       window.location.href = '/checkout';
     })
     .catch(function() {
-      window.location.href = '/cart/' + variantId + ':1?checkout';
+      window.location.href = '/checkout';
     });
   } else {
     window.location.href = '/checkout';
   }
 }
 
+function hydrateMeeekuPdpFromObject(p) {
+  if (!p) return;
+
+  const titleEl = document.getElementById('MeeekuPdpTitle');
+  if (titleEl) titleEl.innerText = p.title;
+
+  const badgeEl = document.getElementById('MeeekuPdpBadge');
+  if (badgeEl) {
+    badgeEl.innerText = p.badge || '✨ Meeeku Premium';
+    badgeEl.className = 'meeeku-badge ' + (p.badge_class || 'meeeku-badge--ethnic');
+  }
+
+  const priceFormatted = '₹' + p.price.toLocaleString('en-IN', {minimumFractionDigits: 2});
+  const priceEl = document.getElementById('MeeekuDisplayPriceText');
+  if (priceEl) priceEl.innerText = priceFormatted;
+
+  const btnPriceEl = document.getElementById('MeeekuBtnPriceLabel');
+  if (btnPriceEl) btnPriceEl.innerText = priceFormatted;
+
+  const mrpEl = document.getElementById('MeeekuDisplayMrpText');
+  const discountEl = document.getElementById('MeeekuDisplayDiscountBadge');
+  if (p.compare_price > p.price) {
+    const compareFormatted = '₹' + p.compare_price.toLocaleString('en-IN', {minimumFractionDigits: 2});
+    const discountPct = Math.round((p.compare_price - p.price) / p.compare_price * 100);
+    if (mrpEl) {
+      mrpEl.innerText = compareFormatted;
+      mrpEl.style.display = 'inline';
+    }
+    if (discountEl) {
+      discountEl.innerText = 'SAVE ' + discountPct + '%';
+      discountEl.style.display = 'inline';
+    }
+  } else {
+    if (mrpEl) mrpEl.style.display = 'none';
+    if (discountEl) discountEl.style.display = 'none';
+  }
+
+  const descEl = document.getElementById('MeeekuPdpDescription');
+  if (descEl && p.body) {
+    descEl.innerHTML = p.body;
+  }
+
+  // Hero image & Thumbs
+  const mainImg = document.getElementById('MeeekuMainPdpImage');
+  const thumbsWrap = document.getElementById('MeeekuPdpThumbsList');
+  if (p.images && p.images.length > 0) {
+    const firstUrl = 'https://raw.githubusercontent.com/aaybwork-studio/meeeku/main/assets/' + p.images[0];
+    if (mainImg) mainImg.src = firstUrl;
+
+    if (thumbsWrap) {
+      if (p.images.length > 1) {
+        thumbsWrap.style.display = 'flex';
+        thumbsWrap.innerHTML = '';
+        p.images.forEach(function(imgFn, idx) {
+          const thumbUrl = 'https://raw.githubusercontent.com/aaybwork-studio/meeeku/main/assets/' + imgFn;
+          const thumb = document.createElement('div');
+          thumb.className = 'meeeku-pdp-thumb-item' + (idx === 0 ? ' active' : '');
+          thumb.onclick = function() { meeekuSwitchMainPdpImg(thumb, thumbUrl); };
+          thumb.innerHTML = '<img src="' + thumbUrl + '" alt="View ' + (idx + 1) + '" width="75" height="95" loading="lazy"><span>View ' + (idx + 1) + '</span>';
+          thumbsWrap.appendChild(thumb);
+        });
+      } else {
+        thumbsWrap.style.display = 'none';
+      }
+    }
+  }
+
+  // Variant size buttons
+  const sizeGrid = document.getElementById('MeeekuPdpSizeGrid');
+  if (sizeGrid && p.variants && p.variants.length > 0) {
+    sizeGrid.innerHTML = '';
+    p.variants.forEach(function(sizeName, idx) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'meeeku-size-btn' + (idx === 0 ? ' active' : '');
+      btn.innerText = sizeName;
+      btn.onclick = function() {
+        meeekuSelectVariantBtn(btn, '', priceFormatted, p.compare_price > p.price ? ('₹' + p.compare_price.toLocaleString('en-IN', {minimumFractionDigits: 2})) : '');
+      };
+      sizeGrid.appendChild(btn);
+    });
+  }
+
+  // Sizing Guide Heading
+  const sizeGuideHeading = document.getElementById('MeeekuSizeGuideHeading');
+  if (sizeGuideHeading) {
+    if (p.size_guide_type === 'towel') {
+      sizeGuideHeading.innerText = '🛁 Bath Towel & Blanket Dimensions (0 – 3 Years)';
+    } else if (p.size_guide_type === 'pajama') {
+      sizeGuideHeading.innerText = '🧸 2-Pack Pajamas Size & Fit Guide (0 – 3 Years)';
+    } else if (p.size_guide_type === 'winter') {
+      sizeGuideHeading.innerText = '❄️ Winterwear & Tracksuit Size Guide (1 – 6 Years)';
+    } else if (p.size_guide_type === 'tee') {
+      sizeGuideHeading.innerText = '📏 T-Shirt Size & Fit Guide (0 – 3 Years)';
+    } else if (p.size_guide_type === 'coord') {
+      sizeGuideHeading.innerText = '📏 2-Piece Co-ord Size Guide (0 – 3 Years)';
+    } else {
+      sizeGuideHeading.innerText = '📏 Size & Fit Guide (0 – 7 Years)';
+    }
+  }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
+  // Check if handle is in URL or sessionStorage
+  const path = window.location.pathname;
+  let targetHandle = '';
+  if (path.includes('/products/')) {
+    targetHandle = path.split('/products/')[1].split('/')[0].split('?')[0];
+  }
+  if (!targetHandle) {
+    const urlParams = new URLSearchParams(window.location.search);
+    targetHandle = urlParams.get('product') || urlParams.get('handle');
+  }
+
+  if (targetHandle && MEEKU_ALL_PRODUCTS[targetHandle]) {
+    hydrateMeeekuPdpFromObject(MEEKU_ALL_PRODUCTS[targetHandle]);
+  } else {
+    try {
+      const stored = sessionStorage.getItem('meeeku_current_pdp_product');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed && parsed.handle && MEEKU_ALL_PRODUCTS[parsed.handle]) {
+          hydrateMeeekuPdpFromObject(MEEKU_ALL_PRODUCTS[parsed.handle]);
+        }
+      }
+    } catch(e) {}
+  }
+
   const form = document.getElementById('MeeekuPdpNativeForm');
   if (form) {
     form.addEventListener('submit', function(e) {
@@ -408,17 +1847,69 @@ document.addEventListener('DOMContentLoaded', function() {
       const sizeTitle = activeSizeBtn ? activeSizeBtn.innerText.trim() : 'Standard';
       const hiddenInput = document.getElementById('MeeekuVariantIdInput');
       const variantId = hiddenInput ? hiddenInput.value : '';
-      const title = {{ product.title | json }};
-      const price = document.getElementById('MeeekuDisplayPriceText') ? document.getElementById('MeeekuDisplayPriceText').innerText.trim() : '';
+      const title = document.getElementById('MeeekuPdpTitle') ? document.getElementById('MeeekuPdpTitle').innerText.trim() : 'Meeeku Garment';
+      const price = document.getElementById('MeeekuDisplayPriceText') ? document.getElementById('MeeekuDisplayPriceText').innerText.trim() : '₹999.00';
       const heroImg = document.getElementById('MeeekuMainPdpImage');
       const img = heroImg ? heroImg.src : '';
 
       const btn = form.querySelector('button[type="submit"]');
       if (btn) btn.innerHTML = '✅ Added!';
 
-      meeekuAddToCartNative(variantId, title, price, img, sizeTitle, function() {
+      // Add to local cart
+      let cart = [];
+      try {
+        cart = JSON.parse(localStorage.getItem('meeeku_active_cart') || localStorage.getItem('meeeku_user_cart') || localStorage.getItem('meeeku_cart') || '[]');
+      } catch (err) { cart = []; }
+
+      const itemKey = (variantId || title) + '_' + sizeTitle;
+      const existing = cart.find(function(i) { return i.title === title && i.size === sizeTitle; });
+      let numPrice = typeof parseMeeekuPrice === 'function' ? parseMeeekuPrice(price) : (parseFloat((price || '0').replace(/[^0-9.]/g, '')) || 0);
+      let cleanPrice = typeof formatMeeekuPrice === 'function' ? formatMeeekuPrice(numPrice) : ('₹' + numPrice.toLocaleString('en-IN') + '.00');
+
+      if (existing) {
+        let q = existing.qty || existing.quantity || 1;
+        existing.qty = q + 1;
+        existing.quantity = q + 1;
+        existing.price = cleanPrice;
+      } else {
+        cart.push({
+          key: itemKey,
+          id: variantId || ('item_' + Date.now()),
+          title: title,
+          price: cleanPrice,
+          img: img,
+          size: sizeTitle,
+          qty: 1,
+          quantity: 1
+        });
+      }
+
+      localStorage.setItem('meeeku_active_cart', JSON.stringify(cart));
+      localStorage.setItem('meeeku_user_cart', JSON.stringify(cart));
+      localStorage.setItem('meeeku_cart', JSON.stringify(cart));
+
+      if (variantId && !isNaN(parseInt(variantId))) {
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items: [{ id: parseInt(variantId), quantity: 1 }] })
+        }).catch(function() {});
+      }
+
+      const dot = document.getElementById('MeeekuCartDot');
+      if (dot) dot.classList.add('has-items');
+
+      const totalCount = cart.reduce(function(sum, i) { return sum + (i.quantity || i.qty || 1); }, 0);
+      const countBubbles = document.querySelectorAll('.cart-count-bubble span');
+      countBubbles.forEach(function(b) { b.textContent = totalCount; });
+
+      setTimeout(function() {
         if (btn) btn.innerHTML = '🛒 Add to Cart — <span id="MeeekuBtnPriceLabel">' + price + '</span>';
-      });
+      }, 1400);
+
+      if (typeof openMeeekuCart === 'function') {
+        openMeeekuCart();
+      }
     });
   }
 });
