@@ -41,14 +41,16 @@
   if p_tags contains 'towels' or p_tags contains 'towel' or p_tags contains 'blanket' or p_tags contains 'swaddle' or p_type contains 'towel' or p_type contains 'blanket' or p_title contains 'towel' or p_title contains 'blanket'
     assign is_towel = true
   endif
-  if p_tags contains 'coord' or p_tags contains 'co-ord' or p_type contains 'coord' or p_type contains 'co-ord' or p_title contains 'coord' or p_title contains 'co-ord'
-    assign is_coord = true
+  if p_tags contains 'ethnic' or p_type contains 'ethnic' or p_tags contains 'lehenga' or p_type contains 'lehenga' or p_title contains 'lehenga' or p_handle contains 'lehenga'
+    assign is_ethnic = true
+  endif
+  if is_ethnic == false
+    if p_tags contains 'coord' or p_tags contains 'co-ord' or p_type contains 'coord' or p_type contains 'co-ord' or p_title contains 'coord' or p_title contains 'co-ord'
+      assign is_coord = true
+    endif
   endif
   if p_tags contains 'tee' or p_type contains 'tee' or p_title contains 'tee' or p_title contains 'sweatshirt' or p_handle contains 'tee'
     assign is_tee = true
-  endif
-  if p_tags contains 'ethnic' or p_type contains 'ethnic' or p_tags contains 'lehenga' or p_type contains 'lehenga' or p_title contains 'lehenga'
-    assign is_ethnic = true
   endif
 
   if is_pajama
@@ -69,15 +71,15 @@
   elsif is_girl and is_winterwear
     assign category_badge = '❄️ Cozy Winterwear'
     assign badge_class = 'meeeku-badge--winter'
+  elsif is_ethnic
+    assign category_badge = '👑 Handcrafted Royal Ethnic'
+    assign badge_class = 'meeeku-badge--ethnic'
   elsif is_coord
     assign category_badge = '🌸 2-Piece Cotton Co-ord'
     assign badge_class = 'meeeku-badge--coord'
   elsif is_tee
     assign category_badge = '👕 100% Combed Cotton'
     assign badge_class = 'meeeku-badge--tee'
-  elsif is_ethnic
-    assign category_badge = '👑 Handcrafted Royal Ethnic'
-    assign badge_class = 'meeeku-badge--ethnic'
   else
     assign category_badge = '✨ Meeeku Premium Quality'
     assign badge_class = 'meeeku-badge--ethnic'
@@ -500,10 +502,10 @@ const MEEKU_ALL_PRODUCTS = {
   },
   "gulmohar-splash-abstract-coord": {
     "handle": "gulmohar-splash-abstract-coord",
-    "title": "Gulmohar Splash Co-ord",
-    "body": "<p>Bright, bold, and delightfully artistic. This vibrant abstract printed co-ord set brings festive joy with rich hues of magenta, marigold yellow, and ocean blue.</p><ul><li>Fabric: Premium Soft Cotton Rayon Blend</li><li>Set Includes: V-Neck Crop Top &amp; Flared Mid-Calf Skirt</li><li>Care: Machine Washable Gentle Cycle</li></ul>",
-    "type": "Festive Co-ords",
-    "tags": "Co-ords, Abstract Print, Multicolor, Magenta, Yellow, Cotton Blend, 2-3Y, 4-5Y, 6-7Y",
+    "title": "Gulmohar Splash Lehenga",
+    "body": "<p>Bright, bold, and delightfully artistic. This vibrant abstract printed lehenga brings festive joy with rich hues of magenta, marigold yellow, and ocean blue.</p><ul><li>Fabric: Premium Soft Cotton Rayon Blend</li><li>Set Includes: V-Neck Crop Top &amp; Flared Ankle-Length Skirt</li><li>Care: Machine Washable Gentle Cycle</li></ul>",
+    "type": "Indian Ethnic Lehengas",
+    "tags": "Ethnic, Lehenga, Multicolor, Magenta, Yellow, Cotton Blend, 2-3Y, 4-5Y, 6-7Y",
     "price": 2899.0,
     "compare_price": 3599.0,
     "variants": [
@@ -516,9 +518,31 @@ const MEEKU_ALL_PRODUCTS = {
       "meeeku_prod_multicolor_coord_model.jpg",
       "meeeku_prod_multicolor_coord_swirl.jpg"
     ],
-    "badge": "\ud83c\udf38 2-Piece Cotton Co-ord",
-    "badge_class": "meeeku-badge--coord",
-    "size_guide_type": "coord"
+    "badge": "👑 Handcrafted Royal Ethnic",
+    "badge_class": "meeeku-badge--ethnic",
+    "size_guide_type": "lehenga"
+  },
+  "gulmohar-splash-lehenga": {
+    "handle": "gulmohar-splash-lehenga",
+    "title": "Gulmohar Splash Lehenga",
+    "body": "<p>Bright, bold, and delightfully artistic. This vibrant abstract printed lehenga brings festive joy with rich hues of magenta, marigold yellow, and ocean blue.</p><ul><li>Fabric: Premium Soft Cotton Rayon Blend</li><li>Set Includes: V-Neck Crop Top &amp; Flared Ankle-Length Skirt</li><li>Care: Machine Washable Gentle Cycle</li></ul>",
+    "type": "Indian Ethnic Lehengas",
+    "tags": "Ethnic, Lehenga, Multicolor, Magenta, Yellow, Cotton Blend, 2-3Y, 4-5Y, 6-7Y",
+    "price": 2899.0,
+    "compare_price": 3599.0,
+    "variants": [
+      "2-3Y",
+      "4-5Y",
+      "6-7Y"
+    ],
+    "images": [
+      "meeeku_prod_multicolor_coord.jpg",
+      "meeeku_prod_multicolor_coord_model.jpg",
+      "meeeku_prod_multicolor_coord_swirl.jpg"
+    ],
+    "badge": "👑 Handcrafted Royal Ethnic",
+    "badge_class": "meeeku-badge--ethnic",
+    "size_guide_type": "lehenga"
   },
   "sage-mint-gota-lehenga": {
     "handle": "sage-mint-gota-lehenga",
@@ -591,7 +615,7 @@ const MEEKU_ALL_PRODUCTS = {
     "title": "Olive Silk One-Shoulder Lehenga",
     "body": "<p>Exquisite chartreuse olive green silk ensemble. Features an asymmetrical one-shoulder crop top with intricate silver zardozi embroidery vines and a shoulder fabric floral accent, paired with a rich flared satin silk skirt.</p><ul><li>Fabric: Pure Satin Silk & Zardozi Threadwork</li><li>Set Includes: One-Shoulder Crop Top &amp; Flared Ankle-Length Skirt</li><li>Care: Dry Clean Only</li></ul>",
     "type": "Indian Ethnic Lehengas",
-    "tags": "Ethnic, Lehenga, Olive Green, Chartreuse, Zardozi Silk, One Shoulder, coords, 2-3Y, 4-5Y, 6-7Y",
+    "tags": "Ethnic, Lehenga, Olive Green, Chartreuse, Zardozi Silk, One Shoulder, 2-3Y, 4-5Y, 6-7Y",
     "price": 3299.0,
     "compare_price": 3999.0,
     "variants": [
@@ -604,9 +628,9 @@ const MEEKU_ALL_PRODUCTS = {
       "meeeku_prod_olive_lehenga_model.jpg",
       "meeeku_prod_olive_lehenga_swirl.jpg"
     ],
-    "badge": "\ud83c\udf38 2-Piece Cotton Co-ord",
-    "badge_class": "meeeku-badge--coord",
-    "size_guide_type": "coord"
+    "badge": "👑 Handcrafted Royal Ethnic",
+    "badge_class": "meeeku-badge--ethnic",
+    "size_guide_type": "lehenga"
   },
   "snuggle-bunny-blush-tee": {
     "handle": "snuggle-bunny-blush-tee",

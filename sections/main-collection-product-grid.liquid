@@ -11,6 +11,9 @@
     <button type="button" class="meeeku-pill-filter active" data-filter="all" onclick="setCategoryFilter('all', this)">
       ✨ All Products
     </button>
+    <button type="button" class="meeeku-pill-filter" data-filter="ethnic" onclick="setCategoryFilter('ethnic', this)" style="background-color: #FFF0F5; color: #6B3FA0; border-color: #F8BBD0; font-weight: 700;">
+      👑 Royal Ethnic Lehengas
+    </button>
     <button type="button" class="meeeku-pill-filter" data-filter="boys" onclick="setCategoryFilter('boys', this)" style="background-color: #FFF8E1; color: #F57F17; border-color: #FFE082; font-weight: 700;">
       👦 Boys Collection
     </button>
@@ -28,9 +31,6 @@
     </button>
     <button type="button" class="meeeku-pill-filter" data-filter="tees" onclick="setCategoryFilter('tees', this)" style="background-color: #E8F5E9; color: #2E7D32; border-color: #A5D6A7; font-weight: 700;">
       👕 Everyday T-Shirts
-    </button>
-    <button type="button" class="meeeku-pill-filter" data-filter="ethnic" onclick="setCategoryFilter('ethnic', this)" style="background-color: #FFF0F5; color: #6B3FA0; border-color: #F8BBD0; font-weight: 700;">
-      👑 Royal Ethnic Lehengas
     </button>
     <button type="button" class="meeeku-pill-filter" data-filter="pajamas" onclick="setCategoryFilter('pajamas', this)" style="background-color: #EDE7F6; color: #512DA8; border-color: #D1C4E9; font-weight: 700;">
       🧸 2-Pack Pajamas (₹499)
@@ -83,6 +83,7 @@
               assign p_title = product.title | downcase
               assign p_handle = product.handle | downcase
 
+              assign is_ethnic = false
               assign is_boy = false
               assign is_girl = false
               assign is_nightwear = false
@@ -91,12 +92,14 @@
               assign is_tee = false
               assign is_pajama = false
               assign is_towel = false
-              assign is_ethnic = false
 
+              if p_tags contains 'ethnic' or p_type contains 'ethnic' or p_tags contains 'lehenga' or p_type contains 'lehenga' or p_title contains 'lehenga' or p_handle contains 'lehenga'
+                assign is_ethnic = true
+              endif
               if p_tags contains 'boys' or p_type contains 'boys' or p_title contains 'boy' or p_handle contains 'boy'
                 assign is_boy = true
               endif
-              if p_tags contains 'girls' or p_type contains 'girls' or p_title contains 'girl' or p_handle contains 'girl' or p_title contains 'lehenga' or p_type contains 'lehenga' or p_tags contains 'lehenga'
+              if p_tags contains 'girls' or p_type contains 'girls' or p_title contains 'girl' or p_handle contains 'girl' or is_ethnic
                 assign is_girl = true
               endif
               if p_tags contains 'nightwear' or p_tags contains 'nightsuit' or p_type contains 'nightwear' or p_title contains 'nightsuit' or p_title contains 'sleep' or p_handle contains 'nightsuit'
@@ -111,17 +114,19 @@
               if p_tags contains 'towel' or p_tags contains 'blanket' or p_tags contains 'swaddle' or p_type contains 'towel' or p_type contains 'blanket' or p_title contains 'towel' or p_title contains 'blanket' or p_handle contains 'towel' or p_handle contains 'blanket'
                 assign is_towel = true
               endif
-              if p_tags contains 'coord' or p_tags contains 'co-ord' or p_type contains 'coord' or p_type contains 'co-ord' or p_title contains 'coord' or p_title contains 'co-ord'
-                assign is_coord = true
+              if is_ethnic == false
+                if p_tags contains 'coord' or p_tags contains 'co-ord' or p_type contains 'coord' or p_type contains 'co-ord' or p_title contains 'coord' or p_title contains 'co-ord'
+                  assign is_coord = true
+                endif
               endif
               if p_tags contains 'tee' or p_type contains 'tee' or p_title contains 'tee' or p_title contains 'sweatshirt' or p_handle contains 'tee'
                 assign is_tee = true
               endif
-              if p_tags contains 'ethnic' or p_type contains 'ethnic' or p_tags contains 'lehenga' or p_type contains 'lehenga' or p_title contains 'lehenga'
-                assign is_ethnic = true
-              endif
 
               assign cat_list = 'all '
+              if is_ethnic
+                assign cat_list = cat_list | append: 'ethnic '
+              endif
               if is_boy
                 assign cat_list = cat_list | append: 'boys '
               endif
@@ -146,11 +151,11 @@
               if is_towel
                 assign cat_list = cat_list | append: 'towels '
               endif
-              if is_ethnic
-                assign cat_list = cat_list | append: 'ethnic '
-              endif
 
-              if is_pajama
+              if is_ethnic
+                assign badge_label = '👑 Royal Ethnic Lehenga'
+                assign badge_style = 'background: #FFF0F5; color: #6B3FA0; border: 1px solid #F8BBD0;'
+              elsif is_pajama
                 assign badge_label = '🧸 2-Pack Set (₹499)'
                 assign badge_style = 'background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;'
               elsif is_towel
@@ -174,9 +179,6 @@
               elsif is_tee
                 assign badge_label = '👕 100% Combed Cotton'
                 assign badge_style = 'background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;'
-              elsif is_ethnic
-                assign badge_label = '👑 Royal Ethnic Lehenga'
-                assign badge_style = 'background: #FFF0F5; color: #6B3FA0; border: 1px solid #F8BBD0;'
               else
                 assign badge_label = '✨ Meeeku Premium'
                 assign badge_style = 'background: #FFF0F5; color: #6B3FA0; border: 1px solid #F8BBD0;'
@@ -287,9 +289,9 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "Indo-Western Dresses",
     "price": 2999.0,
     "compare_price": 3699.0,
-    "categories": "all",
+    "categories": "all girls ethnic",
     "ages": "all,2-3y,3-7y",
-    "badge": "\u2728 Meeeku Premium",
+    "badge": "\ud83d\udc51 Royal Ethnic Lehenga",
     "badge_style": "background: #FFF0F5; color: #6B3FA0; border: 1px solid #F8BBD0;",
     "images": [
       "meeeku_prod_teal_dress.jpg",
@@ -346,14 +348,14 @@ const MEEKU_CATALOG_FALLBACK = [
   },
   {
     "handle": "gulmohar-splash-abstract-coord",
-    "title": "Gulmohar Splash Co-ord",
-    "type": "Festive Co-ords",
+    "title": "Gulmohar Splash Lehenga",
+    "type": "Indian Ethnic Lehengas",
     "price": 2899.0,
     "compare_price": 3599.0,
-    "categories": "all coords",
+    "categories": "all girls ethnic",
     "ages": "all,2-3y,3-7y",
-    "badge": "\ud83c\udf38 2-Piece Co-ord Set",
-    "badge_style": "background: #E0F2F1; color: #00695C; border: 1px solid #80CBC4;",
+    "badge": "\ud83d\udc51 Royal Ethnic Lehenga",
+    "badge_style": "background: #FFF0F5; color: #6B3FA0; border: 1px solid #F8BBD0;",
     "images": [
       "meeeku_prod_multicolor_coord.jpg",
       "meeeku_prod_multicolor_coord_model.jpg",
@@ -415,8 +417,8 @@ const MEEKU_CATALOG_FALLBACK = [
     "compare_price": 3499.0,
     "categories": "all girls nightwear ethnic",
     "ages": "all,2-3y,3-7y",
-    "badge": "\ud83c\udf19 100% Cotton Nightsuit",
-    "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
+    "badge": "\ud83d\udc51 Royal Ethnic Lehenga",
+    "badge_style": "background: #FFF0F5; color: #6B3FA0; border: 1px solid #F8BBD0;",
     "images": [
       "meeeku_prod_black_lehenga.jpg",
       "meeeku_prod_black_lehenga_model.jpg",
@@ -434,10 +436,10 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "Indian Ethnic Lehengas",
     "price": 3299.0,
     "compare_price": 3999.0,
-    "categories": "all girls coords ethnic",
+    "categories": "all girls ethnic",
     "ages": "all,2-3y,3-7y",
-    "badge": "\ud83c\udf38 2-Piece Co-ord Set",
-    "badge_style": "background: #E0F2F1; color: #00695C; border: 1px solid #80CBC4;",
+    "badge": "\ud83d\udc51 Royal Ethnic Lehenga",
+    "badge_style": "background: #FFF0F5; color: #6B3FA0; border: 1px solid #F8BBD0;",
     "images": [
       "meeeku_prod_olive_lehenga.jpg",
       "meeeku_prod_olive_lehenga_model.jpg",
