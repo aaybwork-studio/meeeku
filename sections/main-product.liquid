@@ -22,17 +22,32 @@
   assign is_pajama = false
   assign is_towel = false
   assign is_ethnic = false
+  assign is_sweater = false
+  assign is_frock = false
 
+  if p_tags contains 'sweater' or p_tags contains 'knitwear' or p_type contains 'sweater' or p_title contains 'sweater' or p_handle contains 'sweater'
+    assign is_sweater = true
+    assign is_winterwear = true
+  endif
+  if p_tags contains 'ethnic' or p_type contains 'ethnic' or p_tags contains 'lehenga' or p_type contains 'lehenga' or p_title contains 'lehenga' or p_handle contains 'lehenga'
+    assign is_ethnic = true
+  endif
+  if is_ethnic == false
+    if p_tags contains 'frock' or p_tags contains 'dress' or p_type contains 'frock' or p_title contains 'frock' or p_handle contains 'frock'
+      assign is_frock = true
+      assign is_girl = true
+    endif
+  endif
   if p_tags contains 'boys' or p_type contains 'boys' or p_title contains 'boy' or p_handle contains 'boy'
     assign is_boy = true
   endif
-  if p_tags contains 'girls' or p_type contains 'girls' or p_title contains 'girl' or p_handle contains 'girl' or p_title contains 'lehenga' or p_type contains 'lehenga' or p_tags contains 'lehenga'
+  if p_tags contains 'girls' or p_type contains 'girls' or p_title contains 'girl' or p_handle contains 'girl' or is_ethnic or is_frock
     assign is_girl = true
   endif
   if p_tags contains 'nightwear' or p_tags contains 'nightsuit' or p_type contains 'nightwear' or p_title contains 'nightsuit' or p_title contains 'sleep' or p_handle contains 'nightsuit'
     assign is_nightwear = true
   endif
-  if p_tags contains 'winterwear' or p_type contains 'winterwear' or p_tags contains 'winter' or p_tags contains 'fleece' or p_title contains 'winter' or p_title contains 'tracksuit' or p_title contains 'fleece' or p_title contains 'hoodie'
+  if p_tags contains 'winterwear' or p_type contains 'winterwear' or p_tags contains 'winter' or p_tags contains 'fleece' or p_title contains 'winter' or p_title contains 'tracksuit' or p_title contains 'fleece' or p_title contains 'hoodie' or is_sweater
     assign is_winterwear = true
   endif
   if p_tags contains 'pajamas' or p_tags contains 'pajama' or p_type contains 'pajama' or p_title contains 'pajama' or p_handle contains 'pajama'
@@ -41,10 +56,7 @@
   if p_tags contains 'towels' or p_tags contains 'towel' or p_tags contains 'blanket' or p_tags contains 'swaddle' or p_type contains 'towel' or p_type contains 'blanket' or p_title contains 'towel' or p_title contains 'blanket'
     assign is_towel = true
   endif
-  if p_tags contains 'ethnic' or p_type contains 'ethnic' or p_tags contains 'lehenga' or p_type contains 'lehenga' or p_title contains 'lehenga' or p_handle contains 'lehenga'
-    assign is_ethnic = true
-  endif
-  if is_ethnic == false
+  if is_ethnic == false and is_sweater == false and is_frock == false
     if p_tags contains 'coord' or p_tags contains 'co-ord' or p_type contains 'coord' or p_type contains 'co-ord' or p_title contains 'coord' or p_title contains 'co-ord'
       assign is_coord = true
     endif
@@ -53,8 +65,17 @@
     assign is_tee = true
   endif
 
-  if is_pajama
-    assign category_badge = '🧸 2-Pack Pajama Set (₹499)'
+  if is_ethnic
+    assign category_badge = '👑 Handcrafted Royal Ethnic'
+    assign badge_class = 'meeeku-badge--ethnic'
+  elsif is_sweater
+    assign category_badge = '🧶 100% Cotton Knit'
+    assign badge_class = 'meeeku-badge--winter'
+  elsif is_frock
+    assign category_badge = '👗 Princess Bubble Frock'
+    assign badge_class = 'meeeku-badge--coord'
+  elsif is_pajama
+    assign category_badge = '🧸 2-Pack Pajama Set'
     assign badge_class = 'meeeku-badge--pajama'
   elsif is_towel
     assign category_badge = '🛁 100% Organic Muslin & Terry'
@@ -65,15 +86,12 @@
   elsif is_boy and is_coord
     assign category_badge = '👦 Boys Linen Co-ord Set'
     assign badge_class = 'meeeku-badge--boy'
-  elsif is_girl and is_nightwear
+  elsif is_nightwear
     assign category_badge = '🌙 Pure Cotton Nightsuit'
     assign badge_class = 'meeeku-badge--night'
   elsif is_girl and is_winterwear
     assign category_badge = '❄️ Cozy Winterwear'
     assign badge_class = 'meeeku-badge--winter'
-  elsif is_ethnic
-    assign category_badge = '👑 Handcrafted Royal Ethnic'
-    assign badge_class = 'meeeku-badge--ethnic'
   elsif is_coord
     assign category_badge = '🌸 2-Piece Cotton Co-ord'
     assign badge_class = 'meeeku-badge--coord'
