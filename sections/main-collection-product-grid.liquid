@@ -26,6 +26,12 @@
     <button type="button" class="meeeku-pill-filter" data-filter="winterwear" onclick="setCategoryFilter('winterwear', this)" style="background-color: #E8EAF6; color: #283593; border-color: #9FA8DA; font-weight: 700;">
       ❄️ Cozy Winterwear
     </button>
+    <button type="button" class="meeeku-pill-filter" data-filter="sweaters" onclick="setCategoryFilter('sweaters', this)" style="background-color: #FFF3E0; color: #E65100; border-color: #FFB74D; font-weight: 700;">
+      🧶 Sweaters (₹1599)
+    </button>
+    <button type="button" class="meeeku-pill-filter" data-filter="frocks" onclick="setCategoryFilter('frocks', this)" style="background-color: #F8BBD0; color: #880E4F; border-color: #EC407A; font-weight: 700;">
+      👗 Frocks (₹1299)
+    </button>
     <button type="button" class="meeeku-pill-filter" data-filter="coords" onclick="setCategoryFilter('coords', this)" style="background-color: #E0F2F1; color: #00695C; border-color: #80CBC4; font-weight: 700;">
       🌸 2-Piece Co-ords
     </button>
@@ -92,20 +98,30 @@
               assign is_tee = false
               assign is_pajama = false
               assign is_towel = false
+              assign is_sweater = false
+              assign is_frock = false
 
+              if p_tags contains 'sweater' or p_tags contains 'knitwear' or p_type contains 'sweater' or p_title contains 'sweater' or p_handle contains 'sweater'
+                assign is_sweater = true
+                assign is_winterwear = true
+              endif
+              if p_tags contains 'frock' or p_tags contains 'dress' or p_type contains 'frock' or p_title contains 'frock' or p_handle contains 'frock'
+                assign is_frock = true
+                assign is_girl = true
+              endif
               if p_tags contains 'ethnic' or p_type contains 'ethnic' or p_tags contains 'lehenga' or p_type contains 'lehenga' or p_title contains 'lehenga' or p_handle contains 'lehenga'
                 assign is_ethnic = true
               endif
-              if p_tags contains 'boys' or p_type contains 'boys' or p_title contains 'boy' or p_handle contains 'boy'
+              if p_tags contains 'boys' or p_type contains 'boys' or p_title contains 'boy' or p_handle contains 'boy' or p_handle contains 'camper' or p_handle contains 'street-doodle' or p_handle contains 'charcoal-wave' or p_handle contains 'heather-wave' or p_handle contains 'chocolate-wave'
                 assign is_boy = true
               endif
-              if p_tags contains 'girls' or p_type contains 'girls' or p_title contains 'girl' or p_handle contains 'girl' or is_ethnic
+              if p_tags contains 'girls' or p_type contains 'girls' or p_title contains 'girl' or p_handle contains 'girl' or is_ethnic or is_frock or p_handle contains 'lavender-fawn' or p_handle contains 'nap-queen' or p_handle contains 'pastel-meadow'
                 assign is_girl = true
               endif
               if p_tags contains 'nightwear' or p_tags contains 'nightsuit' or p_type contains 'nightwear' or p_title contains 'nightsuit' or p_title contains 'sleep' or p_handle contains 'nightsuit'
                 assign is_nightwear = true
               endif
-              if p_tags contains 'winterwear' or p_type contains 'winterwear' or p_tags contains 'winter' or p_tags contains 'fleece' or p_title contains 'winter' or p_title contains 'tracksuit' or p_title contains 'fleece' or p_title contains 'hoodie'
+              if p_tags contains 'winterwear' or p_type contains 'winterwear' or p_tags contains 'winter' or p_tags contains 'fleece' or p_title contains 'winter' or p_title contains 'tracksuit' or p_title contains 'fleece' or p_title contains 'hoodie' or is_sweater
                 assign is_winterwear = true
               endif
               if p_tags contains 'pajamas' or p_tags contains 'pajama' or p_type contains 'pajama' or p_title contains 'pajama' or p_handle contains 'pajama'
@@ -114,7 +130,7 @@
               if p_tags contains 'towel' or p_tags contains 'blanket' or p_tags contains 'swaddle' or p_type contains 'towel' or p_type contains 'blanket' or p_title contains 'towel' or p_title contains 'blanket' or p_handle contains 'towel' or p_handle contains 'blanket'
                 assign is_towel = true
               endif
-              if is_ethnic == false
+              if is_ethnic == false and is_sweater == false and is_frock == false
                 if p_tags contains 'coord' or p_tags contains 'co-ord' or p_type contains 'coord' or p_type contains 'co-ord' or p_title contains 'coord' or p_title contains 'co-ord'
                   assign is_coord = true
                 endif
@@ -139,6 +155,12 @@
               if is_winterwear
                 assign cat_list = cat_list | append: 'winterwear '
               endif
+              if is_sweater
+                assign cat_list = cat_list | append: 'sweaters '
+              endif
+              if is_frock
+                assign cat_list = cat_list | append: 'frocks '
+              endif
               if is_coord
                 assign cat_list = cat_list | append: 'coords '
               endif
@@ -155,6 +177,12 @@
               if is_ethnic
                 assign badge_label = '👑 Royal Ethnic Lehenga'
                 assign badge_style = 'background: #FFF0F5; color: #6B3FA0; border: 1px solid #F8BBD0;'
+              elsif is_sweater
+                assign badge_label = '🧶 100% Cotton Knit (₹1599)'
+                assign badge_style = 'background: #FFF3E0; color: #E65100; border: 1px solid #FFB74D;'
+              elsif is_frock
+                assign badge_label = '👗 Princess Bubble Frock (₹1299)'
+                assign badge_style = 'background: #F8BBD0; color: #880E4F; border: 1px solid #EC407A;'
               elsif is_pajama
                 assign badge_label = '🧸 2-Pack Set (₹499)'
                 assign badge_style = 'background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;'
@@ -167,8 +195,8 @@
               elsif is_boy and is_coord
                 assign badge_label = '👦 Boys Co-ord Set'
                 assign badge_style = 'background: #FFF8E1; color: #F57F17; border: 1px solid #FFE082;'
-              elsif is_girl and is_nightwear
-                assign badge_label = '🌙 100% Cotton Nightsuit'
+              elsif is_nightwear
+                assign badge_label = '🌙 100% Cotton Nightsuit (₹999)'
                 assign badge_style = 'background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;'
               elsif is_girl and is_winterwear
                 assign badge_label = '❄️ Cozy Winterwear'
@@ -268,7 +296,7 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "Indian Ethnic Lehengas",
     "price": 3199.0,
     "compare_price": 3899.0,
-    "categories": "all girls ethnic",
+    "categories": "ethnic girls all",
     "ages": "all,2-3y,3-7y",
     "badge": "\ud83d\udc51 Royal Ethnic Lehenga",
     "badge_style": "background: #FFF0F5; color: #6B3FA0; border: 1px solid #F8BBD0;",
@@ -289,7 +317,7 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "Indo-Western Dresses",
     "price": 2999.0,
     "compare_price": 3699.0,
-    "categories": "all girls ethnic",
+    "categories": "ethnic girls all",
     "ages": "all,2-3y,3-7y",
     "badge": "\ud83d\udc51 Royal Ethnic Lehenga",
     "badge_style": "background: #FFF0F5; color: #6B3FA0; border: 1px solid #F8BBD0;",
@@ -310,7 +338,7 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "Indian Ethnic Lehengas",
     "price": 3299.0,
     "compare_price": 3999.0,
-    "categories": "all girls ethnic",
+    "categories": "ethnic girls all",
     "ages": "all,2-3y,3-7y",
     "badge": "\ud83d\udc51 Royal Ethnic Lehenga",
     "badge_style": "background: #FFF0F5; color: #6B3FA0; border: 1px solid #F8BBD0;",
@@ -331,7 +359,7 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "Indian Ethnic Lehengas",
     "price": 3199.0,
     "compare_price": 3899.0,
-    "categories": "all girls ethnic",
+    "categories": "ethnic girls all",
     "ages": "all,2-3y,3-7y",
     "badge": "\ud83d\udc51 Royal Ethnic Lehenga",
     "badge_style": "background: #FFF0F5; color: #6B3FA0; border: 1px solid #F8BBD0;",
@@ -352,7 +380,7 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "Indian Ethnic Lehengas",
     "price": 2899.0,
     "compare_price": 3599.0,
-    "categories": "all girls ethnic",
+    "categories": "ethnic girls all",
     "ages": "all,2-3y,3-7y",
     "badge": "\ud83d\udc51 Royal Ethnic Lehenga",
     "badge_style": "background: #FFF0F5; color: #6B3FA0; border: 1px solid #F8BBD0;",
@@ -373,7 +401,7 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "Indian Ethnic Lehengas",
     "price": 3199.0,
     "compare_price": 3899.0,
-    "categories": "all girls ethnic",
+    "categories": "ethnic girls all",
     "ages": "all,2-3y,3-7y",
     "badge": "\ud83d\udc51 Royal Ethnic Lehenga",
     "badge_style": "background: #FFF0F5; color: #6B3FA0; border: 1px solid #F8BBD0;",
@@ -394,7 +422,7 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "Indian Ethnic Lehengas",
     "price": 2799.0,
     "compare_price": 3499.0,
-    "categories": "all girls ethnic",
+    "categories": "ethnic girls all",
     "ages": "all,2-3y,3-7y",
     "badge": "\ud83d\udc51 Royal Ethnic Lehenga",
     "badge_style": "background: #FFF0F5; color: #6B3FA0; border: 1px solid #F8BBD0;",
@@ -415,7 +443,7 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "Indian Ethnic Lehengas",
     "price": 2799.0,
     "compare_price": 3499.0,
-    "categories": "all girls nightwear ethnic",
+    "categories": "ethnic girls all nightwear",
     "ages": "all,2-3y,3-7y",
     "badge": "\ud83d\udc51 Royal Ethnic Lehenga",
     "badge_style": "background: #FFF0F5; color: #6B3FA0; border: 1px solid #F8BBD0;",
@@ -436,7 +464,7 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "Indian Ethnic Lehengas",
     "price": 3299.0,
     "compare_price": 3999.0,
-    "categories": "all girls ethnic",
+    "categories": "ethnic girls all",
     "ages": "all,2-3y,3-7y",
     "badge": "\ud83d\udc51 Royal Ethnic Lehenga",
     "badge_style": "background: #FFF0F5; color: #6B3FA0; border: 1px solid #F8BBD0;",
@@ -458,7 +486,7 @@ const MEEKU_CATALOG_FALLBACK = [
     "price": 599.0,
     "compare_price": 899.0,
     "categories": "all tees",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "ages": "0-6m,6-12m,1-2y,all,2-3y",
     "badge": "\ud83d\udc55 100% Combed Cotton",
     "badge_style": "background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;",
     "images": [
@@ -479,7 +507,7 @@ const MEEKU_CATALOG_FALLBACK = [
     "price": 599.0,
     "compare_price": 899.0,
     "categories": "all tees",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "ages": "0-6m,6-12m,1-2y,all,2-3y",
     "badge": "\ud83d\udc55 100% Combed Cotton",
     "badge_style": "background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;",
     "images": [
@@ -500,7 +528,7 @@ const MEEKU_CATALOG_FALLBACK = [
     "price": 599.0,
     "compare_price": 899.0,
     "categories": "all tees",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "ages": "0-6m,6-12m,1-2y,all,2-3y",
     "badge": "\ud83d\udc55 100% Combed Cotton",
     "badge_style": "background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;",
     "images": [
@@ -521,9 +549,9 @@ const MEEKU_CATALOG_FALLBACK = [
     "price": 599.0,
     "compare_price": 899.0,
     "categories": "all nightwear tees",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y",
-    "badge": "\ud83d\udc55 100% Combed Cotton",
-    "badge_style": "background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;",
+    "ages": "0-6m,6-12m,1-2y,all,2-3y",
+    "badge": "\ud83c\udf19 100% Cotton Nightsuit (\u20b9999)",
+    "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
     "images": [
       "meeeku_prod_owl_tee.jpg"
     ],
@@ -542,7 +570,7 @@ const MEEKU_CATALOG_FALLBACK = [
     "price": 599.0,
     "compare_price": 899.0,
     "categories": "all tees",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "ages": "0-6m,6-12m,1-2y,all,2-3y",
     "badge": "\ud83d\udc55 100% Combed Cotton",
     "badge_style": "background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;",
     "images": [
@@ -563,7 +591,7 @@ const MEEKU_CATALOG_FALLBACK = [
     "price": 599.0,
     "compare_price": 899.0,
     "categories": "all tees",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "ages": "0-6m,6-12m,1-2y,all,2-3y",
     "badge": "\ud83d\udc55 100% Combed Cotton",
     "badge_style": "background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;",
     "images": [
@@ -584,7 +612,7 @@ const MEEKU_CATALOG_FALLBACK = [
     "price": 599.0,
     "compare_price": 899.0,
     "categories": "all tees",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "ages": "0-6m,6-12m,1-2y,all,2-3y",
     "badge": "\ud83d\udc55 100% Combed Cotton",
     "badge_style": "background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;",
     "images": [
@@ -605,7 +633,7 @@ const MEEKU_CATALOG_FALLBACK = [
     "price": 1299.0,
     "compare_price": 1699.0,
     "categories": "all coords",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "ages": "0-6m,6-12m,1-2y,all,2-3y",
     "badge": "\ud83c\udf38 2-Piece Co-ord Set",
     "badge_style": "background: #E0F2F1; color: #00695C; border: 1px solid #80CBC4;",
     "images": [
@@ -626,7 +654,7 @@ const MEEKU_CATALOG_FALLBACK = [
     "price": 1299.0,
     "compare_price": 1699.0,
     "categories": "all coords",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "ages": "0-6m,6-12m,1-2y,all,2-3y",
     "badge": "\ud83c\udf38 2-Piece Co-ord Set",
     "badge_style": "background: #E0F2F1; color: #00695C; border: 1px solid #80CBC4;",
     "images": [
@@ -647,7 +675,7 @@ const MEEKU_CATALOG_FALLBACK = [
     "price": 1299.0,
     "compare_price": 1699.0,
     "categories": "all coords",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "ages": "0-6m,6-12m,1-2y,all,2-3y",
     "badge": "\ud83c\udf38 2-Piece Co-ord Set",
     "badge_style": "background: #E0F2F1; color: #00695C; border: 1px solid #80CBC4;",
     "images": [
@@ -668,7 +696,7 @@ const MEEKU_CATALOG_FALLBACK = [
     "price": 1299.0,
     "compare_price": 1699.0,
     "categories": "all coords",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "ages": "0-6m,6-12m,1-2y,all,2-3y",
     "badge": "\ud83c\udf38 2-Piece Co-ord Set",
     "badge_style": "background: #E0F2F1; color: #00695C; border: 1px solid #80CBC4;",
     "images": [
@@ -689,7 +717,7 @@ const MEEKU_CATALOG_FALLBACK = [
     "price": 1299.0,
     "compare_price": 1699.0,
     "categories": "all coords",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "ages": "0-6m,6-12m,1-2y,all,2-3y",
     "badge": "\ud83c\udf38 2-Piece Co-ord Set",
     "badge_style": "background: #E0F2F1; color: #00695C; border: 1px solid #80CBC4;",
     "images": [
@@ -710,7 +738,7 @@ const MEEKU_CATALOG_FALLBACK = [
     "price": 1299.0,
     "compare_price": 1699.0,
     "categories": "all coords",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "ages": "0-6m,6-12m,1-2y,all,2-3y",
     "badge": "\ud83c\udf38 2-Piece Co-ord Set",
     "badge_style": "background: #E0F2F1; color: #00695C; border: 1px solid #80CBC4;",
     "images": [
@@ -730,8 +758,8 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "Boys Co-ords",
     "price": 1299.0,
     "compare_price": 1699.0,
-    "categories": "all boys coords",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y,3-7y",
+    "categories": "coords all boys",
+    "ages": "0-6m,6-12m,3-7y,1-2y,all,2-3y",
     "badge": "\ud83d\udc66 Boys Co-ord Set",
     "badge_style": "background: #FFF8E1; color: #F57F17; border: 1px solid #FFE082;",
     "images": [
@@ -751,8 +779,8 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "Boys Co-ords",
     "price": 1299.0,
     "compare_price": 1699.0,
-    "categories": "all boys coords",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y,3-7y",
+    "categories": "coords all boys",
+    "ages": "0-6m,6-12m,3-7y,1-2y,all,2-3y",
     "badge": "\ud83d\udc66 Boys Co-ord Set",
     "badge_style": "background: #FFF8E1; color: #F57F17; border: 1px solid #FFE082;",
     "images": [
@@ -772,8 +800,8 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "Boys Co-ords",
     "price": 1299.0,
     "compare_price": 1699.0,
-    "categories": "all boys coords",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y,3-7y",
+    "categories": "coords all boys",
+    "ages": "0-6m,6-12m,3-7y,1-2y,all,2-3y",
     "badge": "\ud83d\udc66 Boys Co-ord Set",
     "badge_style": "background: #FFF8E1; color: #F57F17; border: 1px solid #FFE082;",
     "images": [
@@ -793,8 +821,8 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "Boys Winterwear",
     "price": 1499.0,
     "compare_price": 1899.0,
-    "categories": "all boys winterwear",
-    "ages": "all,1-2y,2-3y,3-7y",
+    "categories": "winterwear all boys",
+    "ages": "1-2y,all,2-3y,3-7y",
     "badge": "\ud83d\udc66 Boys Winterwear",
     "badge_style": "background: #FFF8E1; color: #F57F17; border: 1px solid #FFE082;",
     "images": [
@@ -815,8 +843,8 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "Boys Winterwear",
     "price": 1499.0,
     "compare_price": 1899.0,
-    "categories": "all boys winterwear",
-    "ages": "all,1-2y,2-3y,3-7y",
+    "categories": "winterwear all boys",
+    "ages": "1-2y,all,2-3y,3-7y",
     "badge": "\ud83d\udc66 Boys Winterwear",
     "badge_style": "background: #FFF8E1; color: #F57F17; border: 1px solid #FFE082;",
     "images": [
@@ -837,8 +865,8 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "Boys Winterwear",
     "price": 1499.0,
     "compare_price": 1899.0,
-    "categories": "all boys winterwear",
-    "ages": "all,1-2y,2-3y,3-7y",
+    "categories": "winterwear all boys",
+    "ages": "1-2y,all,2-3y,3-7y",
     "badge": "\ud83d\udc66 Boys Winterwear",
     "badge_style": "background: #FFF8E1; color: #F57F17; border: 1px solid #FFE082;",
     "images": [
@@ -859,9 +887,9 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "Girls Nightwear",
     "price": 999.0,
     "compare_price": 1399.0,
-    "categories": "all girls nightwear",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y,3-7y",
-    "badge": "\ud83c\udf19 100% Cotton Nightsuit",
+    "categories": "girls all nightwear",
+    "ages": "0-6m,6-12m,3-7y,1-2y,all,2-3y",
+    "badge": "\ud83c\udf19 100% Cotton Nightsuit (\u20b9999)",
     "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
     "images": [
       "meeeku_prod_girl_blush_bunny_nightsuit.jpg"
@@ -880,9 +908,9 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "Girls Nightwear",
     "price": 999.0,
     "compare_price": 1399.0,
-    "categories": "all girls nightwear",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y,3-7y",
-    "badge": "\ud83c\udf19 100% Cotton Nightsuit",
+    "categories": "girls all nightwear",
+    "ages": "0-6m,6-12m,3-7y,1-2y,all,2-3y",
+    "badge": "\ud83c\udf19 100% Cotton Nightsuit (\u20b9999)",
     "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
     "images": [
       "meeeku_prod_girl_space_explorer_nightsuit.jpg"
@@ -901,9 +929,9 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "Girls Nightwear",
     "price": 1099.0,
     "compare_price": 1499.0,
-    "categories": "all girls nightwear",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y,3-7y",
-    "badge": "\ud83c\udf19 100% Cotton Nightsuit",
+    "categories": "girls all nightwear",
+    "ages": "0-6m,6-12m,3-7y,1-2y,all,2-3y",
+    "badge": "\ud83c\udf19 100% Cotton Nightsuit (\u20b9999)",
     "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
     "images": [
       "meeeku_prod_girl_rose_floral_ruffle_nightsuit.jpg"
@@ -922,9 +950,9 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "Girls Nightwear",
     "price": 1099.0,
     "compare_price": 1499.0,
-    "categories": "all girls nightwear",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y,3-7y",
-    "badge": "\ud83c\udf19 100% Cotton Nightsuit",
+    "categories": "girls all nightwear",
+    "ages": "0-6m,6-12m,3-7y,1-2y,all,2-3y",
+    "badge": "\ud83c\udf19 100% Cotton Nightsuit (\u20b9999)",
     "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
     "images": [
       "meeeku_prod_girl_buttercup_floral_ruffle_nightsuit.jpg"
@@ -943,9 +971,9 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "Girls Nightwear",
     "price": 999.0,
     "compare_price": 1399.0,
-    "categories": "all girls nightwear",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y,3-7y",
-    "badge": "\ud83c\udf19 100% Cotton Nightsuit",
+    "categories": "girls all nightwear",
+    "ages": "0-6m,6-12m,3-7y,1-2y,all,2-3y",
+    "badge": "\ud83c\udf19 100% Cotton Nightsuit (\u20b9999)",
     "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
     "images": [
       "meeeku_prod_girl_enchanted_deer_nightsuit.jpg"
@@ -964,9 +992,9 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "Girls Nightwear",
     "price": 999.0,
     "compare_price": 1399.0,
-    "categories": "all girls nightwear",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y,3-7y",
-    "badge": "\ud83c\udf19 100% Cotton Nightsuit",
+    "categories": "girls all nightwear",
+    "ages": "0-6m,6-12m,3-7y,1-2y,all,2-3y",
+    "badge": "\ud83c\udf19 100% Cotton Nightsuit (\u20b9999)",
     "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
     "images": [
       "meeeku_prod_girl_cozy_bear_nightsuit.jpg"
@@ -985,8 +1013,8 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "Girls Co-ords",
     "price": 1299.0,
     "compare_price": 1699.0,
-    "categories": "all girls coords",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y,3-7y",
+    "categories": "girls all coords",
+    "ages": "0-6m,6-12m,3-7y,1-2y,all,2-3y",
     "badge": "\ud83c\udf38 2-Piece Co-ord Set",
     "badge_style": "background: #E0F2F1; color: #00695C; border: 1px solid #80CBC4;",
     "images": [
@@ -1006,8 +1034,8 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "Girls Co-ords",
     "price": 1299.0,
     "compare_price": 1699.0,
-    "categories": "all girls coords",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y,3-7y",
+    "categories": "girls all coords",
+    "ages": "0-6m,6-12m,3-7y,1-2y,all,2-3y",
     "badge": "\ud83c\udf38 2-Piece Co-ord Set",
     "badge_style": "background: #E0F2F1; color: #00695C; border: 1px solid #80CBC4;",
     "images": [
@@ -1027,8 +1055,8 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "Girls Winterwear",
     "price": 1399.0,
     "compare_price": 1799.0,
-    "categories": "all girls winterwear",
-    "ages": "all,1-2y,2-3y,3-7y",
+    "categories": "girls all winterwear",
+    "ages": "1-2y,all,2-3y,3-7y",
     "badge": "\u2744\ufe0f Cozy Winterwear",
     "badge_style": "background: #FCE4EC; color: #C2185B; border: 1px solid #F48FB1;",
     "images": [
@@ -1048,8 +1076,8 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "Girls Winterwear",
     "price": 1399.0,
     "compare_price": 1799.0,
-    "categories": "all girls winterwear",
-    "ages": "all,1-2y,2-3y,3-7y",
+    "categories": "girls all winterwear",
+    "ages": "1-2y,all,2-3y,3-7y",
     "badge": "\u2744\ufe0f Cozy Winterwear",
     "badge_style": "background: #FCE4EC; color: #C2185B; border: 1px solid #F48FB1;",
     "images": [
@@ -1069,8 +1097,8 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "Girls Winterwear",
     "price": 1499.0,
     "compare_price": 1899.0,
-    "categories": "all girls winterwear",
-    "ages": "all,1-2y,2-3y,3-7y",
+    "categories": "girls all winterwear",
+    "ages": "1-2y,all,2-3y,3-7y",
     "badge": "\u2744\ufe0f Cozy Winterwear",
     "badge_style": "background: #FCE4EC; color: #C2185B; border: 1px solid #F48FB1;",
     "images": [
@@ -1091,8 +1119,8 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "Girls Winterwear",
     "price": 999.0,
     "compare_price": 1399.0,
-    "categories": "all girls winterwear",
-    "ages": "all,1-2y,2-3y,3-7y",
+    "categories": "girls all winterwear",
+    "ages": "1-2y,all,2-3y,3-7y",
     "badge": "\u2744\ufe0f Cozy Winterwear",
     "badge_style": "background: #FCE4EC; color: #C2185B; border: 1px solid #F48FB1;",
     "images": [
@@ -1114,7 +1142,7 @@ const MEEKU_CATALOG_FALLBACK = [
     "price": 649.0,
     "compare_price": 949.0,
     "categories": "all tees",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "ages": "0-6m,6-12m,1-2y,all,2-3y",
     "badge": "\ud83d\udc55 100% Combed Cotton",
     "badge_style": "background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;",
     "images": [
@@ -1135,7 +1163,7 @@ const MEEKU_CATALOG_FALLBACK = [
     "price": 649.0,
     "compare_price": 949.0,
     "categories": "all tees",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "ages": "0-6m,6-12m,1-2y,all,2-3y",
     "badge": "\ud83d\udc55 100% Combed Cotton",
     "badge_style": "background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;",
     "images": [
@@ -1156,7 +1184,7 @@ const MEEKU_CATALOG_FALLBACK = [
     "price": 649.0,
     "compare_price": 949.0,
     "categories": "all tees",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "ages": "0-6m,6-12m,1-2y,all,2-3y",
     "badge": "\ud83d\udc55 100% Combed Cotton",
     "badge_style": "background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;",
     "images": [
@@ -1177,7 +1205,7 @@ const MEEKU_CATALOG_FALLBACK = [
     "price": 649.0,
     "compare_price": 949.0,
     "categories": "all tees",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "ages": "0-6m,6-12m,1-2y,all,2-3y",
     "badge": "\ud83d\udc55 100% Combed Cotton",
     "badge_style": "background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;",
     "images": [
@@ -1198,7 +1226,7 @@ const MEEKU_CATALOG_FALLBACK = [
     "price": 799.0,
     "compare_price": 1099.0,
     "categories": "all tees",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "ages": "0-6m,6-12m,1-2y,all,2-3y",
     "badge": "\ud83d\udc55 100% Combed Cotton",
     "badge_style": "background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7;",
     "images": [
@@ -1219,8 +1247,8 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "2-Pack Pajama Sets",
     "price": 499.0,
     "compare_price": 799.0,
-    "categories": "all pajamas",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "categories": "pajamas all",
+    "ages": "0-6m,6-12m,1-2y,all,2-3y",
     "badge": "\ud83e\uddf8 2-Pack Set (\u20b9499)",
     "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
     "images": [
@@ -1240,8 +1268,8 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "2-Pack Pajama Sets",
     "price": 499.0,
     "compare_price": 799.0,
-    "categories": "all pajamas",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "categories": "pajamas all",
+    "ages": "0-6m,6-12m,1-2y,all,2-3y",
     "badge": "\ud83e\uddf8 2-Pack Set (\u20b9499)",
     "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
     "images": [
@@ -1261,8 +1289,8 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "2-Pack Pajama Sets",
     "price": 499.0,
     "compare_price": 799.0,
-    "categories": "all pajamas",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "categories": "pajamas all",
+    "ages": "0-6m,6-12m,1-2y,all,2-3y",
     "badge": "\ud83e\uddf8 2-Pack Set (\u20b9499)",
     "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
     "images": [
@@ -1282,8 +1310,8 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "2-Pack Pajama Sets",
     "price": 499.0,
     "compare_price": 799.0,
-    "categories": "all pajamas",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "categories": "pajamas all",
+    "ages": "0-6m,6-12m,1-2y,all,2-3y",
     "badge": "\ud83e\uddf8 2-Pack Set (\u20b9499)",
     "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
     "images": [
@@ -1303,8 +1331,8 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "2-Pack Pajama Sets",
     "price": 499.0,
     "compare_price": 799.0,
-    "categories": "all pajamas",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "categories": "pajamas all",
+    "ages": "0-6m,6-12m,1-2y,all,2-3y",
     "badge": "\ud83e\uddf8 2-Pack Set (\u20b9499)",
     "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
     "images": [
@@ -1324,8 +1352,8 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "2-Pack Pajama Sets",
     "price": 499.0,
     "compare_price": 799.0,
-    "categories": "all nightwear pajamas",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "categories": "pajamas all nightwear",
+    "ages": "0-6m,6-12m,1-2y,all,2-3y",
     "badge": "\ud83e\uddf8 2-Pack Set (\u20b9499)",
     "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
     "images": [
@@ -1345,8 +1373,8 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "2-Pack Pajama Sets",
     "price": 499.0,
     "compare_price": 799.0,
-    "categories": "all pajamas",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "categories": "pajamas all",
+    "ages": "0-6m,6-12m,1-2y,all,2-3y",
     "badge": "\ud83e\uddf8 2-Pack Set (\u20b9499)",
     "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
     "images": [
@@ -1366,8 +1394,8 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "2-Pack Pajama Sets",
     "price": 499.0,
     "compare_price": 799.0,
-    "categories": "all pajamas",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "categories": "pajamas all",
+    "ages": "0-6m,6-12m,1-2y,all,2-3y",
     "badge": "\ud83e\uddf8 2-Pack Set (\u20b9499)",
     "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
     "images": [
@@ -1387,8 +1415,8 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "2-Pack Pajama Sets",
     "price": 499.0,
     "compare_price": 799.0,
-    "categories": "all pajamas",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "categories": "pajamas all",
+    "ages": "0-6m,6-12m,1-2y,all,2-3y",
     "badge": "\ud83e\uddf8 2-Pack Set (\u20b9499)",
     "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
     "images": [
@@ -1408,8 +1436,8 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "Baby Towels & Blankets",
     "price": 699.0,
     "compare_price": 999.0,
-    "categories": "all towels",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "categories": "towels all",
+    "ages": "all,3-7y",
     "badge": "\ud83d\udec1 100% Organic Muslin/Terry",
     "badge_style": "background: #E0F7FA; color: #00838F; border: 1px solid #80DEEA;",
     "images": [
@@ -1426,8 +1454,8 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "Baby Towels & Blankets",
     "price": 799.0,
     "compare_price": 1199.0,
-    "categories": "all towels",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "categories": "towels all",
+    "ages": "all,3-7y",
     "badge": "\ud83d\udec1 100% Organic Muslin/Terry",
     "badge_style": "background: #E0F7FA; color: #00838F; border: 1px solid #80DEEA;",
     "images": [
@@ -1444,8 +1472,8 @@ const MEEKU_CATALOG_FALLBACK = [
     "type": "Baby Towels & Blankets",
     "price": 699.0,
     "compare_price": 999.0,
-    "categories": "all towels",
-    "ages": "all,0-6m,6-12m,1-2y,2-3y",
+    "categories": "towels all",
+    "ages": "all,3-7y",
     "badge": "\ud83d\udec1 100% Organic Muslin/Terry",
     "badge_style": "background: #E0F7FA; color: #00838F; border: 1px solid #80DEEA;",
     "images": [
@@ -1454,6 +1482,342 @@ const MEEKU_CATALOG_FALLBACK = [
     ],
     "variants": [
       "One Size (0-3Y)"
+    ]
+  },
+  {
+    "handle": "blue-horizon-stripe-knitted-sweater",
+    "title": "Blue Horizon Stripe Knitted Sweater",
+    "type": "Baby Sweaters",
+    "price": 1599.0,
+    "compare_price": 2199.0,
+    "categories": "winterwear all sweaters",
+    "ages": "0-6m,6-12m,3-7y,1-2y,all,2-3y",
+    "badge": "\ud83e\uddf6 100% Cotton Knit (\u20b91599)",
+    "badge_style": "background: #FFF3E0; color: #E65100; border: 1px solid #FFB74D;",
+    "images": [
+      "meeeku_prod_blue_horizon_stripe_sweater.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ]
+  },
+  {
+    "handle": "nordic-fair-isle-knitted-sweater",
+    "title": "Nordic Fair Isle Knitted Sweater",
+    "type": "Baby Sweaters",
+    "price": 1599.0,
+    "compare_price": 2199.0,
+    "categories": "winterwear all sweaters",
+    "ages": "0-6m,6-12m,3-7y,1-2y,all,2-3y",
+    "badge": "\ud83e\uddf6 100% Cotton Knit (\u20b91599)",
+    "badge_style": "background: #FFF3E0; color: #E65100; border: 1px solid #FFB74D;",
+    "images": [
+      "meeeku_prod_nordic_fair_isle_sweater.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ]
+  },
+  {
+    "handle": "lavender-fawn-embroidered-sweater",
+    "title": "Lavender Fawn Embroidered Sweater",
+    "type": "Baby Sweaters",
+    "price": 1599.0,
+    "compare_price": 2199.0,
+    "categories": "girls all sweaters winterwear",
+    "ages": "0-6m,6-12m,3-7y,1-2y,all,2-3y",
+    "badge": "\ud83e\uddf6 100% Cotton Knit (\u20b91599)",
+    "badge_style": "background: #FFF3E0; color: #E65100; border: 1px solid #FFB74D;",
+    "images": [
+      "meeeku_prod_lavender_fawn_sweater.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ]
+  },
+  {
+    "handle": "sage-frost-pudding-knitted-sweater",
+    "title": "Sage Frost Pudding Knitted Sweater",
+    "type": "Baby Sweaters",
+    "price": 1599.0,
+    "compare_price": 2199.0,
+    "categories": "winterwear all sweaters",
+    "ages": "0-6m,6-12m,3-7y,1-2y,all,2-3y",
+    "badge": "\ud83e\uddf6 100% Cotton Knit (\u20b91599)",
+    "badge_style": "background: #FFF3E0; color: #E65100; border: 1px solid #FFB74D;",
+    "images": [
+      "meeeku_prod_sage_frost_pudding_sweater.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ]
+  },
+  {
+    "handle": "charcoal-wave-textured-knitted-sweater",
+    "title": "Charcoal Wave Textured Knitted Sweater",
+    "type": "Baby Sweaters",
+    "price": 1599.0,
+    "compare_price": 2199.0,
+    "categories": "winterwear all boys sweaters",
+    "ages": "0-6m,6-12m,3-7y,1-2y,all,2-3y",
+    "badge": "\ud83e\uddf6 100% Cotton Knit (\u20b91599)",
+    "badge_style": "background: #FFF3E0; color: #E65100; border: 1px solid #FFB74D;",
+    "images": [
+      "meeeku_prod_charcoal_wave_sweater.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ]
+  },
+  {
+    "handle": "heather-wave-ribbed-knitted-sweater",
+    "title": "Heather Wave Ribbed Knitted Sweater",
+    "type": "Baby Sweaters",
+    "price": 1599.0,
+    "compare_price": 2199.0,
+    "categories": "winterwear all boys sweaters",
+    "ages": "0-6m,6-12m,3-7y,1-2y,all,2-3y",
+    "badge": "\ud83e\uddf6 100% Cotton Knit (\u20b91599)",
+    "badge_style": "background: #FFF3E0; color: #E65100; border: 1px solid #FFB74D;",
+    "images": [
+      "meeeku_prod_heather_wave_sweater.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ]
+  },
+  {
+    "handle": "chocolate-wave-textured-knitted-sweater",
+    "title": "Chocolate Wave Textured Knitted Sweater",
+    "type": "Baby Sweaters",
+    "price": 1599.0,
+    "compare_price": 2199.0,
+    "categories": "winterwear all boys sweaters",
+    "ages": "0-6m,6-12m,3-7y,1-2y,all,2-3y",
+    "badge": "\ud83e\uddf6 100% Cotton Knit (\u20b91599)",
+    "badge_style": "background: #FFF3E0; color: #E65100; border: 1px solid #FFB74D;",
+    "images": [
+      "meeeku_prod_chocolate_wave_sweater.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ]
+  },
+  {
+    "handle": "little-fox-milk-white-knitted-sweater",
+    "title": "Little Fox Milk White Knitted Sweater",
+    "type": "Baby Sweaters",
+    "price": 1599.0,
+    "compare_price": 2199.0,
+    "categories": "winterwear all sweaters",
+    "ages": "0-6m,6-12m,3-7y,1-2y,all,2-3y",
+    "badge": "\ud83e\uddf6 100% Cotton Knit (\u20b91599)",
+    "badge_style": "background: #FFF3E0; color: #E65100; border: 1px solid #FFB74D;",
+    "images": [
+      "meeeku_prod_little_fox_sweater.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ]
+  },
+  {
+    "handle": "honey-bobble-oatmeal-knitted-sweater",
+    "title": "Honey Bobble Oatmeal Knitted Sweater",
+    "type": "Baby Sweaters",
+    "price": 1599.0,
+    "compare_price": 2199.0,
+    "categories": "winterwear all sweaters",
+    "ages": "0-6m,6-12m,3-7y,1-2y,all,2-3y",
+    "badge": "\ud83e\uddf6 100% Cotton Knit (\u20b91599)",
+    "badge_style": "background: #FFF3E0; color: #E65100; border: 1px solid #FFB74D;",
+    "images": [
+      "meeeku_prod_honey_bobble_sweater.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ]
+  },
+  {
+    "handle": "lilac-tweed-shimmer-bubble-frock",
+    "title": "Lilac Tweed Shimmer Bubble Frock",
+    "type": "Girls Frocks",
+    "price": 1299.0,
+    "compare_price": 1799.0,
+    "categories": "frocks girls all",
+    "ages": "0-6m,6-12m,3-7y,1-2y,all,2-3y",
+    "badge": "\ud83d\udc57 Princess Bubble Frock (\u20b91299)",
+    "badge_style": "background: #F8BBD0; color: #880E4F; border: 1px solid #EC407A;",
+    "images": [
+      "meeeku_prod_lilac_tweed_bubble_frock.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ]
+  },
+  {
+    "handle": "ruby-velvet-bow-bubble-frock",
+    "title": "Ruby Velvet Bow Bubble Frock",
+    "type": "Girls Frocks",
+    "price": 1299.0,
+    "compare_price": 1799.0,
+    "categories": "frocks girls all",
+    "ages": "0-6m,6-12m,3-7y,1-2y,all,2-3y",
+    "badge": "\ud83d\udc57 Princess Bubble Frock (\u20b91299)",
+    "badge_style": "background: #F8BBD0; color: #880E4F; border: 1px solid #EC407A;",
+    "images": [
+      "meeeku_prod_ruby_velvet_bubble_frock.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ]
+  },
+  {
+    "handle": "camper-van-sunshine-cotton-nightsuit",
+    "title": "Camper Van Sunshine Cotton Nightsuit",
+    "type": "Kids Nightwear",
+    "price": 999.0,
+    "compare_price": 1399.0,
+    "categories": "all boys nightwear",
+    "ages": "0-6m,6-12m,3-7y,1-2y,all,2-3y",
+    "badge": "\ud83c\udf19 100% Cotton Nightsuit (\u20b9999)",
+    "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
+    "images": [
+      "meeeku_prod_camper_van_nightsuit.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ]
+  },
+  {
+    "handle": "street-doodle-peace-cotton-nightsuit",
+    "title": "Street Doodle Peace Cotton Nightsuit",
+    "type": "Kids Nightwear",
+    "price": 999.0,
+    "compare_price": 1399.0,
+    "categories": "all boys nightwear",
+    "ages": "0-6m,6-12m,3-7y,1-2y,all,2-3y",
+    "badge": "\ud83c\udf19 100% Cotton Nightsuit (\u20b9999)",
+    "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
+    "images": [
+      "meeeku_prod_street_doodle_nightsuit.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ]
+  },
+  {
+    "handle": "pastel-meadow-flora-cotton-nightsuit",
+    "title": "Pastel Meadow Flora Cotton Nightsuit",
+    "type": "Kids Nightwear",
+    "price": 999.0,
+    "compare_price": 1399.0,
+    "categories": "girls all nightwear",
+    "ages": "0-6m,6-12m,3-7y,1-2y,all,2-3y",
+    "badge": "\ud83c\udf19 100% Cotton Nightsuit (\u20b9999)",
+    "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
+    "images": [
+      "meeeku_prod_pastel_meadow_nightsuit.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ]
+  },
+  {
+    "handle": "nap-queen-hearts-cotton-nightsuit",
+    "title": "Nap Queen Hearts Cotton Nightsuit",
+    "type": "Kids Nightwear",
+    "price": 999.0,
+    "compare_price": 1399.0,
+    "categories": "girls all nightwear",
+    "ages": "0-6m,6-12m,3-7y,1-2y,all,2-3y",
+    "badge": "\ud83c\udf19 100% Cotton Nightsuit (\u20b9999)",
+    "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
+    "images": [
+      "meeeku_prod_nap_queen_nightsuit.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
+    ]
+  },
+  {
+    "handle": "meadow-sprig-piped-cotton-nightsuit",
+    "title": "Meadow Sprig Piped Cotton Nightsuit",
+    "type": "Kids Nightwear",
+    "price": 999.0,
+    "compare_price": 1399.0,
+    "categories": "all nightwear",
+    "ages": "0-6m,6-12m,3-7y,1-2y,all,2-3y",
+    "badge": "\ud83c\udf19 100% Cotton Nightsuit (\u20b9999)",
+    "badge_style": "background: #F3E5F5; color: #4A148C; border: 1px solid #CE93D8;",
+    "images": [
+      "meeeku_prod_meadow_sprig_nightsuit.jpg"
+    ],
+    "variants": [
+      "0-6M",
+      "6-12M",
+      "1-2Y",
+      "2-3Y",
+      "3-4Y"
     ]
   }
 ];
