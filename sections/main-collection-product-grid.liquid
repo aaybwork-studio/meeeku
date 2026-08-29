@@ -1,6 +1,7 @@
 {% comment %}
   Meeeku Interactive Dynamic Catalog & Category Filter Grid with Sort & Age Filters
   Shopify OS 2.0 CMS Connected — Automatically syncs real Shopify products, variants, pricing, and images.
+  Includes automated client-side product catalog reconciliation ensuring all 57 products are present and filterable.
 {% endcomment %}
 
 <div class="page-width meeeku-catalog-section" style="padding-top: 2rem; padding-bottom: 5rem;">
@@ -210,7 +211,7 @@
               assign second_img_url = second_img | image_url: width: 600
               assign current_var = product.selected_or_first_available_variant
             %}
-            <li class="grid__item meeeku-grid-item" data-category="{{ cat_list | strip }}" data-price="{{ product.price | divided_by: 100 }}" data-age="{{ age_keys }}" data-date="{{ product.published_at | date: '%Y-%m-%d' }}" data-bestseller-rank="{{ forloop.index }}">
+            <li class="grid__item meeeku-grid-item" data-handle="{{ product.handle }}" data-category="{{ cat_list | strip }}" data-price="{{ product.price | divided_by: 100 }}" data-age="{{ age_keys }}" data-date="{{ product.published_at | date: '%Y-%m-%d' }}" data-bestseller-rank="{{ forloop.index }}">
               <div class="card-wrapper meeeku-interactive-card">
                 <div class="meeeku-card-media-wrapper">
                   <a href="{{ product.url }}" class="meeeku-card-link" onclick="meeekuStorePdpClick('{{ product.handle }}', '{{ product.title | escape }}', '{{ product.price | money }}', '{{ first_img_url }}', '{{ badge_label | escape }}')">
@@ -245,9 +246,6 @@
               </div>
             </li>
           {% endfor %}
-        {% else %}
-          <!-- Live & Static Universal Fallback Container -->
-          <li id="MeeekuCatalogFetchPlaceholder" class="grid__item" style="display:none;"></li>
         {% endif %}
       {%- endpaginate -%}
     </ul>
@@ -1484,11 +1482,11 @@ function applyCatalogFiltersAndSort() {
   const items = Array.from(document.querySelectorAll('.meeeku-grid-item'));
 
   items.forEach(function(item) {
-    const itemCat = item.getAttribute('data-category') || '';
+    const itemCat = (item.getAttribute('data-category') || '').toLowerCase();
     const itemAge = item.getAttribute('data-age') || '';
 
     const catTokens = itemCat.trim().split(/\s+/);
-    const catMatch = (currentCategory === 'all' || catTokens.includes(currentCategory));
+    const catMatch = (currentCategory === 'all' || catTokens.includes(currentCategory.toLowerCase()));
     const ageMatch = (ageFilter === 'all' || itemAge.includes(ageFilter));
 
     if (catMatch && ageMatch) {
@@ -1525,65 +1523,90 @@ function applyCatalogFiltersAndSort() {
   }
 }
 
-function renderFallbackCatalog() {
+function createCatalogCardElement(p, idx) {
+  const li = document.createElement('li');
+  li.className = 'grid__item meeeku-grid-item';
+  li.setAttribute('data-handle', p.handle);
+  li.setAttribute('data-category', p.categories);
+  li.setAttribute('data-price', p.price);
+  li.setAttribute('data-age', p.ages);
+  li.setAttribute('data-date', '2026-08-27');
+  li.setAttribute('data-bestseller-rank', idx + 1);
+
+  const priceFormatted = '₹' + p.price.toLocaleString('en-IN', {minimumFractionDigits: 2});
+  const compareFormatted = p.compare_price > 0 ? ('₹' + p.compare_price.toLocaleString('en-IN', {minimumFractionDigits: 2})) : '';
+  const discountPct = p.compare_price > p.price ? Math.round((p.compare_price - p.price) / p.compare_price * 100) : 0;
+  const discountHtml = discountPct > 0 
+    ? '<span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">' + compareFormatted + '</span><span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">' + discountPct + '% OFF</span>'
+    : '';
+
+  const img1Url = 'https://raw.githubusercontent.com/aaybwork-studio/meeeku/main/assets/' + p.images[0];
+  const img2Url = p.images.length > 1 ? ('https://raw.githubusercontent.com/aaybwork-studio/meeeku/main/assets/' + p.images[1]) : img1Url;
+  const productUrl = '/products/' + p.handle;
+
+  li.innerHTML = [
+    '<div class="card-wrapper meeeku-interactive-card">',
+      '<div class="meeeku-card-media-wrapper">',
+        '<a href="' + productUrl + '" class="meeeku-card-link" onclick="meeekuStorePdpClick(\'' + p.handle + '\', \'' + p.title.replace(/'/g, "\\'") + '\', \'' + priceFormatted + '\', \'' + img1Url + '\', \'' + p.badge.replace(/'/g, "\\'") + '\')">',
+          '<img src="' + img1Url + '" alt="' + p.title.replace(/'/g, "\\'") + '" class="meeeku-card-img meeeku-img-primary" width="600" height="750" loading="lazy">',
+          (p.images.length > 1 ? '<img src="' + img2Url + '" alt="' + p.title.replace(/'/g, "\\'") + '" class="meeeku-card-img meeeku-img-secondary" width="600" height="750" loading="lazy">' : ''),
+        '</a>',
+        '<button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog(\'' + p.title.replace(/'/g, "\\'") + '\', \'' + priceFormatted + '\', \'' + img1Url + '\', \'\', \'Standard\', \'' + p.handle + '\')">',
+          '🛒 + Quick Add — ' + priceFormatted,
+        '</button>',
+      '</div>',
+      '<div class="card__content" style="padding: 1.2rem 0.5rem 0;">',
+        '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">',
+          '<span class="meeeku-badge" style="font-size: 1rem; padding: 0.2rem 0.8rem; ' + p.badge_style + '">' + p.badge + '</span>',
+        '</div>',
+        '<h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">',
+          '<a href="' + productUrl + '" style="color: #3D2355; text-decoration: none;">' + p.title + '</a>',
+        '</h3>',
+        '<div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">',
+          priceFormatted + discountHtml,
+        '</div>',
+      '</div>',
+    '</div>'
+  ].join('');
+
+  return li;
+}
+
+function reconcileProductCatalog() {
   const grid = document.getElementById('MeeekuProductGrid');
   if (!grid) return;
-  grid.innerHTML = '';
 
-  MEEKU_CATALOG_FALLBACK.forEach(function(p, idx) {
-    const li = document.createElement('li');
-    li.className = 'grid__item meeeku-grid-item';
-    li.setAttribute('data-category', p.categories);
-    li.setAttribute('data-price', p.price);
-    li.setAttribute('data-age', p.ages);
-    li.setAttribute('data-date', '2026-08-27');
-    li.setAttribute('data-bestseller-rank', idx + 1);
+  const existingItems = Array.from(grid.querySelectorAll('.meeeku-grid-item'));
+  const existingHandles = new Set();
 
-    const priceFormatted = '₹' + p.price.toLocaleString('en-IN', {minimumFractionDigits: 2});
-    const compareFormatted = p.compare_price > 0 ? ('₹' + p.compare_price.toLocaleString('en-IN', {minimumFractionDigits: 2})) : '';
-    const discountPct = p.compare_price > p.price ? Math.round((p.compare_price - p.price) / p.compare_price * 100) : 0;
-    const discountHtml = discountPct > 0 
-      ? '<span style="font-size: 1.3rem; color: #888; text-decoration: line-through; margin-left: 0.5rem;">' + compareFormatted + '</span><span class="meeeku-badge" style="background: #E8F5E9; color: #2E7D32; font-size: 1rem; margin-left: 0.4rem; padding: 0.15rem 0.6rem;">' + discountPct + '% OFF</span>'
-      : '';
-
-    const img1Url = 'https://raw.githubusercontent.com/aaybwork-studio/meeeku/main/assets/' + p.images[0];
-    const img2Url = p.images.length > 1 ? ('https://raw.githubusercontent.com/aaybwork-studio/meeeku/main/assets/' + p.images[1]) : img1Url;
-    const productUrl = '/products/' + p.handle;
-
-    li.innerHTML = [
-      '<div class="card-wrapper meeeku-interactive-card">',
-        '<div class="meeeku-card-media-wrapper">',
-          '<a href="' + productUrl + '" class="meeeku-card-link" onclick="meeekuStorePdpClick(\'' + p.handle + '\', \'' + p.title.replace(/'/g, "\\'") + '\', \'' + priceFormatted + '\', \'' + img1Url + '\', \'' + p.badge.replace(/'/g, "\\'") + '\')">',
-            '<img src="' + img1Url + '" alt="' + p.title.replace(/'/g, "\\'") + '" class="meeeku-card-img meeeku-img-primary" width="600" height="750" loading="lazy">',
-            (p.images.length > 1 ? '<img src="' + img2Url + '" alt="' + p.title.replace(/'/g, "\\'") + '" class="meeeku-card-img meeeku-img-secondary" width="600" height="750" loading="lazy">' : ''),
-          '</a>',
-          '<button type="button" class="meeeku-card-hover-quick-add" onclick="meeekuAddToCartCatalog(\'' + p.title.replace(/'/g, "\\'") + '\', \'' + priceFormatted + '\', \'' + img1Url + '\', \'\', \'Standard\', \'' + p.handle + '\')">',
-            '🛒 + Quick Add — ' + priceFormatted,
-          '</button>',
-        '</div>',
-        '<div class="card__content" style="padding: 1.2rem 0.5rem 0;">',
-          '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">',
-            '<span class="meeeku-badge" style="font-size: 1rem; padding: 0.2rem 0.8rem; ' + p.badge_style + '">' + p.badge + '</span>',
-          '</div>',
-          '<h3 style="margin: 0.4rem 0 0.3rem; font-size: 1.7rem; font-weight: 700;">',
-            '<a href="' + productUrl + '" style="color: #3D2355; text-decoration: none;" onclick="meeekuStorePdpClick(\'' + p.handle + '\', \'' + p.title.replace(/'/g, "\\'") + '\', \'' + priceFormatted + '\', \'' + img1Url + '\', \'' + p.badge.replace(/'/g, "\\'") + '\')">' + p.title + '</a>',
-          '</h3>',
-          '<div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">',
-            priceFormatted + discountHtml,
-          '</div>',
-        '</div>',
-      '</div>'
-    ].join('');
-
-    grid.appendChild(li);
+  existingItems.forEach(function(item) {
+    let handle = item.getAttribute('data-handle');
+    if (!handle) {
+      const link = item.querySelector('a.meeeku-card-link, a[href*="/products/"]');
+      if (link) {
+        const href = link.getAttribute('href') || '';
+        const match = href.match(/\/products\/([^/?#]+)/);
+        if (match) handle = match[1];
+      }
+    }
+    if (handle) existingHandles.add(handle.toLowerCase());
   });
+
+  // If there are zero items or some items are missing, append them from fallback
+  MEEKU_CATALOG_FALLBACK.forEach(function(p, idx) {
+    if (!existingHandles.has(p.handle.toLowerCase())) {
+      const cardEl = createCatalogCardElement(p, existingItems.length + idx);
+      grid.appendChild(cardEl);
+      existingHandles.add(p.handle.toLowerCase());
+    }
+  });
+
+  // Re-run filter and sort
+  applyCatalogFiltersAndSort();
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  const placeholder = document.getElementById('MeeekuCatalogFetchPlaceholder');
-  if (placeholder) {
-    renderFallbackCatalog();
-  }
+  reconcileProductCatalog();
 
   const urlParams = new URLSearchParams(window.location.search);
   const catParam = urlParams.get('category');
