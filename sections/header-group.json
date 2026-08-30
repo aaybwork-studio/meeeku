@@ -2,6 +2,43 @@
   "name": "t:sections.header.name",
   "type": "header",
   "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "blocks": {
+        "announcement_gift": {
+          "type": "announcement",
+          "settings": {
+            "text": "\ud83c\udf81 Orders above \u20b91,000 get a FREE Surprise Gift Inside for the little ones! \u2728",
+            "link": "/collections/all"
+          }
+        },
+        "announcement_shipping": {
+          "type": "announcement",
+          "settings": {
+            "text": "\ud83d\ude9a FREE Express Delivery Across India on Orders Above \u20b91,000!",
+            "link": "/collections/all"
+          }
+        },
+        "announcement_cotton": {
+          "type": "announcement",
+          "settings": {
+            "text": "\ud83c\udf38 100% Skin-Safe Organic Cotton \u2022 Zero-Itch Softness Guaranteed",
+            "link": "/collections/all"
+          }
+        }
+      },
+      "block_order": [
+        "announcement_gift",
+        "announcement_shipping",
+        "announcement_cotton"
+      ],
+      "settings": {
+        "color_scheme": "scheme-2",
+        "show_line_separator": true,
+        "auto_rotate": true,
+        "change_slides_speed": 4
+      }
+    },
     "header": {
       "type": "header",
       "settings": {
@@ -23,6 +60,7 @@
     }
   },
   "order": [
+    "announcement-bar",
     "header"
   ]
 }

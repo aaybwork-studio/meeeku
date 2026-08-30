@@ -55,6 +55,10 @@
           <span>Bag Subtotal:</span>
           <span id="MeeekuCartSubtotal" style="color: #3D2355; font-weight: 700; font-size: 1.55rem;">₹0.00</span>
         </div>
+        <div id="MeeekuDrawerGiftRow" style="display: none; justify-content: space-between; align-items: center; font-size: 1.45rem; margin-bottom: 0.5rem; background: #F3E5F5; padding: 0.4rem 0.8rem; border-radius: 10px; border: 1px dashed #CE93D8;">
+          <span style="color: #6A1B9A; font-weight: 700;">🎁 Surprise Gift (Little Ones):</span>
+          <span style="font-weight: 800; font-size: 1.35rem; color: #2E7D32;">FREE ✨</span>
+        </div>
         <div style="display: flex; justify-content: space-between; align-items: center; font-size: 1.45rem; margin-bottom: 0.8rem;">
           <span>Delivery Charge:</span>
           <span id="MeeekuCartDeliveryFee" style="font-weight: 700; font-size: 1.45rem; color: #2E7D32;">FREE</span>
@@ -145,22 +149,26 @@ function updateMeeekuShippingProgress(subtotalRupees, progressBoxId, msgId, fill
     deliveryFee = 100;
     var diff = threshold - subtotal;
     var pct = Math.min(100, Math.max(8, (subtotal / threshold) * 100));
-    msg.innerHTML = 'Add <strong style="color: #FF6097;">₹' + diff.toLocaleString('en-IN', {minimumFractionDigits: 2}) + '</strong> more for <span style="color: #2E7D32; font-weight: 800;">FREE Delivery!</span> 🚚';
+    msg.innerHTML = 'Add <strong style="color: #FF6097;">₹' + diff.toLocaleString('en-IN', {minimumFractionDigits: 2}) + '</strong> more for <span style="color: #2E7D32; font-weight: 800;">FREE Delivery + FREE Gift!</span> 🎁🚚';
     fill.style.width = pct + '%';
     fill.style.background = 'linear-gradient(90deg, #FF6097, #6B3FA0)';
     if (deliveryEl) {
       deliveryEl.innerText = '₹100.00';
       deliveryEl.style.color = '#E65100';
     }
+    var giftRow = document.getElementById('MeeekuDrawerGiftRow');
+    if (giftRow) giftRow.style.display = 'none';
   } else {
     deliveryFee = 0;
-    msg.innerHTML = '🎉 <strong style="color: #2E7D32;">You\'ve unlocked FREE Express Delivery!</strong>';
+    msg.innerHTML = '🎉 <strong style="color: #2E7D32;">Unlocked FREE Express Delivery + FREE Surprise Gift Inside! 🎁</strong>';
     fill.style.width = '100%';
     fill.style.background = 'linear-gradient(90deg, #4CAF50, #2E7D32)';
     if (deliveryEl) {
       deliveryEl.innerText = 'FREE (₹0.00)';
       deliveryEl.style.color = '#2E7D32';
     }
+    var giftRow = document.getElementById('MeeekuDrawerGiftRow');
+    if (giftRow) giftRow.style.display = 'flex';
   }
 
   if (totalEl) {
