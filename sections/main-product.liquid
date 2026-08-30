@@ -25,12 +25,16 @@
   assign is_sweater = false
   assign is_frock = false
 
+  # 1. Royal Ethnic Check (Highest Priority)
+  if p_tags contains 'ethnic' or p_type contains 'ethnic' or p_tags contains 'lehenga' or p_type contains 'lehenga' or p_title contains 'lehenga' or p_handle contains 'lehenga' or p_handle contains 'teal-bloom' or p_title contains 'teal bloom' or p_title contains 'chanderi'
+    assign is_ethnic = true
+    assign is_girl = true
+  endif
+
+  # 2. Sweaters Check
   if p_tags contains 'sweater' or p_tags contains 'knitwear' or p_type contains 'sweater' or p_title contains 'sweater' or p_handle contains 'sweater'
     assign is_sweater = true
     assign is_winterwear = true
-  endif
-  if p_tags contains 'ethnic' or p_type contains 'ethnic' or p_tags contains 'lehenga' or p_type contains 'lehenga' or p_title contains 'lehenga' or p_handle contains 'lehenga'
-    assign is_ethnic = true
   endif
   if is_ethnic == false
     if p_tags contains 'frock' or p_tags contains 'dress' or p_type contains 'frock' or p_title contains 'frock' or p_handle contains 'frock'
@@ -128,10 +132,22 @@
           {% endif %}
         </div>
 
+        {% liquid
+            assign pdp_hero_src = featured_img | image_url: width: 900
+            if p_handle contains 'minnie-cream' or p_handle contains 'minnie-vanilla'
+              assign pdp_hero_src = 'meeeku_prod_girl_minnie_cream_fleece_hoodie.jpg' | asset_url
+            elsif p_handle contains 'retro-bows' or p_handle contains 'extra-retro'
+              assign pdp_hero_src = 'meeeku_prod_extra_retro_bows_sweatshirt.jpg' | asset_url
+            elsif p_handle contains 'storybook-friends'
+              assign pdp_hero_src = 'meeeku_prod_boy_storybook_friends_winter_set.jpg' | asset_url
+            elsif p_handle contains 'minnie-hearts'
+              assign pdp_hero_src = 'meeeku_prod_girl_minnie_hearts_winter_set.jpg' | asset_url
+            endif
+          %}
         <div class="meeeku-pdp-hero-image">
           {% if featured_img %}
             <img id="MeeekuMainPdpImage" 
-                 src="{{ featured_img | image_url: width: 900 }}" 
+                 src="{{ pdp_hero_src }}" 
                  alt="{{ product.title | escape }}" 
                  width="600" 
                  height="750" 

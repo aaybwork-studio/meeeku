@@ -259,6 +259,21 @@
               assign second_img = product.images[1] | default: first_img
               assign first_img_url = first_img | image_url: width: 600
               assign second_img_url = second_img | image_url: width: 600
+
+              if p_handle contains 'minnie-cream' or p_handle contains 'minnie-vanilla'
+                assign first_img_url = 'meeeku_prod_girl_minnie_cream_fleece_hoodie.jpg' | asset_url
+                assign second_img_url = 'meeeku_prod_girl_minnie_cream_fleece_hoodie_alt.jpg' | asset_url
+              elsif p_handle contains 'retro-bows' or p_handle contains 'extra-retro'
+                assign first_img_url = 'meeeku_prod_extra_retro_bows_sweatshirt.jpg' | asset_url
+                assign second_img_url = 'meeeku_prod_extra_retro_bows_sweatshirt_alt.jpg' | asset_url
+              elsif p_handle contains 'storybook-friends'
+                assign first_img_url = 'meeeku_prod_boy_storybook_friends_winter_set.jpg' | asset_url
+                assign second_img_url = 'meeeku_prod_boy_storybook_friends_winter_set_alt.jpg' | asset_url
+              elsif p_handle contains 'minnie-hearts'
+                assign first_img_url = 'meeeku_prod_girl_minnie_hearts_winter_set.jpg' | asset_url
+                assign second_img_url = 'meeeku_prod_girl_minnie_hearts_winter_set_alt.jpg' | asset_url
+              endif
+
               assign current_var = product.selected_or_first_available_variant
             %}
             <li class="grid__item meeeku-grid-item" data-handle="{{ product.handle }}" data-category="{{ cat_list | strip }}" data-price="{{ product.price | divided_by: 100 }}" data-age="{{ age_keys }}" data-date="{{ product.published_at | date: '%Y-%m-%d' }}" data-bestseller-rank="{{ forloop.index }}">
