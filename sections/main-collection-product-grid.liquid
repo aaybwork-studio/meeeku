@@ -101,17 +101,26 @@
               assign is_sweater = false
               assign is_frock = false
 
+              # 1. Royal Ethnic Check (Highest Priority)
+              if p_tags contains 'ethnic' or p_type contains 'ethnic' or p_tags contains 'lehenga' or p_type contains 'lehenga' or p_title contains 'lehenga' or p_handle contains 'lehenga' or p_handle contains 'teal-bloom' or p_title contains 'teal bloom' or p_title contains 'chanderi'
+                assign is_ethnic = true
+                assign is_girl = true
+              endif
+
+              # 2. Sweaters Check
               if p_tags contains 'sweater' or p_tags contains 'knitwear' or p_type contains 'sweater' or p_title contains 'sweater' or p_handle contains 'sweater'
                 assign is_sweater = true
                 assign is_winterwear = true
               endif
-              if p_tags contains 'frock' or p_tags contains 'dress' or p_type contains 'frock' or p_title contains 'frock' or p_handle contains 'frock'
-                assign is_frock = true
-                assign is_girl = true
+
+              # 3. Party Frocks Check (Strictly Non-Ethnic)
+              if is_ethnic == false
+                if p_tags contains 'frock' or p_type contains 'frock' or p_title contains 'frock' or p_handle contains 'frock' or p_tags contains 'bubble frock'
+                  assign is_frock = true
+                  assign is_girl = true
+                endif
               endif
-              if p_tags contains 'ethnic' or p_type contains 'ethnic' or p_tags contains 'lehenga' or p_type contains 'lehenga' or p_title contains 'lehenga' or p_handle contains 'lehenga'
-                assign is_ethnic = true
-              endif
+
               if p_tags contains 'boys' or p_type contains 'boys' or p_title contains 'boy' or p_handle contains 'boy' or p_handle contains 'camper' or p_handle contains 'street-doodle' or p_handle contains 'charcoal-wave' or p_handle contains 'heather-wave' or p_handle contains 'chocolate-wave'
                 assign is_boy = true
               endif
@@ -142,6 +151,8 @@
               assign cat_list = 'all '
               if is_ethnic
                 assign cat_list = cat_list | append: 'ethnic '
+              elsif is_frock
+                assign cat_list = cat_list | append: 'frocks '
               endif
               if is_boy
                 assign cat_list = cat_list | append: 'boys '
@@ -158,8 +169,17 @@
               if is_sweater
                 assign cat_list = cat_list | append: 'sweaters '
               endif
-              if is_frock
-                assign cat_list = cat_list | append: 'frocks '
+              if is_coord
+                assign cat_list = cat_list | append: 'coords '
+              endif
+              if is_tee
+                assign cat_list = cat_list | append: 'tees '
+              endif
+              if is_pajama
+                assign cat_list = cat_list | append: 'pajamas '
+              endif
+              if is_towel
+                assign cat_list = cat_list | append: 'towels '
               endif
               if is_coord
                 assign cat_list = cat_list | append: 'coords '
@@ -1515,10 +1535,19 @@ function applyCatalogFiltersAndSort() {
   const items = Array.from(document.querySelectorAll('.meeeku-grid-item'));
 
   items.forEach(function(item) {
-    const itemCat = (item.getAttribute('data-category') || '').toLowerCase();
-    const itemAge = item.getAttribute('data-age') || '';
+    let itemCat = (item.getAttribute('data-category') || '').toLowerCase();
+    const handle = (item.getAttribute('data-handle') || '').toLowerCase();
+    const titleEl = item.querySelector('h3 a, .card__content h3');
+    const titleText = (titleEl ? titleEl.textContent : '').toLowerCase();
 
-    const catTokens = itemCat.trim().split(/\s+/);
+    // Strict guard: Lehengas and Royal Ethnic products NEVER belong to frocks or coords
+    if (handle.includes('teal-bloom') || handle.includes('lehenga') || titleText.includes('lehenga') || itemCat.includes('ethnic')) {
+      itemCat = itemCat.replace(/\bfrocks\b/g, '').replace(/\bcoords\b/g, '').trim();
+      item.setAttribute('data-category', itemCat);
+    }
+
+    const itemAge = item.getAttribute('data-age') || '';
+    const catTokens = itemCat.split(/\s+/);
     const catMatch = (currentCategory === 'all' || catTokens.includes(currentCategory.toLowerCase()));
     const ageMatch = (ageFilter === 'all' || itemAge.includes(ageFilter));
 
