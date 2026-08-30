@@ -478,12 +478,43 @@ function meeekuClearCart() {
 
 function meeekuProceedToCheckout() {
   const btn = document.querySelector('.meeeku-btn-checkout');
-  if (btn) btn.innerText = '⏳ Opening Checkout...';
-  window.location.href = '/checkout';
+  if (typeof meeekuGlobalProceedToCheckout === 'function') {
+    meeekuGlobalProceedToCheckout(btn);
+  } else {
+    if (btn) {
+      btn.setAttribute('disabled', 'true');
+      btn.innerText = '⏳ Opening Checkout...';
+    }
+    fetch('/cart.js', { cache: 'no-store' })
+      .then(function(res) { return res.json(); })
+      .then(function(cart) {
+        if (cart && cart.item_count > 0) {
+          window.location.href = '/checkout';
+        } else {
+          if (btn) {
+            btn.removeAttribute('disabled');
+            btn.innerText = '🔒 Checkout';
+          }
+          if (typeof showMeeekuToast === 'function') showMeeekuToast('⚠️ Your bag is empty!');
+        }
+      })
+      .catch(function() {
+        window.location.href = '/checkout';
+      });
+  }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
   fetchMeeekuPageCart();
+});
+
+window.addEventListener('pageshow', function() {
+  fetchMeeekuPageCart();
+  const btn = document.querySelector('.meeeku-btn-checkout');
+  if (btn) {
+    btn.removeAttribute('disabled');
+    btn.innerText = '🔒 Checkout';
+  }
 });
 </script>
 

@@ -51,9 +51,9 @@
           <a href="/cart" class="button button--secondary" style="width: 100%; border-radius: 25px; padding: 1.1rem; font-size: 1.45rem; font-weight: 700; color: #6B3FA0; border: 2px solid #F8BBD0; background: #FFF; text-align: center; text-decoration: none;">
             View Full Cart & Edit Sizes 📝
           </a>
-          <a href="/checkout" class="meeeku-btn-primary" style="display: block; text-align: center; text-decoration: none; width: 100%; font-size: 1.65rem; padding: 1.25rem; border-radius: 30px; box-shadow: 0 6px 20px rgba(255, 96, 151, 0.4);">
+          <button type="button" id="MeeekuDrawerCheckoutBtn" class="meeeku-btn-primary meeeku-btn-checkout" onclick="meeekuProceedToCheckout(this)" style="display: block; text-align: center; width: 100%; font-size: 1.65rem; padding: 1.25rem; border-radius: 30px; box-shadow: 0 6px 20px rgba(255, 96, 151, 0.4); border: none; cursor: pointer; color: #FFF; background: linear-gradient(135deg, #FF6097, #E91E63);">
             ⚡ Proceed to Checkout
-          </a>
+          </button>
         </div>
       </div>
 
@@ -96,19 +96,20 @@ function saveMeeekuLocalCart(cartArray) {
 }
 
 function updateCartBadges(count) {
+  var c = parseInt(count) || 0;
   var countBubbles = document.querySelectorAll('.cart-count-bubble span');
-  countBubbles.forEach(function(b) { b.textContent = count; });
+  countBubbles.forEach(function(b) { b.textContent = c; });
   var dot = document.getElementById('MeeekuCartDot');
   if (dot) {
-    if (count > 0) dot.classList.add('has-items');
+    if (c > 0) dot.classList.add('has-items');
     else dot.classList.remove('has-items');
   }
 }
 
 function fetchMeeekuShopifyCart(callback) {
-  fetch('/cart.js')
+  fetch('/cart.js', { cache: 'no-store' })
     .then(function(res) {
-      if (!res.ok) throw new Error('Cart fetch failed with status ' + res.status);
+      if (!res.ok) throw new Error('Cart fetch status: ' + res.status);
       return res.json();
     })
     .then(function(cart) {
@@ -124,7 +125,7 @@ function fetchMeeekuShopifyCart(callback) {
 
 function renderMeeekuCartDrawerWithLocalFallback() {
   var localCart = getMeeekuLocalCart();
-  var totalCount = localCart.reduce(function(sum, i) { return sum + (i.quantity || i.qty || 1); }, 0);
+  var totalCount = localCart.reduce(function(sum, i) { return sum + (parseInt(i.quantity || i.qty) || 1); }, 0);
   updateCartBadges(totalCount);
 
   var emptyNotice = document.getElementById('MeeekuCartEmptyNotice');
@@ -153,7 +154,7 @@ function renderMeeekuCartDrawerWithLocalFallback() {
 
   localCart.forEach(function(item, idx) {
     var key = item.key || item.id || ('local_' + idx);
-    var qty = parseInt(item.quantity || item.qty || 1);
+    var qty = parseInt(item.quantity || item.qty) || 1;
     var unitNum = parseMeeekuPrice(item.price);
     var lineTotal = unitNum * qty;
     subtotal += lineTotal;
@@ -178,13 +179,13 @@ function renderMeeekuCartDrawerWithLocalFallback() {
           '<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.4rem;">',
             '<div style="font-size: 1.55rem; font-weight: 800; color: #6B3FA0;">' + priceFmt + '</div>',
             '<div style="display: flex; align-items: center; background: #FFF; border: 1px solid #F8BBD0; border-radius: 20px; padding: 0.15rem 0.6rem;">',
-              '<button type="button" onclick="meeekuDrawerUpdateQty(\'' + key + '\', ' + (qty - 1) + ')" style="background: none; border: none; font-size: 1.5rem; font-weight: 800; color: #FF6097; cursor: pointer; padding: 0 0.3rem; line-height: 1;" title="Decrease quantity">−</button>',
+              '<button type="button" onclick="meeekuDrawerUpdateQty('' + key + '', ' + (qty - 1) + ')" style="background: none; border: none; font-size: 1.5rem; font-weight: 800; color: #FF6097; cursor: pointer; padding: 0 0.3rem; line-height: 1;" title="Decrease quantity">−</button>',
               '<span style="font-size: 1.3rem; font-weight: 800; padding: 0 0.5rem; color: #3D2355;">' + qty + '</span>',
-              '<button type="button" onclick="meeekuDrawerUpdateQty(\'' + key + '\', ' + (qty + 1) + ')" style="background: none; border: none; font-size: 1.5rem; font-weight: 800; color: #FF6097; cursor: pointer; padding: 0 0.3rem; line-height: 1;" title="Increase quantity">+</button>',
+              '<button type="button" onclick="meeekuDrawerUpdateQty('' + key + '', ' + (qty + 1) + ')" style="background: none; border: none; font-size: 1.5rem; font-weight: 800; color: #FF6097; cursor: pointer; padding: 0 0.3rem; line-height: 1;" title="Increase quantity">+</button>',
             '</div>',
           '</div>',
         '</div>',
-        '<button type="button" style="background: transparent; border: none; font-size: 1.8rem; cursor: pointer; color: #BBB; padding: 0.4rem; line-height: 1;" onclick="removeMeeekuCartItem(\'' + key + '\')" title="Remove item">✕</button>',
+        '<button type="button" style="background: transparent; border: none; font-size: 1.8rem; cursor: pointer; color: #BBB; padding: 0.4rem; line-height: 1;" onclick="removeMeeekuCartItem('' + key + '')" title="Remove item">✕</button>',
       '</div>'
     ].join('');
   });
@@ -220,6 +221,7 @@ function renderMeeekuCartDrawerWithData(cart) {
     summary.style.display = 'none';
     if (cartDot) cartDot.classList.remove('has-items');
     updateCartBadges(0);
+    saveMeeekuLocalCart([]);
     return;
   }
 
@@ -230,6 +232,7 @@ function renderMeeekuCartDrawerWithData(cart) {
     return {
       key: item.key || item.id,
       id: item.variant_id || item.id,
+      handle: item.handle || '',
       title: item.product_title || item.title,
       price: formatMeeekuPaise(item.final_price || item.price || 0),
       img: item.image || (item.featured_image ? item.featured_image.url : ''),
@@ -271,13 +274,13 @@ function renderMeeekuCartDrawerWithData(cart) {
           '<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.4rem;">',
             '<div style="font-size: 1.55rem; font-weight: 800; color: #6B3FA0;">' + unitPriceFormatted + '</div>',
             '<div style="display: flex; align-items: center; background: #FFF; border: 1px solid #F8BBD0; border-radius: 20px; padding: 0.15rem 0.6rem;">',
-              '<button type="button" onclick="meeekuDrawerUpdateQty(\'' + itemKey + '\', ' + (item.quantity - 1) + ')" style="background: none; border: none; font-size: 1.5rem; font-weight: 800; color: #FF6097; cursor: pointer; padding: 0 0.3rem; line-height: 1;" title="Decrease quantity">−</button>',
+              '<button type="button" onclick="meeekuDrawerUpdateQty('' + itemKey + '', ' + (item.quantity - 1) + ')" style="background: none; border: none; font-size: 1.5rem; font-weight: 800; color: #FF6097; cursor: pointer; padding: 0 0.3rem; line-height: 1;" title="Decrease quantity">−</button>',
               '<span style="font-size: 1.3rem; font-weight: 800; padding: 0 0.5rem; color: #3D2355;">' + item.quantity + '</span>',
-              '<button type="button" onclick="meeekuDrawerUpdateQty(\'' + itemKey + '\', ' + (item.quantity + 1) + ')" style="background: none; border: none; font-size: 1.5rem; font-weight: 800; color: #FF6097; cursor: pointer; padding: 0 0.3rem; line-height: 1;" title="Increase quantity">+</button>',
+              '<button type="button" onclick="meeekuDrawerUpdateQty('' + itemKey + '', ' + (item.quantity + 1) + ')" style="background: none; border: none; font-size: 1.5rem; font-weight: 800; color: #FF6097; cursor: pointer; padding: 0 0.3rem; line-height: 1;" title="Increase quantity">+</button>',
             '</div>',
           '</div>',
         '</div>',
-        '<button type="button" style="background: transparent; border: none; font-size: 1.8rem; cursor: pointer; color: #BBB; padding: 0.4rem; line-height: 1;" onclick="removeMeeekuCartItem(\'' + itemKey + '\')" title="Remove item">✕</button>',
+        '<button type="button" style="background: transparent; border: none; font-size: 1.8rem; cursor: pointer; color: #BBB; padding: 0.4rem; line-height: 1;" onclick="removeMeeekuCartItem('' + itemKey + '')" title="Remove item">✕</button>',
       '</div>'
     ].join('');
   });
@@ -291,12 +294,12 @@ function renderMeeekuCartDrawerWithData(cart) {
 function meeekuDrawerUpdateQty(itemKey, newQty) {
   var q = parseInt(newQty) || 0;
   
-  // Update local cart first
+  // 1. Update local storage first
   var localCart = getMeeekuLocalCart();
   var updatedLocal = [];
   localCart.forEach(function(item) {
     var key = item.key || item.id;
-    if (String(key) === String(itemKey)) {
+    if (String(key) === String(itemKey) || String(item.id) === String(itemKey)) {
       if (q > 0) {
         item.qty = q;
         item.quantity = q;
@@ -307,15 +310,28 @@ function meeekuDrawerUpdateQty(itemKey, newQty) {
     }
   });
   saveMeeekuLocalCart(updatedLocal);
+  renderMeeekuCartDrawerWithLocalFallback();
 
-  // Send to server
+  // 2. Resolve server item key if available
+  var serverId = itemKey;
+  if (window.meeekuLiveShopifyCart && window.meeekuLiveShopifyCart.items) {
+    var matchedItem = window.meeekuLiveShopifyCart.items.find(function(it) {
+      return String(it.key) === String(itemKey) || String(it.id) === String(itemKey) || String(it.variant_id) === String(itemKey);
+    });
+    if (matchedItem) {
+      serverId = matchedItem.key || matchedItem.id;
+    }
+  }
+
   fetch('/cart/change.js', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-    body: JSON.stringify({ id: itemKey, quantity: q })
+    body: JSON.stringify({ id: String(serverId), quantity: q })
   })
   .then(function(res) {
-    if (!res.ok) throw new Error('Change cart request failed');
+    if (!res.ok) {
+      return fetch('/cart.js', { cache: 'no-store' }).then(function(r) { return r.json(); });
+    }
     return res.json();
   })
   .then(function(cart) {
@@ -353,21 +369,59 @@ async function meeekuAddToCartCatalog(title, price, imgUrl, variantId, size, han
   var cleanSize = size || 'Standard';
   var numPrice = parseMeeekuPrice(price);
   var cleanPrice = '₹' + numPrice.toLocaleString('en-IN', {minimumFractionDigits: 2});
-  var itemKey = (variantId || handle || title) + '_' + cleanSize;
 
-  // 1. Add to local storage
+  // 1. Resolve numeric variant ID from product endpoint if needed
+  var numericVariantId = (variantId && !isNaN(parseInt(variantId))) ? parseInt(variantId) : null;
+  
+  if (!numericVariantId && handle) {
+    try {
+      var prodRes = await fetch('/products/' + handle + '.js');
+      if (prodRes.ok) {
+        var prodJson = await prodRes.json();
+        if (prodJson && prodJson.variants && prodJson.variants.length > 0) {
+          var matched = prodJson.variants.find(function(v) {
+            return (v.title || '').toLowerCase() === cleanSize.toLowerCase() || (v.option1 || '').toLowerCase() === cleanSize.toLowerCase();
+          });
+          numericVariantId = matched ? matched.id : prodJson.variants[0].id;
+        }
+      }
+    } catch(e) {}
+  }
+
+  var itemKey = (numericVariantId || handle || title) + '_' + cleanSize;
+
+  // 2. Post to Shopify server cart
+  if (numericVariantId) {
+    try {
+      var addRes = await fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ id: numericVariantId, quantity: 1 })
+      });
+      if (addRes.ok) {
+        var addedItem = await addRes.json();
+        if (addedItem && addedItem.key) {
+          itemKey = addedItem.key;
+        }
+      }
+    } catch(e) {}
+  }
+
+  // 3. Add to local storage
   var cart = getMeeekuLocalCart();
   var existing = cart.find(function(i) { 
-    return (i.title === title && i.size === cleanSize) || (i.key === itemKey); 
+    return (i.title === title && i.size === cleanSize) || (String(i.key) === String(itemKey)) || (numericVariantId && String(i.id) === String(numericVariantId)); 
   });
   if (existing) {
     existing.qty = (existing.qty || existing.quantity || 1) + 1;
     existing.quantity = existing.qty;
     existing.price = cleanPrice;
+    if (numericVariantId) existing.id = numericVariantId;
   } else {
     cart.push({
       key: itemKey,
-      id: variantId || ('item_' + Date.now()),
+      id: numericVariantId || ('item_' + Date.now()),
+      handle: handle || '',
       title: title,
       price: cleanPrice,
       img: imgUrl,
@@ -378,40 +432,98 @@ async function meeekuAddToCartCatalog(title, price, imgUrl, variantId, size, han
   }
   saveMeeekuLocalCart(cart);
 
-  var totalCount = cart.reduce(function(sum, i) { return sum + (i.quantity || i.qty || 1); }, 0);
-  updateCartBadges(totalCount);
-
-  // 2. Resolve variant ID if needed and post to Shopify /cart/add.js
-  var numericVariantId = (variantId && !isNaN(parseInt(variantId))) ? parseInt(variantId) : null;
-  
-  if (!numericVariantId && handle) {
-    try {
-      var prodRes = await fetch('/products/' + handle + '.js');
-      if (prodRes.ok) {
-        var prodJson = await prodRes.json();
-        if (prodJson && prodJson.variants && prodJson.variants.length > 0) {
-          var matched = prodJson.variants.find(function(v) {
-            return v.title.toLowerCase() === cleanSize.toLowerCase();
-          });
-          numericVariantId = matched ? matched.id : prodJson.variants[0].id;
-        }
-      }
-    } catch(e) {}
-  }
-
-  if (numericVariantId) {
-    try {
-      await fetch('/cart/add.js', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({ id: numericVariantId, quantity: 1 })
-      });
-    } catch(e) {}
-  }
-
+  // 4. Update UI & open drawer with fresh cart
+  fetchMeeekuShopifyCart();
   showMeeekuToast('🎉 Added ' + title + ' to Bag!');
   openMeeekuCart();
 }
+
+/**
+ * Robust Checkout Engine:
+ * Validates that server cart is in sync with local cart, prevents empty checkout errors,
+ * and seamlessly handles Shopify checkout transitions.
+ */
+async function meeekuProceedToCheckout(btn) {
+  var triggerBtn = btn || document.querySelector('.meeeku-btn-checkout') || document.getElementById('MeeekuDrawerCheckoutBtn');
+  if (triggerBtn) {
+    triggerBtn.setAttribute('disabled', 'true');
+    triggerBtn.innerText = '⏳ Opening Checkout...';
+  }
+
+  try {
+    // 1. Fetch live Shopify server cart
+    var res = await fetch('/cart.js', { cache: 'no-store' });
+    var cart = res.ok ? await res.json() : null;
+    var localCart = getMeeekuLocalCart();
+
+    // 2. If server cart has items, proceed safely
+    if (cart && cart.items && cart.items.length > 0) {
+      window.location.href = '/checkout';
+      return;
+    }
+
+    // 3. If server cart is empty BUT localCart has items, sync items to server cart first!
+    if (localCart && localCart.length > 0) {
+      var itemsToAdd = [];
+      for (var i = 0; i < localCart.length; i++) {
+        var item = localCart[i];
+        var vId = (item.id && !isNaN(parseInt(item.id))) ? parseInt(item.id) : null;
+        
+        // If no numeric variant ID, look up by handle or title
+        if (!vId && (item.handle || item.title)) {
+          var h = item.handle || (item.title || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+          try {
+            var prodRes = await fetch('/products/' + h + '.js');
+            if (prodRes.ok) {
+              var prodJson = await prodRes.json();
+              if (prodJson && prodJson.variants && prodJson.variants.length > 0) {
+                var sizeStr = (item.size || '').toLowerCase();
+                var matched = prodJson.variants.find(function(v) {
+                  return (v.title || '').toLowerCase() === sizeStr || (v.option1 || '').toLowerCase() === sizeStr;
+                });
+                vId = matched ? matched.id : prodJson.variants[0].id;
+              }
+            }
+          } catch(e) {}
+        }
+
+        if (vId) {
+          itemsToAdd.push({
+            id: vId,
+            quantity: parseInt(item.qty || item.quantity) || 1
+          });
+        }
+      }
+
+      if (itemsToAdd.length > 0) {
+        var addRes = await fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ items: itemsToAdd })
+        });
+        if (addRes.ok) {
+          window.location.href = '/checkout';
+          return;
+        }
+      }
+    }
+
+    // 4. If cart is completely empty, alert the user and stay on the page
+    if (triggerBtn) {
+      triggerBtn.removeAttribute('disabled');
+      triggerBtn.innerText = '⚡ Proceed to Checkout';
+    }
+    showMeeekuToast('⚠️ Your bag is empty. Please add items to proceed!');
+  } catch(e) {
+    if (triggerBtn) {
+      triggerBtn.removeAttribute('disabled');
+      triggerBtn.innerText = '⚡ Proceed to Checkout';
+    }
+    window.location.href = '/checkout';
+  }
+}
+
+window.meeekuGlobalProceedToCheckout = meeekuProceedToCheckout;
 
 function showMeeekuToast(msg) {
   var toast = document.getElementById('MeeekuCartToast') || document.getElementById('MeeekuCartToastCatalog');
@@ -424,7 +536,7 @@ function showMeeekuToast(msg) {
   }
 }
 
-// Global hooks
+// Global hooks & BFCache (pageshow) recovery when navigating back from checkout/payment
 document.addEventListener('DOMContentLoaded', function() {
   fetchMeeekuShopifyCart();
   
@@ -435,6 +547,19 @@ document.addEventListener('DOMContentLoaded', function() {
       openMeeekuCart();
     });
   }
+});
+
+window.addEventListener('pageshow', function(event) {
+  document.body.style.overflow = '';
+  fetchMeeekuShopifyCart();
+
+  // Reset any buttons that were set to loading
+  document.querySelectorAll('.meeeku-btn-checkout, #MeeekuDrawerCheckoutBtn, #MeeekuBuyNowBtn, #MeeekuAddToCartBtn').forEach(function(btn) {
+    btn.removeAttribute('disabled');
+    if (btn.classList.contains('meeeku-btn-checkout') || btn.id === 'MeeekuDrawerCheckoutBtn') {
+      btn.innerText = '⚡ Proceed to Checkout';
+    }
+  });
 });
 </script>
 
