@@ -1,7 +1,8 @@
 {% comment %}
   Meeeku Universal Slide-Out Cart Drawer Component
   Guarantees flawless real-time cart item addition, dynamic pricing subtotal calculation,
-  in-cart size selection modification, item removal, and persistent checkout across all pages!
+  in-cart size selection modification, item removal, dynamic ₹1000 free delivery progress bar,
+  and persistent checkout across all pages!
 {% endcomment %}
 
 <!-- Meeeku Dedicated Slide-out Cart Drawer -->
@@ -121,24 +122,6 @@ function updateCartBadges(count) {
   }
 }
 
-function fetchMeeekuShopifyCart(callback) {
-  fetch('/cart.js', { cache: 'no-store' })
-    .then(function(res) {
-      if (!res.ok) throw new Error('Cart fetch status: ' + res.status);
-      return res.json();
-    })
-    .then(function(cart) {
-      window.meeekuLiveShopifyCart = cart;
-      renderMeeekuCartDrawerWithData(cart);
-      if (typeof callback === 'function') callback(cart);
-    })
-    .catch(function(err) {
-      renderMeeekuCartDrawerWithLocalFallback();
-      if (typeof callback === 'function') callback(null);
-    });
-}
-
-
 function updateMeeekuShippingProgress(subtotalRupees, progressBoxId, msgId, fillId, deliveryElId, totalElId) {
   var box = document.getElementById(progressBoxId || 'MeeekuDrawerShippingProgress');
   var msg = document.getElementById(msgId || 'MeeekuDrawerShippingMsg');
@@ -186,6 +169,23 @@ function updateMeeekuShippingProgress(subtotalRupees, progressBoxId, msgId, fill
   }
 }
 
+function fetchMeeekuShopifyCart(callback) {
+  fetch('/cart.js', { cache: 'no-store' })
+    .then(function(res) {
+      if (!res.ok) throw new Error('Cart fetch status: ' + res.status);
+      return res.json();
+    })
+    .then(function(cart) {
+      window.meeekuLiveShopifyCart = cart;
+      renderMeeekuCartDrawerWithData(cart);
+      if (typeof callback === 'function') callback(cart);
+    })
+    .catch(function(err) {
+      renderMeeekuCartDrawerWithLocalFallback();
+      if (typeof callback === 'function') callback(null);
+    });
+}
+
 function renderMeeekuCartDrawerWithLocalFallback() {
   var localCart = getMeeekuLocalCart();
   var totalCount = localCart.reduce(function(sum, i) { return sum + (parseInt(i.quantity || i.qty) || 1); }, 0);
@@ -196,6 +196,7 @@ function renderMeeekuCartDrawerWithLocalFallback() {
   var summary = document.getElementById('MeeekuCartSummary');
   var subtotalEl = document.getElementById('MeeekuCartSubtotal');
   var cartDot = document.getElementById('MeeekuCartDot');
+  var progressBox = document.getElementById('MeeekuDrawerShippingProgress');
 
   if (!container || !emptyNotice || !summary) return;
 
@@ -203,6 +204,7 @@ function renderMeeekuCartDrawerWithLocalFallback() {
     emptyNotice.style.display = 'block';
     container.style.display = 'none';
     summary.style.display = 'none';
+    if (progressBox) progressBox.style.display = 'none';
     if (cartDot) cartDot.classList.remove('has-items');
     return;
   }
@@ -242,13 +244,13 @@ function renderMeeekuCartDrawerWithLocalFallback() {
           '<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.4rem;">',
             '<div style="font-size: 1.55rem; font-weight: 800; color: #6B3FA0;">' + priceFmt + '</div>',
             '<div style="display: flex; align-items: center; background: #FFF; border: 1px solid #F8BBD0; border-radius: 20px; padding: 0.15rem 0.6rem;">',
-              '<button type="button" onclick="meeekuDrawerUpdateQty('' + key + '', ' + (qty - 1) + ')" style="background: none; border: none; font-size: 1.5rem; font-weight: 800; color: #FF6097; cursor: pointer; padding: 0 0.3rem; line-height: 1;" title="Decrease quantity">−</button>',
+              '<button type="button" onclick="meeekuDrawerUpdateQty(\'' + key + '\', ' + (qty - 1) + ')" style="background: none; border: none; font-size: 1.5rem; font-weight: 800; color: #FF6097; cursor: pointer; padding: 0 0.3rem; line-height: 1;" title="Decrease quantity">−</button>',
               '<span style="font-size: 1.3rem; font-weight: 800; padding: 0 0.5rem; color: #3D2355;">' + qty + '</span>',
-              '<button type="button" onclick="meeekuDrawerUpdateQty('' + key + '', ' + (qty + 1) + ')" style="background: none; border: none; font-size: 1.5rem; font-weight: 800; color: #FF6097; cursor: pointer; padding: 0 0.3rem; line-height: 1;" title="Increase quantity">+</button>',
+              '<button type="button" onclick="meeekuDrawerUpdateQty(\'' + key + '\', ' + (qty + 1) + ')" style="background: none; border: none; font-size: 1.5rem; font-weight: 800; color: #FF6097; cursor: pointer; padding: 0 0.3rem; line-height: 1;" title="Increase quantity">+</button>',
             '</div>',
           '</div>',
         '</div>',
-        '<button type="button" style="background: transparent; border: none; font-size: 1.8rem; cursor: pointer; color: #BBB; padding: 0.4rem; line-height: 1;" onclick="removeMeeekuCartItem('' + key + '')" title="Remove item">✕</button>',
+        '<button type="button" style="background: transparent; border: none; font-size: 1.8rem; cursor: pointer; color: #BBB; padding: 0.4rem; line-height: 1;" onclick="removeMeeekuCartItem(\'' + key + '\')" title="Remove item">✕</button>',
       '</div>'
     ].join('');
   });
@@ -276,6 +278,7 @@ function renderMeeekuCartDrawerWithData(cart) {
   var summary = document.getElementById('MeeekuCartSummary');
   var subtotalEl = document.getElementById('MeeekuCartSubtotal');
   var cartDot = document.getElementById('MeeekuCartDot');
+  var progressBox = document.getElementById('MeeekuDrawerShippingProgress');
 
   if (!container || !emptyNotice || !summary) return;
 
@@ -283,6 +286,7 @@ function renderMeeekuCartDrawerWithData(cart) {
     emptyNotice.style.display = 'block';
     container.style.display = 'none';
     summary.style.display = 'none';
+    if (progressBox) progressBox.style.display = 'none';
     if (cartDot) cartDot.classList.remove('has-items');
     updateCartBadges(0);
     saveMeeekuLocalCart([]);
@@ -338,13 +342,13 @@ function renderMeeekuCartDrawerWithData(cart) {
           '<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.4rem;">',
             '<div style="font-size: 1.55rem; font-weight: 800; color: #6B3FA0;">' + unitPriceFormatted + '</div>',
             '<div style="display: flex; align-items: center; background: #FFF; border: 1px solid #F8BBD0; border-radius: 20px; padding: 0.15rem 0.6rem;">',
-              '<button type="button" onclick="meeekuDrawerUpdateQty('' + itemKey + '', ' + (item.quantity - 1) + ')" style="background: none; border: none; font-size: 1.5rem; font-weight: 800; color: #FF6097; cursor: pointer; padding: 0 0.3rem; line-height: 1;" title="Decrease quantity">−</button>',
+              '<button type="button" onclick="meeekuDrawerUpdateQty(\'' + itemKey + '\', ' + (item.quantity - 1) + ')" style="background: none; border: none; font-size: 1.5rem; font-weight: 800; color: #FF6097; cursor: pointer; padding: 0 0.3rem; line-height: 1;" title="Decrease quantity">−</button>',
               '<span style="font-size: 1.3rem; font-weight: 800; padding: 0 0.5rem; color: #3D2355;">' + item.quantity + '</span>',
-              '<button type="button" onclick="meeekuDrawerUpdateQty('' + itemKey + '', ' + (item.quantity + 1) + ')" style="background: none; border: none; font-size: 1.5rem; font-weight: 800; color: #FF6097; cursor: pointer; padding: 0 0.3rem; line-height: 1;" title="Increase quantity">+</button>',
+              '<button type="button" onclick="meeekuDrawerUpdateQty(\'' + itemKey + '\', ' + (item.quantity + 1) + ')" style="background: none; border: none; font-size: 1.5rem; font-weight: 800; color: #FF6097; cursor: pointer; padding: 0 0.3rem; line-height: 1;" title="Increase quantity">+</button>',
             '</div>',
           '</div>',
         '</div>',
-        '<button type="button" style="background: transparent; border: none; font-size: 1.8rem; cursor: pointer; color: #BBB; padding: 0.4rem; line-height: 1;" onclick="removeMeeekuCartItem('' + itemKey + '')" title="Remove item">✕</button>',
+        '<button type="button" style="background: transparent; border: none; font-size: 1.8rem; cursor: pointer; color: #BBB; padding: 0.4rem; line-height: 1;" onclick="removeMeeekuCartItem(\'' + itemKey + '\')" title="Remove item">✕</button>',
       '</div>'
     ].join('');
   });
