@@ -23,6 +23,16 @@
     <!-- Drawer Body -->
     <div class="meeeku-drawer-body">
       
+      <!-- Free Delivery Progress Bar (Threshold: ₹1,000) -->
+      <div id="MeeekuDrawerShippingProgress" style="display: none; background: #FFF5F8; border: 1.5px solid #F8BBD0; border-radius: 16px; padding: 1.2rem; margin-bottom: 1.4rem;">
+        <div id="MeeekuDrawerShippingMsg" style="font-size: 1.25rem; font-weight: 700; color: #3D2355; margin-bottom: 0.8rem; text-align: center; line-height: 1.4;">
+          Add ₹1,000.00 more to unlock FREE Express Delivery! 🚚
+        </div>
+        <div style="width: 100%; height: 10px; background: #FFE0EC; border-radius: 10px; overflow: hidden; position: relative;">
+          <div id="MeeekuDrawerShippingFill" style="width: 0%; height: 100%; background: linear-gradient(90deg, #FF6097, #6B3FA0); border-radius: 10px; transition: width 0.4s ease, background 0.4s ease;"></div>
+        </div>
+      </div>
+
       <!-- Empty State -->
       <div id="MeeekuCartEmptyNotice" style="text-align: center; padding: 4rem 1.5rem; display: block;">
         <div style="font-size: 4.5rem; margin-bottom: 1.2rem;">🌸</div>
@@ -40,13 +50,18 @@
 
       <!-- Cart Subtotal & Checkout Summary -->
       <div id="MeeekuCartSummary" style="display: none; border-top: 2px dashed #F8BBD0; padding-top: 1.6rem; margin-top: 1.6rem;">
-        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 1.8rem; font-weight: 800; color: #3D2355; margin-bottom: 0.6rem;">
-          <span>Subtotal:</span>
-          <span id="MeeekuCartSubtotal" style="color: #6B3FA0; font-size: 2rem;">₹0.00</span>
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 1.45rem; color: #666; margin-bottom: 0.5rem;">
+          <span>Bag Subtotal:</span>
+          <span id="MeeekuCartSubtotal" style="color: #3D2355; font-weight: 700; font-size: 1.55rem;">₹0.00</span>
         </div>
-        <p style="font-size: 1.25rem; color: #2E7D32; font-weight: 700; margin: 0 0 1.5rem; display: flex; align-items: center; gap: 0.4rem;">
-          <span>🚚</span> Free Express Shipping Included Across India
-        </p>
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 1.45rem; margin-bottom: 0.8rem;">
+          <span>Delivery Charge:</span>
+          <span id="MeeekuCartDeliveryFee" style="font-weight: 700; font-size: 1.45rem; color: #2E7D32;">FREE</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 1.85rem; font-weight: 800; color: #3D2355; margin-bottom: 1.2rem; border-top: 1px solid #FFE0EC; padding-top: 0.8rem;">
+          <span>Estimated Total:</span>
+          <span id="MeeekuCartTotal" style="color: #6B3FA0; font-size: 2.1rem;">₹0.00</span>
+        </div>
         <div style="display: flex; flex-direction: column; gap: 0.9rem;">
           <a href="/cart" class="button button--secondary" style="width: 100%; border-radius: 25px; padding: 1.1rem; font-size: 1.45rem; font-weight: 700; color: #6B3FA0; border: 2px solid #F8BBD0; background: #FFF; text-align: center; text-decoration: none;">
             View Full Cart & Edit Sizes 📝
@@ -123,6 +138,54 @@ function fetchMeeekuShopifyCart(callback) {
     });
 }
 
+
+function updateMeeekuShippingProgress(subtotalRupees, progressBoxId, msgId, fillId, deliveryElId, totalElId) {
+  var box = document.getElementById(progressBoxId || 'MeeekuDrawerShippingProgress');
+  var msg = document.getElementById(msgId || 'MeeekuDrawerShippingMsg');
+  var fill = document.getElementById(fillId || 'MeeekuDrawerShippingFill');
+  var deliveryEl = document.getElementById(deliveryElId || 'MeeekuCartDeliveryFee');
+  var totalEl = document.getElementById(totalElId || 'MeeekuCartTotal');
+
+  if (!box || !msg || !fill) return;
+
+  var subtotal = parseFloat(subtotalRupees) || 0;
+  if (subtotal <= 0) {
+    box.style.display = 'none';
+    return;
+  }
+
+  box.style.display = 'block';
+  var threshold = 1000;
+  var deliveryFee = 0;
+
+  if (subtotal < threshold) {
+    deliveryFee = 100;
+    var diff = threshold - subtotal;
+    var pct = Math.min(100, Math.max(8, (subtotal / threshold) * 100));
+    msg.innerHTML = 'Add <strong style="color: #FF6097;">₹' + diff.toLocaleString('en-IN', {minimumFractionDigits: 2}) + '</strong> more for <span style="color: #2E7D32; font-weight: 800;">FREE Delivery!</span> 🚚';
+    fill.style.width = pct + '%';
+    fill.style.background = 'linear-gradient(90deg, #FF6097, #6B3FA0)';
+    if (deliveryEl) {
+      deliveryEl.innerText = '₹100.00';
+      deliveryEl.style.color = '#E65100';
+    }
+  } else {
+    deliveryFee = 0;
+    msg.innerHTML = '🎉 <strong style="color: #2E7D32;">You\'ve unlocked FREE Express Delivery!</strong>';
+    fill.style.width = '100%';
+    fill.style.background = 'linear-gradient(90deg, #4CAF50, #2E7D32)';
+    if (deliveryEl) {
+      deliveryEl.innerText = 'FREE (₹0.00)';
+      deliveryEl.style.color = '#2E7D32';
+    }
+  }
+
+  if (totalEl) {
+    var finalTotal = subtotal + deliveryFee;
+    totalEl.innerText = '₹' + finalTotal.toLocaleString('en-IN', {minimumFractionDigits: 2});
+  }
+}
+
 function renderMeeekuCartDrawerWithLocalFallback() {
   var localCart = getMeeekuLocalCart();
   var totalCount = localCart.reduce(function(sum, i) { return sum + (parseInt(i.quantity || i.qty) || 1); }, 0);
@@ -194,6 +257,7 @@ function renderMeeekuCartDrawerWithLocalFallback() {
   if (subtotalEl) {
     subtotalEl.innerText = '₹' + subtotal.toLocaleString('en-IN', {minimumFractionDigits: 2});
   }
+  updateMeeekuShippingProgress(subtotal, 'MeeekuDrawerShippingProgress', 'MeeekuDrawerShippingMsg', 'MeeekuDrawerShippingFill', 'MeeekuCartDeliveryFee', 'MeeekuCartTotal');
 }
 
 function renderMeeekuCartDrawerWithData(cart) {
@@ -286,9 +350,11 @@ function renderMeeekuCartDrawerWithData(cart) {
   });
 
   container.innerHTML = itemsHtml;
+  var subtotalInRupees = Math.round((cart.total_price || 0) / 100);
   if (subtotalEl) {
     subtotalEl.innerText = formatMeeekuPaise(cart.total_price || 0);
   }
+  updateMeeekuShippingProgress(subtotalInRupees, 'MeeekuDrawerShippingProgress', 'MeeekuDrawerShippingMsg', 'MeeekuDrawerShippingFill', 'MeeekuCartDeliveryFee', 'MeeekuCartTotal');
 }
 
 function meeekuDrawerUpdateQty(itemKey, newQty) {
