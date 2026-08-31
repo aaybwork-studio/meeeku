@@ -717,6 +717,11 @@ function meeekuProceedToCheckout() {
   }
 }
 
+window.fetchMeeekuPageCart = fetchMeeekuPageCart;
+window.meeekuUpdatePageQty = meeekuUpdatePageQty;
+window.meeekuRemovePageItem = meeekuRemovePageItem;
+window.meeekuClearCart = meeekuClearCart;
+
 document.addEventListener('DOMContentLoaded', function() {
   fetchMeeekuPageCart();
 });

@@ -3,9 +3,21 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="theme-color" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+    <meta name="theme-color" content="#FFF0F5">
     <link rel="canonical" href="{{ canonical_url }}">
+    <script>
+      (function() {
+        function setViewportMetrics() {
+          var vh = window.innerHeight * 0.01;
+          document.documentElement.style.setProperty('--vh', vh + 'px');
+          document.documentElement.style.setProperty('--viewport-height', window.innerHeight + 'px');
+        }
+        setViewportMetrics();
+        window.addEventListener('resize', setViewportMetrics, { passive: true });
+        window.addEventListener('orientationchange', setViewportMetrics, { passive: true });
+      })();
+    </script>
 
     {%- if settings.favicon != blank -%}
       <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
@@ -256,12 +268,14 @@
         box-sizing: border-box;
         font-size: calc(var(--font-body-scale) * 62.5%);
         height: 100%;
+        overflow-x: hidden;
       }
 
       body {
         display: flex;
         flex-direction: column;
         min-height: 100%;
+        min-height: 100dvh;
         margin: 0;
         font-size: 1.5rem;
         letter-spacing: 0.06rem;
@@ -269,14 +283,43 @@
         font-family: var(--font-body-family);
         font-style: var(--font-body-style);
         font-weight: var(--font-body-weight);
+        overflow-x: hidden;
+        width: 100%;
+        position: relative;
       }
 
-      @media screen and (min-width: 750px) {
-        body {
-          font-size: 1.6rem;
-        }
+      .announcement-bar-section,
+      .announcement-bar,
+      .utility-bar,
+      #shopify-section-announcement-bar,
+      [id*="announcement-bar"] {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        min-height: 0 !important;
+        max-height: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow: hidden !important;
+        pointer-events: none !important;
+        opacity: 0 !important;
       }
     {% endstyle %}
+
+    <script>
+      (function() {
+        function purgeLegacyAnnouncements() {
+          var legacy = document.querySelectorAll('.announcement-bar-section, .announcement-bar, .utility-bar, #shopify-section-announcement-bar, [id*="announcement-bar"]');
+          legacy.forEach(function(el) {
+            if (el && el.id !== 'MeeekuPromoTicker' && !el.closest('#MeeekuPromoTicker')) {
+              el.remove();
+            }
+          });
+        }
+        purgeLegacyAnnouncements();
+        document.addEventListener('DOMContentLoaded', purgeLegacyAnnouncements);
+      })();
+    </script>
 
     {{ 'base.css' | asset_url | stylesheet_tag }}
     <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
@@ -348,6 +391,11 @@
             <span>🌸 ZERO-ITCH GUARANTEE: <span class="meeeku-promo-badge" style="background: #E1BEE7; color: #4A148C;">100% Pure Organic</span> Muslin Cotton Linings • Handcrafted with Love 💕</span>
           </div>
 
+          <!-- Slide 4: Free Express Delivery & Gift -->
+          <div class="meeeku-promo-slide">
+            <span>🚚 FREE EXPRESS DELIVERY: On Orders Above <span class="meeeku-promo-badge" style="background: #C8E6C9; color: #1B5E20;">₹1,000</span> + Free Surprise Gift Inside! 🎁</span>
+          </div>
+
         </div>
 
         <button type="button" class="meeeku-ticker-arrow meeeku-ticker-arrow--prev" onclick="meeekuRotatePromo(-1)" aria-label="Previous promo">‹</button>
@@ -365,7 +413,8 @@
       letter-spacing: 0.02em;
       border-bottom: 1.5px solid #F8BBD0;
       position: relative;
-      z-index: 10;
+      z-index: 25;
+      isolation: isolate;
       overflow: hidden;
       line-height: 1.35;
     }

@@ -323,23 +323,61 @@
   font-size: 1.1rem;
 }
 
-@media screen and (max-width: 989px) {
+@media screen and (min-width: 750px) and (max-width: 989px) {
+  .meeeku-bento-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+  .meeeku-bento-card--hero {
+    grid-column: span 2;
+    grid-template-columns: 1fr 1fr;
+  }
+  .meeeku-bento-card--hero .meeeku-bento-card__media {
+    height: 340px;
+  }
+  .meeeku-bento-card--hero .meeeku-bento-card__content {
+    padding: 2.5rem;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .meeeku-categories-section {
+    padding-top: 2.5rem;
+    padding-bottom: 3.5rem;
+  }
   .meeeku-bento-grid {
     grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: 1.8rem;
   }
   .meeeku-bento-card--hero {
     grid-column: span 1;
     grid-template-columns: 1fr;
   }
   .meeeku-bento-card--hero .meeeku-bento-card__media {
-    height: 320px;
+    height: 260px;
   }
   .meeeku-bento-card--hero .meeeku-bento-card__content {
-    padding: 2.2rem 1.8rem;
+    padding: 2rem 1.6rem;
   }
   .meeeku-bento-card--hero h3 {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
+  }
+  .meeeku-bento-card--hero p {
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+  }
+  .meeeku-bento-card--sub .meeeku-bento-card__media {
+    height: 220px;
+  }
+  .meeeku-bento-card--sub .meeeku-bento-card__content {
+    padding: 1.8rem 1.4rem;
+  }
+  .meeeku-bento-card--sub h3 {
+    font-size: 1.9rem;
+  }
+  .meeeku-bento-card--sub p {
+    font-size: 1.35rem;
+    margin-bottom: 1.4rem;
   }
 }
 </style>

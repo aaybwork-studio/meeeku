@@ -67,10 +67,6 @@ if (!customElements.get('product-form')) {
               soldOutMessage.classList.remove('hidden');
               this.error = true;
               return;
-            } else if (!this.cart) {
-              this.resolveCartLinesUpdate(linesUpdateDeferred);
-              window.location = window.routes.cart_url;
-              return;
             }
 
             this.resolveCartLinesUpdate(linesUpdateDeferred);
@@ -85,24 +81,40 @@ if (!customElements.get('product-form')) {
                 CartPerformance.measureFromMarker('add:wait-for-subscribers', startMarker);
               });
             this.error = false;
+
+            if (typeof fetchMeeekuShopifyCart === 'function') {
+              fetchMeeekuShopifyCart();
+            }
+            if (typeof showMeeekuToast === 'function') {
+              showMeeekuToast('🎉 Added to Bag!');
+            }
+
             const quickAddModal = this.closest('quick-add-modal');
             if (quickAddModal) {
               document.body.addEventListener(
                 'modalClosed',
                 () => {
                   setTimeout(() => {
-                    CartPerformance.measure("add:paint-updated-sections", () => {
-                      this.cart.renderContents(response);
-                    });
+                    if (typeof openMeeekuCart === 'function') {
+                      openMeeekuCart();
+                    } else if (this.cart && typeof this.cart.renderContents === 'function') {
+                      CartPerformance.measure("add:paint-updated-sections", () => {
+                        this.cart.renderContents(response);
+                      });
+                    }
                   });
                 },
                 { once: true }
               );
               quickAddModal.hide(true);
             } else {
-              CartPerformance.measure("add:paint-updated-sections", () => {
-                this.cart.renderContents(response);
-              });
+              if (typeof openMeeekuCart === 'function') {
+                openMeeekuCart();
+              } else if (this.cart && typeof this.cart.renderContents === 'function') {
+                CartPerformance.measure("add:paint-updated-sections", () => {
+                  this.cart.renderContents(response);
+                });
+              }
             }
           })
           .catch((e) => {

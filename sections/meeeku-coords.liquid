@@ -89,10 +89,20 @@
   }
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 550px) {
   .meeeku-coords-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  .meeeku-coords-section {
+    padding-top: 2.5rem !important;
+    padding-bottom: 3.5rem !important;
+  }
+  .meeeku-coords-section h2.h1 {
+    font-size: 2.4rem !important;
+  }
+  .meeeku-coords-section p {
+    font-size: 1.35rem !important;
   }
 }
 </style>

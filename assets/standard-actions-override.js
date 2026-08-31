@@ -121,6 +121,10 @@ function initStandardActions() {
 
   actions.openCart.configure({
     async handler(defaultHandler) {
+      if (typeof openMeeekuCart === 'function') {
+        openMeeekuCart();
+        return;
+      }
       const drawer = document.querySelector('cart-drawer');
       if (drawer && typeof drawer.open === 'function') {
         drawer.open();
@@ -139,8 +143,13 @@ function initStandardActions() {
       try {
         await refreshDawnCartUI();
       } catch (error) {
-        console.error('[Dawn] Standard Actions cart refresh failed; reloading.', error);
-        window.location.reload();
+        // Suppress hard reload; update Meeeku cart asynchronously
+      }
+      if (typeof fetchMeeekuShopifyCart === 'function') {
+        fetchMeeekuShopifyCart();
+      }
+      if (typeof fetchMeeekuPageCart === 'function') {
+        fetchMeeekuPageCart();
       }
       return result;
     },

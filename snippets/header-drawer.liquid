@@ -18,6 +18,15 @@
     </summary>
     <div id="menu-drawer" class="gradient menu-drawer motion-reduce color-{{ section.settings.menu_color_scheme }}">
       <div class="menu-drawer__inner-container">
+        <div class="menu-drawer__top-bar">
+          <div style="display: flex; align-items: center; gap: 0.8rem;">
+            <span style="font-size: 2rem;">🌸</span>
+            <span style="font-size: 1.7rem; font-weight: 800; color: #3D2355;">Menu & Collections</span>
+          </div>
+          <button type="button" class="menu-drawer__top-close" onclick="var hd = document.querySelector('header-drawer'); if(hd) hd.closeMenuDrawer(event, this); var det = document.getElementById('Details-menu-drawer-container'); if(det) det.removeAttribute('open');" aria-label="Close menu">
+            ✕
+          </button>
+        </div>
         <div class="menu-drawer__navigation-container">
           <nav class="menu-drawer__navigation">
             <ul class="menu-drawer__menu has-submenu list-menu" role="list">
