@@ -2274,6 +2274,8 @@ async function meeekuDynamicBuyNow() {
   await meeekuDynamicAddToCart();
   if (typeof meeekuGlobalProceedToCheckout === 'function') {
     await meeekuGlobalProceedToCheckout();
+  } else if (typeof getMeeekuCheckoutUrl === 'function') {
+    window.location.href = getMeeekuCheckoutUrl();
   } else {
     window.location.href = '/checkout';
   }

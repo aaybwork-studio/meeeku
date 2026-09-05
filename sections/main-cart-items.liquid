@@ -855,7 +855,9 @@ function meeekuProceedToCheckout() {
     meeekuGlobalProceedToCheckout(btn);
   } else {
     var discount = sessionStorage.getItem('meeeku_active_discount') || localStorage.getItem('meeeku_active_discount');
-    var chkUrl = '/checkout' + (discount ? '?discount=' + encodeURIComponent(discount) : '');
+    var chkUrl = (discount && discount.trim())
+      ? ('/discount/' + encodeURIComponent(discount.trim().toUpperCase()) + '?redirect=/checkout')
+      : '/checkout';
     if (btn) {
       btn.setAttribute('disabled', 'true');
       btn.innerText = '⏳ Opening Checkout...';

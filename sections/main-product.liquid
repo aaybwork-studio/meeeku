@@ -2143,6 +2143,8 @@ async function meeekuTriggerBuyNow() {
   }
   if (typeof meeekuGlobalProceedToCheckout === 'function') {
     await meeekuGlobalProceedToCheckout();
+  } else if (typeof getMeeekuCheckoutUrl === 'function') {
+    window.location.href = getMeeekuCheckoutUrl();
   } else {
     window.location.href = '/checkout';
   }
