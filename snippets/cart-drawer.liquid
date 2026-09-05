@@ -38,9 +38,12 @@
       <div id="MeeekuCartEmptyNotice" style="text-align: center; padding: 4rem 1.5rem; display: block;">
         <div style="font-size: 4.5rem; margin-bottom: 1.2rem;">🌸</div>
         <p style="font-size: 1.8rem; color: #3D2355; font-weight: 800; margin-bottom: 0.8rem;">Your shopping bag is empty</p>
-        <p style="font-size: 1.4rem; color: #666; margin-bottom: 2.2rem; max-width: 280px; margin-left: auto; margin-right: auto; line-height: 1.5;">
+        <p style="font-size: 1.4rem; color: #666; margin-bottom: 1.6rem; max-width: 280px; margin-left: auto; margin-right: auto; line-height: 1.5;">
           Discover 100% skin-safe cotton tees, cozy co-ords, and festive twirling lehengas!
         </p>
+        <div style="background: #FFF3E0; border: 1.5px dashed #FFB74D; border-radius: 12px; padding: 0.9rem 1.2rem; margin-bottom: 2rem; max-width: 320px; margin-left: auto; margin-right: auto;">
+          <span style="font-size: 1.25rem; color: #E65100; font-weight: 700;">✨ Special Offer: Get <strong>20% OFF</strong> your first order with code <strong style="text-decoration: underline;">WELCOME20</strong>!</span>
+        </div>
         <a href="/collections/all" class="meeeku-btn-primary" style="display: inline-block; text-decoration: none; padding: 1.1rem 2.5rem; font-size: 1.45rem; border-radius: 30px;" onclick="closeMeeekuCart()">
           Explore Collections ✨
         </a>
@@ -48,6 +51,44 @@
 
       <!-- Dynamic Items Container -->
       <div id="MeeekuCartItemsContainer" style="display: none; flex-direction: column; gap: 1.2rem;"></div>
+
+      <!-- Available Discounts Carousel & Reminder Box -->
+      <div id="MeeekuDrawerDiscountsBox" class="meeeku-cart-discounts-box" style="display: none;">
+        <div class="meeeku-cart-discounts-header">
+          <div style="display: flex; align-items: center; gap: 0.6rem;">
+            <span style="font-size: 1.6rem;">🏷️</span>
+            <span class="meeeku-cart-discounts-title">Available Discounts</span>
+          </div>
+          <span class="meeeku-cart-discounts-sub">Tap to apply at checkout</span>
+        </div>
+
+        <div class="meeeku-cart-discounts-carousel">
+          <!-- Card 1: WELCOME20 -->
+          <div class="meeeku-cart-discount-card" id="MeeekuCard-WELCOME20" onclick="meeekuApplyCartDiscount('WELCOME20', this)">
+            <div class="meeeku-cart-discount-badge">20% OFF</div>
+            <div class="meeeku-cart-discount-info">
+              <div class="meeeku-cart-discount-code">WELCOME20</div>
+              <div class="meeeku-cart-discount-text">20% OFF your first order site-wide</div>
+            </div>
+            <button type="button" class="meeeku-cart-discount-btn" id="MeeekuBtn-WELCOME20">Apply</button>
+          </div>
+
+          <!-- Card 2: B2G1 -->
+          <div class="meeeku-cart-discount-card" id="MeeekuCard-B2G1" onclick="meeekuApplyCartDiscount('B2G1', this)">
+            <div class="meeeku-cart-discount-badge" style="background: #FFE082; color: #E65100;">BOGO DEAL</div>
+            <div class="meeeku-cart-discount-info">
+              <div class="meeeku-cart-discount-code">B2G1</div>
+              <div class="meeeku-cart-discount-text">Buy 2 Get 1 FREE on Tees & Co-ords</div>
+            </div>
+            <button type="button" class="meeeku-cart-discount-btn" id="MeeekuBtn-B2G1">Apply</button>
+          </div>
+        </div>
+
+        <div id="MeeekuDrawerDiscountAppliedAlert" class="meeeku-discount-applied-alert" style="display: none;">
+          <span id="MeeekuDrawerDiscountAppliedMsg">🎉 Code <strong>WELCOME20</strong> applied!</span>
+          <button type="button" class="meeeku-discount-remove-btn" onclick="meeekuRemoveCartDiscount(event)">Remove</button>
+        </div>
+      </div>
 
       <!-- Cart Subtotal & Checkout Summary -->
       <div id="MeeekuCartSummary" style="display: none; border-top: 2px dashed #F8BBD0; padding-top: 1.6rem; margin-top: 1.6rem;">
@@ -205,6 +246,7 @@ function renderMeeekuCartDrawerWithLocalFallback() {
   var subtotalEl = document.getElementById('MeeekuCartSubtotal');
   var cartDot = document.getElementById('MeeekuCartDot');
   var progressBox = document.getElementById('MeeekuDrawerShippingProgress');
+  var discBox = document.getElementById('MeeekuDrawerDiscountsBox');
 
   if (!container || !emptyNotice || !summary) return;
 
@@ -212,6 +254,7 @@ function renderMeeekuCartDrawerWithLocalFallback() {
     emptyNotice.style.display = 'block';
     container.style.display = 'none';
     summary.style.display = 'none';
+    if (discBox) discBox.style.display = 'none';
     if (progressBox) progressBox.style.display = 'none';
     if (cartDot) cartDot.classList.remove('has-items');
     return;
@@ -220,7 +263,9 @@ function renderMeeekuCartDrawerWithLocalFallback() {
   emptyNotice.style.display = 'none';
   container.style.display = 'flex';
   summary.style.display = 'block';
+  if (discBox) discBox.style.display = 'block';
   if (cartDot) cartDot.classList.add('has-items');
+  if (typeof meeekuSyncDiscountUI === 'function') meeekuSyncDiscountUI();
 
   var itemsHtml = '';
   var subtotal = 0;
@@ -287,6 +332,7 @@ function renderMeeekuCartDrawerWithData(cart) {
   var subtotalEl = document.getElementById('MeeekuCartSubtotal');
   var cartDot = document.getElementById('MeeekuCartDot');
   var progressBox = document.getElementById('MeeekuDrawerShippingProgress');
+  var discBox = document.getElementById('MeeekuDrawerDiscountsBox');
 
   if (!container || !emptyNotice || !summary) return;
 
@@ -294,12 +340,20 @@ function renderMeeekuCartDrawerWithData(cart) {
     emptyNotice.style.display = 'block';
     container.style.display = 'none';
     summary.style.display = 'none';
+    if (discBox) discBox.style.display = 'none';
     if (progressBox) progressBox.style.display = 'none';
     if (cartDot) cartDot.classList.remove('has-items');
     updateCartBadges(0);
     saveMeeekuLocalCart([]);
     return;
   }
+
+  emptyNotice.style.display = 'none';
+  container.style.display = 'flex';
+  summary.style.display = 'block';
+  if (discBox) discBox.style.display = 'block';
+  if (cartDot) cartDot.classList.add('has-items');
+  if (typeof meeekuSyncDiscountUI === 'function') meeekuSyncDiscountUI();
 
   updateCartBadges(cart.item_count || 0);
 
@@ -528,9 +582,84 @@ async function meeekuAddToCartCatalog(title, price, imgUrl, variantId, size, han
 }
 
 /**
+ * Returns dynamic Shopify checkout URL including applied discount codes
+ */
+function getMeeekuCheckoutUrl() {
+  var discount = sessionStorage.getItem('meeeku_active_discount') || localStorage.getItem('meeeku_active_discount');
+  return '/checkout' + (discount ? '?discount=' + encodeURIComponent(discount) : '');
+}
+
+window.getMeeekuCheckoutUrl = getMeeekuCheckoutUrl;
+
+window.meeekuApplyCartDiscount = function(code, cardEl) {
+  if (!code) return;
+  try {
+    sessionStorage.setItem('meeeku_active_discount', code);
+    localStorage.setItem('meeeku_active_discount', code);
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(code);
+    }
+    meeekuSyncDiscountUI();
+    showMeeekuToast('🎉 Code ' + code + ' applied! Discount active for checkout.');
+  } catch(e) {}
+};
+
+window.meeekuRemoveCartDiscount = function(e) {
+  if (e) e.stopPropagation();
+  sessionStorage.removeItem('meeeku_active_discount');
+  localStorage.removeItem('meeeku_active_discount');
+  meeekuSyncDiscountUI();
+  showMeeekuToast('Discount code removed.');
+};
+
+window.meeekuSyncDiscountUI = function() {
+  var code = sessionStorage.getItem('meeeku_active_discount') || localStorage.getItem('meeeku_active_discount');
+  ['WELCOME20', 'B2G1'].forEach(function(c) {
+    var card = document.getElementById('MeeekuCard-' + c);
+    var btn = document.getElementById('MeeekuBtn-' + c);
+    var pageCard = document.getElementById('MeeekuPageCard-' + c);
+    var pageBtn = document.getElementById('MeeekuPageBtn-' + c);
+
+    if (code === c) {
+      if (card) card.classList.add('applied');
+      if (btn) btn.innerText = 'Applied ✓';
+      if (pageCard) pageCard.classList.add('applied');
+      if (pageBtn) pageBtn.innerText = 'Applied ✓';
+    } else {
+      if (card) card.classList.remove('applied');
+      if (btn) btn.innerText = 'Apply';
+      if (pageCard) pageCard.classList.remove('applied');
+      if (pageBtn) pageBtn.innerText = 'Apply';
+    }
+  });
+
+  var drawerAlert = document.getElementById('MeeekuDrawerDiscountAppliedAlert');
+  var drawerMsg = document.getElementById('MeeekuDrawerDiscountAppliedMsg');
+  if (drawerAlert && drawerMsg) {
+    if (code) {
+      drawerAlert.style.display = 'flex';
+      drawerMsg.innerHTML = '🎉 Code <strong>' + code + '</strong> applied! Added at checkout.';
+    } else {
+      drawerAlert.style.display = 'none';
+    }
+  }
+
+  var pageAlert = document.getElementById('MeeekuPageDiscountAppliedAlert');
+  var pageMsg = document.getElementById('MeeekuPageDiscountAppliedMsg');
+  if (pageAlert && pageMsg) {
+    if (code) {
+      pageAlert.style.display = 'flex';
+      pageMsg.innerHTML = '🎉 Code <strong>' + code + '</strong> applied! Added at checkout.';
+    } else {
+      pageAlert.style.display = 'none';
+    }
+  }
+};
+
+/**
  * Robust Checkout Engine:
  * Validates that server cart is in sync with local cart, prevents empty checkout errors,
- * and seamlessly handles Shopify checkout transitions.
+ * and seamlessly handles Shopify checkout transitions with auto-applied discount codes.
  */
 async function meeekuProceedToCheckout(btn) {
   var triggerBtn = btn || document.querySelector('.meeeku-btn-checkout') || document.getElementById('MeeekuDrawerCheckoutBtn');
@@ -547,7 +676,7 @@ async function meeekuProceedToCheckout(btn) {
 
     // 2. If server cart has items, proceed safely
     if (cart && cart.items && cart.items.length > 0) {
-      window.location.href = '/checkout';
+      window.location.href = getMeeekuCheckoutUrl();
       return;
     }
 
@@ -591,7 +720,7 @@ async function meeekuProceedToCheckout(btn) {
           body: JSON.stringify({ items: itemsToAdd })
         });
         if (addRes.ok) {
-          window.location.href = '/checkout';
+          window.location.href = getMeeekuCheckoutUrl();
           return;
         }
       }
@@ -608,7 +737,7 @@ async function meeekuProceedToCheckout(btn) {
       triggerBtn.removeAttribute('disabled');
       triggerBtn.innerText = '⚡ Proceed to Checkout';
     }
-    window.location.href = '/checkout';
+    window.location.href = getMeeekuCheckoutUrl();
   }
 }
 
@@ -789,5 +918,121 @@ window.addEventListener('pageshow', function(event) {
   .meeeku-drawer-inner {
     width: 100vw;
   }
+}
+
+/* Meeeku In-Cart Discounts Box Styling */
+.meeeku-cart-discounts-box {
+  background: #FFF9FA;
+  border: 1.5px solid #F8BBD0;
+  border-radius: 16px;
+  padding: 1.2rem;
+  margin-bottom: 1.4rem;
+}
+.meeeku-cart-discounts-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.9rem;
+}
+.meeeku-cart-discounts-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #3D2355;
+}
+.meeeku-cart-discounts-sub {
+  font-size: 1.15rem;
+  color: #FF6097;
+  font-weight: 700;
+}
+.meeeku-cart-discounts-carousel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+.meeeku-cart-discount-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #FFFFFF;
+  border: 1px dashed #F8BBD0;
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.meeeku-cart-discount-card:hover {
+  border-color: #FF6097;
+  box-shadow: 0 4px 12px rgba(255, 96, 151, 0.15);
+}
+.meeeku-cart-discount-card.applied {
+  border-color: #2E7D32;
+  background: #F1F8E9;
+}
+.meeeku-cart-discount-badge {
+  background: #FFD54F;
+  color: #3D2355;
+  font-size: 1.05rem;
+  font-weight: 800;
+  padding: 0.25rem 0.6rem;
+  border-radius: 10px;
+  margin-right: 0.8rem;
+  white-space: nowrap;
+}
+.meeeku-cart-discount-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.meeeku-cart-discount-code {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #3D2355;
+  letter-spacing: 0.04em;
+}
+.meeeku-cart-discount-text {
+  font-size: 1.1rem;
+  color: #666;
+  line-height: 1.3;
+}
+.meeeku-cart-discount-btn {
+  background: #FFF;
+  border: 1.5px solid #FF6097;
+  color: #FF6097;
+  font-size: 1.15rem;
+  font-weight: 800;
+  border-radius: 20px;
+  padding: 0.35rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.meeeku-cart-discount-btn:hover,
+.meeeku-cart-discount-card.applied .meeeku-cart-discount-btn {
+  background: #2E7D32;
+  border-color: #2E7D32;
+  color: #FFF;
+}
+.meeeku-discount-applied-alert {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #E8F5E9;
+  border: 1px solid #A5D6A7;
+  border-radius: 10px;
+  padding: 0.6rem 1rem;
+  margin-top: 0.8rem;
+  font-size: 1.2rem;
+  color: #1B5E20;
+  font-weight: 700;
+}
+.meeeku-discount-remove-btn {
+  background: transparent;
+  border: none;
+  color: #C62828;
+  font-weight: 800;
+  cursor: pointer;
+  padding: 0.2rem 0.5rem;
+  font-size: 1.2rem;
+  text-decoration: underline;
 }
 </style>

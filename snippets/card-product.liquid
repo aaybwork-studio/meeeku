@@ -207,6 +207,9 @@
               {%- endif -%}
 
               {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %}
+              <div class="meeeku-card-discount-reminder" style="margin-top: 0.4rem;">
+                <span style="display: inline-block; font-size: 1.05rem; font-weight: 700; color: #E65100; background: #FFF3E0; border: 1px dashed #FFB74D; border-radius: 6px; padding: 0.15rem 0.55rem;">🏷️ 20% OFF with WELCOME20</span>
+              </div>
               {%- if card_product.quantity_price_breaks_configured? -%}
                 {% if card_product.variants_count == 1 and quick_add == 'bulk' %}
                   {% liquid

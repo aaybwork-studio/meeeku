@@ -39,10 +39,24 @@
             "button_link": "/collections/all?category=coords",
             "button_style": "primary"
           }
+        },
+        "slide_discounts": {
+          "type": "slide",
+          "settings": {
+            "badge_text": "🎁 Exclusive Discounts & Offers",
+            "badge_bg": "#FFF3E0",
+            "badge_color": "#E65100",
+            "heading": "Special Offers: WELCOME20 & BOGO Deals!",
+            "tagline": "Save big on pure organic cotton! Use WELCOME20 for 20% OFF your first order, or grab BUY 2 GET 1 FREE with code B2G1 on all Tees & Co-ords. Free shipping over ₹1,000!",
+            "button_label": "Claim Offers & Shop 🛍️",
+            "button_link": "/collections/all",
+            "button_style": "primary"
+          }
         }
       },
       "block_order": [
         "slide_1",
+        "slide_discounts",
         "slide_2",
         "slide_3"
       ],

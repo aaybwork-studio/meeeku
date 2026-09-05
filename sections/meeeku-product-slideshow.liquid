@@ -66,6 +66,25 @@
                 <p class="meeeku-slide__tagline">{{ tagline }}</p>
               {% endif %}
 
+              {% if tagline contains 'WELCOME20' or heading contains 'Offers' or heading contains 'Discounts' or heading contains '20%' or badge contains 'Offers' or badge contains 'Discounts' %}
+                <div class="meeeku-hero-vouchers">
+                  <div class="meeeku-hero-voucher-pill" onclick="meeekuQuickCopyCode('WELCOME20', this)" title="Click to copy WELCOME20">
+                    <div class="meeeku-voucher-tag">20% OFF FIRST ORDER</div>
+                    <div class="meeeku-voucher-code-wrap">
+                      <strong class="meeeku-voucher-code">WELCOME20</strong>
+                      <span class="meeeku-voucher-action">📋 Tap to Copy</span>
+                    </div>
+                  </div>
+                  <div class="meeeku-hero-voucher-pill" onclick="meeekuQuickCopyCode('B2G1', this)" title="Click to copy B2G1">
+                    <div class="meeeku-voucher-tag" style="background: #FFE082; color: #E65100;">BUY 2 GET 1 FREE</div>
+                    <div class="meeeku-voucher-code-wrap">
+                      <strong class="meeeku-voucher-code">B2G1</strong>
+                      <span class="meeeku-voucher-action">📋 Tap to Copy</span>
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
+
               {% if btn_label != blank %}
                 <a href="{{ btn_link }}" class="button button--{{ btn_style }} meeeku-btn-pill">
                   {{ btn_label }}
@@ -116,6 +135,35 @@
           </div>
         </div>
       </div>
+
+      <!-- Slide 4: Discounts & Promotional Reminders -->
+      <div class="meeeku-slide" data-index="3">
+        <img src="{{ 'meeeku_hero_scenery_dresses_wide.jpg' | asset_url }}" alt="Special Discounts and Offers" class="meeeku-hero-bg-img" width="1920" height="1080" loading="lazy">
+        <div class="page-width meeeku-slide__content-wrapper">
+          <div class="meeeku-hero-col-text">
+            <span class="meeeku-badge" style="background: #FFF3E0; color: #E65100; border-color: #FFE0B2;">🎁 Special Discounts & Offers</span>
+            <h2 class="meeeku-slide__headline">Flat 20% OFF & Buy 2 Get 1 Free!</h2>
+            <p class="meeeku-slide__tagline">Save big on pure organic cotton! Use WELCOME20 for 20% OFF your first order, or grab BUY 2 GET 1 FREE with code B2G1 on all Tees & Co-ords. Free shipping over ₹1,000!</p>
+            <div class="meeeku-hero-vouchers">
+              <div class="meeeku-hero-voucher-pill" onclick="meeekuQuickCopyCode('WELCOME20', this)" title="Click to copy WELCOME20">
+                <div class="meeeku-voucher-tag">20% OFF FIRST ORDER</div>
+                <div class="meeeku-voucher-code-wrap">
+                  <strong class="meeeku-voucher-code">WELCOME20</strong>
+                  <span class="meeeku-voucher-action">📋 Tap to Copy</span>
+                </div>
+              </div>
+              <div class="meeeku-hero-voucher-pill" onclick="meeekuQuickCopyCode('B2G1', this)" title="Click to copy B2G1">
+                <div class="meeeku-voucher-tag" style="background: #FFE082; color: #E65100;">BUY 2 GET 1 FREE</div>
+                <div class="meeeku-voucher-code-wrap">
+                  <strong class="meeeku-voucher-code">B2G1</strong>
+                  <span class="meeeku-voucher-action">📋 Tap to Copy</span>
+                </div>
+              </div>
+            </div>
+            <a href="/collections/all" class="button button--primary meeeku-btn-pill">Claim Offers & Shop 🛍️</a>
+          </div>
+        </div>
+      </div>
     {% endif %}
 
     <!-- Navigation Arrows -->
@@ -125,7 +173,7 @@
     <!-- Dots Indicators -->
     <div class="meeeku-slideshow__dots">
       {% assign dot_count = slide_count %}
-      {% if dot_count == 0 %}{% assign dot_count = 3 %}{% endif %}
+      {% if dot_count == 0 %}{% assign dot_count = 4 %}{% endif %}
       {% for i in (1..dot_count) %}
         <span class="meeeku-dot {% if forloop.first %}active{% endif %}" onclick="setMeeekuSlide('{{ section.id }}', {{ forloop.index0 }})"></span>
       {% endfor %}
@@ -211,6 +259,61 @@
   border-radius: 30px !important;
   font-size: 1.5rem !important;
   padding: 1.1rem 2.4rem !important;
+}
+.meeeku-hero-vouchers {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1.2rem 0 1.8rem;
+}
+.meeeku-hero-voucher-pill {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+  background: #FFFFFF;
+  border: 1.5px dashed #FF6097;
+  border-radius: 16px;
+  padding: 0.85rem 1.4rem;
+  box-shadow: 0 4px 16px rgba(107, 63, 160, 0.08);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.meeeku-hero-voucher-pill:hover {
+  transform: translateY(-2px);
+  border-color: #6B3FA0;
+  box-shadow: 0 6px 22px rgba(255, 96, 151, 0.25);
+}
+.meeeku-voucher-tag {
+  background: #E8F5E9;
+  color: #2E7D32;
+  font-size: 1.15rem;
+  font-weight: 800;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+.meeeku-voucher-code-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.meeeku-voucher-code {
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: #3D2355;
+  background: #FFF3E0;
+  padding: 0.15rem 0.65rem;
+  border-radius: 6px;
+  letter-spacing: 0.06em;
+  border: 1px solid #FFE0B2;
+}
+.meeeku-voucher-action {
+  font-size: 1.2rem;
+  color: #FF6097;
+  font-weight: 700;
+  white-space: nowrap;
 }
 .meeeku-slideshow__nav {
   position: absolute;
