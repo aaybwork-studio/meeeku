@@ -12,6 +12,7 @@
 <div class="meeeku-slideshow-wrapper" id="MeeekuSlideshowWrapper-{{ section.id }}">
   <div class="meeeku-slideshow-container" id="MeeekuSlideshow-{{ section.id }}" data-autoplay="{{ autoplay }}" data-interval="{{ interval }}">
     
+    {% assign rendered_slide_count = 0 %}
     {% if slide_count > 0 %}
       {% for block in section.blocks %}
         {% liquid
@@ -23,76 +24,67 @@
           assign btn_label = block.settings.button_label
           assign btn_link = block.settings.button_link | default: '/collections/all'
           assign btn_style = block.settings.button_style | default: 'primary'
+
+          assign is_obsolete_promo_slide = false
+          if block.id == 'slide_discounts' or heading contains 'WELCOME20' or heading contains 'BOGO' or tagline contains 'WELCOME20' or tagline contains 'B2G1' or badge contains 'Discounts'
+            assign is_obsolete_promo_slide = true
+          endif
         %}
-        <div class="meeeku-slide {% if forloop.first %}active{% endif %}" data-index="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
-          {% if bg_img != blank %}
-            <picture>
-              {% if mob_img != blank and mob_img != bg_img %}
-                <source media="(max-width: 749px)" srcset="{{ mob_img | image_url: width: 800 }}">
-              {% endif %}
-              <img src="{{ bg_img | image_url: width: 1920 }}" 
-                   alt="{{ heading | default: 'Meeeku Hero Banner' | escape }}" 
-                   class="meeeku-hero-bg-img" 
-                   width="1920" 
-                   height="1080" 
-                   {% if forloop.first %}loading="eager"{% else %}loading="lazy"{% endif %}>
-            </picture>
-          {% else %}
-            <!-- Default Fallback Image based on slide index -->
-            {% liquid
-              assign default_asset = 'meeeku_hero_scenery_ethnic_wide.jpg'
-              if forloop.index == 2
-                assign default_asset = 'meeeku_hero_scenery_dresses_wide.jpg'
-              elsif forloop.index == 3
-                assign default_asset = 'meeeku_hero_scenery_coords_wide.jpg'
-              endif
-            %}
-            <img src="{{ default_asset | asset_url }}" alt="{{ heading | escape }}" class="meeeku-hero-bg-img" width="1920" height="1080" {% if forloop.first %}loading="eager"{% else %}loading="lazy"{% endif %}>
-          {% endif %}
+        {% unless is_obsolete_promo_slide %}
+          <div class="meeeku-slide {% if rendered_slide_count == 0 %}active{% endif %}" data-index="{{ rendered_slide_count }}" {{ block.shopify_attributes }}>
+            {% if bg_img != blank %}
+              <picture>
+                {% if mob_img != blank and mob_img != bg_img %}
+                  <source media="(max-width: 749px)" srcset="{{ mob_img | image_url: width: 800 }}">
+                {% endif %}
+                <img src="{{ bg_img | image_url: width: 1920 }}" 
+                     alt="{{ heading | default: 'Meeeku Hero Banner' | escape }}" 
+                     class="meeeku-hero-bg-img" 
+                     width="1920" 
+                     height="1080" 
+                     {% if rendered_slide_count == 0 %}loading="eager"{% else %}loading="lazy"{% endif %}>
+              </picture>
+            {% else %}
+              <!-- Default Fallback Image based on slide content/index -->
+              {% liquid
+                assign default_asset = 'meeeku_hero_scenery_ethnic_wide.jpg'
+                if heading contains 'Boys' or badge contains 'Boys'
+                  assign default_asset = 'meeeku_prod_boy_pinstripe_linen_coord.jpg'
+                elsif heading contains 'Co-ord' or badge contains 'Co-ord' or rendered_slide_count == 2
+                  assign default_asset = 'meeeku_hero_scenery_coords_wide.jpg'
+                elsif rendered_slide_count == 1
+                  assign default_asset = 'meeeku_prod_boy_pinstripe_linen_coord.jpg'
+                endif
+              %}
+              <img src="{{ default_asset | asset_url }}" alt="{{ heading | escape }}" class="meeeku-hero-bg-img" width="1920" height="1080" {% if rendered_slide_count == 0 %}loading="eager"{% else %}loading="lazy"{% endif %}>
+            {% endif %}
 
-          <div class="page-width meeeku-slide__content-wrapper">
-            <div class="meeeku-hero-col-text">
-              {% if badge != blank %}
-                <span class="meeeku-badge" style="background: {{ block.settings.badge_bg | default: '#EDE7F6' }}; color: {{ block.settings.badge_color | default: '#512DA8' }};">
-                  {{ badge }}
-                </span>
-              {% endif %}
-              
-              {% if heading != blank %}
-                <h2 class="meeeku-slide__headline">{{ heading }}</h2>
-              {% endif %}
+            <div class="page-width meeeku-slide__content-wrapper">
+              <div class="meeeku-hero-col-text">
+                {% if badge != blank %}
+                  <span class="meeeku-badge" style="background: {{ block.settings.badge_bg | default: '#EDE7F6' }}; color: {{ block.settings.badge_color | default: '#512DA8' }};">
+                    {{ badge }}
+                  </span>
+                {% endif %}
+                
+                {% if heading != blank %}
+                  <h2 class="meeeku-slide__headline">{{ heading }}</h2>
+                {% endif %}
 
-              {% if tagline != blank %}
-                <p class="meeeku-slide__tagline">{{ tagline }}</p>
-              {% endif %}
+                {% if tagline != blank %}
+                  <p class="meeeku-slide__tagline">{{ tagline }}</p>
+                {% endif %}
 
-              {% if tagline contains 'WELCOME20' or heading contains 'Offers' or heading contains 'Discounts' or heading contains '20%' or badge contains 'Offers' or badge contains 'Discounts' %}
-                <div class="meeeku-hero-vouchers">
-                  <div class="meeeku-hero-voucher-pill" onclick="meeekuQuickCopyCode('WELCOME20', this)" title="Click to copy WELCOME20">
-                    <div class="meeeku-voucher-tag">20% OFF FIRST ORDER</div>
-                    <div class="meeeku-voucher-code-wrap">
-                      <strong class="meeeku-voucher-code">WELCOME20</strong>
-                      <span class="meeeku-voucher-action">📋 Tap to Copy</span>
-                    </div>
-                  </div>
-                  <div class="meeeku-hero-voucher-pill" onclick="meeekuQuickCopyCode('B2G1', this)" title="Click to copy B2G1">
-                    <div class="meeeku-voucher-tag" style="background: #FFE082; color: #E65100;">BUY 2 GET 1 FREE</div>
-                    <div class="meeeku-voucher-code-wrap">
-                      <strong class="meeeku-voucher-code">B2G1</strong>
-                      <span class="meeeku-voucher-action">📋 Tap to Copy</span>
-                    </div>
-                  </div>
-                </div>
-              {% endif %}
-
-              {% if btn_label != blank %}
-                <a href="{{ btn_link }}" class="button button--{{ btn_style }} meeeku-btn-pill">
-                  {{ btn_label }}
-                </a>
-              {% endif %}
+                {% if btn_label != blank %}
+                  <a href="{{ btn_link }}" class="button button--{{ btn_style }} meeeku-btn-pill">
+                    {{ btn_label }}
+                  </a>
+                {% endif %}
+              </div>
             </div>
           </div>
-        </div>
+          {% assign rendered_slide_count = rendered_slide_count | plus: 1 %}
+        {% endunless %}
       {% endfor %}
 
     {% else %}
@@ -135,35 +127,7 @@
           </div>
         </div>
       </div>
-
-      <!-- Slide 4: Discounts & Promotional Reminders -->
-      <div class="meeeku-slide" data-index="3">
-        <img src="{{ 'meeeku_hero_scenery_dresses_wide.jpg' | asset_url }}" alt="Special Discounts and Offers" class="meeeku-hero-bg-img" width="1920" height="1080" loading="lazy">
-        <div class="page-width meeeku-slide__content-wrapper">
-          <div class="meeeku-hero-col-text">
-            <span class="meeeku-badge" style="background: #FFF3E0; color: #E65100; border-color: #FFE0B2;">🎁 Special Discounts & Offers</span>
-            <h2 class="meeeku-slide__headline">Flat 20% OFF & Buy 2 Get 1 Free!</h2>
-            <p class="meeeku-slide__tagline">Save big on pure organic cotton! Use WELCOME20 for 20% OFF your first order, or grab BUY 2 GET 1 FREE with code B2G1 on all Tees & Co-ords. Free shipping over ₹1,000!</p>
-            <div class="meeeku-hero-vouchers">
-              <div class="meeeku-hero-voucher-pill" onclick="meeekuQuickCopyCode('WELCOME20', this)" title="Click to copy WELCOME20">
-                <div class="meeeku-voucher-tag">20% OFF FIRST ORDER</div>
-                <div class="meeeku-voucher-code-wrap">
-                  <strong class="meeeku-voucher-code">WELCOME20</strong>
-                  <span class="meeeku-voucher-action">📋 Tap to Copy</span>
-                </div>
-              </div>
-              <div class="meeeku-hero-voucher-pill" onclick="meeekuQuickCopyCode('B2G1', this)" title="Click to copy B2G1">
-                <div class="meeeku-voucher-tag" style="background: #FFE082; color: #E65100;">BUY 2 GET 1 FREE</div>
-                <div class="meeeku-voucher-code-wrap">
-                  <strong class="meeeku-voucher-code">B2G1</strong>
-                  <span class="meeeku-voucher-action">📋 Tap to Copy</span>
-                </div>
-              </div>
-            </div>
-            <a href="/collections/all" class="button button--primary meeeku-btn-pill">Claim Offers & Shop 🛍️</a>
-          </div>
-        </div>
-      </div>
+      {% assign rendered_slide_count = 3 %}
     {% endif %}
 
     <!-- Navigation Arrows -->
@@ -172,8 +136,8 @@
 
     <!-- Dots Indicators -->
     <div class="meeeku-slideshow__dots">
-      {% assign dot_count = slide_count %}
-      {% if dot_count == 0 %}{% assign dot_count = 4 %}{% endif %}
+      {% assign dot_count = rendered_slide_count %}
+      {% if dot_count == 0 %}{% assign dot_count = 3 %}{% endif %}
       {% for i in (1..dot_count) %}
         <span class="meeeku-dot {% if forloop.first %}active{% endif %}" onclick="setMeeekuSlide('{{ section.id }}', {{ forloop.index0 }})"></span>
       {% endfor %}

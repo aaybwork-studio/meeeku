@@ -207,9 +207,19 @@
               {%- endif -%}
 
               {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %}
+              {% liquid
+                assign card_p1_enabled = settings.promo_1_enabled
+                if card_p1_enabled == nil
+                  assign card_p1_enabled = true
+                endif
+                assign card_p1_code = settings.promo_1_code | default: 'Festive25' | strip
+                assign card_p1_badge = settings.promo_1_card_badge | default: '25% OFF' | strip
+              %}
+              {% if card_p1_enabled and card_p1_code != blank %}
               <div class="meeeku-card-discount-reminder" style="margin-top: 0.4rem;">
-                <span style="display: inline-block; font-size: 1.05rem; font-weight: 700; color: #E65100; background: #FFF3E0; border: 1px dashed #FFB74D; border-radius: 6px; padding: 0.15rem 0.55rem;">🏷️ 20% OFF with WELCOME20</span>
+                <span style="display: inline-block; font-size: 1.05rem; font-weight: 700; color: #E65100; background: #FFF3E0; border: 1px dashed #FFB74D; border-radius: 6px; padding: 0.15rem 0.55rem;">🏷️ {{ card_p1_badge }} with {{ card_p1_code }}</span>
               </div>
+              {% endif %}
               {%- if card_product.quantity_price_breaks_configured? -%}
                 {% if card_product.variants_count == 1 and quick_add == 'bulk' %}
                   {% liquid

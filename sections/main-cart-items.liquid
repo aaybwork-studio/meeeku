@@ -59,7 +59,27 @@
       </div>
     </div>
 
-    <!-- Available Discounts & Reminders Container for Cart Page -->
+    {% liquid
+      assign pp1_enabled = settings.promo_1_enabled
+      if pp1_enabled == nil
+        assign pp1_enabled = true
+      endif
+      assign pp1_code = settings.promo_1_code | default: 'Festive25' | strip
+      assign pp1_card_badge = settings.promo_1_card_badge | default: '25% OFF' | strip
+      assign pp1_desc = settings.promo_1_description | default: '25% off entire order • Minimum purchase of ₹1,000.00' | strip
+
+      assign pp2_enabled = settings.promo_2_enabled | default: false
+      assign pp2_code = settings.promo_2_code | default: '' | strip
+      assign pp2_card_badge = settings.promo_2_card_badge | default: settings.promo_2_badge | default: 'OFFER' | strip
+      assign pp2_desc = settings.promo_2_description | default: '' | strip
+
+      assign pp3_enabled = settings.promo_3_enabled | default: false
+      assign pp3_code = settings.promo_3_code | default: '' | strip
+      assign pp3_card_badge = settings.promo_3_card_badge | default: settings.promo_3_badge | default: 'OFFER' | strip
+      assign pp3_desc = settings.promo_3_description | default: '' | strip
+    %}
+
+    <!-- Available Discounts & Reminders Container for Cart Page (Synced with Shopify Admin Promo Property) -->
     <div id="MeeekuPageDiscountsBox" class="meeeku-cart-discounts-box">
       <div class="meeeku-cart-discounts-header">
         <div style="display: flex; align-items: center; gap: 0.6rem;">
@@ -69,30 +89,49 @@
         <span class="meeeku-cart-discounts-sub">Tap to apply at checkout</span>
       </div>
 
-      <div class="meeeku-page-discounts-grid">
-        <!-- Card 1: WELCOME20 -->
-        <div class="meeeku-cart-discount-card" id="MeeekuPageCard-WELCOME20" onclick="meeekuApplyCartDiscount('WELCOME20', this)">
-          <div class="meeeku-cart-discount-badge">20% OFF</div>
+      <div class="meeeku-page-discounts-grid" id="MeeekuPageDiscountsGrid">
+        {% if pp1_enabled and pp1_code != blank %}
+        <div class="meeeku-cart-discount-card" id="MeeekuPageCard-{{ pp1_code | upcase }}" data-promo-code="{{ pp1_code | escape }}" onclick="meeekuApplyCartDiscount('{{ pp1_code | escape }}', this)">
+          <div class="meeeku-cart-discount-badge" style="background: #FFE082; color: #E65100;">{{ pp1_card_badge }}</div>
           <div class="meeeku-cart-discount-info">
-            <div class="meeeku-cart-discount-code">WELCOME20</div>
-            <div class="meeeku-cart-discount-text">20% OFF your first order site-wide</div>
+            <div class="meeeku-cart-discount-code">{{ pp1_code }}</div>
+            <div class="meeeku-cart-discount-text">{{ pp1_desc }}</div>
           </div>
-          <button type="button" class="meeeku-cart-discount-btn" id="MeeekuPageBtn-WELCOME20">Apply</button>
+          <button type="button" class="meeeku-cart-discount-btn" id="MeeekuPageBtn-{{ pp1_code | upcase }}">Apply</button>
         </div>
+        {% endif %}
 
-        <!-- Card 2: B2G1 -->
-        <div class="meeeku-cart-discount-card" id="MeeekuPageCard-B2G1" onclick="meeekuApplyCartDiscount('B2G1', this)">
-          <div class="meeeku-cart-discount-badge" style="background: #FFE082; color: #E65100;">BOGO DEAL</div>
+        {% if pp2_enabled and pp2_code != blank %}
+        <div class="meeeku-cart-discount-card" id="MeeekuPageCard-{{ pp2_code | upcase }}" data-promo-code="{{ pp2_code | escape }}" onclick="meeekuApplyCartDiscount('{{ pp2_code | escape }}', this)">
+          <div class="meeeku-cart-discount-badge" style="background: #FFE082; color: #E65100;">{{ pp2_card_badge }}</div>
           <div class="meeeku-cart-discount-info">
-            <div class="meeeku-cart-discount-code">B2G1</div>
-            <div class="meeeku-cart-discount-text">Buy 2 Get 1 FREE on Tees & Co-ords</div>
+            <div class="meeeku-cart-discount-code">{{ pp2_code }}</div>
+            <div class="meeeku-cart-discount-text">{{ pp2_desc }}</div>
           </div>
-          <button type="button" class="meeeku-cart-discount-btn" id="MeeekuPageBtn-B2G1">Apply</button>
+          <button type="button" class="meeeku-cart-discount-btn" id="MeeekuPageBtn-{{ pp2_code | upcase }}">Apply</button>
         </div>
+        {% endif %}
+
+        {% if pp3_enabled and pp3_code != blank %}
+        <div class="meeeku-cart-discount-card" id="MeeekuPageCard-{{ pp3_code | upcase }}" data-promo-code="{{ pp3_code | escape }}" onclick="meeekuApplyCartDiscount('{{ pp3_code | escape }}', this)">
+          <div class="meeeku-cart-discount-badge" style="background: #FFE082; color: #E65100;">{{ pp3_card_badge }}</div>
+          <div class="meeeku-cart-discount-info">
+            <div class="meeeku-cart-discount-code">{{ pp3_code }}</div>
+            <div class="meeeku-cart-discount-text">{{ pp3_desc }}</div>
+          </div>
+          <button type="button" class="meeeku-cart-discount-btn" id="MeeekuPageBtn-{{ pp3_code | upcase }}">Apply</button>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Custom Shopify Discount Code Input -->
+      <div class="meeeku-custom-discount-row" style="display: flex; gap: 0.8rem; margin-top: 1rem;">
+        <input type="text" id="MeeekuPageCustomCodeInput" placeholder="Enter Shopify promo code (e.g. {{ pp1_code }})..." style="flex: 1; border: 1.5px solid #F8BBD0; border-radius: 12px; padding: 0.8rem 1.2rem; font-size: 1.35rem; color: #3D2355; background: #FFF; outline: none; font-family: inherit;" onkeydown="if(event.key==='Enter'){event.preventDefault();meeekuApplyCustomCodeInput('MeeekuPageCustomCodeInput');}">
+        <button type="button" onclick="meeekuApplyCustomCodeInput('MeeekuPageCustomCodeInput')" style="background: #6B3FA0; color: #FFF; border: none; border-radius: 12px; padding: 0.8rem 1.6rem; font-size: 1.3rem; font-weight: 700; cursor: pointer; white-space: nowrap;">Apply Code</button>
       </div>
 
       <div id="MeeekuPageDiscountAppliedAlert" class="meeeku-discount-applied-alert" style="display: none;">
-        <span id="MeeekuPageDiscountAppliedMsg">🎉 Code <strong>WELCOME20</strong> applied!</span>
+        <span id="MeeekuPageDiscountAppliedMsg">🎉 Code <strong>{{ pp1_code }}</strong> applied!</span>
         <button type="button" class="meeeku-discount-remove-btn" onclick="meeekuRemoveCartDiscount(event)">Remove</button>
       </div>
     </div>
@@ -118,6 +157,10 @@
           <div style="display: flex; justify-content: space-between; align-items: center; font-size: 1.45rem; color: #666; margin-bottom: 0.5rem; width: 100%;">
             <span>Bag Subtotal:</span>
             <span id="MeeekuPageSubtotal" style="color: #3D2355; font-weight: 700; font-size: 1.55rem;">₹0.00</span>
+          </div>
+          <div id="MeeekuPageDiscountRow" style="display: none; justify-content: space-between; align-items: center; font-size: 1.45rem; margin-bottom: 0.5rem; width: 100%; background: #E8F5E9; padding: 0.5rem 1rem; border-radius: 12px; border: 1px dashed #81C784;">
+            <span id="MeeekuPageDiscountRowLabel" style="color: #1B5E20; font-weight: 700;">🏷️ Promo Discount ({{ pp1_code }}):</span>
+            <span id="MeeekuPageDiscountRowVal" style="font-weight: 800; font-size: 1.4rem; color: #2E7D32;">-₹0.00</span>
           </div>
           <div id="MeeekuPageGiftRow" style="display: none; justify-content: space-between; align-items: center; font-size: 1.45rem; margin-bottom: 0.5rem; width: 100%; background: #F3E5F5; padding: 0.5rem 1rem; border-radius: 12px; border: 1px dashed #CE93D8;">
             <span style="color: #6A1B9A; font-weight: 700;">🎁 Surprise Gift (Little Ones):</span>
@@ -154,9 +197,11 @@
     <p style="font-size: 1.5rem; color: #777; margin-bottom: 1.6rem; max-width: 380px; margin-left: auto; margin-right: auto;">
       Discover our 100% skin-safe organic cotton tees, 2-piece co-ord sets, and handcrafted ethnic lehengas!
     </p>
-    <div style="background: #FFF3E0; border: 1.5px dashed #FFB74D; border-radius: 14px; padding: 1rem 1.6rem; margin-bottom: 2.2rem; max-width: 400px; margin-left: auto; margin-right: auto;">
-      <span style="font-size: 1.35rem; color: #E65100; font-weight: 700;">✨ Tip: Get <strong>20% OFF</strong> your first order with code <strong style="text-decoration: underline;">WELCOME20</strong>!</span>
+    {% if pp1_enabled and pp1_code != blank %}
+    <div style="background: #FFF3E0; border: 1.5px dashed #FFB74D; border-radius: 14px; padding: 1rem 1.6rem; margin-bottom: 2.2rem; max-width: 440px; margin-left: auto; margin-right: auto;">
+      <span style="font-size: 1.35rem; color: #E65100; font-weight: 700;">✨ Tip: <strong>{{ pp1_desc }}</strong> with code <strong style="text-decoration: underline;">{{ pp1_code }}</strong>!</span>
     </div>
+    {% endif %}
     <a href="/collections/all" class="button button--primary" style="background: #6B3FA0; border-color: #6B3FA0; border-radius: 30px; padding: 1.2rem 3rem; font-size: 1.5rem; font-weight: 700; text-decoration: none;">
       Explore Collections ✨
     </a>
@@ -562,10 +607,13 @@ function updateMeeekuPageShippingProgress(subtotalRupees) {
   var trustSubtitle = document.getElementById('MeeekuPageTrustSubtitle');
 
   var subtotal = parseFloat(subtotalRupees) || 0;
+  window.meeekuLastPageSubtotal = subtotal;
   if (!box || !msg || !fill) return;
 
   if (subtotal <= 0) {
     box.style.display = 'none';
+    var emptyPageDiscRow = document.getElementById('MeeekuPageDiscountRow');
+    if (emptyPageDiscRow) emptyPageDiscRow.style.display = 'none';
     return;
   }
 
@@ -603,11 +651,31 @@ function updateMeeekuPageShippingProgress(subtotalRupees) {
     if (giftRow) giftRow.style.display = 'flex';
   }
 
+  var savingsInfo = (typeof window.calculateMeeekuPromoSavings === 'function')
+    ? window.calculateMeeekuPromoSavings(subtotal)
+    : { code: '', discountAmount: 0, qualifies: false, percent: 0 };
+
+  var discRow = document.getElementById('MeeekuPageDiscountRow');
+  var discLabel = document.getElementById('MeeekuPageDiscountRowLabel');
+  var discVal = document.getElementById('MeeekuPageDiscountRowVal');
+
+  if (discRow && discLabel && discVal) {
+    if (savingsInfo.code && savingsInfo.qualifies && savingsInfo.discountAmount > 0) {
+      discRow.style.display = 'flex';
+      discLabel.innerText = '🏷️ Promo (' + savingsInfo.code + (savingsInfo.percent ? ' • ' + savingsInfo.percent + '% OFF' : '') + '):';
+      discVal.innerText = '-₹' + savingsInfo.discountAmount.toLocaleString('en-IN', {minimumFractionDigits: 2});
+    } else {
+      discRow.style.display = 'none';
+    }
+  }
+
   if (totalEl) {
-    var finalTotal = subtotal + deliveryFee;
+    var finalTotal = Math.max(0, subtotal - (savingsInfo.discountAmount || 0)) + deliveryFee;
     totalEl.innerText = '₹' + finalTotal.toLocaleString('en-IN', {minimumFractionDigits: 2});
   }
 }
+
+window.updateMeeekuPageShippingProgress = updateMeeekuPageShippingProgress;
 
 function fetchMeeekuPageCart(callback) {
   fetch('/cart.js', { cache: 'no-store' })
@@ -616,11 +684,19 @@ function fetchMeeekuPageCart(callback) {
       return res.json();
     })
     .then(function(cart) {
+      window.meeekuLiveShopifyCart = cart;
+      if (window.MEEEKU_PROMO_CONFIG && typeof window.MEEEKU_PROMO_CONFIG.syncFromShopifyCartJson === 'function') {
+        window.MEEEKU_PROMO_CONFIG.syncFromShopifyCartJson(cart);
+      }
       renderMeeekuPageCartWithData(cart);
       updateCartBadges(cart.item_count || 0);
+      if (typeof window.meeekuSyncDiscountUI === 'function') {
+        window.meeekuSyncDiscountUI();
+      }
       if (typeof callback === 'function') callback(cart);
     })
     .catch(function(err) {
+      if (window.MeeekuLogger) window.MeeekuLogger.error('FetchPageCart', err);
       renderMeeekuPageCartWithLocalFallback();
       if (typeof callback === 'function') callback(null);
     });

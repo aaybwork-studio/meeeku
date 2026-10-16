@@ -369,31 +369,65 @@
       {{ 'accessibility.skip_to_text' | t }}
     </a>
 
+    {%- render 'meeeku-promo-config' -%}
     {%- render 'cart-drawer' -%}
 
     <!-- Meeeku Persistent Sticky Header Wrapper (Discounts Header + Main Navigation) -->
     <div id="MeeekuStickyHeaderWrapper" class="meeeku-sticky-header-wrapper">
-      <!-- Meeeku Dynamic Rotating Promotion Ticker Banner -->
+      <!-- Meeeku Dynamic Rotating Promotion Ticker Banner (Synced with Shopify Admin Promo Property) -->
       <div id="MeeekuPromoTicker" class="meeeku-promo-ticker" role="region" aria-label="Promotions Announcement">
         <div class="meeeku-promo-ticker-container">
           <div class="meeeku-promo-slides-wrapper" id="MeeekuPromoSlides">
-            
-            <!-- Slide 1: Welcome 20 -->
-            <div class="meeeku-promo-slide active" onclick="meeekuQuickCopyCode('WELCOME20', this)" title="Click to copy code WELCOME20">
-              <span>✨ SPECIAL OFFER: Get <span class="meeeku-promo-badge">20% OFF</span> your first purchase with code <strong class="meeeku-promo-code">WELCOME20</strong> <span class="meeeku-copy-tip">📋 Tap to copy</span> | Free Shipping Across India 🚚</span>
-            </div>
+            {% liquid
+              assign p1_enabled = settings.promo_1_enabled
+              if p1_enabled == nil
+                assign p1_enabled = true
+              endif
+              assign p1_code = settings.promo_1_code | default: 'Festive25' | strip
+              assign p1_headline = settings.promo_1_headline | default: '🎉 MEGA PROMOTION:' | strip
+              assign p1_badge = settings.promo_1_badge | default: '25% OFF ENTIRE ORDER' | strip
+              assign p1_ticker_text = settings.promo_1_ticker_text | default: 'Minimum purchase of ₹1,000.00' | strip
 
-            <!-- Slide 2: Buy 2 Get 1 Free / BOGO -->
-            <div class="meeeku-promo-slide" onclick="meeekuQuickCopyCode('B2G1', this)" title="Click to copy code B2G1">
-              <span>🎉 MEGA PROMOTION: <span class="meeeku-promo-badge" style="background: #FFE082; color: #E65100;">BUY 2 GET 1 FREE</span> on all Cotton Tees & Co-ords with code <strong class="meeeku-promo-code">B2G1</strong> <span class="meeeku-copy-tip">📋 Tap to copy</span> 🎁</span>
-            </div>
+              assign p2_enabled = settings.promo_2_enabled | default: false
+              assign p2_code = settings.promo_2_code | default: '' | strip
+              assign p2_headline = settings.promo_2_headline | default: '✨ SPECIAL OFFER:' | strip
+              assign p2_badge = settings.promo_2_badge | default: 'SPECIAL OFFER' | strip
+              assign p2_ticker_text = settings.promo_2_ticker_text | default: settings.promo_2_description | strip
 
-            <!-- Slide 3: Quality Guarantee -->
-            <div class="meeeku-promo-slide">
+              assign p3_enabled = settings.promo_3_enabled | default: false
+              assign p3_code = settings.promo_3_code | default: '' | strip
+              assign p3_headline = settings.promo_3_headline | default: '🎁 LIMITED OFFER:' | strip
+              assign p3_badge = settings.promo_3_badge | default: 'SPECIAL OFFER' | strip
+              assign p3_ticker_text = settings.promo_3_ticker_text | default: settings.promo_3_description | strip
+
+              assign has_active_slide = false
+            %}
+
+            {% if p1_enabled and p1_code != blank %}
+              {% assign has_active_slide = true %}
+              <div class="meeeku-promo-slide active" data-promo-code="{{ p1_code | upcase }}" onclick="meeekuQuickCopyCode('{{ p1_code | escape }}', this)" title="Click to copy code {{ p1_code | escape }}">
+                <span>{{ p1_headline }} <span class="meeeku-promo-badge" style="background: #FFE082; color: #E65100;">{{ p1_badge }}</span> {{ p1_ticker_text }} with code <strong class="meeeku-promo-code">{{ p1_code }}</strong> <span class="meeeku-copy-tip">📋 Tap to copy</span> 🎁</span>
+              </div>
+            {% endif %}
+
+            {% if p2_enabled and p2_code != blank %}
+              <div class="meeeku-promo-slide {% unless has_active_slide %}active{% assign has_active_slide = true %}{% endunless %}" data-promo-code="{{ p2_code | upcase }}" onclick="meeekuQuickCopyCode('{{ p2_code | escape }}', this)" title="Click to copy code {{ p2_code | escape }}">
+                <span>{{ p2_headline }} <span class="meeeku-promo-badge" style="background: #FFE082; color: #E65100;">{{ p2_badge }}</span> {{ p2_ticker_text }} with code <strong class="meeeku-promo-code">{{ p2_code }}</strong> <span class="meeeku-copy-tip">📋 Tap to copy</span> 🎁</span>
+              </div>
+            {% endif %}
+
+            {% if p3_enabled and p3_code != blank %}
+              <div class="meeeku-promo-slide {% unless has_active_slide %}active{% assign has_active_slide = true %}{% endunless %}" data-promo-code="{{ p3_code | upcase }}" onclick="meeekuQuickCopyCode('{{ p3_code | escape }}', this)" title="Click to copy code {{ p3_code | escape }}">
+                <span>{{ p3_headline }} <span class="meeeku-promo-badge" style="background: #FFE082; color: #E65100;">{{ p3_badge }}</span> {{ p3_ticker_text }} with code <strong class="meeeku-promo-code">{{ p3_code }}</strong> <span class="meeeku-copy-tip">📋 Tap to copy</span> 🎁</span>
+              </div>
+            {% endif %}
+
+            <!-- Brand Slide: Quality Guarantee -->
+            <div class="meeeku-promo-slide {% unless has_active_slide %}active{% assign has_active_slide = true %}{% endunless %}">
               <span>🌸 ZERO-ITCH GUARANTEE: <span class="meeeku-promo-badge" style="background: #E1BEE7; color: #4A148C;">100% Pure Organic</span> Muslin Cotton Linings • Handcrafted with Love 💕</span>
             </div>
 
-            <!-- Slide 4: Free Express Delivery & Gift -->
+            <!-- Brand Slide: Free Express Delivery & Gift -->
             <div class="meeeku-promo-slide">
               <span>🚚 FREE EXPRESS DELIVERY: On Orders Above <span class="meeeku-promo-badge" style="background: #C8E6C9; color: #1B5E20;">₹1,000</span> + Free Surprise Gift Inside! 🎁</span>
             </div>
@@ -613,15 +647,29 @@
       window.meeekuQuickCopyCode = function(code, el) {
         if (!code) return;
         try {
-          navigator.clipboard.writeText(code);
-          sessionStorage.setItem('meeeku_active_discount', code);
+          var cleanCode = String(code).trim();
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(cleanCode);
+          }
+          sessionStorage.setItem('meeeku_active_discount', cleanCode);
+          localStorage.setItem('meeeku_active_discount', cleanCode);
+          fetch('/discount/' + encodeURIComponent(cleanCode), {
+            credentials: 'same-origin'
+          }).catch(function(err) {
+            if (window.MeeekuLogger) window.MeeekuLogger.error('QuickCopyDiscountPrime', err);
+          });
+          if (typeof window.meeekuSyncDiscountUI === 'function') {
+            window.meeekuSyncDiscountUI();
+          }
           var toast = document.getElementById('MeeekuCartToast') || document.getElementById('MeeekuCartToastCatalog');
           if (toast) {
-            toast.textContent = '🎉 Coupon ' + code + ' copied! Discount will apply at checkout.';
+            toast.textContent = '🎉 Coupon ' + cleanCode + ' copied & applied! Discount will apply at checkout.';
             toast.classList.add('show');
             setTimeout(function() { toast.classList.remove('show'); }, 3500);
           }
-        } catch(e) {}
+        } catch(e) {
+          if (window.MeeekuLogger) window.MeeekuLogger.error('QuickCopyCode', e);
+        }
       };
 
       function startTimer() {
@@ -640,7 +688,9 @@
               document.body.style.paddingTop = h + 'px';
             }
           }
-        } catch(e) {}
+        } catch(e) {
+          if (window.MeeekuLogger) window.MeeekuLogger.error('SyncHeaderHeight', e);
+        }
       }
 
       window.addEventListener('resize', syncMeeekuHeaderHeight, { passive: true });
@@ -648,6 +698,11 @@
       window.addEventListener('load', syncMeeekuHeaderHeight);
 
       document.addEventListener('DOMContentLoaded', function() {
+        if (window.MEEEKU_PROMO_CONFIG && Array.isArray(window.MEEEKU_PROMO_CONFIG.promos)) {
+          window.MEEEKU_PROMO_CONFIG.promos.forEach(function(p) {
+            window.MEEEKU_PROMO_CONFIG.renderDynamicTickerSlide(p);
+          });
+        }
         startTimer();
         syncMeeekuHeaderHeight();
         var tickerEl = document.getElementById('MeeekuPromoTicker');

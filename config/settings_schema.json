@@ -8,6 +8,199 @@
     "theme_support_url": "https://support.shopify.com/"
   },
   {
+    "name": "Promotions & Discount Codes",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Sync discount codes created in Shopify Admin > Discounts here. Changes automatically reflect in both the Top Promo Ticker Banner and the Cart (Drawer & Cart Page)."
+      },
+      {
+        "type": "header",
+        "content": "Primary Discount Code (Active)"
+      },
+      {
+        "type": "checkbox",
+        "id": "promo_1_enabled",
+        "label": "Show Primary Discount Code in Ticker & Cart",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "promo_1_code",
+        "label": "Discount Code (Shopify Admin Code)",
+        "default": "Festive25"
+      },
+      {
+        "type": "text",
+        "id": "promo_1_headline",
+        "label": "Top Ticker Prefix",
+        "default": "🎉 MEGA PROMOTION:"
+      },
+      {
+        "type": "text",
+        "id": "promo_1_badge",
+        "label": "Top Ticker Highlight Badge",
+        "default": "25% OFF ENTIRE ORDER"
+      },
+      {
+        "type": "text",
+        "id": "promo_1_ticker_text",
+        "label": "Top Ticker Condition Text",
+        "default": "Minimum purchase of ₹1,000.00"
+      },
+      {
+        "type": "text",
+        "id": "promo_1_card_badge",
+        "label": "Cart Discount Card Badge",
+        "default": "25% OFF"
+      },
+      {
+        "type": "text",
+        "id": "promo_1_description",
+        "label": "Cart Discount Description",
+        "default": "25% off entire order • Minimum purchase of ₹1,000.00"
+      },
+      {
+        "type": "number",
+        "id": "promo_1_percent",
+        "label": "Discount Percentage (for Cart preview)",
+        "default": 25
+      },
+      {
+        "type": "number",
+        "id": "promo_1_min_order",
+        "label": "Minimum Purchase Amount in ₹ (0 for none)",
+        "default": 1000
+      },
+      {
+        "type": "header",
+        "content": "Second Discount Code (Optional)"
+      },
+      {
+        "type": "checkbox",
+        "id": "promo_2_enabled",
+        "label": "Show Second Discount Code in Ticker & Cart",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "promo_2_code",
+        "label": "Second Discount Code",
+        "default": ""
+      },
+      {
+        "type": "text",
+        "id": "promo_2_headline",
+        "label": "Second Ticker Prefix",
+        "default": "✨ SPECIAL OFFER:"
+      },
+      {
+        "type": "text",
+        "id": "promo_2_badge",
+        "label": "Second Ticker Highlight Badge",
+        "default": ""
+      },
+      {
+        "type": "text",
+        "id": "promo_2_ticker_text",
+        "label": "Second Ticker Condition Text",
+        "default": ""
+      },
+      {
+        "type": "text",
+        "id": "promo_2_card_badge",
+        "label": "Second Cart Card Badge",
+        "default": ""
+      },
+      {
+        "type": "text",
+        "id": "promo_2_description",
+        "label": "Second Cart Discount Description",
+        "default": ""
+      },
+      {
+        "type": "number",
+        "id": "promo_2_percent",
+        "label": "Second Discount Percentage",
+        "default": 0
+      },
+      {
+        "type": "number",
+        "id": "promo_2_min_order",
+        "label": "Second Minimum Purchase Amount in ₹",
+        "default": 0
+      },
+      {
+        "type": "header",
+        "content": "Third Discount Code (Optional)"
+      },
+      {
+        "type": "checkbox",
+        "id": "promo_3_enabled",
+        "label": "Show Third Discount Code in Ticker & Cart",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "promo_3_code",
+        "label": "Third Discount Code",
+        "default": ""
+      },
+      {
+        "type": "text",
+        "id": "promo_3_headline",
+        "label": "Third Ticker Prefix",
+        "default": "🎁 LIMITED OFFER:"
+      },
+      {
+        "type": "text",
+        "id": "promo_3_badge",
+        "label": "Third Ticker Highlight Badge",
+        "default": ""
+      },
+      {
+        "type": "text",
+        "id": "promo_3_ticker_text",
+        "label": "Third Ticker Condition Text",
+        "default": ""
+      },
+      {
+        "type": "text",
+        "id": "promo_3_card_badge",
+        "label": "Third Cart Card Badge",
+        "default": ""
+      },
+      {
+        "type": "text",
+        "id": "promo_3_description",
+        "label": "Third Cart Discount Description",
+        "default": ""
+      },
+      {
+        "type": "number",
+        "id": "promo_3_percent",
+        "label": "Third Discount Percentage",
+        "default": 0
+      },
+      {
+        "type": "number",
+        "id": "promo_3_min_order",
+        "label": "Third Minimum Purchase Amount in ₹",
+        "default": 0
+      },
+      {
+        "type": "header",
+        "content": "Additional Promo Codes List (Optional)"
+      },
+      {
+        "type": "textarea",
+        "id": "promo_extra_codes",
+        "label": "Additional Codes (One per line: CODE | BADGE | DESCRIPTION | % | MIN_ORDER)",
+        "default": ""
+      }
+    ]
+  },
+  {
     "name": "t:settings_schema.logo.name",
     "settings": [
       {

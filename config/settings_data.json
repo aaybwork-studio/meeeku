@@ -1,5 +1,19 @@
 {
   "current": {
+    "promo_1_enabled": true,
+    "promo_1_code": "Festive25",
+    "promo_1_headline": "🎉 MEGA PROMOTION:",
+    "promo_1_badge": "25% OFF ENTIRE ORDER",
+    "promo_1_ticker_text": "Minimum purchase of ₹1,000.00",
+    "promo_1_card_badge": "25% OFF",
+    "promo_1_description": "25% off entire order • Minimum purchase of ₹1,000.00",
+    "promo_1_percent": 25,
+    "promo_1_min_order": 1000,
+    "promo_2_enabled": false,
+    "promo_2_code": "",
+    "promo_3_enabled": false,
+    "promo_3_code": "",
+    "promo_extra_codes": "",
     "logo_width": 90,
     "color_schemes": {
       "scheme-1": {

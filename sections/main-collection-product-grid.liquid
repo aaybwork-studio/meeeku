@@ -307,9 +307,19 @@
                       </span>
                     {% endif %}
                   </div>
+                  {% liquid
+                    assign grid_p1_enabled = settings.promo_1_enabled
+                    if grid_p1_enabled == nil
+                      assign grid_p1_enabled = true
+                    endif
+                    assign grid_p1_code = settings.promo_1_code | default: 'Festive25' | strip
+                    assign grid_p1_badge = settings.promo_1_card_badge | default: '25% OFF' | strip
+                  %}
+                  {% if grid_p1_enabled and grid_p1_code != blank %}
                   <div class="meeeku-card-discount-reminder" style="margin-top: 0.4rem;">
-                    <span style="display: inline-block; font-size: 1.05rem; font-weight: 700; color: #E65100; background: #FFF3E0; border: 1px dashed #FFB74D; border-radius: 6px; padding: 0.15rem 0.55rem;">🏷️ 20% OFF with WELCOME20</span>
+                    <span style="display: inline-block; font-size: 1.05rem; font-weight: 700; color: #E65100; background: #FFF3E0; border: 1px dashed #FFB74D; border-radius: 6px; padding: 0.15rem 0.55rem;">🏷️ {{ grid_p1_badge }} with {{ grid_p1_code }}</span>
                   </div>
+                  {% endif %}
                 </div>
               </div>
             </li>
@@ -1826,6 +1836,21 @@ function setCategoryFilter(cat, btn) {
     el.classList.remove('active');
   });
   if (btn) btn.classList.add('active');
+
+  // ── Sync active filter into the URL so the browser Back button returns
+  // to this exact filtered state (e.g. /collections/all?category=girls).
+  // Uses replaceState (not pushState) so filtering itself doesn't create
+  // extra history entries — only the product click does.
+  try {
+    var url = new URL(window.location.href);
+    if (cat && cat !== 'all') {
+      url.searchParams.set('category', cat);
+    } else {
+      url.searchParams.delete('category');
+    }
+    history.replaceState({ meeekuCategory: cat }, '', url.toString());
+  } catch(e) {}
+
   applyCatalogFiltersAndSort();
 }
 
@@ -1834,67 +1859,116 @@ function meeekuStorePdpClick(handle, title, price, img, badge) {
     const pdata = { handle: handle, title: title, price: price, img: img, badge: badge };
     sessionStorage.setItem('meeeku_current_pdp_product', JSON.stringify(pdata));
     localStorage.setItem('meeeku_last_viewed_product', JSON.stringify(pdata));
+    // Save the full collection URL so the PDP can show "← Back to Collection"
+    // This is the reliable cross-browser fix for Instagram's in-app browser
+    // which sometimes injects its own Back history entry, bypassing the real collection.
+    sessionStorage.setItem('meeeku_collection_return_url', window.location.href);
   } catch(e) {}
 }
 
 function applyCatalogFiltersAndSort() {
-  const ageFilterEl = document.getElementById('MeeekuAgeFilter');
-  const sortOptionEl = document.getElementById('MeeekuPriceSort');
-  const ageFilter = ageFilterEl ? ageFilterEl.value : 'all';
-  const sortOption = sortOptionEl ? sortOptionEl.value : 'featured';
+  try {
+    const ageFilterEl = document.getElementById('MeeekuAgeFilter');
+    const sortOptionEl = document.getElementById('MeeekuPriceSort');
+    const ageFilter = ageFilterEl ? ageFilterEl.value : 'all';
+    const sortOption = sortOptionEl ? sortOptionEl.value : 'featured';
 
-  const grid = document.getElementById('MeeekuProductGrid');
-  const items = Array.from(document.querySelectorAll('.meeeku-grid-item'));
+    const grid = document.getElementById('MeeekuProductGrid');
+    if (!grid) return;
 
-  items.forEach(function(item) {
-    let itemCat = (item.getAttribute('data-category') || '').toLowerCase();
-    const handle = (item.getAttribute('data-handle') || '').toLowerCase();
-    const titleEl = item.querySelector('h3 a, .card__content h3');
-    const titleText = (titleEl ? titleEl.textContent : '').toLowerCase();
+    const items = Array.from(document.querySelectorAll('.meeeku-grid-item'));
 
-    // Strict guard: Lehengas and Royal Ethnic products NEVER belong to frocks or coords
-    if (handle.includes('teal-bloom') || handle.includes('lehenga') || titleText.includes('lehenga') || itemCat.includes('ethnic')) {
-      itemCat = itemCat.replace(/\bfrocks\b/g, '').replace(/\bcoords\b/g, '').trim();
-      item.setAttribute('data-category', itemCat);
-    }
+    items.forEach(function(item) {
+      let itemCat = (item.getAttribute('data-category') || '').toLowerCase();
+      const handle = (item.getAttribute('data-handle') || '').toLowerCase();
+      const titleEl = item.querySelector('h3 a, .card__content h3');
+      const titleText = (titleEl ? titleEl.textContent : '').toLowerCase();
 
-    const itemAge = item.getAttribute('data-age') || '';
-    const catTokens = itemCat.split(/\s+/);
-    const catMatch = (currentCategory === 'all' || catTokens.includes(currentCategory.toLowerCase()));
-    const ageMatch = (ageFilter === 'all' || itemAge.includes(ageFilter));
+      // Strict guard: Lehengas and Royal Ethnic products NEVER belong to frocks or coords
+      if (handle.includes('teal-bloom') || handle.includes('lehenga') || titleText.includes('lehenga') || itemCat.includes('ethnic')) {
+        itemCat = itemCat.replace(/\bfrocks\b/g, '').replace(/\bcoords\b/g, '').trim();
+        item.setAttribute('data-category', itemCat);
+      }
 
-    if (catMatch && ageMatch) {
-      item.style.display = 'block';
-      item.style.opacity = '1';
-    } else {
-      item.style.display = 'none';
-      item.style.opacity = '0';
-    }
-  });
+      const itemAge = item.getAttribute('data-age') || '';
+      const catTokens = itemCat.split(/\s+/);
+      const catMatch = (currentCategory === 'all' || catTokens.includes(currentCategory.toLowerCase()));
+      const ageMatch = (ageFilter === 'all' || itemAge.includes(ageFilter));
 
-  items.sort(function(a, b) {
-    const rankA = parseInt(a.getAttribute('data-bestseller-rank')) || 99;
-    const rankB = parseInt(b.getAttribute('data-bestseller-rank')) || 99;
-    const priceA = parseFloat(a.getAttribute('data-price')) || 0;
-    const priceB = parseFloat(b.getAttribute('data-price')) || 0;
-    const dateA = new Date(a.getAttribute('data-date')).getTime() || 0;
-    const dateB = new Date(b.getAttribute('data-date')).getTime() || 0;
+      item.style.display = (catMatch && ageMatch) ? 'block' : 'none';
+      item.style.opacity = (catMatch && ageMatch) ? '1' : '0';
+    });
 
-    if (sortOption === 'featured') {
+    items.sort(function(a, b) {
+      const rankA = parseInt(a.getAttribute('data-bestseller-rank')) || 99;
+      const rankB = parseInt(b.getAttribute('data-bestseller-rank')) || 99;
+      const priceA = parseFloat(a.getAttribute('data-price')) || 0;
+      const priceB = parseFloat(b.getAttribute('data-price')) || 0;
+      const dateA = new Date(a.getAttribute('data-date')).getTime() || 0;
+      const dateB = new Date(b.getAttribute('data-date')).getTime() || 0;
+
+      if (sortOption === 'featured') {
+        return rankA - rankB;
+      } else if (sortOption === 'price-low') {
+        return priceA - priceB;
+      } else if (sortOption === 'price-high') {
+        return priceB - priceA;
+      } else if (sortOption === 'newest') {
+        return dateB - dateA;
+      }
       return rankA - rankB;
-    } else if (sortOption === 'price-low') {
-      return priceA - priceB;
-    } else if (sortOption === 'price-high') {
-      return priceB - priceA;
-    } else if (sortOption === 'newest') {
-      return dateB - dateA;
+    });
+
+    // ── FIX: batch all DOM appends into a DocumentFragment (single reflow) ──
+    const fragment = document.createDocumentFragment();
+    items.forEach(function(item) { fragment.appendChild(item); });
+    grid.replaceChildren(fragment);
+
+  } catch (err) {
+    // Prevent silent blank-page failures — log and attempt a soft recovery
+    if (typeof window.__meeekuGridErrCount === 'undefined') window.__meeekuGridErrCount = 0;
+    window.__meeekuGridErrCount++;
+    // Avoid infinite retry loops
+    if (window.__meeekuGridErrCount < 3) {
+      window.requestAnimationFrame(applyCatalogFiltersAndSort);
     }
-    return rankA - rankB;
+  }
+}
+
+// ── Debounce wrapper to prevent stacked calls during rapid scroll/filter ──
+let _meeekuFilterTimer = null;
+function debouncedApplyCatalogFiltersAndSort() {
+  if (_meeekuFilterTimer) clearTimeout(_meeekuFilterTimer);
+  _meeekuFilterTimer = setTimeout(applyCatalogFiltersAndSort, 60);
+}
+
+// ── Blank-page self-recovery guard ──
+// If the grid container somehow becomes empty while the section is visible,
+// re-run reconcile + filter. Catches silent JS crashes without a full page reload.
+function meeekuInstallGridRecoveryGuard() {
+  const section = document.querySelector('.meeeku-catalog-section');
+  const grid = document.getElementById('MeeekuProductGrid');
+  if (!section || !grid || typeof MutationObserver === 'undefined') return;
+
+  let _recoveryScheduled = false;
+
+  const observer = new MutationObserver(function() {
+    if (_recoveryScheduled) return;
+    const visibleItems = grid.querySelectorAll('.meeeku-grid-item[style*="block"]');
+    const allItems = grid.querySelectorAll('.meeeku-grid-item');
+    // Only recover if grid is in the viewport and has zero rendered items but fallback data exists
+    const rect = section.getBoundingClientRect();
+    const inView = rect.top < window.innerHeight && rect.bottom > 0;
+    if (inView && allItems.length === 0 && MEEKU_CATALOG_FALLBACK.length > 0) {
+      _recoveryScheduled = true;
+      window.requestAnimationFrame(function() {
+        reconcileProductCatalog();
+        _recoveryScheduled = false;
+      });
+    }
   });
 
-  if (grid) {
-    items.forEach(function(item) { grid.appendChild(item); });
-  }
+  observer.observe(grid, { childList: true });
 }
 
 function createCatalogCardElement(p, idx) {
@@ -1939,9 +2013,11 @@ function createCatalogCardElement(p, idx) {
         '<div style="font-size: 1.7rem; font-weight: 800; color: #6B3FA0;">',
           priceFormatted + discountHtml,
         '</div>',
-        '<div class="meeeku-card-discount-reminder" style="margin-top: 0.4rem;">',
-          '<span style="display: inline-block; font-size: 1.05rem; font-weight: 700; color: #E65100; background: #FFF3E0; border: 1px dashed #FFB74D; border-radius: 6px; padding: 0.15rem 0.55rem;">🏷️ 20% OFF with WELCOME20</span>',
-        '</div>',
+        ((window.MEEEKU_PROMO_CONFIG && window.MEEEKU_PROMO_CONFIG.primaryPromo) ? [
+          '<div class="meeeku-card-discount-reminder" style="margin-top: 0.4rem;">',
+            '<span style="display: inline-block; font-size: 1.05rem; font-weight: 700; color: #E65100; background: #FFF3E0; border: 1px dashed #FFB74D; border-radius: 6px; padding: 0.15rem 0.55rem;">🏷️ ' + (window.MEEEKU_PROMO_CONFIG.primaryPromo.cardBadge || '25% OFF') + ' with ' + window.MEEEKU_PROMO_CONFIG.primaryPromo.code + '</span>',
+          '</div>'
+        ].join('') : ''),
       '</div>',
     '</div>'
   ].join('');
@@ -2031,6 +2107,7 @@ function reconcileProductCatalog() {
 
 document.addEventListener('DOMContentLoaded', function() {
   reconcileProductCatalog();
+  meeekuInstallGridRecoveryGuard();
 
   const urlParams = new URLSearchParams(window.location.search);
   const catParam = urlParams.get('category');
@@ -2044,6 +2121,7 @@ document.addEventListener('DOMContentLoaded', function() {
   applyCatalogFiltersAndSort();
 });
 </script>
+
 
 <style>
 .meeeku-card-media-wrapper {

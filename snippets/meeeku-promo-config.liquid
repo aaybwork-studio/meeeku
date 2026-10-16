@@ -1,0 +1,372 @@
+{% comment %}
+  Meeeku Unified Promotions & Discount Codes Property Configuration (DRY Single Source of Truth)
+  Connects Shopify Admin Theme Settings, Shop Metafields, and Live Shopify Cart Discount Applications
+  to both the Top Promo Ticker Banner (#MeeekuPromoTicker) and Cart (Drawer + Page).
+{% endcomment %}
+{% liquid
+  assign promo_1_enabled = settings.promo_1_enabled
+  if promo_1_enabled == nil
+    assign promo_1_enabled = true
+  endif
+  assign promo_1_code = settings.promo_1_code | default: 'Festive25' | strip
+  assign promo_1_badge = settings.promo_1_badge | default: '25% OFF ENTIRE ORDER' | strip
+  assign promo_1_card_badge = settings.promo_1_card_badge | default: '25% OFF' | strip
+  assign promo_1_headline = settings.promo_1_headline | default: '🎉 MEGA PROMOTION:' | strip
+  assign promo_1_ticker_text = settings.promo_1_ticker_text | default: 'Minimum purchase of ₹1,000.00' | strip
+  assign promo_1_description = settings.promo_1_description | default: '25% off entire order • Minimum purchase of ₹1,000.00' | strip
+  assign promo_1_percent = settings.promo_1_percent | default: 25 | plus: 0
+  assign promo_1_min_order = settings.promo_1_min_order | default: 1000 | plus: 0
+
+  assign promo_2_enabled = settings.promo_2_enabled | default: false
+  assign promo_2_code = settings.promo_2_code | default: '' | strip
+  assign promo_2_badge = settings.promo_2_badge | default: '' | strip
+  assign promo_2_card_badge = settings.promo_2_card_badge | default: promo_2_badge | strip
+  assign promo_2_headline = settings.promo_2_headline | default: '✨ SPECIAL OFFER:' | strip
+  assign promo_2_ticker_text = settings.promo_2_ticker_text | default: '' | strip
+  assign promo_2_description = settings.promo_2_description | default: '' | strip
+  assign promo_2_percent = settings.promo_2_percent | default: 0 | plus: 0
+  assign promo_2_min_order = settings.promo_2_min_order | default: 0 | plus: 0
+
+  assign promo_3_enabled = settings.promo_3_enabled | default: false
+  assign promo_3_code = settings.promo_3_code | default: '' | strip
+  assign promo_3_badge = settings.promo_3_badge | default: '' | strip
+  assign promo_3_card_badge = settings.promo_3_card_badge | default: promo_3_badge | strip
+  assign promo_3_headline = settings.promo_3_headline | default: '🎁 LIMITED OFFER:' | strip
+  assign promo_3_ticker_text = settings.promo_3_ticker_text | default: '' | strip
+  assign promo_3_description = settings.promo_3_description | default: '' | strip
+  assign promo_3_percent = settings.promo_3_percent | default: 0 | plus: 0
+  assign promo_3_min_order = settings.promo_3_min_order | default: 0 | plus: 0
+
+  assign extra_codes_raw = settings.promo_extra_codes | default: '' | strip
+%}
+
+<script>
+(function() {
+  window.MeeekuLogger = window.MeeekuLogger || {
+    error: function(context, err) {
+      if (window.Shopify && window.Shopify.designMode && typeof window.console !== 'undefined' && window.console.error) {
+        window.console.error('[Meeeku:' + context + ']', err);
+      }
+    }
+  };
+
+  var configuredPromos = [];
+
+  {% if promo_1_enabled and promo_1_code != blank %}
+  configuredPromos.push({
+    code: {{ promo_1_code | json }},
+    badge: {{ promo_1_badge | json }},
+    cardBadge: {{ promo_1_card_badge | json }},
+    headline: {{ promo_1_headline | json }},
+    tickerText: {{ promo_1_ticker_text | json }},
+    description: {{ promo_1_description | json }},
+    percent: {{ promo_1_percent | json }},
+    minOrder: {{ promo_1_min_order | json }}
+  });
+  {% endif %}
+
+  {% if promo_2_enabled and promo_2_code != blank %}
+  configuredPromos.push({
+    code: {{ promo_2_code | json }},
+    badge: {{ promo_2_badge | default: 'SPECIAL OFFER' | json }},
+    cardBadge: {{ promo_2_card_badge | default: 'OFFER' | json }},
+    headline: {{ promo_2_headline | json }},
+    tickerText: {{ promo_2_ticker_text | default: promo_2_description | json }},
+    description: {{ promo_2_description | json }},
+    percent: {{ promo_2_percent | json }},
+    minOrder: {{ promo_2_min_order | json }}
+  });
+  {% endif %}
+
+  {% if promo_3_enabled and promo_3_code != blank %}
+  configuredPromos.push({
+    code: {{ promo_3_code | json }},
+    badge: {{ promo_3_badge | default: 'SPECIAL OFFER' | json }},
+    cardBadge: {{ promo_3_card_badge | default: 'OFFER' | json }},
+    headline: {{ promo_3_headline | json }},
+    tickerText: {{ promo_3_ticker_text | default: promo_3_description | json }},
+    description: {{ promo_3_description | json }},
+    percent: {{ promo_3_percent | json }},
+    minOrder: {{ promo_3_min_order | json }}
+  });
+  {% endif %}
+
+  {% if extra_codes_raw != blank %}
+  try {
+    var rawLines = {{ extra_codes_raw | json }}.split(/\r?\n/);
+    rawLines.forEach(function(line) {
+      var trimmed = (line || '').trim();
+      if (!trimmed) return;
+      var parts = trimmed.split('|').map(function(p) { return p.trim(); });
+      if (parts[0]) {
+        configuredPromos.push({
+          code: parts[0],
+          badge: parts[1] || 'SPECIAL OFFER',
+          cardBadge: parts[1] || 'PROMO',
+          headline: '🎉 MEGA PROMOTION:',
+          tickerText: parts[2] || 'Use this code at checkout',
+          description: parts[2] || 'Apply at checkout for instant savings',
+          percent: parseFloat(parts[3]) || 0,
+          minOrder: parseFloat(parts[4]) || 0
+        });
+      }
+    });
+  } catch (err) {
+    window.MeeekuLogger.error('ExtraCodesParse', err);
+  }
+  {% endif %}
+
+  {% if shop.metafields.custom.discounts != blank %}
+  try {
+    var mfDiscounts = {{ shop.metafields.custom.discounts.value | default: shop.metafields.custom.discounts | json }};
+    if (Array.isArray(mfDiscounts)) {
+      mfDiscounts.forEach(function(d) {
+        if (d && d.code) {
+          var exists = configuredPromos.some(function(p) { return p.code.toUpperCase() === String(d.code).toUpperCase(); });
+          if (!exists) {
+            configuredPromos.push({
+              code: String(d.code).trim(),
+              badge: d.badge || 'SPECIAL OFFER',
+              cardBadge: d.cardBadge || d.badge || 'PROMO',
+              headline: d.headline || '🎉 MEGA PROMOTION:',
+              tickerText: d.tickerText || d.description || '',
+              description: d.description || 'Active store promotion',
+              percent: parseFloat(d.percent) || 0,
+              minOrder: parseFloat(d.minOrder) || 0
+            });
+          }
+        }
+      });
+    }
+  } catch (err) {
+    window.MeeekuLogger.error('MetafieldDiscountsParse', err);
+  }
+  {% endif %}
+
+  {% if cart and cart.discount_applications and cart.discount_applications.size > 0 %}
+    {% for discount_app in cart.discount_applications %}
+      try {
+        var liveCode = {{ discount_app.title | json }};
+        if (liveCode) {
+          var alreadyListed = configuredPromos.some(function(p) {
+            return p.code.toUpperCase() === String(liveCode).toUpperCase();
+          });
+          if (!alreadyListed) {
+            var valType = {{ discount_app.value_type | json }};
+            var rawVal = {{ discount_app.value | default: 0 | json }};
+            var badgeStr = valType === 'percentage' ? (Math.round(parseFloat(rawVal)) + '% OFF') : 'ACTIVE PROMO';
+            configuredPromos.push({
+              code: liveCode,
+              badge: badgeStr,
+              cardBadge: badgeStr,
+              headline: '🎉 MEGA PROMOTION:',
+              tickerText: 'Active Shopify discount applied',
+              description: badgeStr + ' applied via Shopify',
+              percent: valType === 'percentage' ? (parseFloat(rawVal) || 0) : 0,
+              minOrder: 0
+            });
+          }
+        }
+      } catch (err) {
+        window.MeeekuLogger.error('LiquidCartDiscountSync', err);
+      }
+    {% endfor %}
+  {% endif %}
+
+  // Obsolete/deleted promotional codes that must never persist in client storage
+  var obsoleteCodes = ['WELCOME20', 'B2G1'];
+
+  try {
+    var storedSession = sessionStorage.getItem('meeeku_active_discount');
+    var storedLocal = localStorage.getItem('meeeku_active_discount');
+    if (storedSession && obsoleteCodes.indexOf(storedSession.trim().toUpperCase()) !== -1) {
+      sessionStorage.removeItem('meeeku_active_discount');
+    }
+    if (storedLocal && obsoleteCodes.indexOf(storedLocal.trim().toUpperCase()) !== -1) {
+      localStorage.removeItem('meeeku_active_discount');
+    }
+
+    // Check if URL has ?discount=CODE or /discount/CODE
+    var urlParams = new URLSearchParams(window.location.search);
+    var urlDiscount = urlParams.get('discount') || urlParams.get('promo');
+    if (urlDiscount && urlDiscount.trim()) {
+      var cleanUrlCode = urlDiscount.trim();
+      if (obsoleteCodes.indexOf(cleanUrlCode.toUpperCase()) === -1) {
+        sessionStorage.setItem('meeeku_active_discount', cleanUrlCode);
+        localStorage.setItem('meeeku_active_discount', cleanUrlCode);
+        var foundInList = configuredPromos.some(function(p) {
+          return p.code.toUpperCase() === cleanUrlCode.toUpperCase();
+        });
+        if (!foundInList) {
+          configuredPromos.unshift({
+            code: cleanUrlCode,
+            badge: 'SPECIAL OFFER',
+            cardBadge: 'PROMO',
+            headline: '🎉 MEGA PROMOTION:',
+            tickerText: 'Special promotional code active',
+            description: 'Tap to apply at checkout',
+            percent: 0,
+            minOrder: 0
+          });
+        }
+      }
+    }
+  } catch (err) {
+    window.MeeekuLogger.error('StorageInit', err);
+  }
+
+  window.MEEEKU_PROMO_CONFIG = {
+    promos: configuredPromos,
+    obsoleteCodes: obsoleteCodes,
+    primaryPromo: configuredPromos.length > 0 ? configuredPromos[0] : null,
+    getPromoByCode: function(code) {
+      if (!code) return null;
+      var upper = String(code).trim().toUpperCase();
+      for (var i = 0; i < this.promos.length; i++) {
+        if (this.promos[i].code.toUpperCase() === upper) {
+          return this.promos[i];
+        }
+      }
+      return null;
+    },
+    registerDynamicPromo: function(promoObj) {
+      if (!promoObj || !promoObj.code) return;
+      var clean = String(promoObj.code).trim();
+      if (!clean || this.obsoleteCodes.indexOf(clean.toUpperCase()) !== -1) return;
+      var existing = this.getPromoByCode(clean);
+      if (existing) {
+        if (promoObj.badge) existing.badge = promoObj.badge;
+        if (promoObj.cardBadge) existing.cardBadge = promoObj.cardBadge;
+        if (promoObj.description) existing.description = promoObj.description;
+        if (promoObj.percent) existing.percent = promoObj.percent;
+        return existing;
+      }
+      var newEntry = {
+        code: clean,
+        badge: promoObj.badge || 'ACTIVE OFFER',
+        cardBadge: promoObj.cardBadge || promoObj.badge || 'PROMO',
+        headline: promoObj.headline || '🎉 MEGA PROMOTION:',
+        tickerText: promoObj.tickerText || promoObj.description || 'Special discount code active',
+        description: promoObj.description || 'Applied for Shopify Checkout',
+        percent: parseFloat(promoObj.percent) || 0,
+        minOrder: parseFloat(promoObj.minOrder) || 0
+      };
+      this.promos.push(newEntry);
+      if (!this.primaryPromo) this.primaryPromo = newEntry;
+      this.renderDynamicTickerSlide(newEntry);
+      this.renderDynamicCartCards();
+      return newEntry;
+    },
+    renderDynamicTickerSlide: function(promo) {
+      try {
+        var slidesWrapper = document.getElementById('MeeekuPromoSlides');
+        if (!slidesWrapper || !promo || !promo.code) return;
+        var existingSlide = slidesWrapper.querySelector('[data-promo-code="' + promo.code.toUpperCase() + '"]');
+        if (existingSlide) return;
+
+        var slideDiv = document.createElement('div');
+        slideDiv.className = 'meeeku-promo-slide';
+        slideDiv.setAttribute('data-promo-code', promo.code.toUpperCase());
+        slideDiv.setAttribute('title', 'Click to copy code ' + promo.code);
+        slideDiv.onclick = function() {
+          if (typeof window.meeekuQuickCopyCode === 'function') {
+            window.meeekuQuickCopyCode(promo.code, slideDiv);
+          }
+        };
+        slideDiv.innerHTML = '<span>' + (promo.headline || '🎉 MEGA PROMOTION:') +
+          ' <span class="meeeku-promo-badge" style="background: #FFE082; color: #E65100;">' + (promo.badge || 'SPECIAL OFFER') + '</span> ' +
+          (promo.tickerText || promo.description || '') +
+          ' with code <strong class="meeeku-promo-code">' + promo.code + '</strong> ' +
+          '<span class="meeeku-copy-tip">📋 Tap to copy</span> 🎁</span>';
+        slidesWrapper.insertBefore(slideDiv, slidesWrapper.firstChild);
+      } catch (err) {
+        window.MeeekuLogger.error('RenderDynamicTicker', err);
+      }
+    },
+    renderDynamicCartCards: function() {
+      try {
+        var drawerCarousel = document.getElementById('MeeekuDrawerDiscountsCarousel');
+        var pageGrid = document.getElementById('MeeekuPageDiscountsGrid');
+        var promos = this.promos;
+
+        if (drawerCarousel) {
+          drawerCarousel.innerHTML = promos.map(function(p) {
+            var codeKey = p.code.toUpperCase();
+            return [
+              '<div class="meeeku-cart-discount-card" id="MeeekuCard-' + codeKey + '" data-promo-code="' + p.code + '" onclick="meeekuApplyCartDiscount(\'' + p.code.replace(/'/g, "\\'") + '\', this)">',
+                '<div class="meeeku-cart-discount-badge" style="background: #FFE082; color: #E65100;">' + (p.cardBadge || p.badge || 'OFFER') + '</div>',
+                '<div class="meeeku-cart-discount-info">',
+                  '<div class="meeeku-cart-discount-code">' + p.code + '</div>',
+                  '<div class="meeeku-cart-discount-text">' + (p.description || '') + '</div>',
+                '</div>',
+                '<button type="button" class="meeeku-cart-discount-btn" id="MeeekuBtn-' + codeKey + '">Apply</button>',
+              '</div>'
+            ].join('');
+          }).join('');
+        }
+
+        if (pageGrid) {
+          pageGrid.innerHTML = promos.map(function(p) {
+            var codeKey = p.code.toUpperCase();
+            return [
+              '<div class="meeeku-cart-discount-card" id="MeeekuPageCard-' + codeKey + '" data-promo-code="' + p.code + '" onclick="meeekuApplyCartDiscount(\'' + p.code.replace(/'/g, "\\'") + '\', this)">',
+                '<div class="meeeku-cart-discount-badge" style="background: #FFE082; color: #E65100;">' + (p.cardBadge || p.badge || 'OFFER') + '</div>',
+                '<div class="meeeku-cart-discount-info">',
+                  '<div class="meeeku-cart-discount-code">' + p.code + '</div>',
+                  '<div class="meeeku-cart-discount-text">' + (p.description || '') + '</div>',
+                '</div>',
+                '<button type="button" class="meeeku-cart-discount-btn" id="MeeekuPageBtn-' + codeKey + '">Apply</button>',
+              '</div>'
+            ].join('');
+          }).join('');
+        }
+      } catch (err) {
+        window.MeeekuLogger.error('RenderDynamicCartCards', err);
+      }
+    },
+    syncFromShopifyCartJson: function(cart) {
+      if (!cart) return;
+      try {
+        var apps = [];
+        if (Array.isArray(cart.cart_level_discount_applications)) {
+          apps = apps.concat(cart.cart_level_discount_applications);
+        }
+        if (Array.isArray(cart.discount_applications)) {
+          apps = apps.concat(cart.discount_applications);
+        }
+        if (Array.isArray(cart.items)) {
+          cart.items.forEach(function(item) {
+            if (Array.isArray(item.line_level_discount_allocations)) {
+              item.line_level_discount_allocations.forEach(function(alloc) {
+                if (alloc && alloc.discount_application) {
+                  apps.push(alloc.discount_application);
+                }
+              });
+            }
+          });
+        }
+        var self = this;
+        apps.forEach(function(app) {
+          var title = app && (app.title || app.code);
+          if (title) {
+            var valType = app.value_type;
+            var rawVal = parseFloat(app.value) || 0;
+            var badge = valType === 'percentage' && rawVal > 0 ? (Math.round(rawVal) + '% OFF') : 'ACTIVE OFFER';
+            self.registerDynamicPromo({
+              code: title,
+              badge: badge,
+              cardBadge: badge,
+              description: badge + ' applied from Shopify Admin',
+              percent: valType === 'percentage' ? rawVal : 0
+            });
+            sessionStorage.setItem('meeeku_active_discount', title);
+            localStorage.setItem('meeeku_active_discount', title);
+          }
+        });
+      } catch (err) {
+        window.MeeekuLogger.error('SyncFromShopifyCartJson', err);
+      }
+    }
+  };
+})();
+</script>

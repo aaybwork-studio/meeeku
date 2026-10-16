@@ -44,7 +44,19 @@
       <!-- Column 4: Newsletter Signup -->
       <div class="meeeku-footer-col">
         <h4 class="meeeku-footer-heading">Join Meeeku Family 💕</h4>
-        <p class="meeeku-footer-subtext">Get 20% OFF your first purchase site-wide with code <strong style="color: #FF6097;">WELCOME20</strong>!</p>
+        {% liquid
+          assign ft_p1_enabled = settings.promo_1_enabled
+          if ft_p1_enabled == nil
+            assign ft_p1_enabled = true
+          endif
+          assign ft_p1_code = settings.promo_1_code | default: 'Festive25' | strip
+          assign ft_p1_desc = settings.promo_1_description | default: '25% off entire order • Minimum purchase of ₹1,000.00' | strip
+        %}
+        {% if ft_p1_enabled and ft_p1_code != blank %}
+          <p class="meeeku-footer-subtext">Get {{ ft_p1_desc }} with code <strong style="color: #FF6097;">{{ ft_p1_code }}</strong>!</p>
+        {% else %}
+          <p class="meeeku-footer-subtext">Subscribe for exclusive festive launches and special member offers!</p>
+        {% endif %}
         {% form 'customer', id: 'MeeekuFooterForm', class: 'meeeku-footer-form' %}
           <input type="hidden" name="contact[tags]" value="newsletter">
           <div class="meeeku-footer-input-group">

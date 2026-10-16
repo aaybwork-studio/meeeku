@@ -34,6 +34,26 @@
         </div>
       </div>
 
+      {% liquid
+        assign cp1_enabled = settings.promo_1_enabled
+        if cp1_enabled == nil
+          assign cp1_enabled = true
+        endif
+        assign cp1_code = settings.promo_1_code | default: 'Festive25' | strip
+        assign cp1_card_badge = settings.promo_1_card_badge | default: '25% OFF' | strip
+        assign cp1_desc = settings.promo_1_description | default: '25% off entire order • Minimum purchase of ₹1,000.00' | strip
+
+        assign cp2_enabled = settings.promo_2_enabled | default: false
+        assign cp2_code = settings.promo_2_code | default: '' | strip
+        assign cp2_card_badge = settings.promo_2_card_badge | default: settings.promo_2_badge | default: 'OFFER' | strip
+        assign cp2_desc = settings.promo_2_description | default: '' | strip
+
+        assign cp3_enabled = settings.promo_3_enabled | default: false
+        assign cp3_code = settings.promo_3_code | default: '' | strip
+        assign cp3_card_badge = settings.promo_3_card_badge | default: settings.promo_3_badge | default: 'OFFER' | strip
+        assign cp3_desc = settings.promo_3_description | default: '' | strip
+      %}
+
       <!-- Empty State -->
       <div id="MeeekuCartEmptyNotice" style="text-align: center; padding: 4rem 1.5rem; display: block;">
         <div style="font-size: 4.5rem; margin-bottom: 1.2rem;">🌸</div>
@@ -41,9 +61,11 @@
         <p style="font-size: 1.4rem; color: #666; margin-bottom: 1.6rem; max-width: 280px; margin-left: auto; margin-right: auto; line-height: 1.5;">
           Discover 100% skin-safe cotton tees, cozy co-ords, and festive twirling lehengas!
         </p>
+        {% if cp1_enabled and cp1_code != blank %}
         <div style="background: #FFF3E0; border: 1.5px dashed #FFB74D; border-radius: 12px; padding: 0.9rem 1.2rem; margin-bottom: 2rem; max-width: 320px; margin-left: auto; margin-right: auto;">
-          <span style="font-size: 1.25rem; color: #E65100; font-weight: 700;">✨ Special Offer: Get <strong>20% OFF</strong> your first order with code <strong style="text-decoration: underline;">WELCOME20</strong>!</span>
+          <span style="font-size: 1.25rem; color: #E65100; font-weight: 700;">✨ Special Offer: <strong>{{ cp1_desc }}</strong> with code <strong style="text-decoration: underline;">{{ cp1_code }}</strong>!</span>
         </div>
+        {% endif %}
         <a href="/collections/all" class="meeeku-btn-primary" style="display: inline-block; text-decoration: none; padding: 1.1rem 2.5rem; font-size: 1.45rem; border-radius: 30px;" onclick="closeMeeekuCart()">
           Explore Collections ✨
         </a>
@@ -52,7 +74,7 @@
       <!-- Dynamic Items Container -->
       <div id="MeeekuCartItemsContainer" style="display: none; flex-direction: column; gap: 1rem; margin: 0;"></div>
 
-      <!-- Available Discounts Carousel & Reminder Box -->
+      <!-- Available Discounts Carousel & Reminder Box (Synced with Shopify Admin Promo Property) -->
       <div id="MeeekuDrawerDiscountsBox" class="meeeku-cart-discounts-box" style="display: none;">
         <div class="meeeku-cart-discounts-header">
           <div style="display: flex; align-items: center; gap: 0.6rem;">
@@ -62,30 +84,49 @@
           <span class="meeeku-cart-discounts-sub">Tap to apply at checkout</span>
         </div>
 
-        <div class="meeeku-cart-discounts-carousel">
-          <!-- Card 1: WELCOME20 -->
-          <div class="meeeku-cart-discount-card" id="MeeekuCard-WELCOME20" onclick="meeekuApplyCartDiscount('WELCOME20', this)">
-            <div class="meeeku-cart-discount-badge">20% OFF</div>
+        <div class="meeeku-cart-discounts-carousel" id="MeeekuDrawerDiscountsCarousel">
+          {% if cp1_enabled and cp1_code != blank %}
+          <div class="meeeku-cart-discount-card" id="MeeekuCard-{{ cp1_code | upcase }}" data-promo-code="{{ cp1_code | escape }}" onclick="meeekuApplyCartDiscount('{{ cp1_code | escape }}', this)">
+            <div class="meeeku-cart-discount-badge" style="background: #FFE082; color: #E65100;">{{ cp1_card_badge }}</div>
             <div class="meeeku-cart-discount-info">
-              <div class="meeeku-cart-discount-code">WELCOME20</div>
-              <div class="meeeku-cart-discount-text">20% OFF your first order site-wide</div>
+              <div class="meeeku-cart-discount-code">{{ cp1_code }}</div>
+              <div class="meeeku-cart-discount-text">{{ cp1_desc }}</div>
             </div>
-            <button type="button" class="meeeku-cart-discount-btn" id="MeeekuBtn-WELCOME20">Apply</button>
+            <button type="button" class="meeeku-cart-discount-btn" id="MeeekuBtn-{{ cp1_code | upcase }}">Apply</button>
           </div>
+          {% endif %}
 
-          <!-- Card 2: B2G1 -->
-          <div class="meeeku-cart-discount-card" id="MeeekuCard-B2G1" onclick="meeekuApplyCartDiscount('B2G1', this)">
-            <div class="meeeku-cart-discount-badge" style="background: #FFE082; color: #E65100;">BOGO DEAL</div>
+          {% if cp2_enabled and cp2_code != blank %}
+          <div class="meeeku-cart-discount-card" id="MeeekuCard-{{ cp2_code | upcase }}" data-promo-code="{{ cp2_code | escape }}" onclick="meeekuApplyCartDiscount('{{ cp2_code | escape }}', this)">
+            <div class="meeeku-cart-discount-badge" style="background: #FFE082; color: #E65100;">{{ cp2_card_badge }}</div>
             <div class="meeeku-cart-discount-info">
-              <div class="meeeku-cart-discount-code">B2G1</div>
-              <div class="meeeku-cart-discount-text">Buy 2 Get 1 FREE on Tees & Co-ords</div>
+              <div class="meeeku-cart-discount-code">{{ cp2_code }}</div>
+              <div class="meeeku-cart-discount-text">{{ cp2_desc }}</div>
             </div>
-            <button type="button" class="meeeku-cart-discount-btn" id="MeeekuBtn-B2G1">Apply</button>
+            <button type="button" class="meeeku-cart-discount-btn" id="MeeekuBtn-{{ cp2_code | upcase }}">Apply</button>
           </div>
+          {% endif %}
+
+          {% if cp3_enabled and cp3_code != blank %}
+          <div class="meeeku-cart-discount-card" id="MeeekuCard-{{ cp3_code | upcase }}" data-promo-code="{{ cp3_code | escape }}" onclick="meeekuApplyCartDiscount('{{ cp3_code | escape }}', this)">
+            <div class="meeeku-cart-discount-badge" style="background: #FFE082; color: #E65100;">{{ cp3_card_badge }}</div>
+            <div class="meeeku-cart-discount-info">
+              <div class="meeeku-cart-discount-code">{{ cp3_code }}</div>
+              <div class="meeeku-cart-discount-text">{{ cp3_desc }}</div>
+            </div>
+            <button type="button" class="meeeku-cart-discount-btn" id="MeeekuBtn-{{ cp3_code | upcase }}">Apply</button>
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- Custom Shopify Discount Code Input -->
+        <div class="meeeku-custom-discount-row" style="display: flex; gap: 0.6rem; margin-top: 0.85rem;">
+          <input type="text" id="MeeekuDrawerCustomCodeInput" placeholder="Enter promo code (e.g. {{ cp1_code }})..." style="flex: 1; border: 1.5px solid #F8BBD0; border-radius: 10px; padding: 0.65rem 1rem; font-size: 1.25rem; color: #3D2355; background: #FFF; outline: none; font-family: inherit;" onkeydown="if(event.key==='Enter'){event.preventDefault();meeekuApplyCustomCodeInput('MeeekuDrawerCustomCodeInput');}">
+          <button type="button" onclick="meeekuApplyCustomCodeInput('MeeekuDrawerCustomCodeInput')" style="background: #6B3FA0; color: #FFF; border: none; border-radius: 10px; padding: 0.65rem 1.3rem; font-size: 1.2rem; font-weight: 700; cursor: pointer; white-space: nowrap;">Apply Code</button>
         </div>
 
         <div id="MeeekuDrawerDiscountAppliedAlert" class="meeeku-discount-applied-alert" style="display: none;">
-          <span id="MeeekuDrawerDiscountAppliedMsg">🎉 Code <strong>WELCOME20</strong> applied!</span>
+          <span id="MeeekuDrawerDiscountAppliedMsg">🎉 Code <strong>{{ cp1_code }}</strong> applied!</span>
           <button type="button" class="meeeku-discount-remove-btn" onclick="meeekuRemoveCartDiscount(event)">Remove</button>
         </div>
       </div>
@@ -95,6 +136,10 @@
         <div style="display: flex; justify-content: space-between; align-items: center; font-size: 1.45rem; color: #666; margin-bottom: 0.5rem;">
           <span>Bag Subtotal:</span>
           <span id="MeeekuCartSubtotal" style="color: #3D2355; font-weight: 700; font-size: 1.55rem;">₹0.00</span>
+        </div>
+        <div id="MeeekuDrawerDiscountRow" style="display: none; justify-content: space-between; align-items: center; font-size: 1.4rem; margin-bottom: 0.5rem; background: #E8F5E9; padding: 0.4rem 0.8rem; border-radius: 10px; border: 1px dashed #81C784;">
+          <span id="MeeekuDrawerDiscountRowLabel" style="color: #1B5E20; font-weight: 700;">🏷️ Promo Discount ({{ cp1_code }}):</span>
+          <span id="MeeekuDrawerDiscountRowVal" style="font-weight: 800; font-size: 1.4rem; color: #2E7D32;">-₹0.00</span>
         </div>
         <div id="MeeekuDrawerGiftRow" style="display: none; justify-content: space-between; align-items: center; font-size: 1.45rem; margin-bottom: 0.5rem; background: #F3E5F5; padding: 0.4rem 0.8rem; border-radius: 10px; border: 1px dashed #CE93D8;">
           <span style="color: #6A1B9A; font-weight: 700;">🎁 Surprise Gift (Little Ones):</span>
@@ -167,6 +212,52 @@ function updateCartBadges(count) {
   }
 }
 
+function calculateMeeekuPromoSavings(subtotalRupees) {
+  var subtotal = parseFloat(subtotalRupees) || 0;
+  var rawCode = sessionStorage.getItem('meeeku_active_discount') || localStorage.getItem('meeeku_active_discount') || '';
+  var code = rawCode.trim();
+  if (!code) return { code: '', discountAmount: 0, qualifies: false, minOrder: 0, percent: 0 };
+
+  if (window.MEEEKU_PROMO_CONFIG && window.MEEEKU_PROMO_CONFIG.obsoleteCodes.indexOf(code.toUpperCase()) !== -1) {
+    sessionStorage.removeItem('meeeku_active_discount');
+    localStorage.removeItem('meeeku_active_discount');
+    return { code: '', discountAmount: 0, qualifies: false, minOrder: 0, percent: 0 };
+  }
+
+  var promo = (window.MEEEKU_PROMO_CONFIG && window.MEEEKU_PROMO_CONFIG.getPromoByCode(code)) || null;
+  var minOrder = promo ? (parseFloat(promo.minOrder) || 0) : 0;
+  var percent = promo ? (parseFloat(promo.percent) || 0) : 0;
+
+  if (minOrder > 0 && subtotal < minOrder) {
+    return {
+      code: promo ? promo.code : code,
+      discountAmount: 0,
+      qualifies: false,
+      minOrder: minOrder,
+      percent: percent,
+      diff: minOrder - subtotal
+    };
+  }
+
+  var discountAmount = 0;
+  if (percent > 0 && subtotal > 0) {
+    discountAmount = Math.round(subtotal * (percent / 100));
+  } else if (window.meeekuLiveShopifyCart && window.meeekuLiveShopifyCart.total_discount > 0) {
+    discountAmount = Math.round(window.meeekuLiveShopifyCart.total_discount / 100);
+  }
+
+  return {
+    code: promo ? promo.code : code,
+    discountAmount: discountAmount,
+    qualifies: true,
+    minOrder: minOrder,
+    percent: percent,
+    diff: 0
+  };
+}
+
+window.calculateMeeekuPromoSavings = calculateMeeekuPromoSavings;
+
 function updateMeeekuShippingProgress(subtotalRupees, progressBoxId, msgId, fillId, deliveryElId, totalElId) {
   var box = document.getElementById(progressBoxId || 'MeeekuDrawerShippingProgress');
   var msg = document.getElementById(msgId || 'MeeekuDrawerShippingMsg');
@@ -174,11 +265,15 @@ function updateMeeekuShippingProgress(subtotalRupees, progressBoxId, msgId, fill
   var deliveryEl = document.getElementById(deliveryElId || 'MeeekuCartDeliveryFee');
   var totalEl = document.getElementById(totalElId || 'MeeekuCartTotal');
 
+  var subtotal = parseFloat(subtotalRupees) || 0;
+  window.meeekuLastDrawerSubtotal = subtotal;
+
   if (!box || !msg || !fill) return;
 
-  var subtotal = parseFloat(subtotalRupees) || 0;
   if (subtotal <= 0) {
     box.style.display = 'none';
+    var emptyDiscRow = document.getElementById('MeeekuDrawerDiscountRow');
+    if (emptyDiscRow) emptyDiscRow.style.display = 'none';
     return;
   }
 
@@ -212,8 +307,23 @@ function updateMeeekuShippingProgress(subtotalRupees, progressBoxId, msgId, fill
     if (giftRow) giftRow.style.display = 'flex';
   }
 
+  var savingsInfo = calculateMeeekuPromoSavings(subtotal);
+  var discRow = document.getElementById('MeeekuDrawerDiscountRow');
+  var discLabel = document.getElementById('MeeekuDrawerDiscountRowLabel');
+  var discVal = document.getElementById('MeeekuDrawerDiscountRowVal');
+
+  if (discRow && discLabel && discVal) {
+    if (savingsInfo.code && savingsInfo.qualifies && savingsInfo.discountAmount > 0) {
+      discRow.style.display = 'flex';
+      discLabel.innerText = '🏷️ Promo (' + savingsInfo.code + (savingsInfo.percent ? ' • ' + savingsInfo.percent + '% OFF' : '') + '):';
+      discVal.innerText = '-₹' + savingsInfo.discountAmount.toLocaleString('en-IN', {minimumFractionDigits: 2});
+    } else {
+      discRow.style.display = 'none';
+    }
+  }
+
   if (totalEl) {
-    var finalTotal = subtotal + deliveryFee;
+    var finalTotal = Math.max(0, subtotal - (savingsInfo.discountAmount || 0)) + deliveryFee;
     totalEl.innerText = '₹' + finalTotal.toLocaleString('en-IN', {minimumFractionDigits: 2});
   }
 }
@@ -226,10 +336,14 @@ function fetchMeeekuShopifyCart(callback) {
     })
     .then(function(cart) {
       window.meeekuLiveShopifyCart = cart;
+      if (window.MEEEKU_PROMO_CONFIG && typeof window.MEEEKU_PROMO_CONFIG.syncFromShopifyCartJson === 'function') {
+        window.MEEEKU_PROMO_CONFIG.syncFromShopifyCartJson(cart);
+      }
       renderMeeekuCartDrawerWithData(cart);
       if (typeof callback === 'function') callback(cart);
     })
     .catch(function(err) {
+      if (window.MeeekuLogger) window.MeeekuLogger.error('FetchShopifyCart', err);
       renderMeeekuCartDrawerWithLocalFallback();
       if (typeof callback === 'function') callback(null);
     });
@@ -587,7 +701,12 @@ async function meeekuAddToCartCatalog(title, price, imgUrl, variantId, size, han
 function getMeeekuCheckoutUrl() {
   var discount = sessionStorage.getItem('meeeku_active_discount') || localStorage.getItem('meeeku_active_discount');
   if (discount && discount.trim()) {
-    var cleanCode = discount.trim().toUpperCase();
+    var cleanCode = discount.trim();
+    if (window.MEEEKU_PROMO_CONFIG && window.MEEEKU_PROMO_CONFIG.obsoleteCodes.indexOf(cleanCode.toUpperCase()) !== -1) {
+      sessionStorage.removeItem('meeeku_active_discount');
+      localStorage.removeItem('meeeku_active_discount');
+      return '/checkout';
+    }
     return '/discount/' + encodeURIComponent(cleanCode) + '?redirect=/checkout';
   }
   return '/checkout';
@@ -598,20 +717,85 @@ window.getMeeekuCheckoutUrl = getMeeekuCheckoutUrl;
 window.meeekuApplyCartDiscount = function(code, cardEl) {
   if (!code) return;
   try {
-    var cleanCode = code.trim().toUpperCase();
-    sessionStorage.setItem('meeeku_active_discount', cleanCode);
-    localStorage.setItem('meeeku_active_discount', cleanCode);
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(cleanCode);
+    var cleanCode = String(code).trim();
+    if (!cleanCode) return;
+
+    if (window.MEEEKU_PROMO_CONFIG && window.MEEEKU_PROMO_CONFIG.obsoleteCodes.indexOf(cleanCode.toUpperCase()) !== -1) {
+      var fallbackCode = (window.MEEEKU_PROMO_CONFIG.primaryPromo && window.MEEEKU_PROMO_CONFIG.primaryPromo.code) || 'Festive25';
+      showMeeekuToast('⚠️ Promotion ' + cleanCode + ' has ended. Use active code ' + fallbackCode + '!');
+      return;
     }
-    // Prime the Shopify discount session cookie immediately
-    fetch('/discount/' + encodeURIComponent(cleanCode), {
+
+    var matchedPromo = window.MEEEKU_PROMO_CONFIG ? window.MEEEKU_PROMO_CONFIG.getPromoByCode(cleanCode) : null;
+    var canonicalCode = matchedPromo ? matchedPromo.code : cleanCode;
+
+    sessionStorage.setItem('meeeku_active_discount', canonicalCode);
+    localStorage.setItem('meeeku_active_discount', canonicalCode);
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(canonicalCode);
+    }
+
+    // Prime the Shopify discount session cookie immediately and sync cart
+    fetch('/discount/' + encodeURIComponent(canonicalCode), {
       credentials: 'same-origin'
-    }).catch(function() {});
+    })
+      .then(function() {
+        return fetch('/cart.js', { cache: 'no-store' });
+      })
+      .then(function(res) {
+        return res && res.ok ? res.json() : null;
+      })
+      .then(function(cart) {
+        if (cart) {
+          window.meeekuLiveShopifyCart = cart;
+          if (window.MEEEKU_PROMO_CONFIG && typeof window.MEEEKU_PROMO_CONFIG.syncFromShopifyCartJson === 'function') {
+            window.MEEEKU_PROMO_CONFIG.syncFromShopifyCartJson(cart);
+          }
+          renderMeeekuCartDrawerWithData(cart);
+          if (typeof window.fetchMeeekuPageCart === 'function') {
+            window.fetchMeeekuPageCart();
+          }
+        }
+      })
+      .catch(function(err) {
+        if (window.MeeekuLogger) window.MeeekuLogger.error('ApplyCartDiscountFetch', err);
+      });
 
     meeekuSyncDiscountUI();
-    showMeeekuToast('🎉 Code ' + cleanCode + ' applied! Discount active for checkout.');
-  } catch(e) {}
+    showMeeekuToast('🎉 Code ' + canonicalCode + ' applied! Discount active for checkout.');
+  } catch (e) {
+    if (window.MeeekuLogger) window.MeeekuLogger.error('ApplyCartDiscount', e);
+  }
+};
+
+window.meeekuApplyCustomCodeInput = function(inputId) {
+  try {
+    var inputEl = document.getElementById(inputId);
+    if (!inputEl) return;
+    var val = (inputEl.value || '').trim();
+    if (!val) {
+      showMeeekuToast('⚠️ Please enter a promotional code first.');
+      return;
+    }
+    if (window.MEEEKU_PROMO_CONFIG && window.MEEEKU_PROMO_CONFIG.obsoleteCodes.indexOf(val.toUpperCase()) !== -1) {
+      var activeDefault = (window.MEEEKU_PROMO_CONFIG.primaryPromo && window.MEEEKU_PROMO_CONFIG.primaryPromo.code) || 'Festive25';
+      showMeeekuToast('⚠️ Code ' + val.toUpperCase() + ' has expired. Try ' + activeDefault + '!');
+      inputEl.value = '';
+      return;
+    }
+    if (window.MEEEKU_PROMO_CONFIG && typeof window.MEEEKU_PROMO_CONFIG.registerDynamicPromo === 'function') {
+      window.MEEEKU_PROMO_CONFIG.registerDynamicPromo({
+        code: val,
+        badge: 'SHOPIFY PROMO',
+        cardBadge: 'PROMO',
+        description: 'Applied Shopify discount code'
+      });
+    }
+    inputEl.value = '';
+    window.meeekuApplyCartDiscount(val);
+  } catch (e) {
+    if (window.MeeekuLogger) window.MeeekuLogger.error('ApplyCustomCodeInput', e);
+  }
 };
 
 window.meeekuRemoveCartDiscount = function(e) {
@@ -623,46 +807,78 @@ window.meeekuRemoveCartDiscount = function(e) {
 };
 
 window.meeekuSyncDiscountUI = function() {
-  var code = sessionStorage.getItem('meeeku_active_discount') || localStorage.getItem('meeeku_active_discount');
-  ['WELCOME20', 'B2G1'].forEach(function(c) {
-    var card = document.getElementById('MeeekuCard-' + c);
-    var btn = document.getElementById('MeeekuBtn-' + c);
-    var pageCard = document.getElementById('MeeekuPageCard-' + c);
-    var pageBtn = document.getElementById('MeeekuPageBtn-' + c);
+  try {
+    var rawCode = sessionStorage.getItem('meeeku_active_discount') || localStorage.getItem('meeeku_active_discount') || '';
+    var code = rawCode.trim();
 
-    if (code === c) {
-      if (card) card.classList.add('applied');
-      if (btn) btn.innerText = 'Applied ✓';
-      if (pageCard) pageCard.classList.add('applied');
-      if (pageBtn) pageBtn.innerText = 'Applied ✓';
-    } else {
-      if (card) card.classList.remove('applied');
-      if (btn) btn.innerText = 'Apply';
-      if (pageCard) pageCard.classList.remove('applied');
-      if (pageBtn) pageBtn.innerText = 'Apply';
+    if (code && window.MEEEKU_PROMO_CONFIG && window.MEEEKU_PROMO_CONFIG.obsoleteCodes.indexOf(code.toUpperCase()) !== -1) {
+      sessionStorage.removeItem('meeeku_active_discount');
+      localStorage.removeItem('meeeku_active_discount');
+      code = '';
     }
-  });
 
-  var drawerAlert = document.getElementById('MeeekuDrawerDiscountAppliedAlert');
-  var drawerMsg = document.getElementById('MeeekuDrawerDiscountAppliedMsg');
-  if (drawerAlert && drawerMsg) {
-    if (code) {
-      drawerAlert.style.display = 'flex';
-      drawerMsg.innerHTML = '🎉 Code <strong>' + code + '</strong> applied! Added at checkout.';
-    } else {
-      drawerAlert.style.display = 'none';
-    }
-  }
+    var upperActive = code.toUpperCase();
+    var allCards = document.querySelectorAll('.meeeku-cart-discount-card[data-promo-code]');
+    allCards.forEach(function(cardEl) {
+      var cardCode = (cardEl.getAttribute('data-promo-code') || '').trim();
+      var cardUpper = cardCode.toUpperCase();
+      var btnEl = cardEl.querySelector('.meeeku-cart-discount-btn');
+      if (upperActive && cardUpper === upperActive) {
+        cardEl.classList.add('applied');
+        if (btnEl) btnEl.innerText = 'Applied ✓';
+      } else {
+        cardEl.classList.remove('applied');
+        if (btnEl) btnEl.innerText = 'Apply';
+      }
+    });
 
-  var pageAlert = document.getElementById('MeeekuPageDiscountAppliedAlert');
-  var pageMsg = document.getElementById('MeeekuPageDiscountAppliedMsg');
-  if (pageAlert && pageMsg) {
-    if (code) {
-      pageAlert.style.display = 'flex';
-      pageMsg.innerHTML = '🎉 Code <strong>' + code + '</strong> applied! Added at checkout.';
-    } else {
-      pageAlert.style.display = 'none';
+    var promoMeta = (code && window.MEEEKU_PROMO_CONFIG) ? window.MEEEKU_PROMO_CONFIG.getPromoByCode(code) : null;
+    var displayCode = promoMeta ? promoMeta.code : code;
+    var statusText = '';
+    if (displayCode) {
+      if (promoMeta && promoMeta.minOrder > 0) {
+        var currentSub = window.meeekuLastDrawerSubtotal || window.meeekuLastPageSubtotal || 0;
+        if (currentSub > 0 && currentSub < promoMeta.minOrder) {
+          var needed = promoMeta.minOrder - currentSub;
+          statusText = '🎉 Code <strong>' + displayCode + '</strong> saved! Add ₹' + needed.toLocaleString('en-IN') + ' more to unlock ' + (promoMeta.cardBadge || 'discount') + ' (Min. ₹' + promoMeta.minOrder.toLocaleString('en-IN') + ').';
+        } else {
+          statusText = '🎉 Code <strong>' + displayCode + '</strong> (' + (promoMeta.cardBadge || '25% OFF') + ') applied! Active for checkout.';
+        }
+      } else {
+        statusText = '🎉 Code <strong>' + displayCode + '</strong> applied! Added at checkout.';
+      }
     }
+
+    var drawerAlert = document.getElementById('MeeekuDrawerDiscountAppliedAlert');
+    var drawerMsg = document.getElementById('MeeekuDrawerDiscountAppliedMsg');
+    if (drawerAlert && drawerMsg) {
+      if (displayCode) {
+        drawerAlert.style.display = 'flex';
+        drawerMsg.innerHTML = statusText;
+      } else {
+        drawerAlert.style.display = 'none';
+      }
+    }
+
+    var pageAlert = document.getElementById('MeeekuPageDiscountAppliedAlert');
+    var pageMsg = document.getElementById('MeeekuPageDiscountAppliedMsg');
+    if (pageAlert && pageMsg) {
+      if (displayCode) {
+        pageAlert.style.display = 'flex';
+        pageMsg.innerHTML = statusText;
+      } else {
+        pageAlert.style.display = 'none';
+      }
+    }
+
+    if (typeof window.meeekuLastDrawerSubtotal === 'number' && window.meeekuLastDrawerSubtotal > 0) {
+      updateMeeekuShippingProgress(window.meeekuLastDrawerSubtotal, 'MeeekuDrawerShippingProgress', 'MeeekuDrawerShippingMsg', 'MeeekuDrawerShippingFill', 'MeeekuCartDeliveryFee', 'MeeekuCartTotal');
+    }
+    if (typeof window.updateMeeekuPageShippingProgress === 'function' && typeof window.meeekuLastPageSubtotal === 'number' && window.meeekuLastPageSubtotal > 0) {
+      window.updateMeeekuPageShippingProgress(window.meeekuLastPageSubtotal);
+    }
+  } catch (err) {
+    if (window.MeeekuLogger) window.MeeekuLogger.error('SyncDiscountUI', err);
   }
 };
 
